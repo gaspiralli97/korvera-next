@@ -1,5 +1,39 @@
-/** VARIABLES **/
-
+/** FONTS **/
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 $font: 'Poppins', sans-serif;
+
+/** BRAND COLORS — KORVERA BEAUTY **/
+
+// Primary
+$color-plum:        #2C1654;   // Deep violet/plum — main brand
+$color-plum-light:  #3D2070;   // Lighter plum — hover states
+$color-plum-dark:   #1A0D36;   // Darker plum — active states
+
+// Rose
+$color-rose:        #D4849A;   // Dusty rose — secondary brand
+$color-rose-light:  #F0C5CC;   // Light rose — soft accents
+$color-rose-pale:   #FBF0F2;   // Pale rose — subtle backgrounds
+
+// Neutrals
+$color-cream:       #FBF5F0;   // Warm cream — page background
+$color-cream-dark:  #FAF3EE;   // Card background
+$color-white:       #FFFFFF;
+
+// Text
+$color-text-dark:   #1A1A2E;   // Near black — headings
+$color-text-body:   #4A4A5A;   // Body text
+$color-text-muted:  #8A8A9A;   // Muted / placeholder
+
+// Borders
+$color-border:      #EAE0E8;   // Soft purple-tinted border
+$color-border-dark: #D4C8D4;   // Darker border
+
+// Accent
+$color-gold:        #C9A680;   // Champagne gold — premium
+$color-gold-light:  #EDD9BC;   // Light gold — highlights
+
+// Status
+$color-success:     #4A9B6F;   // Certified / organic green
+$color-warning:     #E8A84A;   // Warning orange
+$color-error:       #C0504A;   // Error red
