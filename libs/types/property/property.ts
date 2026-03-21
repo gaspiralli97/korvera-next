@@ -1,4 +1,4 @@
-import { ProductCategory, ProductStatus, ProductSize, SkinType } from '../../enums/product.enum';
+import { ProductCategory, ProductCertification, ProductStatus, ProductSize, SkinType, VariantType } from '../../enums/product.enum';
 import { Member } from '../member/member';
 
 export interface MeLiked {
@@ -9,6 +9,22 @@ export interface MeLiked {
 
 export interface TotalCounter {
 	total: number;
+}
+
+export interface ProductKeyIngredient {
+	name: string;
+	benefit: string;
+}
+
+export interface ProductVariant {
+	variantName: string;
+	variantType: VariantType;
+	variantPrice: number;
+	variantVolume?: number;
+	variantColor?: string;
+	variantImages?: string[];
+	variantSku?: string;
+	isAvailable: boolean;
 }
 
 export interface Product {
@@ -25,8 +41,22 @@ export interface Product {
 	productLikes: number;
 	productComments: number;
 	productRank: number;
+	productRating: number;
+	productRatingCount: number;
 	productImages: string[];
 	productDesc?: string;
+	// Cosmetics-specific
+	ingredients?: string[];
+	keyIngredients?: ProductKeyIngredient[];
+	variants?: ProductVariant[];
+	notRecommendedFor?: SkinType[];
+	allergens?: string[];
+	isHypoallergenic?: boolean;
+	fragranceFree?: boolean;
+	alcoholFree?: boolean;
+	certifications?: ProductCertification[];
+	paoMonths?: number;
+	expirationDate?: Date;
 	memberId: string;
 	soldAt?: Date;
 	deletedAt?: Date;

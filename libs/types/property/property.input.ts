@@ -1,5 +1,31 @@
-import { ProductCategory, ProductStatus, ProductSize, SkinType } from '../../enums/product.enum';
+import { ProductCategory, ProductCertification, ProductSize, ProductStatus, SkinType, VariantType } from '../../enums/product.enum';
 import { Direction } from '../../enums/common.enum';
+
+interface Range {
+	start: number;
+	end: number;
+}
+
+interface DateRange {
+	start: Date;
+	end: Date;
+}
+
+export interface ProductKeyIngredientInput {
+	name: string;
+	benefit: string;
+}
+
+export interface ProductVariantInput {
+	variantName: string;
+	variantType: VariantType;
+	variantPrice: number;
+	variantVolume?: number;
+	variantColor?: string;
+	variantImages?: string[];
+	variantSku?: string;
+	isAvailable: boolean;
+}
 
 export interface ProductInput {
 	productCategory: ProductCategory;
@@ -11,6 +37,18 @@ export interface ProductInput {
 	productSkinType?: SkinType[];
 	productImages: string[];
 	productDesc?: string;
+	// Cosmetics-specific
+	ingredients?: string[];
+	keyIngredients?: ProductKeyIngredientInput[];
+	variants?: ProductVariantInput[];
+	notRecommendedFor?: SkinType[];
+	allergens?: string[];
+	isHypoallergenic?: boolean;
+	fragranceFree?: boolean;
+	alcoholFree?: boolean;
+	certifications?: ProductCertification[];
+	paoMonths?: number;
+	expirationDate?: Date;
 	memberId?: string;
 	manufacturedAt?: Date;
 }
@@ -30,6 +68,29 @@ export interface ProductsInquiry {
 	sort?: string;
 	direction?: Direction;
 	search: PISearch;
+}
+
+interface PSSearch {
+	memberId?: string;
+	categoryList?: ProductCategory[];
+	skinTypeList?: SkinType[];
+	pricesRange?: Range;
+	volumesRange?: Range;
+	text?: string;
+	certificationList?: ProductCertification[];
+	ingredientKeyword?: string;
+	allergenExclude?: string[];
+	isHypoallergenic?: boolean;
+	fragranceFree?: boolean;
+	alcoholFree?: boolean;
+}
+
+export interface ProductSearchInquiry {
+	page: number;
+	limit: number;
+	sort?: string;
+	direction?: Direction;
+	search: PSSearch;
 }
 
 interface APISearch {
@@ -57,7 +118,7 @@ export interface AllProductsInquiry {
 	search: ALPISearch;
 }
 
-interface Range {
-	start: number;
-	end: number;
+export interface OrdinaryInquiry {
+	page: number;
+	limit: number;
 }

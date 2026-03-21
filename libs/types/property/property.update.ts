@@ -1,4 +1,5 @@
-import { ProductCategory, ProductStatus, ProductSize, SkinType } from '../../enums/product.enum';
+import { ProductCategory, ProductCertification, ProductSize, ProductStatus, SkinType, VariantType } from '../../enums/product.enum';
+import { ProductKeyIngredientInput, ProductVariantInput } from './property.input';
 
 export interface ProductUpdate {
 	_id: string;
@@ -12,6 +13,18 @@ export interface ProductUpdate {
 	productSkinType?: SkinType[];
 	productImages?: string[];
 	productDesc?: string;
+	// Cosmetics-specific
+	ingredients?: string[];
+	keyIngredients?: ProductKeyIngredientInput[];
+	variants?: ProductVariantInput[];
+	notRecommendedFor?: SkinType[];
+	allergens?: string[];
+	isHypoallergenic?: boolean;
+	fragranceFree?: boolean;
+	alcoholFree?: boolean;
+	certifications?: ProductCertification[];
+	paoMonths?: number;
+	expirationDate?: Date;
 	soldAt?: Date;
 	deletedAt?: Date;
 	manufacturedAt?: Date;

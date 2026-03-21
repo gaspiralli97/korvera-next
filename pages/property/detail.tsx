@@ -222,27 +222,9 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 										<Typography className={'city'}>{property?.productCategory}</Typography>
 										<Stack className={'divider'}></Stack>
 										<Stack className={'buy-rent-box'}>
-											{property?.propertyBarter && (
-												<>
-													<Stack className={'circle'}>
-														<svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
-															<circle cx="3" cy="3" r="3" fill="#EB6753" />
-														</svg>
-													</Stack>
-													<Typography className={'buy-rent'}>Barter</Typography>
-												</>
-											)}
+											
 
-											{property?.propertyRent && (
-												<>
-													<Stack className={'circle'}>
-														<svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
-															<circle cx="3" cy="3" r="3" fill="#EB6753" />
-														</svg>
-													</Stack>
-													<Typography className={'buy-rent'}>rent</Typography>
-												</>
-											)}
+											
 										</Stack>
 										<Stack className={'divider'}></Stack>
 										<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -266,13 +248,13 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 									</Stack>
 									<Stack className={'bottom-box'}>
 										<Stack className="option">
-											<img src="/img/icons/bed.svg" alt="" /> <Typography>{property?.propertyBeds} bed</Typography>
+											<img src="/img/icons/bed.svg" alt="" /> <Typography>{property?.productCategory} bed</Typography>
 										</Stack>
 										<Stack className="option">
-											<img src="/img/icons/room.svg" alt="" /> <Typography>{property?.propertyRooms} room</Typography>
+											<img src="/img/icons/room.svg" alt="" /> <Typography>{property?.productSize} room</Typography>
 										</Stack>
 										<Stack className="option">
-											<img src="/img/icons/expand.svg" alt="" /> <Typography>{property?.productVolume} m2</Typography>
+											<img src="/img/icons/expand.svg" alt="" /> <Typography>{property?.productVolume} ml</Typography>
 										</Stack>
 									</Stack>
 								</Stack>
@@ -331,7 +313,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 										</Stack>
 										<Stack className={'option-includes'}>
 											<Typography className={'title'}>Bedroom</Typography>
-											<Typography className={'option-data'}>{property?.propertyBeds}</Typography>
+											<Typography className={'option-data'}>{property?.productCategory}</Typography>
 										</Stack>
 									</Stack>
 									<Stack className={'option'}>
@@ -340,7 +322,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 										</Stack>
 										<Stack className={'option-includes'}>
 											<Typography className={'title'}>Room</Typography>
-											<Typography className={'option-data'}>{property?.propertyRooms}</Typography>
+											<Typography className={'option-data'}>{property?.productSize}</Typography>
 										</Stack>
 									</Stack>
 									<Stack className={'option'}>
@@ -386,7 +368,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 										</Stack>
 										<Stack className={'option-includes'}>
 											<Typography className={'title'}>Size</Typography>
-											<Typography className={'option-data'}>{property?.productVolume} m2</Typography>
+											<Typography className={'option-data'}>{property?.productVolume} ml</Typography>
 										</Stack>
 									</Stack>
 									<Stack className={'option'}>
@@ -400,7 +382,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 											</svg>
 										</Stack>
 										<Stack className={'option-includes'}>
-											<Typography className={'title'}>Property Type</Typography>
+											<Typography className={'title'}>Product Type</Typography>
 											<Typography className={'option-data'}>{property?.productSize}</Typography>
 										</Stack>
 									</Stack>
@@ -420,15 +402,15 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 												</Box>
 												<Box component={'div'} className={'info'}>
 													<Typography className={'title'}>Property Size</Typography>
-													<Typography className={'data'}>{property?.productVolume} m2</Typography>
+													<Typography className={'data'}>{property?.productVolume} ml</Typography>
 												</Box>
 												<Box component={'div'} className={'info'}>
-													<Typography className={'title'}>Rooms</Typography>
-													<Typography className={'data'}>{property?.propertyRooms}</Typography>
+													<Typography className={'title'}>Size</Typography>
+													<Typography className={'data'}>{property?.productSize}</Typography>
 												</Box>
 												<Box component={'div'} className={'info'}>
 													<Typography className={'title'}>Bedrooms</Typography>
-													<Typography className={'data'}>{property?.propertyBeds}</Typography>
+													<Typography className={'data'}>{property?.productCategory}</Typography>
 												</Box>
 											</Stack>
 											<Stack className={'right'}>
@@ -437,13 +419,13 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 													<Typography className={'data'}>{moment(property?.createdAt).format('YYYY')}</Typography>
 												</Box>
 												<Box component={'div'} className={'info'}>
-													<Typography className={'title'}>Property Type</Typography>
+													<Typography className={'title'}>Product Type</Typography>
 													<Typography className={'data'}>{property?.productSize}</Typography>
 												</Box>
 												<Box component={'div'} className={'info'}>
 													<Typography className={'title'}>Property Options</Typography>
 													<Typography className={'data'}>
-														For {property?.propertyBarter && 'Barter'} {property?.propertyRent && 'Rent'}
+														
 													</Typography>
 												</Box>
 											</Stack>
@@ -779,27 +761,9 @@ export default withLayoutFull(PropertyDetail);
 // 										<Typography className={'city'}>{property?.productCategory}</Typography>
 // 										<Stack className={'divider'}></Stack>
 // 										<Stack className={'buy-rent-box'}>
-// 											{property?.propertyBarter && (
-// 												<>
-// 													<Stack className={'circle'}>
-// 														<svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
-// 															<circle cx="3" cy="3" r="3" fill="#EB6753" />
-// 														</svg>
-// 													</Stack>
-// 													<Typography className={'buy-rent'}>Barter</Typography>
-// 												</>
-// 											)}
+// 											
 
-// 											{property?.propertyRent && (
-// 												<>
-// 													<Stack className={'circle'}>
-// 														<svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
-// 															<circle cx="3" cy="3" r="3" fill="#EB6753" />
-// 														</svg>
-// 													</Stack>
-// 													<Typography className={'buy-rent'}>rent</Typography>
-// 												</>
-// 											)}
+// 											
 // 										</Stack>
 // 										<Stack className={'divider'}></Stack>
 // 										<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -823,13 +787,13 @@ export default withLayoutFull(PropertyDetail);
 // 									</Stack>
 // 									<Stack className={'bottom-box'}>
 // 										<Stack className="option">
-// 											<img src="/img/icons/bed.svg" alt="" /> <Typography>{property?.propertyBeds} bed</Typography>
+// 											<img src="/img/icons/bed.svg" alt="" /> <Typography>{property?.productCategory} bed</Typography>
 // 										</Stack>
 // 										<Stack className="option">
-// 											<img src="/img/icons/room.svg" alt="" /> <Typography>{property?.propertyRooms} room</Typography>
+// 											<img src="/img/icons/room.svg" alt="" /> <Typography>{property?.productSize} room</Typography>
 // 										</Stack>
 // 										<Stack className="option">
-// 											<img src="/img/icons/expand.svg" alt="" /> <Typography>{property?.productVolume} m2</Typography>
+// 											<img src="/img/icons/expand.svg" alt="" /> <Typography>{property?.productVolume} ml</Typography>
 // 										</Stack>
 // 									</Stack>
 // 								</Stack>
@@ -888,7 +852,7 @@ export default withLayoutFull(PropertyDetail);
 // 										</Stack>
 // 										<Stack className={'option-includes'}>
 // 											<Typography className={'title'}>Bedroom</Typography>
-// 											<Typography className={'option-data'}>{property?.propertyBeds}</Typography>
+// 											<Typography className={'option-data'}>{property?.productCategory}</Typography>
 // 										</Stack>
 // 									</Stack>
 // 									<Stack className={'option'}>
@@ -897,7 +861,7 @@ export default withLayoutFull(PropertyDetail);
 // 										</Stack>
 // 										<Stack className={'option-includes'}>
 // 											<Typography className={'title'}>Room</Typography>
-// 											<Typography className={'option-data'}>{property?.propertyRooms}</Typography>
+// 											<Typography className={'option-data'}>{property?.productSize}</Typography>
 // 										</Stack>
 // 									</Stack>
 // 									<Stack className={'option'}>
@@ -943,7 +907,7 @@ export default withLayoutFull(PropertyDetail);
 // 										</Stack>
 // 										<Stack className={'option-includes'}>
 // 											<Typography className={'title'}>Size</Typography>
-// 											<Typography className={'option-data'}>{property?.productVolume} m2</Typography>
+// 											<Typography className={'option-data'}>{property?.productVolume} ml</Typography>
 // 										</Stack>
 // 									</Stack>
 // 									<Stack className={'option'}>
@@ -957,7 +921,7 @@ export default withLayoutFull(PropertyDetail);
 // 											</svg>
 // 										</Stack>
 // 										<Stack className={'option-includes'}>
-// 											<Typography className={'title'}>Property Type</Typography>
+// 											<Typography className={'title'}>Product Type</Typography>
 // 											<Typography className={'option-data'}>{property?.productSize}</Typography>
 // 										</Stack>
 // 									</Stack>
@@ -977,15 +941,15 @@ export default withLayoutFull(PropertyDetail);
 // 												</Box>
 // 												<Box component={'div'} className={'info'}>
 // 													<Typography className={'title'}>Property Size</Typography>
-// 													<Typography className={'data'}>{property?.productVolume} m2</Typography>
+// 													<Typography className={'data'}>{property?.productVolume} ml</Typography>
 // 												</Box>
 // 												<Box component={'div'} className={'info'}>
-// 													<Typography className={'title'}>Rooms</Typography>
-// 													<Typography className={'data'}>{property?.propertyRooms}</Typography>
+// 													<Typography className={'title'}>Size</Typography>
+// 													<Typography className={'data'}>{property?.productSize}</Typography>
 // 												</Box>
 // 												<Box component={'div'} className={'info'}>
 // 													<Typography className={'title'}>Bedrooms</Typography>
-// 													<Typography className={'data'}>{property?.propertyBeds}</Typography>
+// 													<Typography className={'data'}>{property?.productCategory}</Typography>
 // 												</Box>
 // 											</Stack>
 // 											<Stack className={'right'}>
@@ -994,13 +958,13 @@ export default withLayoutFull(PropertyDetail);
 // 													<Typography className={'data'}>{moment(property?.createdAt).format('YYYY')}</Typography>
 // 												</Box>
 // 												<Box component={'div'} className={'info'}>
-// 													<Typography className={'title'}>Property Type</Typography>
+// 													<Typography className={'title'}>Product Type</Typography>
 // 													<Typography className={'data'}>{property?.productSize}</Typography>
 // 												</Box>
 // 												<Box component={'div'} className={'info'}>
 // 													<Typography className={'title'}>Property Options</Typography>
 // 													<Typography className={'data'}>
-// 														For {property?.propertyBarter && 'Barter'} {property?.propertyRent && 'Rent'}
+// 														
 // 													</Typography>
 // 												</Box>
 // 											</Stack>
