@@ -147,6 +147,31 @@ export const GET_ALL_BOARD_ARTICLES_BY_ADMIN = gql`
 `;
 
 /**************************
+ *          STATS         *
+ *************************/
+
+export const GET_ADMIN_DASHBOARD_STATS = gql`
+	query GetAdminDashboardStats {
+		getAdminDashboardStats {
+			totalMembers
+			totalSellers
+			newMembersThisMonth
+			totalProducts
+			totalActiveProducts
+			totalSoldOutProducts
+			newProductsThisMonth
+			averagePlatformRating
+			totalRatings
+			totalBoardArticles
+			topCategories {
+				category
+				count
+			}
+		}
+	}
+`;
+
+/**************************
  *         COMMENT        *
  *************************/
 

@@ -136,8 +136,17 @@ export const CREATE_PRODUCT = gql`
 			productSkinType
 			productViews
 			productLikes
+			productRating
+			productRatingCount
 			productImages
 			productDesc
+			ingredients
+			certifications
+			allergens
+			isHypoallergenic
+			fragranceFree
+			alcoholFree
+			paoMonths
 			memberId
 			soldAt
 			deletedAt
@@ -162,8 +171,17 @@ export const UPDATE_PRODUCT = gql`
 			productSkinType
 			productViews
 			productLikes
+			productRating
+			productRatingCount
 			productImages
 			productDesc
+			ingredients
+			certifications
+			allergens
+			isHypoallergenic
+			fragranceFree
+			alcoholFree
+			paoMonths
 			memberId
 			soldAt
 			deletedAt
@@ -188,12 +206,170 @@ export const LIKE_TARGET_PRODUCT = gql`
 			productSkinType
 			productViews
 			productLikes
+			productRating
+			productRatingCount
 			productImages
 			productDesc
 			memberId
 			soldAt
 			deletedAt
 			manufacturedAt
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+/**************************
+ *         RATING         *
+ *************************/
+
+export const CREATE_RATING = gql`
+	mutation CreateRating($input: RatingInput!) {
+		createRating(input: $input) {
+			_id
+			memberId
+			productId
+			ratingScore
+			skinTypeResult
+			reviewText
+			helpfulCount
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const UPDATE_RATING = gql`
+	mutation UpdateRating($input: RatingUpdate!) {
+		updateRating(input: $input) {
+			_id
+			memberId
+			productId
+			ratingScore
+			skinTypeResult
+			reviewText
+			helpfulCount
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const MARK_RATING_HELPFUL = gql`
+	mutation MarkRatingHelpful($input: String!) {
+		markRatingHelpful(ratingId: $input) {
+			_id
+			memberId
+			productId
+			ratingScore
+			skinTypeResult
+			reviewText
+			helpfulCount
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+/**************************
+ *     PRODUCT Q&A        *
+ *************************/
+
+export const CREATE_PRODUCT_QUESTION = gql`
+	mutation CreateProductQuestion($input: QuestionInput!) {
+		createProductQuestion(input: $input) {
+			_id
+			productId
+			memberId
+			questionText
+			questionStatus
+			answerText
+			answeredBy
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const ANSWER_PRODUCT_QUESTION = gql`
+	mutation AnswerProductQuestion($input: AnswerInput!) {
+		answerProductQuestion(input: $input) {
+			_id
+			productId
+			memberId
+			questionText
+			questionStatus
+			answerText
+			answeredBy
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+/**************************
+ *        WISHLIST        *
+ *************************/
+
+export const CREATE_WISHLIST = gql`
+	mutation CreateWishlist($input: WishlistInput!) {
+		createWishlist(input: $input) {
+			_id
+			memberId
+			wishlistName
+			productCount
+			products {
+				productId
+				addedAt
+			}
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const ADD_TO_WISHLIST = gql`
+	mutation AddToWishlist($input: AddToWishlistInput!) {
+		addToWishlist(input: $input) {
+			_id
+			memberId
+			wishlistName
+			productCount
+			products {
+				productId
+				addedAt
+			}
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const REMOVE_FROM_WISHLIST = gql`
+	mutation RemoveFromWishlist($input: RemoveFromWishlistInput!) {
+		removeFromWishlist(input: $input) {
+			_id
+			memberId
+			wishlistName
+			productCount
+			products {
+				productId
+				addedAt
+			}
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const DELETE_WISHLIST = gql`
+	mutation DeleteWishlist($input: String!) {
+		deleteWishlist(wishlistId: $input) {
+			_id
+			memberId
+			wishlistName
+			productCount
 			createdAt
 			updatedAt
 		}
