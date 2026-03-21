@@ -13,13 +13,28 @@ const Notice = () => {
 		{
 			no: 1,
 			event: true,
-			title: 'Register to use and get discounts',
+			title: 'Spring Beauty Sale — Up to 40% off selected skincare & makeup',
 			date: '01.03.2024',
 		},
 		{
 			no: 2,
-			title: "It's absolutely free to upload and trade properties",
+			title: 'New seller registration is now open — list your beauty products for free',
 			date: '31.03.2024',
+		},
+		{
+			no: 3,
+			title: 'Korvera Beauty Points program launched — earn rewards on every purchase',
+			date: '15.04.2024',
+		},
+		{
+			no: 4,
+			title: 'New arrivals: K-Beauty skincare collection now available',
+			date: '20.04.2024',
+		},
+		{
+			no: 5,
+			title: 'Platform update: ingredient search and allergen filter now available',
+			date: '01.05.2024',
 		},
 	];
 

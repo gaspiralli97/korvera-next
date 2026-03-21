@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { Pagination, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { PropertyCard } from '../mypage/PropertyCard';
-import { Product } from '../../types/property/property';
-import { ProductsInquiry } from '../../types/property/property.input';
+import { ProductCard } from '../mypage/ProductCard';
+import { Product } from '../../types/product/product';
+import { ProductsInquiry } from '../../types/product/product.input';
 import { T } from '../../types/common';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../../apollo/user/query';
 
-const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
+const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const { memberId } = router.query;
@@ -76,7 +76,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 							</div>
 						)}
 						{agentProperties?.map((property: Product) => {
-							return <PropertyCard property={property} memberPage={true} key={property?._id} />;
+							return <ProductCard product={property} memberPage={true} key={property?._id} />;
 						})}
 
 						{agentProperties.length !== 0 && (
@@ -102,7 +102,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 	}
 };
 
-MyProperties.defaultProps = {
+MyProducts.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 5,
@@ -113,4 +113,4 @@ MyProperties.defaultProps = {
 	},
 };
 
-export default MyProperties;
+export default MyProducts;

@@ -4,7 +4,7 @@ import { Button, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { ProductCategory, SkinType, ProductSize } from '../../enums/product.enum';
 import { REACT_APP_API_URL } from '../../config';
-import { ProductInput } from '../../types/property/property.input';
+import { ProductInput } from '../../types/product/product.input';
 import axios from 'axios';
 import { getJwtToken } from '../../auth';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';

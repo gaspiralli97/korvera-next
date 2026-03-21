@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Pagination, Stack, Typography } from '@mui/material';
-import PropertyCard from '../property/PropertyCard';
-import { Product } from '../../types/property/property';
+import ProductCard from '../product/ProductCard';
+import { Product } from '../../types/product/product';
 import { T } from '../../types/common';
 import { useMutation, useQuery } from '@apollo/client';
 import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
@@ -73,7 +73,7 @@ const MyFavorites: NextPage = () => {
 				<Stack className="favorites-list-box">
 					{myFavorites?.length ? (
 						myFavorites?.map((property: Product) => {
-							return <PropertyCard property={property} likePropertyHandler={likePropertyHandler} myFavorites={true} />;
+							return <ProductCard property={property} likePropertyHandler={likePropertyHandler} myFavorites={true} />;
 						})
 					) : (
 						<div className={'no-data'}>

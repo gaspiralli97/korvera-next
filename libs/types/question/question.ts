@@ -1,6 +1,6 @@
 import { QuestionStatus } from '../../enums/question.enum';
 import { Member } from '../member/member';
-import { TotalCounter } from '../property/property';
+import { TotalCounter } from '../product/product';
 
 export interface Question {
 	_id: string;

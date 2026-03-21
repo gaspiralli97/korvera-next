@@ -2,11 +2,11 @@ import { NextPage } from 'next';
 import useDeviceDetect from '../libs/hooks/useDeviceDetect';
 import withLayoutMain from '../libs/components/layout/LayoutHome';
 import CommunityBoards from '../libs/components/homepage/CommunityBoards';
-import PopularProperties from '../libs/components/homepage/PopularProperties';
+import PopularProducts from '../libs/components/homepage/PopularProducts';
 import TopAgents from '../libs/components/homepage/TopAgents';
 import Events from '../libs/components/homepage/Events';
-import TrendProperties from '../libs/components/homepage/TrendProperties';
-import TopProperties from '../libs/components/homepage/TopProperties';
+import TrendProducts from '../libs/components/homepage/TrendProducts';
+import TopProducts from '../libs/components/homepage/TopProducts';
 import { Stack } from '@mui/material';
 import Advertisement from '../libs/components/homepage/Advertisement';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -23,20 +23,20 @@ const Home: NextPage = () => {
 	if (device === 'mobile') {
 		return (
 			<Stack className={'home-page'}>
-				<TrendProperties />
-				<PopularProperties />
+				<TrendProducts />
+				<PopularProducts />
 				<Advertisement />
-				<TopProperties />
+				<TopProducts />
 				<TopAgents />
 			</Stack>
 		);
 	} else {
 		return (
 			<Stack className={'home-page'}>
-				<TrendProperties />
-				<PopularProperties />
+				<TrendProducts />
+				<PopularProducts />
 				<Advertisement />
-				<TopProperties />
+				<TopProducts />
 				<TopAgents />
 				<Events />
 				<CommunityBoards />

@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { ProductCategory, SkinType } from '../../enums/product.enum';
-import { ProductsInquiry } from '../../types/property/property.input';
+import { ProductsInquiry } from '../../types/product/product.input';
 import { useRouter } from 'next/router';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import { productVolume } from '../../config';

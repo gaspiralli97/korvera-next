@@ -8,7 +8,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { productVolume } from '../../config';
 import { ProductCategory, SkinType } from '../../enums/product.enum';
-import { ProductsInquiry } from '../../types/property/property.input';
+import { ProductsInquiry } from '../../types/product/product.input';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 

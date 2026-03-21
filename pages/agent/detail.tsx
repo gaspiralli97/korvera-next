@@ -2,17 +2,17 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import PropertyBigCard from '../../libs/components/common/PropertyBigCard';
+import ProductBigCard from '../../libs/components/common/ProductBigCard';
 import ReviewCard from '../../libs/components/agent/ReviewCard';
 import { Box, Button, Pagination, Stack, Typography } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { Product } from '../../libs/types/property/property';
+import { Product } from '../../libs/types/product/product';
 import { Member } from '../../libs/types/member/member';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import { userVar } from '../../apollo/store';
-import { ProductsInquiry } from '../../libs/types/property/property.input';
+import { ProductsInquiry } from '../../libs/types/product/product.input';
 import { CommentInput, CommentsInquiry } from '../../libs/types/comment/comment.input';
 import { Comment } from '../../libs/types/comment/comment';
 import { CommentGroup } from '../../libs/enums/comment.enum';
@@ -196,7 +196,7 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 							{agentProperties.map((property: Product) => {
 								return (
 									<div className={'wrap-main'} key={property?._id}>
-										<PropertyBigCard property={property} key={property?._id} likePropertyHandler={likePropertyHandler}/>
+										<ProductBigCard property={property} key={property?._id} likePropertyHandler={likePropertyHandler}/>
 									</div>
 								);
 							})}

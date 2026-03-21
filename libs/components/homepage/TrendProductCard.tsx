@@ -3,19 +3,19 @@ import { Stack, Box, Divider, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { Product } from '../../types/property/property';
+import { Product } from '../../types/product/product';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { REACT_APP_API_URL } from '../../config';
 import { useRouter } from 'next/router';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 
-interface TrendPropertyCardProps {
+interface TrendProductCardProps {
 	property: Product;
 	likePropertyHandler:any;
 }
 
-const TrendPropertyCard = (props: TrendPropertyCardProps) => {
+const TrendProductCard = (props: TrendProductCardProps) => {
 	const { property, likePropertyHandler} = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -138,4 +138,4 @@ const TrendPropertyCard = (props: TrendPropertyCardProps) => {
 	}
 };
 
-export default TrendPropertyCard;
+export default TrendProductCard;

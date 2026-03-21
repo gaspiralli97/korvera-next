@@ -39,8 +39,8 @@ const CS: NextPage = () => {
 				<Stack className={'container'}>
 					<Box component={'div'} className={'cs-main-info'}>
 						<Box component={'div'} className={'info'}>
-							<span>Cs center</span>
-							<p>I will answer your questions</p>
+							<span>Beauty Help Center</span>
+							<p>How can we help you today?</p>
 						</Box>
 						<Box component={'div'} className={'btns'}>
 							<div

@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { Stack } from '@mui/material';
-import { Product } from '../../../types/property/property';
+import { Product } from '../../../types/product/product';
 import { REACT_APP_API_URL } from '../../../config';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from '@mui/material/Typography';

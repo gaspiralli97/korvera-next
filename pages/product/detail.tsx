@@ -4,17 +4,17 @@ import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material'
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutFull from '../../libs/components/layout/LayoutFull';
 import { NextPage } from 'next';
-import Review from '../../libs/components/property/Review';
+import Review from '../../libs/components/product/Review';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
-import PropertyBigCard from '../../libs/components/common/PropertyBigCard';
+import ProductBigCard from '../../libs/components/common/ProductBigCard';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { Product } from '../../libs/types/property/property';
+import { Product } from '../../libs/types/product/product';
 import moment from 'moment';
 import { formatterStr } from '../../libs/utils';
 import { REACT_APP_API_URL } from '../../libs/config';
@@ -283,7 +283,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 							<Stack className={'images'}>
 								<Stack className={'main-image'}>
 									<img
-										src={slideImage ? `${REACT_APP_API_URL}/${slideImage}` : '/img/property/bigImage.png'}
+										src={slideImage ? `${REACT_APP_API_URL}/${slideImage}` : '/img/product/bigImage.png'}
 										alt={'main-image'}
 									/>
 								</Stack>
@@ -435,7 +435,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 								<Stack className={'floor-plans-config'}>
 									<Typography className={'title'}>Floor Plans</Typography>
 									<Stack className={'image-box'}>
-										<img src={'/img/property/floorPlan.png'} alt={'image'} />
+										<img src={'/img/product/floorPlan.png'} alt={'image'} />
 									</Stack>
 								</Stack>
 								<Stack className={'address-config'}>
@@ -623,7 +623,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 										{destinationProperties.map((property: Product) => {
 											return (
 												<SwiperSlide className={'similar-homes-slide'} key={property.productTitle}>
-													<PropertyBigCard
+													<ProductBigCard
 														property={property}
 														likePropertyHandler={likePropertyHandler}
 														key={property?._id}
@@ -665,17 +665,17 @@ export default withLayoutFull(PropertyDetail);
 // import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 // import withLayoutFull from '../../libs/components/layout/LayoutFull';
 // import { NextPage } from 'next';
-// import Review from '../../libs/components/property/Review';
+// import Review from '../../libs/components/product/Review';
 // import { Swiper, SwiperSlide } from 'swiper/react';
 // import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
-// import PropertyBigCard from '../../libs/components/common/PropertyBigCard';
+// import ProductBigCard from '../../libs/components/common/ProductBigCard';
 // import FavoriteIcon from '@mui/icons-material/Favorite';
 // import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 // import WestIcon from '@mui/icons-material/West';
 // import EastIcon from '@mui/icons-material/East';
 // import { useReactiveVar } from '@apollo/client';
 // import { useRouter } from 'next/router';
-// import { Product } from '../../libs/types/property/property';
+// import { Product } from '../../libs/types/product/product';
 // import moment from 'moment';
 // import { formatterStr } from '../../libs/utils';
 // import { REACT_APP_API_URL } from '../../libs/config';
@@ -822,7 +822,7 @@ export default withLayoutFull(PropertyDetail);
 // 							<Stack className={'images'}>
 // 								<Stack className={'main-image'}>
 // 									<img
-// 										src={slideImage ? `${REACT_APP_API_URL}/${slideImage}` : '/img/property/bigImage.png'}
+// 										src={slideImage ? `${REACT_APP_API_URL}/${slideImage}` : '/img/product/bigImage.png'}
 // 										alt={'main-image'}
 // 									/>
 // 								</Stack>
@@ -974,7 +974,7 @@ export default withLayoutFull(PropertyDetail);
 // 								<Stack className={'floor-plans-config'}>
 // 									<Typography className={'title'}>Floor Plans</Typography>
 // 									<Stack className={'image-box'}>
-// 										<img src={'/img/property/floorPlan.png'} alt={'image'} />
+// 										<img src={'/img/product/floorPlan.png'} alt={'image'} />
 // 									</Stack>
 // 								</Stack>
 // 								<Stack className={'address-config'}>
@@ -1161,7 +1161,7 @@ export default withLayoutFull(PropertyDetail);
 // 										{destinationProperty.map((property: Product) => {
 // 											return (
 // 												<SwiperSlide className={'similar-homes-slide'} key={property.productTitle}>
-// 													<PropertyBigCard property={property} key={property?._id} />
+// 													<ProductBigCard property={property} key={property?._id} />
 // 												</SwiperSlide>
 // 											);
 // 										})}

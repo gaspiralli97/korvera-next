@@ -3,7 +3,7 @@ import { Stack, Box, Divider, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { Product } from '../../types/property/property';
+import { Product } from '../../types/product/product';
 import { REACT_APP_API_URL, topProductRank } from '../../config';
 import { formatterStr } from '../../utils';
 import { useReactiveVar } from '@apollo/client';
@@ -11,12 +11,12 @@ import { userVar } from '../../../apollo/store';
 import { useRouter } from 'next/router';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
-interface PropertyBigCardProps {
+interface ProductBigCardProps {
 	property: Product;
 	likePropertyHandler?:any;
 }
 
-const PropertyBigCard = (props: PropertyBigCardProps) => {
+const ProductBigCard = (props: ProductBigCardProps) => {
 	const { property, likePropertyHandler} = props;
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
@@ -96,4 +96,4 @@ const PropertyBigCard = (props: PropertyBigCardProps) => {
 	}
 };
 
-export default PropertyBigCard;
+export default ProductBigCard;
