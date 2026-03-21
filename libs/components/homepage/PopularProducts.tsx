@@ -5,22 +5,22 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
-import PopularPropertyCard from './PopularPropertyCard';
-import { Product } from '../../types/property/property';
+import PopularProductCard from './PopularProductCard';
+import { Product } from '../../types/product/product';
 import Link from 'next/link';
-import { ProductsInquiry } from '../../types/property/property.input';
+import { ProductsInquiry } from '../../types/product/product.input';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
 
-interface PopularPropertiesProps {
+interface PopularProductsProps {
 	initialInput: ProductsInquiry;
 }
 
-const PopularProperties = (props: PopularPropertiesProps) => {
+const PopularProducts = (props: PopularProductsProps) => {
 	const { initialInput } = props;
 	const device = useDeviceDetect();
-	const [popularProperties, setPopularProperties] = useState<Product[]>([]);
+	const [popularProperties, setPopularProducts] = useState<Product[]>([]);
 
 	/** APOLLO REQUESTS **/
    const {
@@ -33,7 +33,7 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 		variables:{input:initialInput},
 		notifyOnNetworkStatusChange:true,
 		onCompleted:(data:T)=>{
-			setPopularProperties(data?.getProducts?.list);
+			setPopularProducts(data?.getProducts?.list);
 		},
 	});
 	/** HANDLERS **/
@@ -58,7 +58,7 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 							{popularProperties.map((property: Product) => {
 								return (
 									<SwiperSlide key={property._id} className={'popular-property-slide'}>
-										<PopularPropertyCard property={property} />
+										<PopularProductCard property={property} />
 									</SwiperSlide>
 								);
 							})}
@@ -102,7 +102,7 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 							{popularProperties.map((property: Product) => {
 								return (
 									<SwiperSlide key={property._id} className={'popular-property-slide'}>
-										<PopularPropertyCard property={property} />
+										<PopularProductCard property={property} />
 									</SwiperSlide>
 								);
 							})}
@@ -119,7 +119,7 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 	}
 };
 
-PopularProperties.defaultProps = {
+PopularProducts.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 7,
@@ -129,4 +129,4 @@ PopularProperties.defaultProps = {
 	},
 };
 
-export default PopularProperties;
+export default PopularProducts;

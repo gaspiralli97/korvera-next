@@ -1,5 +1,5 @@
-import { Product } from '../property/property';
-import { TotalCounter } from '../property/property';
+import { Product } from '../product/product';
+import { TotalCounter } from '../product/product';
 
 export interface WishlistItem {
 	productId: string;

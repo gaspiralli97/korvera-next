@@ -1,5 +1,5 @@
 import { ProductCategory, ProductCertification, ProductSize, ProductStatus, SkinType, VariantType } from '../../enums/product.enum';
-import { ProductKeyIngredientInput, ProductVariantInput } from './property.input';
+import { ProductKeyIngredientInput, ProductVariantInput } from './product.input';
 
 export interface ProductUpdate {
 	_id: string;

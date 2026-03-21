@@ -5,9 +5,9 @@ import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
-import TopPropertyCard from './TopPropertyCard';
-import { ProductsInquiry } from '../../types/property/property.input';
-import { Product } from '../../types/property/property';
+import TopProductCard from './TopProductCard';
+import { ProductsInquiry } from '../../types/product/product.input';
+import { Product } from '../../types/product/product';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
@@ -15,15 +15,15 @@ import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
 import { Message } from '../../enums/common.enum';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 
-interface TopPropertiesProps {
+interface TopProductsProps {
 	initialInput: ProductsInquiry;
 	
 }
 
-const TopProperties = (props: TopPropertiesProps) => {
+const TopProducts = (props: TopProductsProps) => {
 	const { initialInput } = props;
 	const device = useDeviceDetect();
-	const [topProperties, setTopProperties] = useState<Product[]>([]);
+	const [topProperties, setTopProducts] = useState<Product[]>([]);
 
 	/** APOLLO REQUESTS **/
 	const[likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
@@ -38,7 +38,7 @@ const TopProperties = (props: TopPropertiesProps) => {
 			variables:{input:initialInput},
 			notifyOnNetworkStatusChange:true,
 			onCompleted:(data:T)=>{
-				setTopProperties(data?.getProducts?.list);
+				setTopProducts(data?.getProducts?.list);
 			},
 		});
 	/** HANDLERS **/
@@ -78,7 +78,7 @@ const TopProperties = (props: TopPropertiesProps) => {
 							{topProperties.map((property: Product) => {
 								return (
 									<SwiperSlide className={'top-property-slide'} key={property?._id}>
-										<TopPropertyCard property={property} likePropertyHandler={likePropertyHandler}/>
+										<TopProductCard property={property} likePropertyHandler={likePropertyHandler}/>
 									</SwiperSlide>
 								);
 							})}
@@ -121,7 +121,7 @@ const TopProperties = (props: TopPropertiesProps) => {
 							{topProperties.map((property: Product) => {
 								return (
 									<SwiperSlide className={'top-property-slide'} key={property?._id}>
-										<TopPropertyCard property={property} likePropertyHandler={likePropertyHandler} />
+										<TopProductCard property={property} likePropertyHandler={likePropertyHandler} />
 									</SwiperSlide>
 								);
 							})}
@@ -133,7 +133,7 @@ const TopProperties = (props: TopPropertiesProps) => {
 	}
 };
 
-TopProperties.defaultProps = {
+TopProducts.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 8,
@@ -143,4 +143,4 @@ TopProperties.defaultProps = {
 	},
 };
 
-export default TopProperties;
+export default TopProducts;

@@ -5,9 +5,9 @@ import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
-import { Product } from '../../types/property/property';
-import { ProductsInquiry } from '../../types/property/property.input';
-import TrendPropertyCard from './TrendPropertyCard';
+import { Product } from '../../types/product/product';
+import { ProductsInquiry } from '../../types/product/product.input';
+import TrendProductCard from './TrendProductCard';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
@@ -15,14 +15,14 @@ import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { Message } from '../../enums/common.enum';
 
-interface TrendPropertiesProps {
+interface TrendProductsProps {
 	initialInput: ProductsInquiry;
 }
 
-const TrendProperties = (props: TrendPropertiesProps) => {
+const TrendProducts = (props: TrendProductsProps) => {
 	const { initialInput } = props;
 	const device = useDeviceDetect();
-	const [trendProperties, setTrendProperties] = useState<Product[]>([]);
+	const [trendProperties, setTrendProducts] = useState<Product[]>([]);
 
 	/** APOLLO REQUESTS **/
 	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
@@ -36,7 +36,7 @@ const TrendProperties = (props: TrendPropertiesProps) => {
 		variables:{input:initialInput},
 		notifyOnNetworkStatusChange:true,
 		onCompleted:(data:T)=>{
-			setTrendProperties(data?.getProducts?.list);
+			setTrendProducts(data?.getProducts?.list);
 		},
 	});
 	/** HANDLERS **/
@@ -83,7 +83,7 @@ const TrendProperties = (props: TrendPropertiesProps) => {
 								{trendProperties.map((property: Product) => {
 									return (
 										<SwiperSlide key={property._id} className={'trend-property-slide'}>
-											<TrendPropertyCard property={property} likePropertyHandler={likePropertyHandler} />
+											<TrendProductCard property={property} likePropertyHandler={likePropertyHandler} />
 										</SwiperSlide>
 									);
 								})}
@@ -132,7 +132,7 @@ const TrendProperties = (props: TrendPropertiesProps) => {
 								{trendProperties.map((property: Product) => {
 									return (
 										<SwiperSlide key={property._id} className={'trend-property-slide'}>
-											<TrendPropertyCard property={property} likePropertyHandler={likePropertyHandler} />
+											<TrendProductCard property={property} likePropertyHandler={likePropertyHandler} />
 										</SwiperSlide>
 									);
 								})}
@@ -145,7 +145,7 @@ const TrendProperties = (props: TrendPropertiesProps) => {
 	}
 };
 
-TrendProperties.defaultProps = {
+TrendProducts.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 8,
@@ -155,4 +155,4 @@ TrendProperties.defaultProps = {
 	},
 };
 
-export default TrendProperties;
+export default TrendProducts;

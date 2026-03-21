@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { Pagination, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { PropertyCard } from './PropertyCard';
+import { ProductCard } from './ProductCard';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
-import { Product } from '../../types/property/property';
-import { SellerProductsInquiry } from '../../types/property/property.input';
+import { Product } from '../../types/product/product';
+import { SellerProductsInquiry } from '../../types/product/product.input';
 import { T } from '../../types/common';
 import { ProductStatus } from '../../enums/product.enum';
 import { userVar } from '../../../apollo/store';
@@ -14,7 +14,7 @@ import { UPDATE_PRODUCT } from '../../../apollo/user/mutation';
 import { GET_AGENT_PROPERTIES } from '../../../apollo/user/query';
 import { sweetConfirmAlert, sweetErrorHandling } from '../../sweetAlert';
 
-const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
+const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	const device = useDeviceDetect();
 	const [searchFilter, setSearchFilter] = useState<SellerProductsInquiry>(initialInput);
 	const [sellerProducts, setSellerProducts] = useState<Product[]>([]);
@@ -132,7 +132,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 						) : (
 							sellerProducts.map((property: Product) => {
 								return (
-									<PropertyCard
+									<ProductCard
 										property={property}
 										deletePropertyHandler={deletePropertyHandler}
 										updateProductHandler={updateProductHandler}
@@ -164,7 +164,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 	}
 };
 
-MyProperties.defaultProps = {
+MyProducts.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 5,
@@ -175,4 +175,4 @@ MyProperties.defaultProps = {
 	},
 };
 
-export default MyProperties;
+export default MyProducts;

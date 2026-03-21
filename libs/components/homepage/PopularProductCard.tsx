@@ -2,18 +2,18 @@ import React from 'react';
 import { Stack, Box, Divider, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { Product } from '../../types/property/property';
+import { Product } from '../../types/product/product';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { REACT_APP_API_URL, topProductRank } from '../../config';
 import { useRouter } from 'next/router';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 
-interface PopularPropertyCardProps {
+interface PopularProductCardProps {
 	property: Product;
 }
 
-const PopularPropertyCard = (props: PopularPropertyCardProps) => {
+const PopularProductCard = (props: PopularProductCardProps) => {
 	const { property } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -128,4 +128,4 @@ const PopularPropertyCard = (props: PopularPropertyCardProps) => {
 	}
 };
 
-export default PopularPropertyCard;
+export default PopularProductCard;

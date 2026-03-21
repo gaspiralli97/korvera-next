@@ -1,6 +1,6 @@
 import { SkinType } from '../../enums/product.enum';
 import { Member } from '../member/member';
-import { TotalCounter } from '../property/property';
+import { TotalCounter } from '../product/product';
 
 export interface Rating {
 	_id: string;

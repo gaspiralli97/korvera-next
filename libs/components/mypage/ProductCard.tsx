@@ -4,20 +4,20 @@ import useDeviceDetect from '../../hooks/useDeviceDetect';
 import IconButton from '@mui/material/IconButton';
 import ModeIcon from '@mui/icons-material/Mode';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Product } from '../../types/property/property';
+import { Product } from '../../types/product/product';
 import { formatterStr } from '../../utils';
 import Moment from 'react-moment';
 import { useRouter } from 'next/router';
 import { ProductStatus } from '../../enums/product.enum';
 
-interface PropertyCardProps {
+interface ProductCardProps {
 	property: Product;
 	deletePropertyHandler?: any;
 	memberPage?: boolean;
 	updatePropertyHandler?: any;
 }
 
-export const PropertyCard = (props: PropertyCardProps) => {
+export const ProductCard = (props: ProductCardProps) => {
 	const { property, deletePropertyHandler, memberPage, updatePropertyHandler } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -29,7 +29,7 @@ export const PropertyCard = (props: PropertyCardProps) => {
 		console.log('+pushEditProperty: ', id);
 		await router.push({
 			pathname: '/mypage',
-			query: { category: 'addProperty', propertyId: id },
+			query: { category: 'addProduct', propertyId: id },
 		});
 	};
 
