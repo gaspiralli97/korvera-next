@@ -1,47 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 52" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 52" fill="none">
   <!-- Icon background -->
-  <rect x="0" y="4" width="44" height="44" rx="10" fill="#2C6E49"/>
+  <rect x="0" y="4" width="44" height="44" rx="11" fill="#2C1654"/>
 
-  <!-- Chimney -->
-  <rect x="30" y="11" width="5" height="9" rx="1" fill="#F5EDD8"/>
-
-  <!-- Roof -->
-  <polygon points="22,10 40,26 4,26" fill="#F5EDD8"/>
-
-  <!-- Body -->
-  <rect x="6" y="25" width="32" height="19" rx="1" fill="#F5EDD8"/>
-
-  <!-- Door -->
-  <rect x="15" y="32" width="14" height="12" rx="2" fill="#2C6E49"/>
-
-  <!-- Door knob -->
-  <circle cx="26" cy="39" r="1.2" fill="#F5EDD8"/>
-
-  <!-- Left window -->
-  <rect x="8" y="29" width="6" height="5" rx="1" fill="#2C6E49"/>
-
-  <!-- Right window -->
-  <rect x="26" y="29" width="6" height="5" rx="1" fill="#2C6E49"/>
+  <!-- 5-petal blossom mark (centered at 22, 26) -->
+  <g transform="translate(22,26)">
+    <!-- Petal 1 -->
+    <path d="M0,0 C3,-2 3.5,-9.5 0,-15 C-3.5,-9.5 -3,-2 0,0 Z" fill="#F0C5CC" transform="rotate(0)"/>
+    <!-- Petal 2 -->
+    <path d="M0,0 C3,-2 3.5,-9.5 0,-15 C-3.5,-9.5 -3,-2 0,0 Z" fill="#FAF3EE" transform="rotate(72)"/>
+    <!-- Petal 3 -->
+    <path d="M0,0 C3,-2 3.5,-9.5 0,-15 C-3.5,-9.5 -3,-2 0,0 Z" fill="#F0C5CC" transform="rotate(144)"/>
+    <!-- Petal 4 -->
+    <path d="M0,0 C3,-2 3.5,-9.5 0,-15 C-3.5,-9.5 -3,-2 0,0 Z" fill="#FAF3EE" transform="rotate(216)"/>
+    <!-- Petal 5 -->
+    <path d="M0,0 C3,-2 3.5,-9.5 0,-15 C-3.5,-9.5 -3,-2 0,0 Z" fill="#F0C5CC" transform="rotate(288)"/>
+    <!-- Center -->
+    <circle cx="0" cy="0" r="4" fill="#2C1654"/>
+    <circle cx="0" cy="0" r="1.8" fill="#F0C5CC"/>
+  </g>
 
   <!-- Brand name -->
   <text
-    x="56"
-    y="34"
+    x="58"
+    y="31"
     font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
     font-weight="700"
-    font-size="21"
-    letter-spacing="3"
-    fill="#2C6E49"
+    font-size="19"
+    letter-spacing="4"
+    fill="#2C1654"
   >KORVERA</text>
 
   <!-- Tagline -->
   <text
-    x="57"
-    y="45"
+    x="60"
+    y="43"
     font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
-    font-weight="400"
-    font-size="7.5"
-    letter-spacing="2.5"
-    fill="#4C9A70"
-  >REAL ESTATE</text>
+    font-weight="300"
+    font-size="7"
+    letter-spacing="4"
+    fill="#D4849A"
+  >BEAUTY</text>
 </svg>

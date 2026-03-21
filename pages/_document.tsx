@@ -8,13 +8,13 @@ export default function Document() {
 				<link rel="icon" type="image/png" href="/img/logo/favicon.svg" />
 
 				{/* SEO */}
-				<meta name="keyword" content={'korvera, korvera.uz, devex mern, mern nestjs fullstack'} />
+				<meta name="keyword" content={'korvera, korvera.uz, beauty, skincare, cosmetics, makeup, haircare'} />
 				<meta
 					name={'description'}
 					content={
-						'Buy and sell properties anywhere anytime in South Korea. Best Properties at Best prices on korvera.uz | ' +
-						'Покупайте и продавайте недвижимость в любой точке Южной Кореи в любое время. Лучшая недвижимость по лучшим ценам на korvera.uz | ' +
-						'대한민국 언제 어디서나 부동산을 사고팔 수 있습니다. Korvera.uz에서 최적의 가격으로 최고의 부동산을 만나보세요'
+						'Discover premium beauty & skincare products at Korvera. Shop cosmetics, skincare, makeup and more at korvera.uz | ' +
+						'Откройте для себя премиальные средства по уходу за кожей и косметику на Korvera. Покупайте на korvera.uz | ' +
+						'코르베라에서 프리미엄 뷰티 및 스킨케어 제품을 만나보세요. korvera.uz에서 화장품, 스킨케어, 메이크업 등을 쇼핑하세요'
 					}
 				/>
 			</Head>

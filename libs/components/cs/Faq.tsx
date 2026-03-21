@@ -33,12 +33,12 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 const Faq = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
-	const [category, setCategory] = useState<string>('property');
+	const [category, setCategory] = useState<string>('products');
 	const [expanded, setExpanded] = useState<string | false>('panel1');
 
 	/** APOLLO REQUESTS **/
 	/** LIFECYCLES **/
-	
+
 	/** HANDLERS **/
 	const changeCategoryHandler = (category: string) => {
 		setCategory(category);
@@ -49,386 +49,438 @@ const Faq = () => {
 	};
 
 	const data: any = {
-		property: [
+		products: [
 			{
 				id: '00f5a45ed8897f8090116a01',
-				subject: 'Are the properties displayed on the site reliable?',
-				content: 'of course we only have verified properties',
+				subject: 'Are the products on Korvera authentic and genuine?',
+				content:
+					'Yes, all products listed on Korvera are 100% authentic. We only work with verified sellers and authorized distributors to ensure every product is genuine.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a22',
-				subject: 'What types of properties do you offer?',
-				content: 'We offer single-family homes, condos, townhouses, apartments, and penthouses',
+				subject: 'What categories of beauty products do you offer?',
+				content:
+					'We offer a wide range including Skincare, Makeup, Haircare, Body Care, Fragrances, and Wellness products from both local and international brands.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a21',
-				subject: 'How can I search for properties on your website?',
-				content: 'Simply use our search bar to enter location, price range, bedrooms/bathrooms, and property type.',
+				subject: 'How can I find products suitable for my skin type?',
+				content:
+					'Use our skin type filter on the product listing page. You can filter by Normal, Dry, Oily, Combination, or Sensitive skin type to find products formulated specifically for you.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a23',
-				subject: 'Do you provide assistance for first-time homebuyers?',
-				content: 'Yes, we guide you through the process and help find suitable financing.',
+				subject: 'Do products on Korvera have expiration dates?',
+				content:
+					'Yes, all products display their expiration date and PAO (Period After Opening) information on the product detail page. We never sell expired or near-expiry products.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a24',
-				subject: 'What should I consider when buying a property?',
-				content: 'Location, condition, size, amenities, and future development plans.',
+				subject: 'Are the products dermatologist-tested or certified?',
+				content:
+					'Many products carry certifications such as Dermatologist Tested, Hypoallergenic, Cruelty-Free, Vegan, or Organic. You can find certification badges on each product detail page.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a25',
-				subject: 'How long does the home-buying process typically take?',
-				content: 'Usually 3 to 6 days, depending on various factors.',
+				subject: 'How do I check a product\'s full ingredient list?',
+				content:
+					'The complete INCI ingredient list is available on every product detail page. You can also search products by specific ingredients or exclude allergens using our advanced search filters.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a29',
-				subject: 'What happens if I encounter issues with the property after purchase?',
-				content: 'We offer post-purchase support to address any concerns promptly.',
+				subject: 'What if I have an allergic reaction to a product I purchased?',
+				content:
+					'Stop using the product immediately and consult a dermatologist. Contact our support team with your order details — we will guide you through our return and refund process.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a28',
-				subject: 'Do you offer properties in specific neighborhoods?',
-				content: 'Yes, we have listings in various neighborhoods based on your preferences.',
+				subject: 'Do you offer cruelty-free and vegan beauty products?',
+				content:
+					'Yes, you can filter specifically for Cruelty-Free, Vegan, and Organic certified products. These are clearly marked with certification badges on product cards and detail pages.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a27',
-				subject: 'Can I sell my property through your website?',
-				content: 'Absolutely, we provide services for selling properties as well.',
+				subject: 'Can I sell my own beauty products through Korvera?',
+				content:
+					'Absolutely! Register as a seller, submit your brand verification documents, and list your products. See our "For Sellers" FAQ section for more details.',
 			},
 			{
 				id: '00f5a45ed8897f8090116b99',
-				subject: 'What if I need help understanding legal aspects of property purchase?',
-				content: 'Our team can provide basic guidance and recommend legal professionals if needed.',
+				subject: 'What does PAO (Period After Opening) mean?',
+				content:
+					'PAO indicates how many months a product remains safe to use after opening — for example, "12M" means 12 months. Always check PAO to ensure you\'re using products within their safe period.',
 			},
 		],
 		payment: [
 			{
 				id: '00f5a45ed8897f8090116a02',
-				subject: 'How can I make the payment?',
-				content: 'you make the payment through an agent!',
+				subject: 'What payment methods are accepted on Korvera?',
+				content:
+					'We accept major credit/debit cards, online banking transfers, and popular digital wallets. All payments are processed securely through our payment portal.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a91',
-				subject: 'Are there any additional fees for using your services?',
-				content: 'No, our services are free for buyers. Sellers pay a commission upon successful sale.',
+				subject: 'Are there any additional fees for using Korvera?',
+				content:
+					'No hidden fees for buyers. The price you see is the price you pay, excluding applicable shipping fees which are displayed at checkout.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a92',
-				subject: 'Is there an option for installment payments?',
-				content: 'Yes, we offer installment payment plans for certain properties. Please inquire for more details.',
+				subject: 'Is installment payment available for larger orders?',
+				content:
+					'Yes, we offer installment payment options for qualifying orders. Available installment plans are displayed at checkout based on your order total.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a93',
-				subject: 'Is my payment information secure on your website?',
+				subject: 'Is my payment information secure on Korvera?',
 				content:
-					'Yes, we use industry-standard encryption technology to ensure the security of your payment information.',
+					'Yes, we use industry-standard SSL encryption and comply with PCI-DSS standards to ensure all your payment information is fully protected.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a94',
-				subject: 'Can I make payments online through your website?',
-				content: "Yes, you can securely make payments online through our website's payment portal.",
+				subject: 'Can I save my payment details for future purchases?',
+				content:
+					'Yes, you can securely save your payment method in your account settings for faster checkout on future orders.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a95',
-				subject: "What happens if there's an issue with my payment?",
-				content: 'If you encounter any issues with your payment, please contact our support team for assistance.',
+				subject: "What should I do if my payment fails?",
+				content:
+					'Check your card details and available balance, then try again. If the issue persists, contact your bank or reach out to our support team for assistance.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a96',
-				subject: 'Do you offer refunds for payments made?',
+				subject: 'What is your refund policy?',
 				content:
-					'Refund policies vary depending on the circumstances. Please refer to our refund policy or contact us for more information.',
+					'We offer refunds for unopened products returned within 14 days of delivery. Opened products may be eligible for refund if there is a quality issue or allergic reaction. Contact support to initiate a return.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a97',
-				subject: 'Are there any discounts or incentives for early payments?',
+				subject: 'Are there discounts or promo codes available?',
 				content:
-					'We occasionally offer discounts or incentives for early payments. Check our promotions or contact us for current offers.',
+					'Yes! We regularly offer promotional codes, seasonal sales, and loyalty point discounts. Subscribe to our newsletter or check the promotions banner to stay updated.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a99',
-				subject: 'How long does it take for payments to be processed?',
+				subject: 'How long does payment processing take?',
 				content:
-					'Payment processing times vary depending on the payment method used. Typically, credit/debit card payments are processed instantly',
+					'Credit and debit card payments are processed instantly. Bank transfers may take 1-2 business days. Your order is confirmed once payment is successfully processed.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a98',
-				subject: 'Are there penalties for late payments?',
+				subject: 'Do you offer loyalty points or cashback on purchases?',
 				content:
-					'Late payment penalties may apply depending on the terms of your agreement. Please refer to your contract or contact us for details.',
+					'Yes, every purchase earns you Korvera Beauty Points which can be redeemed as discounts on future orders. Points are credited to your account after order delivery.',
 			},
 		],
-		buyers: [
+		skincare: [
 			{
 				id: '00f5a45ed8897f8090116a03',
-				subject: 'What should buyers pay attention to?',
-				content: 'Buyers should check and decide whether the property they want to buy or rent is actually suitable!',
+				subject: 'How do I determine my skin type?',
+				content:
+					'Wash your face and wait 30 minutes without applying any products. If your skin feels tight — Dry; shiny all over — Oily; shiny only on T-zone — Combination; no issues — Normal; easily irritated — Sensitive.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a85',
-				subject: 'How can I determine if a property is within my budget?',
+				subject: 'What is the correct order to apply skincare products?',
 				content:
-					'Calculate your budget by considering your income, down payment, and potential mortgage payments. Our agents can assist you within your budget.',
+					'Apply products from thinnest to thickest consistency: Cleanser → Toner → Essence → Serum → Eye Cream → Moisturizer → Sunscreen (AM) or Face Oil/Night Cream (PM).',
 			},
 			{
 				id: '00f5a45ed8897f8090116a84',
-				subject: 'What documents do I need to provide when purchasing a property?',
+				subject: 'Can I use multiple active ingredients like Vitamin C and Retinol together?',
 				content:
-					"You'll typically need identification, proof of income, bank statements, and any necessary loan documentation. Our team will guide you through.",
+					'It\'s generally not recommended to use Vitamin C and Retinol at the same time. Use Vitamin C in the morning and Retinol at night. Always patch test new actives and introduce them gradually.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a83',
-				subject: 'What factors should I consider when choosing a neighborhood?',
+				subject: 'What is the difference between a serum and a moisturizer?',
 				content:
-					'Consider factors such as location, safety, schools, amenities, transportation, and future development plans.',
+					'Serums are lightweight, fast-absorbing formulas with high concentrations of active ingredients targeting specific concerns. Moisturizers create a protective barrier to lock in hydration. Use serum before moisturizer.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a82',
-				subject: 'Can I negotiate the price of a property?',
+				subject: 'How often should I exfoliate my skin?',
 				content:
-					'Yes, you can negotiate the price of a property. Our agents will assist you in making competitive offers and negotiating terms with the seller.',
+					'For most skin types, 2-3 times per week is ideal. Sensitive skin should limit exfoliation to once a week. Over-exfoliating can damage the skin barrier and cause irritation.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a81',
-				subject: 'What are some red flags to watch out for when viewing properties?',
+				subject: 'Why is sunscreen important and how do I choose the right SPF?',
 				content:
-					'Watch out for signs of structural damage, water damage, mold, outdated systems, and undesirable neighborhood conditions.',
+					'Sunscreen protects against UV damage, premature aging, and skin cancer. SPF 30 blocks 97% of UVB rays, SPF 50 blocks 98%. For daily use, SPF 30-50 is recommended. Reapply every 2 hours when outdoors.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a80',
-				subject: 'Do you provide assistance with property inspections?',
+				subject: 'How do I patch test a new skincare product?',
 				content:
-					'Yes, we can recommend reputable inspectors and accompany you during property inspections to identify any potential issues.',
+					'Apply a small amount of the product to the inner forearm or behind the ear. Wait 24-48 hours. If no redness, itching, or irritation appears, the product is likely safe to use on your face.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a79',
-				subject: 'How long does it typically take to find the right property?',
+				subject: 'How long does it take to see results from a new skincare routine?',
 				content:
-					'The timeframe varies depending on your preferences and market conditions. Our agents will work diligently to find the right property as quickly as possible.',
+					'Most skincare products need 4-8 weeks of consistent use to show visible results. Skin cell turnover takes about 28 days, so give products enough time before judging effectiveness.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a78',
-				subject: 'What are the advantages of using a real estate agent when buying a property?',
+				subject: 'What ingredients should I avoid for sensitive skin?',
 				content:
-					'Real estate agents provide expertise, negotiation skills, and guidance throughout the buying process, ultimately saving you time and hassle.',
+					'Avoid alcohol (denat.), synthetic fragrances, sulfates, parabens, and harsh exfoliating acids. Look for products labeled Fragrance-Free, Alcohol-Free, or Hypoallergenic.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a77',
-				subject: 'What happens if I change my mind about a property after making an offer?',
+				subject: 'What is the difference between physical and chemical sunscreen?',
 				content:
-					'Depending on the terms of the offer and the stage of the transaction, you may have options to withdraw your offer.',
+					'Physical sunscreen (zinc oxide, titanium dioxide) sits on skin and reflects UV rays. Chemical sunscreen absorbs UV rays and converts them to heat. Physical is better for sensitive skin; chemical tends to be more lightweight.',
 			},
 		],
-
-		agents: [
+		sellers: [
 			{
 				id: '00f5a45ed8897f8090116a04',
-				subject: 'What do I need to do if I want to become an agent?',
+				subject: 'How can I become a seller on Korvera?',
 				content:
-					'If you really decide to become an agent, you should read our terms and conditions and contact the admin!',
+					'Register an account, select "Seller" as your member type, and contact our admin team with your brand information and product catalog. We will review and activate your seller account.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a62',
-				subject: 'What qualifications do I need to become a real estate agent?',
-				content: 'Complete pre-licensing course, pass licensing exam, meet state requirements.',
+				subject: 'What documents are required to register as a seller?',
+				content:
+					'You will need: business registration certificate, product authenticity certificates, brand authorization letter (if reselling), and product safety/compliance documentation.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a63',
-				subject: 'How do I find clients as a new real estate agent?',
-				content: 'Build network, use online/offline marketing, join reputable brokerage.',
+				subject: 'How do I list my products on the platform?',
+				content:
+					'Once approved, use the seller dashboard to add products. Fill in all details including ingredients, certifications, skin type compatibility, variants, and high-quality product images.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a64',
-				subject: 'What are some effective marketing strategies for selling properties?',
-				content: 'Use social media, online platforms, networking events, and direct mail.',
+				subject: 'What are the most effective ways to promote my products on Korvera?',
+				content:
+					'Optimize product descriptions with relevant keywords, ensure high-quality images, collect genuine customer reviews, maintain competitive pricing, and participate in Korvera promotional campaigns.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a65',
-				subject: 'How do I handle negotiations with buyers and sellers?',
-				content: 'Develop strong negotiation skills, understand market trends, represent client interests.',
+				subject: 'How are seller payments processed?',
+				content:
+					'Seller earnings are calculated after deducting the platform commission and transferred to your registered bank account on a bi-weekly basis.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a66',
-				subject: 'What should I do to stay updated with market trends and changes?',
-				content: 'Attend industry events, follow real estate news, participate in training.',
+				subject: 'How do I handle product returns and customer complaints?',
+				content:
+					'Respond to customer inquiries within 24 hours through the Q&A system. For returns, follow the platform\'s return policy and maintain a good seller rating to stay in good standing.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a67',
-				subject: 'How do I handle difficult clients or situations?',
+				subject: 'What quality standards must my products meet?',
 				content:
-					'Approach with professionalism, empathy, and patience. Listen actively, address issues collaboratively.',
+					'All products must comply with local cosmetics safety regulations, have valid expiry dates, accurate ingredient lists, and proper labeling. Products with false claims will be removed immediately.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a68',
-				subject: 'What tools and technologies should I utilize as a real estate agent?',
-				content: 'Use CRM software, virtual tours, digital marketing tools, and mobile apps.',
+				subject: 'Can international brands sell on Korvera?',
+				content:
+					'Yes, international brands are welcome. Products must meet local import regulations and all labels must include information in the required local language(s).',
 			},
 			{
 				id: '00f5a45ed8897f8090116a69',
-				subject: 'How do I ensure compliance with real estate laws and regulations?',
-				content: 'Stay updated with laws, attend education courses, consult legal professionals.',
+				subject: 'How do I track my sales and performance analytics?',
+				content:
+					'Your seller dashboard provides real-time analytics including sales volume, product views, customer ratings, and conversion rates to help you optimize your listings.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a70',
-				subject: 'What strategies can I use to grow my real estate business?',
-				content: 'Build relationships, provide exceptional service, seek referrals, and continuously improve skills.',
+				subject: 'What strategies can I use to grow my brand on Korvera?',
+				content:
+					'Focus on product quality, respond promptly to customer Q&As, encourage genuine reviews, keep your inventory updated, and participate in Korvera\'s featured seller programs.',
 			},
 		],
 		membership: [
 			{
 				id: '00f5a45ed8897f8090116a05',
-				subject: 'Do you have a membership service on your site?',
-				content: 'membership service is not available on our site yet!',
+				subject: 'Is there a membership or loyalty program on Korvera?',
+				content:
+					'Our full membership program is coming soon! Currently, all registered users earn Beauty Points on every purchase which can be redeemed for discounts.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a60',
-				subject: 'What are the benefits of becoming a member on your website?',
-				content: 'We currently do not offer membership benefits, but stay tuned for updates on any future offerings.',
+				subject: 'How does the Beauty Points system work?',
+				content:
+					'You earn 1 point for every $1 spent. Points can be redeemed at checkout — 100 points equals a $1 discount. Points are credited after your order is delivered.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a59',
-				subject: 'Is there a fee associated with becoming a member?',
-				content: 'As membership services are not available, there are no associated fees at this time.',
+				subject: 'Will there be premium membership tiers in the future?',
+				content:
+					'Yes! We are working on Beauty Insider tiers (Silver, Gold, Platinum) with exclusive benefits like early access to new products, special discounts, and free samples.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a58',
-				subject: 'Will membership provide access to exclusive content or features?',
-				content: "We don't currently have membership-exclusive content or features.",
+				subject: 'Do members get access to exclusive product launches?',
+				content:
+					'Registered members already receive early access notifications for new arrivals. Premium members (coming soon) will get exclusive pre-launch shopping access.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a57',
-				subject: 'How can I sign up for a membership on your site?',
-				content: 'As of now, we do not have a sign-up process for memberships.',
+				subject: 'How do I create an account on Korvera?',
+				content:
+					'Click "Sign Up" on the top navigation, fill in your details, verify your email, and you\'re ready to start shopping. Registration is free and takes less than a minute.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a56',
-				subject: 'Do members receive discounts on property listings or services?',
-				content: 'Membership discounts are not part of our current offerings.',
+				subject: 'Do members receive birthday discounts or special offers?',
+				content:
+					'We are introducing birthday discount coupons for all registered members. Add your birthday to your profile settings to receive your special gift when the program launches.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a55',
-				subject: 'Are there plans to introduce a membership program in the future?',
+				subject: 'Can I earn points by writing product reviews?',
 				content:
-					"While we can't confirm any plans at this time, we're always exploring ways to enhance our services for users.",
+					'Yes! Writing verified purchase reviews earns you bonus Beauty Points. Detailed and helpful reviews earn more points than short ones.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a54',
-				subject: 'What kind of content or benefits can members expect if a membership program is introduced?',
-				content: "We're evaluating potential benefits and features, but specifics are not available yet.",
+				subject: 'Do points expire?',
+				content:
+					'Currently, Beauty Points do not expire. However, once tiered membership launches, unused points from inactive accounts may expire after 12 months of inactivity.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a33',
-				subject: 'Do you offer a premium membership option on your platform?',
-				content: 'Currently, we do not provide a premium membership option.',
+				subject: 'Is there a referral reward for inviting friends to Korvera?',
+				content:
+					'A referral program is planned for our upcoming membership launch. You will earn bonus points when friends you refer make their first purchase.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a32',
-				subject: 'Will membership grant access to exclusive deals or discounts?',
-				content: 'Membership perks, including deals or discounts, are not available at this time.',
+				subject: 'Can I use my points together with promotional codes?',
+				content:
+					'Points redemption and promo codes cannot be combined in a single order currently. We are working to allow combined use in a future platform update.',
 			},
 		],
 		community: [
 			{
 				id: '00f5a45ed8897f8090116a06',
-				subject: 'What should I do if there is abusive or criminal behavior in the community section?',
-				content: 'If you encounter this situation, please report it immediately or contact the admin!',
+				subject: 'What can I post in the Korvera Beauty Community?',
+				content:
+					'Share skincare routines, makeup tutorials, product reviews, beauty tips, before/after experiences, ingredient discussions, and questions about specific skin concerns.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a44',
-				subject: 'How can I participate in the community section of your website?',
-				content: 'Create an account and engage in discussions.',
+				subject: 'How do I participate in the community section?',
+				content:
+					'Create a free account, go to the Community page, and start posting or commenting. Share your beauty journey and connect with others who share your interests.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a45',
-				subject: 'Are there guidelines for posting?',
-				content: 'Yes, follow our community guidelines.',
+				subject: 'Are there community guidelines I should follow?',
+				content:
+					'Yes. Be respectful, share accurate product information, avoid spam, do not post misleading claims about products, and do not share personal contact details publicly.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a46',
-				subject: 'What should I do if I encounter spam or irrelevant posts?',
-				content: 'Report them to the admin.',
+				subject: 'What should I do if I see misinformation about a product or ingredient?',
+				content:
+					'You can reply with correct information and cite your sources. If the post contains harmful or false claims, report it to our admin team for review.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a47',
-				subject: 'Can I connect with other members outside of the community section?',
-				content: 'Currently, no.',
+				subject: 'Can I ask for skincare advice from other members?',
+				content:
+					'Absolutely! The community is a great place to ask for advice. However, for medical skin conditions, always consult a licensed dermatologist.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a48',
-				subject: 'Can I share personal experiences or recommendations?',
-				content: 'Yes, if relevant you can share personal experiences and recommendations.',
+				subject: 'Can I share my personal skincare routine or product recommendations?',
+				content:
+					'Yes! Personal routines and honest product recommendations are some of the most valuable content in our community. Feel free to share what works for you.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a49',
-				subject: 'How can I ensure privacy?',
-				content: 'Avoid sharing sensitive information.',
+				subject: 'How do I protect my privacy in the community?',
+				content:
+					'Avoid sharing personal contact information publicly. Use a username instead of your real name if you prefer privacy. You can control what appears on your public profile in account settings.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a50',
-				subject: 'How can I contribute positively?',
-				content: 'Respect others and engage constructively.',
+				subject: 'Are beauty influencers or professionals active in the community?',
+				content:
+					'Yes, we have verified beauty consultants and skincare professionals who participate in the community. Their profiles are marked with a Consultant badge.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a51',
-				subject: 'What if I notice misinformation?',
-				content: 'Provide correct information or report to the admin.',
+				subject: 'Can I report a post or comment that violates community guidelines?',
+				content:
+					'Yes, click the report button on any post or comment. Our moderation team reviews reports within 24 hours and takes appropriate action.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a52',
-				subject: 'Are there moderators?',
-				content: 'Yes, we have moderators.',
+				subject: 'Is the community moderated?',
+				content:
+					'Yes, our community is actively moderated by our team. We also have AI-assisted content filtering to catch violations quickly and maintain a positive environment.',
 			},
 		],
 		other: [
 			{
 				id: '00f5a45ed8897f8090116a40',
-				subject: 'Who should I contact if I want to buy your site?',
-				content: 'We have no plans to sell the site at this time!',
+				subject: 'How can I contact Korvera customer support?',
+				content:
+					'You can reach us through the Inquiry form on this page, via email at support@korvera.uz, or through the live chat widget available on the website.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a39',
-				subject: 'Can I advertise my services on your website?',
-				content: 'We currently do not offer advertising opportunities on our site.',
+				subject: 'Can beauty brands advertise on Korvera?',
+				content:
+					'We offer partnership and advertising opportunities for beauty brands. Contact our partnerships team through the inquiry form for sponsorship and promotional collaboration details.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a38',
-				subject: 'Are there sponsorship opportunities available on your platform?',
-				content: 'At this time, we do not have sponsorship opportunities.',
+				subject: 'Do you collaborate with beauty influencers or content creators?',
+				content:
+					'Yes! We have an influencer and content creator program. If you are a beauty content creator interested in collaboration, please reach out through our partnerships inquiry form.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a36',
-				subject: 'Can I contribute guest posts or articles to your website?',
-				content: "We're not accepting guest posts or articles at the moment.",
+				subject: 'Can I contribute beauty articles or skincare guides to Korvera?',
+				content:
+					'We welcome contributions from skincare professionals and beauty experts. Contact us through the inquiry form with your proposed topic and your credentials.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a35',
-				subject: 'Is there a referral program for recommending your website to others?',
-				content: "We don't have a referral program in place currently.",
+				subject: 'Is there a referral program for recommending Korvera to friends?',
+				content:
+					'A referral rewards program is coming soon. Stay tuned for our announcement — you will earn bonus points for every friend you refer who makes a purchase.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a34',
-				subject: 'Do you offer affiliate partnerships for promoting your services?',
-				content: 'Affiliate partnerships are not available at this time.',
+				subject: 'Do you offer affiliate marketing partnerships?',
+				content:
+					'Yes, we have an affiliate program for content creators and bloggers. Apply through our affiliate program page to earn commission on sales generated through your links.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a33',
-				subject: 'Can I purchase merchandise related to your website?',
-				content: "We don't have merchandise available for purchase.",
+				subject: 'Do you host beauty events or skincare workshops?',
+				content:
+					'We periodically host online beauty masterclasses, skincare Q&A sessions with dermatologists, and virtual brand launch events. Follow us on social media for announcements.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a32',
-				subject: 'Are there any job openings or opportunities to work with your team?',
-				content: 'Currently, we do not have any job openings or opportunities available.',
+				subject: 'Are there career opportunities at Korvera?',
+				content:
+					'We are a growing beauty platform always looking for passionate talent. Check our careers page or send your resume to careers@korvera.uz for current and future openings.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a31',
-				subject: 'Do you host events or webinars related to real estate?',
-				content: "We're not hosting events or webinars at this time.",
+				subject: 'How can I stay updated on new product launches and promotions?',
+				content:
+					'Subscribe to our newsletter, follow us on social media, and enable notifications in your account settings to never miss a new launch or exclusive deal.',
 			},
 			{
 				id: '00f5a45ed8897f8090116a30',
-				subject: 'Can I request custom features or functionalities for your website?',
-				content: "We're not accepting requests for custom features or functionalities.",
+				subject: 'How do I report a counterfeit or suspicious product listing?',
+				content:
+					'Click the "Report" button on the product page or contact our support team directly. We take authenticity very seriously and will investigate all reports immediately.',
 			},
 		],
 	};
@@ -440,12 +492,12 @@ const Faq = () => {
 			<Stack className={'faq-content'}>
 				<Box className={'categories'} component={'div'}>
 					<div
-						className={category === 'property' ? 'active' : ''}
+						className={category === 'products' ? 'active' : ''}
 						onClick={() => {
-							changeCategoryHandler('property');
+							changeCategoryHandler('products');
 						}}
 					>
-						Property
+						Products
 					</div>
 					<div
 						className={category === 'payment' ? 'active' : ''}
@@ -456,20 +508,20 @@ const Faq = () => {
 						Payment
 					</div>
 					<div
-						className={category === 'buyers' ? 'active' : ''}
+						className={category === 'skincare' ? 'active' : ''}
 						onClick={() => {
-							changeCategoryHandler('buyers');
+							changeCategoryHandler('skincare');
 						}}
 					>
-						Foy Buyers
+						Skincare Tips
 					</div>
 					<div
-						className={category === 'agents' ? 'active' : ''}
+						className={category === 'sellers' ? 'active' : ''}
 						onClick={() => {
-							changeCategoryHandler('agents');
+							changeCategoryHandler('sellers');
 						}}
 					>
-						For Agents
+						For Sellers
 					</div>
 					<div
 						className={category === 'membership' ? 'active' : ''}

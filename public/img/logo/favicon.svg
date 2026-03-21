@@ -1,25 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <!-- Background -->
-  <rect width="100" height="100" rx="22" fill="#2C6E49"/>
+  <rect width="100" height="100" rx="24" fill="#2C1654"/>
 
-  <!-- Chimney -->
-  <rect x="60" y="24" width="9" height="16" rx="2" fill="#F5EDD8"/>
-
-  <!-- Roof -->
-  <polygon points="50,16 84,50 16,50" fill="#F5EDD8"/>
-
-  <!-- Body -->
-  <rect x="20" y="49" width="60" height="34" rx="2" fill="#F5EDD8"/>
-
-  <!-- Door -->
-  <rect x="38" y="61" width="24" height="22" rx="4" fill="#2C6E49"/>
-
-  <!-- Door knob -->
-  <circle cx="58" cy="73" r="2" fill="#F5EDD8"/>
-
-  <!-- Left window -->
-  <rect x="24" y="57" width="11" height="10" rx="2" fill="#2C6E49"/>
-
-  <!-- Right window -->
-  <rect x="65" y="57" width="11" height="10" rx="2" fill="#2C6E49"/>
+  <!-- 5-petal blossom mark -->
+  <g transform="translate(50,50)">
+    <!-- Petal 1 - top -->
+    <path d="M0,0 C6,-4 7,-19 0,-30 C-7,-19 -6,-4 0,0 Z" fill="#F0C5CC" transform="rotate(0)"/>
+    <!-- Petal 2 -->
+    <path d="M0,0 C6,-4 7,-19 0,-30 C-7,-19 -6,-4 0,0 Z" fill="#FAF3EE" transform="rotate(72)"/>
+    <!-- Petal 3 -->
+    <path d="M0,0 C6,-4 7,-19 0,-30 C-7,-19 -6,-4 0,0 Z" fill="#F0C5CC" transform="rotate(144)"/>
+    <!-- Petal 4 -->
+    <path d="M0,0 C6,-4 7,-19 0,-30 C-7,-19 -6,-4 0,0 Z" fill="#FAF3EE" transform="rotate(216)"/>
+    <!-- Petal 5 -->
+    <path d="M0,0 C6,-4 7,-19 0,-30 C-7,-19 -6,-4 0,0 Z" fill="#F0C5CC" transform="rotate(288)"/>
+    <!-- Center ring -->
+    <circle cx="0" cy="0" r="8" fill="#2C1654"/>
+    <circle cx="0" cy="0" r="5" fill="none" stroke="#D4849A" stroke-width="1.5"/>
+    <!-- Center dot -->
+    <circle cx="0" cy="0" r="2.5" fill="#D4849A"/>
+  </g>
 </svg>

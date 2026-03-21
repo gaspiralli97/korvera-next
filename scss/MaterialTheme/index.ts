@@ -9,19 +9,24 @@ export const light = {
 	palette: {
 		type: 'light',
 		background: {
-			default: '#f4f6f8',
+			default: '#FBF5F0',
 			paper: common.white,
 		},
 		primary: {
 			contrastText: '#ffffff',
-			main: '#E92C28',
+			main: '#2C1654',
+			light: '#3D2070',
+			dark: '#1A0D36',
 		},
 		secondary: {
-			main: '#1646C1',
+			contrastText: '#ffffff',
+			main: '#D4849A',
+			light: '#F0C5CC',
+			dark: '#B5607A',
 		},
 		text: {
-			primary: '#212121',
-			secondary: '#616161',
+			primary: '#1A1A2E',
+			secondary: '#4A4A5A',
 			dark: common.black,
 		},
 	},
@@ -51,7 +56,7 @@ export const light = {
 		MuiLink: {
 			styleOverrides: {
 				root: {
-					color: '#757575',
+					color: '#D4849A',
 					textDecoration: 'none',
 				},
 			},
@@ -251,7 +256,7 @@ export const light = {
 			styleOverrides: {
 				root: {
 					'&.Mui-checked': {
-						color: 'black',
+						color: '#2C1654',
 					},
 				},
 			},
