@@ -11,7 +11,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Member } from '../../libs/types/member/member';
 import { LIKE_TARGET_MEMBER } from '../../apollo/user/mutation';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_AGENTS } from '../../apollo/user/query';
+import { GET_SELLERS } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import { Messages } from '../../libs/config';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
@@ -45,13 +45,13 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 		data: getAgentsData,
 		error: getAgentsError,
 		refetch: getAgentsRefetch,
-	} = useQuery(GET_AGENTS, {
+	} = useQuery(GET_SELLERS, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setAgents(data?.getAgents?.list);
-			setTotal(data?.getAgents?.metaCounter[0]?.total);
+			setAgents(data?.getSellers?.list);
+			setTotal(data?.getSellers?.metaCounter[0]?.total);
 		},
 	});
 

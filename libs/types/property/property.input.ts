@@ -1,37 +1,30 @@
-import { PropertyLocation, PropertyStatus, PropertyType } from '../../enums/property.enum';
+import { ProductCategory, ProductStatus, ProductSize, SkinType } from '../../enums/product.enum';
 import { Direction } from '../../enums/common.enum';
 
-export interface PropertyInput {
-	propertyType: PropertyType;
-	propertyLocation: PropertyLocation;
-	propertyAddress: string;
-	propertyTitle: string;
-	propertyPrice: number;
-	propertySquare: number;
-	propertyBeds: number;
-	propertyRooms: number;
-	propertyImages: string[];
-	propertyDesc?: string;
-	propertyBarter?: boolean;
-	propertyRent?: boolean;
+export interface ProductInput {
+	productCategory: ProductCategory;
+	productBrand: string;
+	productTitle: string;
+	productPrice: number;
+	productVolume: number;
+	productSize: ProductSize;
+	productSkinType?: SkinType[];
+	productImages: string[];
+	productDesc?: string;
 	memberId?: string;
-	constructedAt?: Date;
+	manufacturedAt?: Date;
 }
 
 interface PISearch {
 	memberId?: string;
-	locationList?: PropertyLocation[];
-	typeList?: PropertyType[];
-	roomsList?: Number[];
-	options?: string[];
-	bedsList?: Number[];
+	categoryList?: ProductCategory[];
+	skinTypeList?: SkinType[];
 	pricesRange?: Range;
-	periodsRange?: PeriodsRange;
-	squaresRange?: Range;
+	volumesRange?: Range;
 	text?: string;
 }
 
-export interface PropertiesInquiry {
+export interface ProductsInquiry {
 	page: number;
 	limit: number;
 	sort?: string;
@@ -40,10 +33,10 @@ export interface PropertiesInquiry {
 }
 
 interface APISearch {
-	propertyStatus?: PropertyStatus;
+	productStatus?: ProductStatus;
 }
 
-export interface AgentPropertiesInquiry {
+export interface SellerProductsInquiry {
 	page: number;
 	limit: number;
 	sort?: string;
@@ -52,11 +45,11 @@ export interface AgentPropertiesInquiry {
 }
 
 interface ALPISearch {
-	propertyStatus?: PropertyStatus;
-	propertyLocationList?: PropertyLocation[];
+	productStatus?: ProductStatus;
+	productCategoryList?: ProductCategory[];
 }
 
-export interface AllPropertiesInquiry {
+export interface AllProductsInquiry {
 	page: number;
 	limit: number;
 	sort?: string;
@@ -67,9 +60,4 @@ export interface AllPropertiesInquiry {
 interface Range {
 	start: number;
 	end: number;
-}
-
-interface PeriodsRange {
-	start: Date | number;
-	end: Date | number;
 }

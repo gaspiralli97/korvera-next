@@ -6,39 +6,39 @@ import EastIcon from '@mui/icons-material/East';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import TopPropertyCard from './TopPropertyCard';
-import { PropertiesInquiry } from '../../types/property/property.input';
-import { Property } from '../../types/property/property';
+import { ProductsInquiry } from '../../types/property/property.input';
+import { Product } from '../../types/property/property';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_PROPERTIES } from '../../../apollo/user/query';
+import { GET_PRODUCTS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
-import { LIKE_TARGET_PROPERTY } from '../../../apollo/user/mutation';
+import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
 import { Message } from '../../enums/common.enum';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 
 interface TopPropertiesProps {
-	initialInput: PropertiesInquiry;
+	initialInput: ProductsInquiry;
 	
 }
 
 const TopProperties = (props: TopPropertiesProps) => {
 	const { initialInput } = props;
 	const device = useDeviceDetect();
-	const [topProperties, setTopProperties] = useState<Property[]>([]);
+	const [topProperties, setTopProperties] = useState<Product[]>([]);
 
 	/** APOLLO REQUESTS **/
-	const[likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+	const[likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
 
 	const {
 			loading:getPropertiesLoading,
 			data:getPropertiesData,
 			error:getPropertiesError,
 			refetch: getPropertiesRefetch,
-		}=useQuery(GET_PROPERTIES, {
+		}=useQuery(GET_PRODUCTS, {
 			fetchPolicy:'cache-and-network',
 			variables:{input:initialInput},
 			notifyOnNetworkStatusChange:true,
 			onCompleted:(data:T)=>{
-				setTopProperties(data?.getProperties?.list);
+				setTopProperties(data?.getProducts?.list);
 			},
 		});
 	/** HANDLERS **/
@@ -48,7 +48,7 @@ const TopProperties = (props: TopPropertiesProps) => {
 				if(!id) return;
 				if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 	
-				await likeTargetProperty({
+				await likeTargetProduct({
 					variables:{input:id},
 				});
 				await getPropertiesRefetch({input:initialInput});
@@ -75,7 +75,7 @@ const TopProperties = (props: TopPropertiesProps) => {
 							spaceBetween={15}
 							modules={[Autoplay]}
 						>
-							{topProperties.map((property: Property) => {
+							{topProperties.map((property: Product) => {
 								return (
 									<SwiperSlide className={'top-property-slide'} key={property?._id}>
 										<TopPropertyCard property={property} likePropertyHandler={likePropertyHandler}/>
@@ -118,7 +118,7 @@ const TopProperties = (props: TopPropertiesProps) => {
 								el: '.swiper-top-pagination',
 							}}
 						>
-							{topProperties.map((property: Property) => {
+							{topProperties.map((property: Product) => {
 								return (
 									<SwiperSlide className={'top-property-slide'} key={property?._id}>
 										<TopPropertyCard property={property} likePropertyHandler={likePropertyHandler} />
@@ -137,7 +137,7 @@ TopProperties.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 8,
-		sort: 'propertyRank',
+		sort: 'productRank',
 		direction: 'DESC',
 		search: {},
 	},

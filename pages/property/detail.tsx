@@ -14,7 +14,7 @@ import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { Property } from '../../libs/types/property/property';
+import { Product } from '../../libs/types/property/property';
 import moment from 'moment';
 import { formatterStr } from '../../libs/utils';
 import { REACT_APP_API_URL } from '../../libs/config';
@@ -29,10 +29,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-import { GET_COMMENTS, GET_PROPERTIES, GET_PROPERTY } from '../../apollo/user/query';
+import { GET_COMMENTS, GET_PRODUCTS, GET_PRODUCT } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
-import { CREATE_COMMENT, LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
+import { CREATE_COMMENT, LIKE_TARGET_PRODUCT } from '../../apollo/user/mutation';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 
 
@@ -48,45 +48,45 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
-	const [propertyId, setPropertyId] = useState<string | null>(null);
-	const [property, setProperty] = useState<Property | null>(null);
+	const [productId, setProductId] = useState<string | null>(null);
+	const [property, setProperty] = useState<Product | null>(null);
 	const [slideImage, setSlideImage] = useState<string>('');
-	const [destinationProperties, setDestinationProperties] = useState<Property[]>([]);
+	const [destinationProperties, setDestinationProperties] = useState<Product[]>([]);
 	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
-	const [propertyComments, setPropertyComments] = useState<Comment[]>([]);
+	const [productComments, setProductComments] = useState<Comment[]>([]);
 	const [commentTotal, setCommentTotal] = useState<number>(0);
 	const [insertCommentData, setInsertCommentData] = useState<CommentInput>({
-		commentGroup: CommentGroup.PROPERTY,
+		commentGroup: CommentGroup.PRODUCT,
 		commentContent: '',
 		commentRefId: '',
 	});
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
 	const [createComment] = useMutation(CREATE_COMMENT);
 
 	const {
-		loading: getPropertyLoading,
-		data: getPropertyData,
-		error: getPropertyError,
-		refetch: getPropertyRefetch,
-	} = useQuery(GET_PROPERTY, {
+		loading: getProductLoading,
+		data: getProductData,
+		error: getProductError,
+		refetch: getProductRefetch,
+	} = useQuery(GET_PRODUCT, {
 		fetchPolicy: 'network-only',
-		variables: { input: propertyId },
-		skip: !propertyId,
+		variables: { input: productId },
+		skip: !productId,
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			if (data?.getProperty) setProperty(data?.getProperty);
-			if (data?.getProperty) setSlideImage(data?.getProperty?.propertyImages[0]);
+			if (data?.getProduct) setProperty(data?.getProduct);
+			if (data?.getProduct) setSlideImage(data?.getProduct?.productImages[0]);
 		},
 	});
 
 	const {
-		loading: getPropertiesLoading,
-		data: getPropertiesData,
-		error: getPropertiesError,
-		refetch: getPropertiesRefetch,
-	} = useQuery(GET_PROPERTIES, {
+		loading: getProductsLoading,
+		data: getProductsData,
+		error: getProductsError,
+		refetch: getProductsRefetch,
+	} = useQuery(GET_PRODUCTS, {
 		fetchPolicy: 'cache-and-network',
 		variables: {
 			input: {
@@ -95,14 +95,14 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 				sort: 'createdAt',
 				direction: Direction.DESC,
 				search: {
-					locationList: property?.propertyLocation ? [property?.propertyLocation] : [],
+					categoryList: property?.productCategory ? [property?.productCategory] : [],
 				},
 			},
 		},
-		skip: !propertyId && !property,
+		skip: !productId && !property,
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			if (data?.getProperties?.list) setDestinationProperties(data?.getProperties?.list);
+			if (data?.getProducts?.list) setDestinationProperties(data?.getProducts?.list);
 		},
 	});
 
@@ -119,14 +119,14 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 		skip: !commentInquiry.search.commentRefId,
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			if (data?.getComments?.list) setPropertyComments(data?.getComments?.list);
+			if (data?.getComments?.list) setProductComments(data?.getComments?.list);
 			setCommentTotal(data?.getComments?.metaCounter[0]?.total ?? 0);
 		},
 	});
 	/** LIFECYCLES **/
 	useEffect(() => {
 		if (router.query.id) {
-			setPropertyId(router.query.id as string);
+			setProductId(router.query.id as string);
 			setCommentInquiry({
 				...commentInquiry,
 				search: {
@@ -156,18 +156,18 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 			if (!id) return;
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 			//execute likePropertyHandler Mutation
-			await likeTargetProperty({ variables: { input: id }, });
+			await likeTargetProduct({ variables: { input: id }, });
 
 			
-			await getPropertyRefetch({ input: id });
-			await getPropertiesRefetch({
+			await getProductRefetch({ input: id });
+			await getProductsRefetch({
 				input: {
 					page: 1,
 					limit: 4,
 					sort: 'createdAt',
 					direction: Direction.DESC,
 					search: {
-						locationList: [property?.propertyLocation],
+						categoryList: [property?.productCategory],
 					},
 				},
 			});
@@ -197,7 +197,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 		}
 	};
 
-	if (getPropertiesLoading) {
+	if (getProductsLoading) {
 		return (
 			<Stack
 				sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '1080px' }}
@@ -217,9 +217,9 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 						<Stack className={'property-info-config'}>
 							<Stack className={'info'}>
 								<Stack className={'left-box'}>
-									<Typography className={'title-main'}>{property?.propertyTitle}</Typography>
+									<Typography className={'title-main'}>{property?.productTitle}</Typography>
 									<Stack className={'top-box'}>
-										<Typography className={'city'}>{property?.propertyLocation}</Typography>
+										<Typography className={'city'}>{property?.productCategory}</Typography>
 										<Stack className={'divider'}></Stack>
 										<Stack className={'buy-rent-box'}>
 											{property?.propertyBarter && (
@@ -272,7 +272,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 											<img src="/img/icons/room.svg" alt="" /> <Typography>{property?.propertyRooms} room</Typography>
 										</Stack>
 										<Stack className="option">
-											<img src="/img/icons/expand.svg" alt="" /> <Typography>{property?.propertySquare} m2</Typography>
+											<img src="/img/icons/expand.svg" alt="" /> <Typography>{property?.productVolume} m2</Typography>
 										</Stack>
 									</Stack>
 								</Stack>
@@ -280,7 +280,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 									<Stack className="buttons">
 										<Stack className="button-box">
 											<RemoveRedEyeIcon fontSize="medium" />
-											<Typography>{property?.propertyViews}</Typography>
+											<Typography>{property?.productViews}</Typography>
 										</Stack>
 										<Stack className="button-box">
 											{property?.meLiked && property?.meLiked[0]?.myFavorite ? (
@@ -292,10 +292,10 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 													onClick={() => likePropertyHandler(user, property?._id)}
 												/>
 											)}
-											<Typography>{property?.propertyLikes}</Typography>
+											<Typography>{property?.productLikes}</Typography>
 										</Stack>
 									</Stack>
-									<Typography>${formatterStr(property?.propertyPrice)}</Typography>
+									<Typography>${formatterStr(property?.productPrice)}</Typography>
 								</Stack>
 							</Stack>
 							<Stack className={'images'}>
@@ -306,7 +306,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 									/>
 								</Stack>
 								<Stack className={'sub-images'}>
-									{property?.propertyImages.map((subImg: string) => {
+									{property?.productImages.map((subImg: string) => {
 										const imagePath: string = `${REACT_APP_API_URL}/${subImg}`;
 										return (
 											<Stack className={'sub-img-box'} onClick={() => changeImageHandler(subImg)} key={subImg}>
@@ -386,7 +386,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 										</Stack>
 										<Stack className={'option-includes'}>
 											<Typography className={'title'}>Size</Typography>
-											<Typography className={'option-data'}>{property?.propertySquare} m2</Typography>
+											<Typography className={'option-data'}>{property?.productVolume} m2</Typography>
 										</Stack>
 									</Stack>
 									<Stack className={'option'}>
@@ -401,14 +401,14 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 										</Stack>
 										<Stack className={'option-includes'}>
 											<Typography className={'title'}>Property Type</Typography>
-											<Typography className={'option-data'}>{property?.propertyType}</Typography>
+											<Typography className={'option-data'}>{property?.productSize}</Typography>
 										</Stack>
 									</Stack>
 								</Stack>
 								<Stack className={'prop-desc-config'}>
 									<Stack className={'top'}>
 										<Typography className={'title'}>Property Description</Typography>
-										<Typography className={'desc'}>{property?.propertyDesc ?? 'No Description!'}</Typography>
+										<Typography className={'desc'}>{property?.productDesc ?? 'No Description!'}</Typography>
 									</Stack>
 									<Stack className={'bottom'}>
 										<Typography className={'title'}>Property Details</Typography>
@@ -416,11 +416,11 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 											<Stack className={'left'}>
 												<Box component={'div'} className={'info'}>
 													<Typography className={'title'}>Price</Typography>
-													<Typography className={'data'}>${formatterStr(property?.propertyPrice)}</Typography>
+													<Typography className={'data'}>${formatterStr(property?.productPrice)}</Typography>
 												</Box>
 												<Box component={'div'} className={'info'}>
 													<Typography className={'title'}>Property Size</Typography>
-													<Typography className={'data'}>{property?.propertySquare} m2</Typography>
+													<Typography className={'data'}>{property?.productVolume} m2</Typography>
 												</Box>
 												<Box component={'div'} className={'info'}>
 													<Typography className={'title'}>Rooms</Typography>
@@ -438,7 +438,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 												</Box>
 												<Box component={'div'} className={'info'}>
 													<Typography className={'title'}>Property Type</Typography>
-													<Typography className={'data'}>{property?.propertyType}</Typography>
+													<Typography className={'data'}>{property?.productSize}</Typography>
 												</Box>
 												<Box component={'div'} className={'info'}>
 													<Typography className={'title'}>Property Options</Typography>
@@ -491,7 +491,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 											</Stack>
 										</Stack>
 										<Stack className={'review-list'}>
-											{propertyComments?.map((comment: Comment) => {
+											{productComments?.map((comment: Comment) => {
 												return <Review comment={comment} key={comment?._id} />;
 											})}
 											<Box component={'div'} className={'pagination-box'}>
@@ -638,9 +638,9 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 											el: '.swiper-similar-pagination',
 										}}
 									>
-										{destinationProperties.map((property: Property) => {
+										{destinationProperties.map((property: Product) => {
 											return (
-												<SwiperSlide className={'similar-homes-slide'} key={property.propertyTitle}>
+												<SwiperSlide className={'similar-homes-slide'} key={property.productTitle}>
 													<PropertyBigCard
 														property={property}
 														likePropertyHandler={likePropertyHandler}
@@ -693,7 +693,7 @@ export default withLayoutFull(PropertyDetail);
 // import EastIcon from '@mui/icons-material/East';
 // import { useReactiveVar } from '@apollo/client';
 // import { useRouter } from 'next/router';
-// import { Property } from '../../libs/types/property/property';
+// import { Product } from '../../libs/types/property/property';
 // import moment from 'moment';
 // import { formatterStr } from '../../libs/utils';
 // import { REACT_APP_API_URL } from '../../libs/config';
@@ -720,15 +720,15 @@ export default withLayoutFull(PropertyDetail);
 // 	const device = useDeviceDetect();
 // 	const router = useRouter();
 // 	const user = useReactiveVar(userVar);
-// 	const [propertyId, setPropertyId] = useState<string | null>(null);
-// 	const [property, setProperty] = useState<Property | null>(null);
+// 	const [productId, setProductId] = useState<string | null>(null);
+// 	const [property, setProperty] = useState<Product | null>(null);
 // 	const [slideImage, setSlideImage] = useState<string>('');
-// 	const [destinationProperty, setDestinationProperties] = useState<Property[]>([]);
+// 	const [destinationProperty, setDestinationProperties] = useState<Product[]>([]);
 // 	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
-// 	const [propertyComments, setPropertyComments] = useState<Comment[]>([]);
+// 	const [productComments, setProductComments] = useState<Comment[]>([]);
 // 	const [commentTotal, setCommentTotal] = useState<number>(0);
 // 	const [insertCommentData, setInsertCommentData] = useState<CommentInput>({
-// 		commentGroup: CommentGroup.PROPERTY,
+// 		commentGroup: CommentGroup.PRODUCT,
 // 		commentContent: '',
 // 		commentRefId: '',
 // 	});
@@ -738,7 +738,7 @@ export default withLayoutFull(PropertyDetail);
 // 	/** LIFECYCLES **/
 // 	useEffect(() => {
 // 		if (router.query.id) {
-// 			setPropertyId(router.query.id as string);
+// 			setProductId(router.query.id as string);
 // 			setCommentInquiry({
 // 				...commentInquiry,
 // 				search: {
@@ -774,9 +774,9 @@ export default withLayoutFull(PropertyDetail);
 // 						<Stack className={'property-info-config'}>
 // 							<Stack className={'info'}>
 // 								<Stack className={'left-box'}>
-// 									<Typography className={'title-main'}>{property?.propertyTitle}</Typography>
+// 									<Typography className={'title-main'}>{property?.productTitle}</Typography>
 // 									<Stack className={'top-box'}>
-// 										<Typography className={'city'}>{property?.propertyLocation}</Typography>
+// 										<Typography className={'city'}>{property?.productCategory}</Typography>
 // 										<Stack className={'divider'}></Stack>
 // 										<Stack className={'buy-rent-box'}>
 // 											{property?.propertyBarter && (
@@ -829,7 +829,7 @@ export default withLayoutFull(PropertyDetail);
 // 											<img src="/img/icons/room.svg" alt="" /> <Typography>{property?.propertyRooms} room</Typography>
 // 										</Stack>
 // 										<Stack className="option">
-// 											<img src="/img/icons/expand.svg" alt="" /> <Typography>{property?.propertySquare} m2</Typography>
+// 											<img src="/img/icons/expand.svg" alt="" /> <Typography>{property?.productVolume} m2</Typography>
 // 										</Stack>
 // 									</Stack>
 // 								</Stack>
@@ -837,7 +837,7 @@ export default withLayoutFull(PropertyDetail);
 // 									<Stack className="buttons">
 // 										<Stack className="button-box">
 // 											<RemoveRedEyeIcon fontSize="medium" />
-// 											<Typography>{property?.propertyViews}</Typography>
+// 											<Typography>{property?.productViews}</Typography>
 // 										</Stack>
 // 										<Stack className="button-box">
 // 											{property?.meLiked && property?.meLiked[0]?.myFavorite ? (
@@ -849,10 +849,10 @@ export default withLayoutFull(PropertyDetail);
 // 													onClick={() => likePropertyHandler(user, property?._id)}
 // 												/>
 // 											)}
-// 											<Typography>{property?.propertyLikes}</Typography>
+// 											<Typography>{property?.productLikes}</Typography>
 // 										</Stack>
 // 									</Stack>
-// 									<Typography>${formatterStr(property?.propertyPrice)}</Typography>
+// 									<Typography>${formatterStr(property?.productPrice)}</Typography>
 // 								</Stack>
 // 							</Stack>
 // 							<Stack className={'images'}>
@@ -863,7 +863,7 @@ export default withLayoutFull(PropertyDetail);
 // 									/>
 // 								</Stack>
 // 								<Stack className={'sub-images'}>
-// 									{property?.propertyImages.map((subImg: string) => {
+// 									{property?.productImages.map((subImg: string) => {
 // 										const imagePath: string = `${REACT_APP_API_URL}/${subImg}`;
 // 										return (
 // 											<Stack className={'sub-img-box'} onClick={() => changeImageHandler(subImg)} key={subImg}>
@@ -943,7 +943,7 @@ export default withLayoutFull(PropertyDetail);
 // 										</Stack>
 // 										<Stack className={'option-includes'}>
 // 											<Typography className={'title'}>Size</Typography>
-// 											<Typography className={'option-data'}>{property?.propertySquare} m2</Typography>
+// 											<Typography className={'option-data'}>{property?.productVolume} m2</Typography>
 // 										</Stack>
 // 									</Stack>
 // 									<Stack className={'option'}>
@@ -958,14 +958,14 @@ export default withLayoutFull(PropertyDetail);
 // 										</Stack>
 // 										<Stack className={'option-includes'}>
 // 											<Typography className={'title'}>Property Type</Typography>
-// 											<Typography className={'option-data'}>{property?.propertyType}</Typography>
+// 											<Typography className={'option-data'}>{property?.productSize}</Typography>
 // 										</Stack>
 // 									</Stack>
 // 								</Stack>
 // 								<Stack className={'prop-desc-config'}>
 // 									<Stack className={'top'}>
 // 										<Typography className={'title'}>Property Description</Typography>
-// 										<Typography className={'desc'}>{property?.propertyDesc ?? 'No Description!'}</Typography>
+// 										<Typography className={'desc'}>{property?.productDesc ?? 'No Description!'}</Typography>
 // 									</Stack>
 // 									<Stack className={'bottom'}>
 // 										<Typography className={'title'}>Property Details</Typography>
@@ -973,11 +973,11 @@ export default withLayoutFull(PropertyDetail);
 // 											<Stack className={'left'}>
 // 												<Box component={'div'} className={'info'}>
 // 													<Typography className={'title'}>Price</Typography>
-// 													<Typography className={'data'}>${formatterStr(property?.propertyPrice)}</Typography>
+// 													<Typography className={'data'}>${formatterStr(property?.productPrice)}</Typography>
 // 												</Box>
 // 												<Box component={'div'} className={'info'}>
 // 													<Typography className={'title'}>Property Size</Typography>
-// 													<Typography className={'data'}>{property?.propertySquare} m2</Typography>
+// 													<Typography className={'data'}>{property?.productVolume} m2</Typography>
 // 												</Box>
 // 												<Box component={'div'} className={'info'}>
 // 													<Typography className={'title'}>Rooms</Typography>
@@ -995,7 +995,7 @@ export default withLayoutFull(PropertyDetail);
 // 												</Box>
 // 												<Box component={'div'} className={'info'}>
 // 													<Typography className={'title'}>Property Type</Typography>
-// 													<Typography className={'data'}>{property?.propertyType}</Typography>
+// 													<Typography className={'data'}>{property?.productSize}</Typography>
 // 												</Box>
 // 												<Box component={'div'} className={'info'}>
 // 													<Typography className={'title'}>Property Options</Typography>
@@ -1048,7 +1048,7 @@ export default withLayoutFull(PropertyDetail);
 // 											</Stack>
 // 										</Stack>
 // 										<Stack className={'review-list'}>
-// 											{propertyComments?.map((comment: Comment) => {
+// 											{productComments?.map((comment: Comment) => {
 // 												return <Review comment={comment} key={comment?._id} />;
 // 											})}
 // 											<Box component={'div'} className={'pagination-box'}>
@@ -1194,9 +1194,9 @@ export default withLayoutFull(PropertyDetail);
 // 											el: '.swiper-similar-pagination',
 // 										}}
 // 									>
-// 										{destinationProperty.map((property: Property) => {
+// 										{destinationProperty.map((property: Product) => {
 // 											return (
-// 												<SwiperSlide className={'similar-homes-slide'} key={property.propertyTitle}>
+// 												<SwiperSlide className={'similar-homes-slide'} key={property.productTitle}>
 // 													<PropertyBigCard property={property} key={property?._id} />
 // 												</SwiperSlide>
 // 											);

@@ -1,0 +1,29 @@
+export enum ProductCategory {
+	SKINCARE = 'SKINCARE',
+	MAKEUP = 'MAKEUP',
+	HAIRCARE = 'HAIRCARE',
+	BODYCARE = 'BODYCARE',
+	FRAGRANCE = 'FRAGRANCE',
+	WELLNESS = 'WELLNESS',
+}
+
+export enum ProductStatus {
+	ACTIVE = 'ACTIVE',
+	SOLD_OUT = 'SOLD_OUT',
+	DELETE = 'DELETE',
+}
+
+export enum SkinType {
+	NORMAL = 'NORMAL',
+	DRY = 'DRY',
+	OILY = 'OILY',
+	COMBINATION = 'COMBINATION',
+	SENSITIVE = 'SENSITIVE',
+}
+
+export enum ProductSize {
+	MINI = 'MINI',
+	STANDARD = 'STANDARD',
+	LARGE = 'LARGE',
+	TRAVEL_SIZE = 'TRAVEL_SIZE',
+}
