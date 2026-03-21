@@ -6,21 +6,21 @@ import { Autoplay, Navigation, Pagination } from 'swiper';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import PopularPropertyCard from './PopularPropertyCard';
-import { Property } from '../../types/property/property';
+import { Product } from '../../types/property/property';
 import Link from 'next/link';
-import { PropertiesInquiry } from '../../types/property/property.input';
+import { ProductsInquiry } from '../../types/property/property.input';
 import { useQuery } from '@apollo/client';
-import { GET_PROPERTIES } from '../../../apollo/user/query';
+import { GET_PRODUCTS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
 
 interface PopularPropertiesProps {
-	initialInput: PropertiesInquiry;
+	initialInput: ProductsInquiry;
 }
 
 const PopularProperties = (props: PopularPropertiesProps) => {
 	const { initialInput } = props;
 	const device = useDeviceDetect();
-	const [popularProperties, setPopularProperties] = useState<Property[]>([]);
+	const [popularProperties, setPopularProperties] = useState<Product[]>([]);
 
 	/** APOLLO REQUESTS **/
    const {
@@ -28,12 +28,12 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 		data:getPropertiesData,
 		error:getPropertiesError,
 		refetch: getPropertiesRefetch,
-	}=useQuery(GET_PROPERTIES, {
+	}=useQuery(GET_PRODUCTS, {
 		fetchPolicy:'cache-and-network',
 		variables:{input:initialInput},
 		notifyOnNetworkStatusChange:true,
 		onCompleted:(data:T)=>{
-			setPopularProperties(data?.getProperties?.list);
+			setPopularProperties(data?.getProducts?.list);
 		},
 	});
 	/** HANDLERS **/
@@ -55,7 +55,7 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 							spaceBetween={25}
 							modules={[Autoplay]}
 						>
-							{popularProperties.map((property: Property) => {
+							{popularProperties.map((property: Product) => {
 								return (
 									<SwiperSlide key={property._id} className={'popular-property-slide'}>
 										<PopularPropertyCard property={property} />
@@ -99,7 +99,7 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 								el: '.swiper-popular-pagination',
 							}}
 						>
-							{popularProperties.map((property: Property) => {
+							{popularProperties.map((property: Product) => {
 								return (
 									<SwiperSlide key={property._id} className={'popular-property-slide'}>
 										<PopularPropertyCard property={property} />
@@ -123,7 +123,7 @@ PopularProperties.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 7,
-		sort: 'propertyViews',
+		sort: 'productViews',
 		direction: 'DESC',
 		search: {},
 	},

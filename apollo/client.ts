@@ -9,7 +9,7 @@ import { TokenRefreshLink } from 'apollo-link-token-refresh';
 import { sweetErrorAlert } from '../libs/sweetAlert';
 import { socketVar } from './store';
 
-// Bu mantiqlani asosiy mohiyati shundaki biz malumotni Cookiega save qilmayabmiz, chunki Nestar haqiqiy mobile application! 
+// Bu mantiqlani asosiy mohiyati shundaki biz malumotni Cookiega save qilmayabmiz, chunki Korvera haqiqiy mobile application!
 //
 
 

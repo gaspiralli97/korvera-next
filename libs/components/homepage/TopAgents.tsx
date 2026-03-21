@@ -8,7 +8,7 @@ import { Autoplay, Navigation, Pagination } from 'swiper';
 import TopAgentCard from './TopAgentCard';
 import { Member } from '../../types/member/member';
 import { AgentsInquiry } from '../../types/member/member.input';
-import { GET_AGENTS } from '../../../apollo/user/query';
+import { GET_SELLERS } from '../../../apollo/user/query';
 import { useQuery } from '@apollo/client';
 import { T } from '../../types/common';
 
@@ -24,16 +24,16 @@ const TopAgents = (props: TopAgentsProps) => {
 
 	/** APOLLO REQUESTS **/
 	const {
-				loading:getAgentsLoading,
-				data:getAgentsData,
-				error:getAgentsError,
-				refetch: getAgentsRefetch,
-			}=useQuery(GET_AGENTS, {
+				loading:getSellersLoading,
+				data:getSellersData,
+				error:getSellersError,
+				refetch: getSellersRefetch,
+			}=useQuery(GET_SELLERS, {
 				fetchPolicy:'cache-and-network',
 				variables:{input:initialInput},
 				notifyOnNetworkStatusChange:true,
 				onCompleted:(data:T)=>{
-					setTopAgents(data?.getAgents?.list);
+					setTopAgents(data?.getSellers?.list);
 				},
 			});
 	/** HANDLERS **/

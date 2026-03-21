@@ -2,15 +2,15 @@ import React from 'react';
 import { Stack, Box, Divider, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { Property } from '../../types/property/property';
+import { Product } from '../../types/property/property';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { REACT_APP_API_URL, topPropertyRank } from '../../config';
+import { REACT_APP_API_URL, topProductRank } from '../../config';
 import { useRouter } from 'next/router';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 
 interface PopularPropertyCardProps {
-	property: Property;
+	property: Product;
 }
 
 const PopularPropertyCard = (props: PopularPropertyCardProps) => {
@@ -31,10 +31,10 @@ const PopularPropertyCard = (props: PopularPropertyCardProps) => {
 				<Box
 					component={'div'}
 					className={'card-img'}
-					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${property?.propertyImages[0]})` }}
+					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${property?.productImages[0]})` }}
 					onClick={() =>{pushDetailHandler(property._id);}}
 				>
-					{property && property?.propertyRank >= topPropertyRank ? (
+					{property && property?.productRank >= topProductRank ? (
 						<div className={'status'}>
 							<img src="/img/icons/electricity.svg" alt="" />
 							<span>top</span>
@@ -43,11 +43,11 @@ const PopularPropertyCard = (props: PopularPropertyCardProps) => {
 						''
 					)}
 
-					<div className={'price'}>${property.propertyPrice}</div>
+					<div className={'price'}>${property.productPrice}</div>
 				</Box>
 				<Box component={'div'} className={'info'}>
-					<strong className={'title'} onClick={() =>{pushDetailHandler(property._id);}}>{property.propertyTitle}</strong>
-					<p className={'desc'}>{property.propertyAddress}</p>
+					<strong className={'title'} onClick={() =>{pushDetailHandler(property._id);}}>{property.productTitle}</strong>
+					<p className={'desc'}>{property.productBrand}</p>
 					<div className={'options'}>
 						<div>
 							<img src="/img/icons/bed.svg" alt="" />
@@ -59,7 +59,7 @@ const PopularPropertyCard = (props: PopularPropertyCardProps) => {
 						</div>
 						<div>
 							<img src="/img/icons/expand.svg" alt="" />
-							<span>{property?.propertySquare} m2</span>
+							<span>{property?.productVolume} m2</span>
 						</div>
 					</div>
 					<Divider sx={{ mt: '15px', mb: '17px' }} />
@@ -69,7 +69,7 @@ const PopularPropertyCard = (props: PopularPropertyCardProps) => {
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
 							</IconButton>
-							<Typography className="view-cnt">{property?.propertyViews}</Typography>
+							<Typography className="view-cnt">{property?.productViews}</Typography>
 						</div>
 					</div>
 				</Box>
@@ -81,10 +81,10 @@ const PopularPropertyCard = (props: PopularPropertyCardProps) => {
 				<Box
 					component={'div'}
 					className={'card-img'}
-					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${property?.propertyImages[0]})` }}
+					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${property?.productImages[0]})` }}
 					onClick={() =>{pushDetailHandler(property._id);}}
 				>
-					{property && property?.propertyRank >= topPropertyRank ? (
+					{property && property?.productRank >= topProductRank ? (
 						<div className={'status'}>
 							<img src="/img/icons/electricity.svg" alt="" />
 							<span>top</span>
@@ -93,11 +93,11 @@ const PopularPropertyCard = (props: PopularPropertyCardProps) => {
 						''
 					)}
 
-					<div className={'price'}>${property.propertyPrice}</div>
+					<div className={'price'}>${property.productPrice}</div>
 				</Box>
 				<Box component={'div'} className={'info'}>
-					<strong className={'title'} onClick={() =>{pushDetailHandler(property._id);}}>{property.propertyTitle}</strong>
-					<p className={'desc'}>{property.propertyAddress}</p>
+					<strong className={'title'} onClick={() =>{pushDetailHandler(property._id);}}>{property.productTitle}</strong>
+					<p className={'desc'}>{property.productBrand}</p>
 					<div className={'options'}>
 						<div>
 							<img src="/img/icons/bed.svg" alt="" />
@@ -109,7 +109,7 @@ const PopularPropertyCard = (props: PopularPropertyCardProps) => {
 						</div>
 						<div>
 							<img src="/img/icons/expand.svg" alt="" />
-							<span>{property?.propertySquare} m2</span>
+							<span>{property?.productVolume} m2</span>
 						</div>
 					</div>
 					<Divider sx={{ mt: '15px', mb: '17px' }} />
@@ -119,7 +119,7 @@ const PopularPropertyCard = (props: PopularPropertyCardProps) => {
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
 							</IconButton>
-							<Typography className="view-cnt">{property?.propertyViews}</Typography>
+							<Typography className="view-cnt">{property?.productViews}</Typography>
 						</div>
 					</div>
 				</Box>
