@@ -10,30 +10,30 @@ interface EventData {
 }
 const eventsData: EventData[] = [
 	{
-		eventTitle: 'Paradise City Theme Park',
-		city: 'Incheon',
+		eventTitle: 'Glow Skincare Collection',
+		city: 'Skincare',
 		description:
-			'Experience magic and wonder in Incheon with a visit to the night-themed indoor theme park Wonderbox at Paradise City!',
-		imageSrc: '/img/events/INCHEON.webp',
+			'Discover our premium skincare collection designed to nourish, hydrate, and protect your skin every day.',
+		imageSrc: '/img/events/skincare.jpg',
 	},
 	{
-		eventTitle: 'Taebaeksan Snow Festival',
-		city: 'Seoul',
-		description: 'If you have the opportunity to travel to South Korea, do not miss the Taebaeksan Snow Festival!',
-		imageSrc: '/img/events/SEOUL.webp',
+		eventTitle: 'Glamour Makeup Line',
+		city: 'Makeup',
+		description: 'Explore our bold and elegant makeup line crafted for every skin tone and occasion.',
+		imageSrc: '/img/events/makeup.jpeg',
 	},
 	{
-		eventTitle: 'Suseong Lake Event',
-		city: 'Daegu',
-		description: 'The Suseong Lake Festival is a culture and arts festival held alongside Suseongmot Lake!',
-		imageSrc: '/img/events/DAEGU.webp',
+		eventTitle: 'Hair & Body Essentials',
+		city: 'Haircare',
+		description: 'From scalp care to body butters — our hair and body essentials keep you feeling fresh and radiant.',
+		imageSrc: '/img/events/haircare.jpeg',
 	},
 	{
-		eventTitle: 'Sand Festival',
-		city: 'Busan',
+		eventTitle: 'Wellness & Fragrance',
+		city: 'Wellness',
 		description:
-			'Haeundae Sand Festival, the nation’s largest eco-friendly exhibition on sand, is held at Haeundae Beach!',
-		imageSrc: '/img/events/BUSAN.webp',
+			'Indulge in our curated wellness and fragrance collection — crafted to elevate your self-care routine.',
+		imageSrc: '/img/events/wellness.jpeg',
 	},
 ];
 
@@ -76,8 +76,8 @@ const Events = () => {
 				<Stack className={'container'}>
 					<Stack className={'info-box'}>
 						<Box component={'div'} className={'left'}>
-							<span className={'white'}>Events</span>
-							<p className={'white'}>Events waiting your attention!</p>
+							<span className={'white'}>Collections</span>
+							<p className={'white'}>Beauty collections waiting for you!</p>
 						</Box>
 					</Stack>
 					<Stack className={'card-wrapper'}>
