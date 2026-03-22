@@ -1,6 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
 import {
 	TableCell,
 	TableHead,
@@ -13,9 +11,10 @@ import {
 	Fade,
 	MenuItem,
 } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/material';
+import { NoticeStatus } from '../../../enums/notice.enum';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Data {
 	category: string;
@@ -23,17 +22,6 @@ interface Data {
 	writer: string;
 	date: string;
 	status: string;
-	id?: string;
-}
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-	if (b[orderBy] < a[orderBy]) {
-		return -1;
-	}
-	if (b[orderBy] > a[orderBy]) {
-		return 1;
-	}
-	return 0;
 }
 
 type Order = 'asc' | 'desc';
@@ -58,7 +46,6 @@ const headCells: readonly HeadCell[] = [
 		disablePadding: false,
 		label: 'TITLE',
 	},
-
 	{
 		id: 'writer',
 		numeric: true,
@@ -89,8 +76,6 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-	const { onSelectAllClick } = props;
-
 	return (
 		<TableHead>
 			<TableRow>
@@ -110,25 +95,24 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface FaqArticlesPanelListType {
 	dense?: boolean;
-	membersData?: any;
-	searchMembers?: any;
-	anchorEl?: any;
-	handleMenuIconClick?: any;
-	handleMenuIconClose?: any;
-	generateMentorTypeHandle?: any;
+	faqsData: any[];
+	anchorEl: any;
+	menuIconClickHandler: any;
+	menuIconCloseHandler: any;
+	updateFaqHandler: any;
+	removeFaqHandler: any;
 }
 
 export const FaqArticlesPanelList = (props: FaqArticlesPanelListType) => {
 	const {
 		dense,
-		membersData,
-		searchMembers,
+		faqsData,
 		anchorEl,
-		handleMenuIconClick,
-		handleMenuIconClose,
-		generateMentorTypeHandle,
+		menuIconClickHandler,
+		menuIconCloseHandler,
+		updateFaqHandler,
+		removeFaqHandler,
 	} = props;
-	const router = useRouter();
 
 	/** APOLLO REQUESTS **/
 	/** LIFECYCLES **/
@@ -141,59 +125,70 @@ export const FaqArticlesPanelList = (props: FaqArticlesPanelListType) => {
 					{/*@ts-ignore*/}
 					<EnhancedTableHead />
 					<TableBody>
-						{[1, 2, 3, 4, 5].map((ele: any, index: number) => {
-							const member_image = '/img/profile/defaultUser.svg';
+						{faqsData.length === 0 && (
+							<TableRow>
+								<TableCell align="center" colSpan={5}>
+									<span className={'no-data'}>data not found!</span>
+								</TableCell>
+							</TableRow>
+						)}
 
-							let status_class_name = '';
-
-							return (
-								<TableRow hover key={'member._id'} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-									<TableCell align="left">mb id</TableCell>
-									<TableCell align="left">member.mb_full_name</TableCell>
-									<TableCell align="left" className={'name'}>
-										<Stack direction={'row'}>
-											<Link href={`/_admin/users/detail?mb_id=$'{member._id'}`}>
-												<div>
-													<Avatar alt="Remy Sharp" src={member_image} sx={{ ml: '2px', mr: '10px' }} />
-												</div>
-											</Link>
-											<Link href={`/_admin/users/detail?mb_id=${'member._id'}`}>
-												<div>member.mb_nick</div>
-											</Link>
-										</Stack>
-									</TableCell>
-									<TableCell align="left">member.mb_phone</TableCell>
+						{faqsData.length !== 0 &&
+							faqsData.map((faq: any, index: number) => (
+								<TableRow hover key={faq?._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+									<TableCell align="left">{faq?.noticeCategory}</TableCell>
+									<TableCell align="left">{faq?.noticeTitle}</TableCell>
+									<TableCell align="left">{faq?.memberData?.memberNick}</TableCell>
+									<TableCell align="left">{faq?.createdAt}</TableCell>
 									<TableCell align="center">
-										<Button onClick={(e: any) => handleMenuIconClick(e, index)} className={'badge success'}>
-											member.mb_type
-										</Button>
+										{faq?.noticeStatus === NoticeStatus.DELETE && (
+											<Button
+												variant="outlined"
+												sx={{ p: '3px', border: 'none', ':hover': { border: '1px solid #000000' } }}
+												onClick={() => removeFaqHandler(faq._id)}
+											>
+												<DeleteIcon fontSize="small" />
+											</Button>
+										)}
 
-										<Menu
-											className={'menu-modal'}
-											MenuListProps={{
-												'aria-labelledby': 'fade-button',
-											}}
-											anchorEl={anchorEl[index]}
-											open={Boolean(anchorEl[index])}
-											onClose={handleMenuIconClose}
-											TransitionComponent={Fade}
-											sx={{ p: 1 }}
-										>
-											<MenuItem onClick={(e) => generateMentorTypeHandle('member._id', 'mentor', 'originate')}>
-												<Typography variant={'subtitle1'} component={'span'}>
-													MENTOR
-												</Typography>
-											</MenuItem>
-											<MenuItem onClick={(e) => generateMentorTypeHandle('member._id', 'user', 'remove')}>
-												<Typography variant={'subtitle1'} component={'span'}>
-													USER
-												</Typography>
-											</MenuItem>
-										</Menu>
+										{faq?.noticeStatus !== NoticeStatus.DELETE && (
+											<>
+												<Button
+													onClick={(e: any) => menuIconClickHandler(e, index)}
+													className={faq?.noticeStatus === NoticeStatus.ACTIVE ? 'badge success' : 'badge warning'}
+												>
+													{faq?.noticeStatus}
+												</Button>
+
+												<Menu
+													className={'menu-modal'}
+													MenuListProps={{
+														'aria-labelledby': 'fade-button',
+													}}
+													anchorEl={anchorEl[index]}
+													open={Boolean(anchorEl[index])}
+													onClose={menuIconCloseHandler}
+													TransitionComponent={Fade}
+													sx={{ p: 1 }}
+												>
+													{Object.values(NoticeStatus)
+														.filter((ele) => ele !== faq?.noticeStatus)
+														.map((status: string) => (
+															<MenuItem
+																onClick={() => updateFaqHandler({ _id: faq._id, noticeStatus: status })}
+																key={status}
+															>
+																<Typography variant={'subtitle1'} component={'span'}>
+																	{status}
+																</Typography>
+															</MenuItem>
+														))}
+												</Menu>
+											</>
+										)}
 									</TableCell>
 								</TableRow>
-							);
-						})}
+							))}
 					</TableBody>
 				</Table>
 			</TableContainer>
