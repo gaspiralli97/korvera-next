@@ -28,51 +28,51 @@ const withLayoutBasic = (Component: any) => {
 				bgImage = '';
 
 			switch (router.pathname) {
-				case '/property':
-					title = 'Property Search';
-					desc = 'We are glad to see you again!';
-					bgImage = '/img/banner/properties.png';
+				case '/product':
+					title = 'Product Search';
+					desc = 'Discover your perfect beauty routine';
+					bgImage = '/img/banner/products.jpg';
 					break;
 				case '/agent':
-					title = 'Agents';
-					desc = 'Home / For Rent';
+					title = 'Sellers';
+					desc = 'Meet our trusted beauty sellers';
 					bgImage = '/img/banner/agents.webp';
 					break;
 				case '/agent/detail':
-					title = 'Agent Page';
-					desc = 'Home / For Rent';
-					bgImage = '/img/banner/header2.svg';
+					title = 'Seller Page';
+					desc = 'Explore seller collections';
+					bgImage = '/img/banner/community.jpeg';
 					break;
 				case '/mypage':
-					title = 'my page';
-					desc = 'Home / For Rent';
-					bgImage = '/img/banner/header1.svg';
+					title = 'My Page';
+					desc = 'Manage your beauty profile';
+					bgImage = '/img/banner/mypage.jpeg';
 					break;
 				case '/community':
 					title = 'Community';
-					desc = 'Home / For Rent';
-					bgImage = '/img/banner/header2.svg';
+					desc = 'Share your beauty experience';
+					bgImage = '/img/banner/community.jpeg';
 					break;
 				case '/community/detail':
 					title = 'Community Detail';
-					desc = 'Home / For Rent';
-					bgImage = '/img/banner/header2.svg';
+					desc = 'Share your beauty experience';
+					bgImage = '/img/banner/community.jpeg';
 					break;
 				case '/cs':
-					title = 'CS';
-					desc = 'We are glad to see you again!';
-					bgImage = '/img/banner/header2.svg';
+					title = 'Customer Support';
+					desc = 'We are here to help you';
+					bgImage = '/img/banner/cs.webp';
 					break;
 				case '/account/join':
-					title = 'Login/Signup';
+					title = 'Login / Signup';
 					desc = 'Authentication Process';
-					bgImage = '/img/banner/header2.svg';
+					bgImage = '/img/banner/cs.webp';
 					setAuthHeader(true);
 					break;
 				case '/member':
 					title = 'Member Page';
-					desc = 'Home / For Rent';
-					bgImage = '/img/banner/header1.svg';
+					desc = 'Beauty enthusiast profile';
+					bgImage = '/img/banner/mypage.jpeg';
 					break;
 				default:
 					break;
@@ -128,7 +128,8 @@ const withLayoutBasic = (Component: any) => {
 							style={{
 								backgroundImage: `url(${memoizedValues.bgImage})`,
 								backgroundSize: 'cover',
-								boxShadow: 'inset 10px 40px 150px 40px rgb(24 22 36)',
+								backgroundPosition: 'center',
+						boxShadow: 'inset 0px 0px 60px 20px rgba(24, 22, 36, 0.6)',
 							}}
 						>
 							<Stack className={'container'}>
