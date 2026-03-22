@@ -18,13 +18,13 @@ const Footer = () => {
 							<img src="/img/logo/logoWhite.svg" alt="" className={'logo'} />
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
-							<span>total free customer care</span>
-							<p>+82 10 4867 2909</p>
+							<span>free customer support</span>
+							<p>support@korvera.uz</p>
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
-							<span>nee live</span>
-							<p>+82 10 4867 2909</p>
-							<span>Support?</span>
+							<span>live chat available</span>
+							<p>Mon – Fri, 9AM – 6PM</p>
+							<span>We're here to help</span>
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
 							<p>follow us on social media</p>
@@ -40,8 +40,10 @@ const Footer = () => {
 						<Box component={'div'} className={'bottom'}>
 							<div>
 								<strong>Popular Search</strong>
-								<span>Property for Rent</span>
-								<span>Property Low to hide</span>
+								<span>Skincare Products</span>
+								<span>Makeup Essentials</span>
+								<span>Hair & Body Care</span>
+								<span>Fragrances</span>
 							</div>
 							<div>
 								<strong>Quick Links</strong>
@@ -53,17 +55,19 @@ const Footer = () => {
 								<span>FAQs</span>
 							</div>
 							<div>
-								<strong>Discover</strong>
-								<span>Seoul</span>
-								<span>Gyeongido</span>
-								<span>Busan</span>
-								<span>Jejudo</span>
+								<strong>Categories</strong>
+								<span>Skincare</span>
+								<span>Makeup</span>
+								<span>Haircare</span>
+								<span>Bodycare</span>
+								<span>Fragrance</span>
+								<span>Wellness</span>
 							</div>
 						</Box>
 					</Stack>
 				</Stack>
 				<Stack className={'second'}>
-					<span>© Korvera - All rights reserved. Korvera {moment().year()}</span>
+					<span>© Korvera Beauty — All rights reserved. {moment().year()}</span>
 				</Stack>
 			</Stack>
 		);
@@ -76,13 +80,13 @@ const Footer = () => {
 							<img src="/img/logo/logoWhite.svg" alt="" className={'logo'} />
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
-							<span>total free customer care</span>
-							<p>+82 10 4867 2909</p>
+							<span>free customer support</span>
+							<p>support@korvera.uz</p>
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
-							<span>nee live</span>
-							<p>+82 10 4867 2909</p>
-							<span>Support?</span>
+							<span>live chat available</span>
+							<p>Mon – Fri, 9AM – 6PM</p>
+							<span>We're here to help</span>
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
 							<p>follow us on social media</p>
@@ -96,17 +100,19 @@ const Footer = () => {
 					</Stack>
 					<Stack className={'right'}>
 						<Box component={'div'} className={'top'}>
-							<strong>keep yourself up to date</strong>
+							<strong>Stay updated with beauty trends</strong>
 							<div>
-								<input type="text" placeholder={'Your Email'} />
+								<input type="text" placeholder={'Your email address'} />
 								<span>Subscribe</span>
 							</div>
 						</Box>
 						<Box component={'div'} className={'bottom'}>
 							<div>
 								<strong>Popular Search</strong>
-								<span>Property for Rent</span>
-								<span>Property Low to hide</span>
+								<span>Skincare Products</span>
+								<span>Makeup Essentials</span>
+								<span>Hair & Body Care</span>
+								<span>Fragrances</span>
 							</div>
 							<div>
 								<strong>Quick Links</strong>
@@ -118,17 +124,19 @@ const Footer = () => {
 								<span>FAQs</span>
 							</div>
 							<div>
-								<strong>Discover</strong>
-								<span>Seoul</span>
-								<span>Gyeongido</span>
-								<span>Busan</span>
-								<span>Jejudo</span>
+								<strong>Categories</strong>
+								<span>Skincare</span>
+								<span>Makeup</span>
+								<span>Haircare</span>
+								<span>Bodycare</span>
+								<span>Fragrance</span>
+								<span>Wellness</span>
 							</div>
 						</Box>
 					</Stack>
 				</Stack>
 				<Stack className={'second'}>
-					<span>© Korvera - All rights reserved. Korvera {moment().year()}</span>
+					<span>© Korvera Beauty — All rights reserved. {moment().year()}</span>
 					<span>Privacy · Terms · Sitemap</span>
 				</Stack>
 			</Stack>

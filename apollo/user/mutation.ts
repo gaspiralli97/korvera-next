@@ -50,6 +50,7 @@ export const LOGIN = gql`
 			memberBlocks
 			memberProducts
 			memberRank
+			memberArticles
 			memberPoints
 			memberLikes
 			memberViews
@@ -465,6 +466,22 @@ export const UPDATE_COMMENT = gql`
 			createdAt
 			updatedAt
 		}
+	}
+`;
+
+/**************************
+ *      FILE UPLOAD       *
+ *************************/
+
+export const IMAGE_UPLOADER = gql`
+	mutation ImageUploader($file: Upload!, $target: String!) {
+		imageUploader(file: $file, target: $target)
+	}
+`;
+
+export const IMAGES_UPLOADER = gql`
+	mutation ImagesUploader($files: [Upload!]!, $target: String!) {
+		imagesUploader(files: $files, target: $target)
 	}
 `;
 

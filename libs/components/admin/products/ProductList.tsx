@@ -113,7 +113,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 	);
 }
 
-interface PropertyPanelListType {
+interface ProductPanelListType {
 	properties: Product[];
 	anchorEl: any;
 	menuIconClickHandler: any;
@@ -122,7 +122,7 @@ interface PropertyPanelListType {
 	removePropertyHandler: any;
 }
 
-export const PropertyPanelList = (props: PropertyPanelListType) => {
+export const ProductPanelList = (props: ProductPanelListType) => {
 	const {
 		properties,
 		anchorEl,
@@ -157,12 +157,12 @@ export const PropertyPanelList = (props: PropertyPanelListType) => {
 										<TableCell align="left" className={'name'}>
 											{ property.productStatus === ProductStatus.ACTIVE ? (
 												<Stack direction={'row'}>
-                                                   <Link href={`/property/detail?id=${property?._id}`}>
+                                                   <Link href={`/product/detail?id=${property?._id}`}>
                                                       <div>
                                                          <Avatar alt="Remy Sharp" src={propertyImage} sx={{ ml: '2px', mr: '10px' }} />
                                                       </div>
                                                    </Link>
-                                                   <Link href={`/property/detail?id=${property?._id}`}>
+                                                   <Link href={`/product/detail?id=${property?._id}`}>
                                                        <div>{property.productTitle}</div>
                                                    </Link>
                                                 </Stack>
