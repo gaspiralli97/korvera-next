@@ -71,13 +71,10 @@ const ProductCard = (props: ProductCardType) => {
 					</Stack>
 					<Stack className="options">
 						<Stack className="option">
-							<img src="/img/icons/bed.svg" alt="" /> <Typography>{property.productCategory} bed</Typography>
+							<Typography>{property.productCategory}</Typography>
 						</Stack>
 						<Stack className="option">
-							<img src="/img/icons/room.svg" alt="" /> <Typography>{property.productSize} room</Typography>
-						</Stack>
-						<Stack className="option">
-							<img src="/img/icons/expand.svg" alt="" /> <Typography>{property.productVolume} ml</Typography>
+							<Typography>{property.productVolume} ml</Typography>
 						</Stack>
 					</Stack>
 					<Stack className="divider"></Stack>

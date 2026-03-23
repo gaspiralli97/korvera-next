@@ -16,6 +16,7 @@ import { GET_PRODUCTS } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import { LIKE_TARGET_PRODUCT } from '../../apollo/user/mutation';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
+import { MOCK_PRODUCTS } from '../../libs/data/mockProducts';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -173,16 +174,9 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 						</Stack>
 						<Stack className="main-config" mb={'76px'}>
 							<Stack className={'list-config'}>
-								{properties?.length === 0 ? (
-									<div className={'no-data'}>
-										<img src="/img/icons/icoAlert.svg" alt="" />
-										<p>No Properties found!</p>
-									</div>
-								) : (
-									properties.map((property: Product) => {
-										return <ProductCard property={property} likePropertyHandler={likePropertyHandler} key={property?._id} />;
-									})
-								)}
+								{(properties?.length > 0 ? properties : MOCK_PRODUCTS).map((property: Product) => (
+									<ProductCard property={property} likePropertyHandler={likePropertyHandler} key={property?._id} />
+								))}
 							</Stack>
 							<Stack className="pagination-config">
 								{properties.length !== 0 && (
@@ -200,7 +194,7 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 								{properties.length !== 0 && (
 									<Stack className="total-result">
 										<Typography>
-											Total {total} propert{total > 1 ? 'ies' : 'y'} available
+											Total {total} product{total > 1 ? 's' : ''} available
 										</Typography>
 									</Stack>
 								)}
@@ -220,7 +214,7 @@ ProductList.defaultProps = {
 		sort: 'createdAt',
 		direction: 'DESC',
 		search: {
-			squaresRange: {
+			volumesRange: {
 				start: 0,
 				end: 500,
 			},
