@@ -24,7 +24,7 @@ const ProductBigCard = (props: ProductBigCardProps) => {
 
 	/** HANDLERS **/
 	const goPropertyDetatilPage = (propertyId: string) => {
-		router.push(`/property/detail?id=${propertyId}`);
+		router.push(`/product/detail?id=${propertyId}`);
 	};
 
 	if (device === 'mobile') {

@@ -35,7 +35,7 @@ const ProductCard = (props: ProductCardType) => {
 				<Stack className="top">
 					<Link
 						href={{
-							pathname: '/property/detail',
+							pathname: '/product/detail',
 							query: { id: property?._id },
 						}}
 					>
@@ -56,7 +56,7 @@ const ProductCard = (props: ProductCardType) => {
 						<Stack className="name">
 							<Link
 								href={{
-									pathname: '/property/detail',
+									pathname: '/product/detail',
 									query: { id: property?._id },
 								}}
 							>

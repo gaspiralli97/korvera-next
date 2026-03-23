@@ -1,43 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 52" fill="none">
-  <!-- Icon background -->
-  <rect x="0" y="4" width="44" height="44" rx="11" fill="#FAF3EE"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 52" fill="none">
 
-  <!-- 5-petal blossom mark (centered at 22, 26) -->
-  <g transform="translate(22,26)">
-    <!-- Petal 1 -->
-    <path d="M0,0 C3,-2 3.5,-9.5 0,-15 C-3.5,-9.5 -3,-2 0,0 Z" fill="#2C1654" transform="rotate(0)"/>
-    <!-- Petal 2 -->
-    <path d="M0,0 C3,-2 3.5,-9.5 0,-15 C-3.5,-9.5 -3,-2 0,0 Z" fill="#D4849A" transform="rotate(72)"/>
-    <!-- Petal 3 -->
-    <path d="M0,0 C3,-2 3.5,-9.5 0,-15 C-3.5,-9.5 -3,-2 0,0 Z" fill="#2C1654" transform="rotate(144)"/>
-    <!-- Petal 4 -->
-    <path d="M0,0 C3,-2 3.5,-9.5 0,-15 C-3.5,-9.5 -3,-2 0,0 Z" fill="#D4849A" transform="rotate(216)"/>
-    <!-- Petal 5 -->
-    <path d="M0,0 C3,-2 3.5,-9.5 0,-15 C-3.5,-9.5 -3,-2 0,0 Z" fill="#2C1654" transform="rotate(288)"/>
-    <!-- Center -->
-    <circle cx="0" cy="0" r="4" fill="#FAF3EE"/>
-    <circle cx="0" cy="0" r="1.8" fill="#D4849A"/>
-  </g>
+  <!-- Outer medallion ring -->
+  <circle cx="26" cy="26" r="23" fill="#FAF3EE" stroke="#75162D" stroke-width="0.7"/>
+
+  <!-- Thin inner ring -->
+  <circle cx="26" cy="26" r="18.5" fill="none" stroke="#75162D" stroke-width="0.4" opacity="0.4"/>
+
+  <!-- 4-petal camellia (brand red + gold alternating) -->
+  <!-- Top petal -->
+  <path d="M26,26 C22,22 22,14 26,8 C30,14 30,22 26,26 Z" fill="#75162D"/>
+  <!-- Right petal -->
+  <path d="M26,26 C30,22 38,22 44,26 C38,30 30,30 26,26 Z" fill="#C9A96E"/>
+  <!-- Bottom petal -->
+  <path d="M26,26 C30,30 30,38 26,44 C22,38 22,30 26,26 Z" fill="#75162D"/>
+  <!-- Left petal -->
+  <path d="M26,26 C22,30 14,30 8,26 C14,22 22,22 26,26 Z" fill="#C9A96E"/>
+
+  <!-- 4 small diamond accents between petals -->
+  <path d="M35.3,16.7 L37,19.3 L35.3,21.9 L33.6,19.3 Z" fill="#75162D" opacity="0.5"/>
+  <path d="M35.3,30.1 L37,32.7 L35.3,35.3 L33.6,32.7 Z" fill="#75162D" opacity="0.5"/>
+  <path d="M16.7,16.7 L18.4,19.3 L16.7,21.9 L15,19.3 Z" fill="#75162D" opacity="0.5"/>
+  <path d="M16.7,30.1 L18.4,32.7 L16.7,35.3 L15,32.7 Z" fill="#75162D" opacity="0.5"/>
+
+  <!-- Center layered circles -->
+  <circle cx="26" cy="26" r="6" fill="#FAF3EE"/>
+  <circle cx="26" cy="26" r="4" fill="#75162D"/>
+  <circle cx="26" cy="26" r="2" fill="#FAF3EE"/>
+  <circle cx="26" cy="26" r="0.9" fill="#C9A96E"/>
 
   <!-- Brand name -->
   <text
-    x="58"
-    y="31"
+    x="60"
+    y="30"
     font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
     font-weight="700"
     font-size="19"
     letter-spacing="4"
-    fill="#FFFFFF"
+    fill="#2C2C2C"
   >KORVERA</text>
 
   <!-- Tagline -->
   <text
-    x="60"
-    y="43"
+    x="62"
+    y="42"
     font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
     font-weight="300"
     font-size="7"
     letter-spacing="4"
-    fill="#F0C5CC"
+    fill="#2C2C2C"
   >BEAUTY</text>
 </svg>

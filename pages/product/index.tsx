@@ -72,8 +72,8 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 	const handlePaginationChange = async (event: ChangeEvent<unknown>, value: number) => {
 		searchFilter.page = value;
 		await router.push(
-			`/property?input=${JSON.stringify(searchFilter)}`,
-			`/property?input=${JSON.stringify(searchFilter)}`,
+			`/product?input=${JSON.stringify(searchFilter)}`,
+			`/product?input=${JSON.stringify(searchFilter)}`,
 			{
 				scroll: false,
 			},
