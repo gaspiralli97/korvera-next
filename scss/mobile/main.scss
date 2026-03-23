@@ -1,5 +1,9 @@
 @import '/scss/variables.scss';
 
+body {
+  background-color: #F5F2EC;
+}
+
 #mobile-wrap {
   .top {
     height: 100px;
@@ -79,7 +83,7 @@
                   left: 12px;
                   bottom: 12px;
                   border-radius: 6px;
-                  background: #fff;
+                  background: #F5F2EC;
                   color: #181a20;
                   font-family: $font;
                   font-size: 15px;
@@ -96,7 +100,7 @@
                 border-radius: 0px 0px 12px 12px;
                 border: 1px solid rgba(196, 196, 196, 0.71);
                 border-top: none;
-                background: #fff;
+                background: #F5F2EC;
                 box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
                 .title {
                   overflow: hidden;
@@ -205,7 +209,7 @@
               left: 12px;
               bottom: 12px;
               border-radius: 6px;
-              background: #fff;
+              background: #F5F2EC;
               color: #181a20;
               font-family: $font;
               font-size: 15px;
@@ -222,7 +226,7 @@
             border-radius: 0px 0px 12px 12px;
             border: 1px solid rgba(196, 196, 196, 0.71);
             border-top: none;
-            background: #fff;
+            background: #F5F2EC;
             box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
             .title {
               overflow: hidden;
@@ -320,7 +324,7 @@
     height: auto;
     display: flex;
     flex-direction: row;
-    background: #f6f6f6;
+    background: #F5F2EC;
     .container {
       width: 100%;
       flex-direction: column;
@@ -386,7 +390,7 @@
               left: 20px;
               bottom: 20px;
               border-radius: 6px;
-              background: #fff;
+              background: #F5F2EC;
               color: #181a20;
               font-family: $font;
               font-size: 15px;
@@ -403,7 +407,7 @@
             border-radius: 0px 0px 12px 12px;
             border: 1px solid rgba(196, 196, 196, 0.71);
             border-top: none;
-            background: #fff;
+            background: #F5F2EC;
             box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
             .title {
               overflow: hidden;
@@ -564,7 +568,7 @@
                   left: 12px;
                   bottom: 12px;
                   border-radius: 6px;
-                  background: #fff;
+                  background: #F5F2EC;
                   color: #181a20;
                   font-family: $font;
                   font-size: 15px;
@@ -581,7 +585,7 @@
                 border-radius: 0px 0px 12px 12px;
                 border: 1px solid rgba(196, 196, 196, 0.71);
                 border-top: none;
-                background: #fff;
+                background: #F5F2EC;
                 box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
                 .title {
                   overflow: hidden;
@@ -683,7 +687,7 @@
     height: auto;
     display: flex;
     flex-direction: row;
-    background: #f6f6f6;
+    background: #F5F2EC;
     .container {
       position: relative;
       width: 100%;
@@ -751,8 +755,7 @@
     height: auto;
     display: flex;
     flex-direction: row;
-    background: $color-cream;
-    border-top: 2px solid $color-gold;
+    background: #2C2C2C;
 
     .footer-container {
       padding: 0 20px;
@@ -764,12 +767,12 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
-        border-bottom: 1px solid $color-border;
+        border-bottom: 1px solid rgba(245, 242, 236, 0.12);
 
         .footer-logo {
           width: 110px;
           cursor: pointer;
-          filter: brightness(0);
+          filter: brightness(0) invert(1) opacity(0.9);
         }
 
         .footer-contact {
@@ -778,7 +781,7 @@
           gap: 4px;
 
           .footer-label {
-            color: $color-text-muted;
+            color: rgba(245, 242, 236, 0.45);
             font-family: $font;
             font-size: 11px;
             font-weight: 400;
@@ -789,7 +792,7 @@
           .footer-value,
           p {
             margin: 0;
-            color: $color-text-dark;
+            color: #F5F2EC;
             font-family: $font;
             font-size: 14px;
             font-weight: 500;
@@ -800,12 +803,15 @@
           display: flex;
           flex-direction: row;
           gap: 14px;
-          color: $color-text-muted;
+          color: rgba(245, 242, 236, 0.45);
           margin-top: 4px;
 
           svg {
             font-size: 22px;
             cursor: pointer;
+            &:hover {
+              color: #C9A96E;
+            }
           }
         }
       }
@@ -816,7 +822,7 @@
         flex-direction: row;
         justify-content: space-between;
         gap: 16px;
-        border-bottom: 1px solid $color-border;
+        border-bottom: 1px solid rgba(245, 242, 236, 0.12);
 
         .footer-col {
           display: flex;
@@ -824,7 +830,7 @@
           flex: 1;
 
           .footer-col-title {
-            color: $color-text-dark;
+            color: #F5F2EC;
             font-family: $font;
             font-size: 11px;
             font-weight: 700;
@@ -832,16 +838,19 @@
             letter-spacing: 1.2px;
             margin-bottom: 14px;
             padding-bottom: 10px;
-            border-bottom: 1px solid $color-border;
+            border-bottom: 1px solid rgba(245, 242, 236, 0.15);
           }
 
           span {
-            color: $color-text-body;
+            color: rgba(245, 242, 236, 0.6);
             font-family: $font;
             font-size: 13px;
             font-weight: 400;
             margin-top: 10px;
             cursor: pointer;
+            &:hover {
+              color: #C9A96E;
+            }
           }
         }
       }
@@ -853,7 +862,7 @@
         justify-content: center;
 
         span {
-          color: $color-text-muted;
+          color: rgba(245, 242, 236, 0.4);
           font-family: $font;
           font-size: 12px;
           font-weight: 400;

@@ -24,7 +24,7 @@ const TopProductCard = (props: TopProductCardProps) => {
 	/** HANDLERS **/
 	const pushDetailHandler = async (propertyId:string) =>{
         console.log("propertyId", propertyId);
-		await router.push({pathname:'/property/detail', query:{id:propertyId}});
+		await router.push({pathname:'/product/detail', query:{id:propertyId}});
 	};
 
 	if (device === 'mobile') {
@@ -43,12 +43,12 @@ const TopProductCard = (props: TopProductCardProps) => {
 					<p className={'desc'}>{property?.productBrand}</p>
 					<div className={'options'}>
 						<div>
-							<img src="/img/icons/bed.svg" alt="" />
-							<span>{property?.productCategory} bed</span>
+							<img src="/img/icons/discovery.svg" alt="" />
+							<span>{property?.productCategory}</span>
 						</div>
 						<div>
-							<img src="/img/icons/room.svg" alt="" />
-							<span>{property?.productSize} rooms</span>
+							<img src="/img/icons/tune.svg" alt="" />
+							<span>{property?.productSize}</span>
 						</div>
 						<div>
 							<img src="/img/icons/expand.svg" alt="" />
@@ -57,11 +57,7 @@ const TopProductCard = (props: TopProductCardProps) => {
 					</div>
 					<Divider sx={{ mt: '15px', mb: '17px' }} />
 					<div className={'bott'}>
-						<p>
-							{' '}
-							{property.productStatus ? 'Rent' : ''} {property.productStatus && false && '/'}{' '}
-							
-						</p>
+						<p>{property?.productStatus ?? ''}</p>
 						<div className="view-like-box">
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
@@ -96,12 +92,12 @@ const TopProductCard = (props: TopProductCardProps) => {
 					<p className={'desc'}>{property?.productBrand}</p>
 					<div className={'options'}>
 						<div>
-							<img src="/img/icons/bed.svg" alt="" />
-							<span>{property?.productCategory} bed</span>
+							<img src="/img/icons/discovery.svg" alt="" />
+							<span>{property?.productCategory}</span>
 						</div>
 						<div>
-							<img src="/img/icons/room.svg" alt="" />
-							<span>{property?.productSize} rooms</span>
+							<img src="/img/icons/tune.svg" alt="" />
+							<span>{property?.productSize}</span>
 						</div>
 						<div>
 							<img src="/img/icons/expand.svg" alt="" />
@@ -110,11 +106,7 @@ const TopProductCard = (props: TopProductCardProps) => {
 					</div>
 					<Divider sx={{ mt: '15px', mb: '17px' }} />
 					<div className={'bott'}>
-						<p>
-							{' '}
-							{property.productStatus ? 'Rent' : ''} {property.productStatus && false && '/'}{' '}
-							
-						</p>
+						<p>{property?.productStatus ?? ''}</p>
 						<div className="view-like-box">
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />

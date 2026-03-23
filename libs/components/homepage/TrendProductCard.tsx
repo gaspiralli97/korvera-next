@@ -24,7 +24,7 @@ const TrendProductCard = (props: TrendProductCardProps) => {
 	/** HANDLERS **/
     const pushDetailHandler = async (propertyId:string) =>{
         console.log("propertyId", propertyId);
-		await router.push({pathname:'/property/detail', query:{id:propertyId}});
+		await router.push({pathname:'/product/detail', query:{id:propertyId}});
 	};
 	if (device === 'mobile') {
 		return (
@@ -44,12 +44,12 @@ const TrendProductCard = (props: TrendProductCardProps) => {
 					<p className={'desc'}>{property.productDesc ?? 'no description'}</p>
 					<div className={'options'}>
 						<div>
-							<img src="/img/icons/bed.svg" alt="" />
-							<span>{property.productCategory} bed</span>
+							<img src="/img/icons/discovery.svg" alt="" />
+							<span>{property.productCategory}</span>
 						</div>
 						<div>
-							<img src="/img/icons/room.svg" alt="" />
-							<span>{property.productSize} rooms</span>
+							<img src="/img/icons/tune.svg" alt="" />
+							<span>{property.productSize}</span>
 						</div>
 						<div>
 							<img src="/img/icons/expand.svg" alt="" />
@@ -58,10 +58,7 @@ const TrendProductCard = (props: TrendProductCardProps) => {
 					</div>
 					<Divider sx={{ mt: '15px', mb: '17px' }} />
 					<div className={'bott'}>
-						<p>
-							{property.productStatus ? 'Rent' : ''} {property.productStatus && false && '/'}{' '}
-							
-						</p>
+						<p>{property?.productStatus ?? ''}</p>
 						<div className="view-like-box">
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
@@ -99,12 +96,12 @@ const TrendProductCard = (props: TrendProductCardProps) => {
 					<p className={'desc'}>{property.productDesc ?? 'no description'}</p>
 					<div className={'options'}>
 						<div>
-							<img src="/img/icons/bed.svg" alt="" />
-							<span>{property.productCategory} bed</span>
+							<img src="/img/icons/discovery.svg" alt="" />
+							<span>{property.productCategory}</span>
 						</div>
 						<div>
-							<img src="/img/icons/room.svg" alt="" />
-							<span>{property.productSize} rooms</span>
+							<img src="/img/icons/tune.svg" alt="" />
+							<span>{property.productSize}</span>
 						</div>
 						<div>
 							<img src="/img/icons/expand.svg" alt="" />
@@ -113,10 +110,7 @@ const TrendProductCard = (props: TrendProductCardProps) => {
 					</div>
 					<Divider sx={{ mt: '15px', mb: '17px' }} />
 					<div className={'bott'}>
-						<p>
-							{property.productStatus ? 'Rent' : ''} {property.productStatus && false && '/'}{' '}
-							
-						</p>
+						<p>{property?.productStatus ?? ''}</p>
 						<div className="view-like-box">
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
