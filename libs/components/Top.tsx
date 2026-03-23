@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter, withRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { getJwtToken, logOut, updateUserInfo } from '../auth';
@@ -26,6 +26,76 @@ const categories = [
 	{ label: 'Wellness', value: ProductCategory.WELLNESS },
 ];
 
+const MEGA_MENU_DATA: Record<string, { cols: string[][]; image: string; tagline: string }> = {
+	[ProductCategory.SKINCARE]: {
+		cols: [
+			['Moisturisers', 'Cleansers', 'Toners'],
+			['Serums', 'Eye Care', 'Sunscreen'],
+			['Exfoliants', 'Face Masks', 'Mists'],
+		],
+		image: '/img/events/skincare.jpg',
+		tagline: 'Rituals for radiant skin',
+	},
+	[ProductCategory.MAKEUP]: {
+		cols: [
+			['Foundation', 'Concealer', 'Primer'],
+			['Lipstick', 'Lip Gloss', 'Blush'],
+			['Mascara', 'Eyeshadow', 'Setting Spray'],
+		],
+		image: '/img/fiber/img2.jpg',
+		tagline: 'Colour, refined',
+	},
+	[ProductCategory.HAIRCARE]: {
+		cols: [
+			['Shampoo', 'Conditioner', 'Hair Masks'],
+			['Scalp Care', 'Hair Oils', 'Treatments'],
+			['Styling', 'Heat Protection', 'Dry Shampoo'],
+		],
+		image: '/img/fiber/img3.jpg',
+		tagline: 'Hair in its best form',
+	},
+	[ProductCategory.BODYCARE]: {
+		cols: [
+			['Body Lotion', 'Body Wash', 'Body Scrubs'],
+			['Deodorant', 'Hand Cream', 'Foot Care'],
+			['Sun Care', 'Body Oil', 'Self-Tan'],
+		],
+		image: '/img/fiber/img4.jpg',
+		tagline: 'Care from head to toe',
+	},
+	[ProductCategory.FRAGRANCE]: {
+		cols: [
+			['Eau de Parfum', 'Eau de Toilette', 'Body Mist'],
+			['Candles', 'Diffusers', 'Room Sprays'],
+			['Gift Sets', 'Travel Size', 'Layering'],
+		],
+		image: '/img/fiber/img5.jpg',
+		tagline: 'Scent as identity',
+	},
+	[ProductCategory.WELLNESS]: {
+		cols: [
+			['Supplements', 'Vitamins', 'Minerals'],
+			['Sleep & Calm', 'Immunity', 'Gut Health'],
+			['Inner Beauty', 'Energy', 'Fitness'],
+		],
+		image: '/img/fiber/img1.jpg',
+		tagline: 'Beauty from within',
+	},
+};
+
+const BRANDS_DATA = [
+	{ name: 'Sulwhasoo', tagline: 'Timeless Korean beauty' },
+	{ name: 'Laneige', tagline: 'Water science skincare' },
+	{ name: 'COSRX', tagline: 'Targeted skin solutions' },
+	{ name: 'Innisfree', tagline: 'Pure Jeju island nature' },
+	{ name: 'Some By Mi', tagline: '30 days miracle series' },
+	{ name: 'Missha', tagline: 'Premium beauty innovation' },
+	{ name: 'The Face Shop', tagline: 'Nature & derma science' },
+	{ name: 'AHC', tagline: 'Professional clinic care' },
+	{ name: 'Benton', tagline: 'Clean gentle skincare' },
+	{ name: 'Klairs', tagline: 'Simple sensitive-friendly' },
+];
+
 const Top = () => {
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
@@ -41,6 +111,32 @@ const Top = () => {
 	const [logoutAnchor, setLogoutAnchor] = React.useState<null | HTMLElement>(null);
 	const logoutOpen = Boolean(logoutAnchor);
 	const [searchQuery, setSearchQuery] = useState<string>('');
+	const [activeCategory, setActiveCategory] = useState<string | null>(null);
+	const hideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const [csOpen, setCsOpen] = useState(false);
+	const csTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	const handleCsEnter = () => {
+		if (csTimeout.current) clearTimeout(csTimeout.current);
+		setCsOpen(true);
+	};
+	const handleCsLeave = () => {
+		csTimeout.current = setTimeout(() => setCsOpen(false), 120);
+	};
+
+	const handleCatEnter = (catValue: string) => {
+		if (hideTimeout.current) clearTimeout(hideTimeout.current);
+		setActiveCategory(catValue);
+	};
+	const handleCatLeave = () => {
+		hideTimeout.current = setTimeout(() => setActiveCategory(null), 120);
+	};
+	const handlePanelEnter = () => {
+		if (hideTimeout.current) clearTimeout(hideTimeout.current);
+	};
+	const handlePanelLeave = () => {
+		hideTimeout.current = setTimeout(() => setActiveCategory(null), 120);
+	};
 
 	/** LIFECYCLES **/
 	useEffect(() => {
@@ -209,9 +305,15 @@ const Top = () => {
 								<span>AI Beauty</span>
 							</Box>
 							<Link href={'/'}><span className={'nav-text-link'}>Home</span></Link>
-							<Box component={'div'} className={'cs-dropdown-wrap'}>
+							<Box component={'div'} className={'cs-dropdown-wrap'}
+								onMouseEnter={handleCsEnter}
+								onMouseLeave={handleCsLeave}
+							>
 								<Link href={'/cs'}><span className={'nav-text-link'}>Customer service</span></Link>
-								<Box component={'div'} className={'cs-dropdown-card'}>
+								<Box component={'div'} className={`cs-dropdown-card${csOpen ? ' is-open' : ''}`}
+									onMouseEnter={handleCsEnter}
+									onMouseLeave={handleCsLeave}
+								>
 									<Box component={'div'} className={'cs-col'}>
 										<span className={'cs-heading'}>How can we help?</span>
 										<Link href={'/cs?tab=faq'}><span className={'cs-item'}>FAQs</span></Link>
@@ -315,13 +417,60 @@ const Top = () => {
 					<Stack className={'container'}>
 						<Box component={'div'} className={'categories-list'}>
 							{categories.map((cat) => (
-								<Link key={cat.value} href={`/product?productCategory=${cat.value}`}>
-									<span className={'cat-link'}>{cat.label}</span>
-								</Link>
+								<div key={cat.value} className={'cat-mega-wrap'}
+									onMouseEnter={() => handleCatEnter(cat.value)}
+									onMouseLeave={handleCatLeave}
+								>
+									<Link href={`/product?productCategory=${cat.value}`}>
+										<span className={'cat-link'}>{cat.label}</span>
+									</Link>
+									<div
+										className={`cat-mega-panel${activeCategory === cat.value ? ' is-active' : ''}`}
+										onMouseEnter={handlePanelEnter}
+										onMouseLeave={handlePanelLeave}
+									>
+										<div className={'cat-mega-cols'}>
+											{MEGA_MENU_DATA[cat.value]?.cols.map((col, ci) => (
+												<div key={ci} className={'cat-mega-col'}>
+													{col.map((item) => (
+														<Link key={item} href={`/product?productCategory=${cat.value}`}>
+															<span className={'cat-mega-item'}>{item}</span>
+														</Link>
+													))}
+												</div>
+											))}
+										</div>
+										<div className={'cat-mega-featured'}>
+											<img src={MEGA_MENU_DATA[cat.value]?.image} alt={cat.label} />
+											<span className={'cat-mega-tagline'}>{MEGA_MENU_DATA[cat.value]?.tagline}</span>
+										</div>
+									</div>
+								</div>
 							))}
-							<Link href={'/agent'}>
-								<span className={'cat-link'}>Brands</span>
-							</Link>
+							<div className={'cat-mega-wrap'}
+								onMouseEnter={() => handleCatEnter('brands')}
+								onMouseLeave={handleCatLeave}
+							>
+								<Link href={'/agent'}>
+									<span className={'cat-link'}>Brands</span>
+								</Link>
+								<div
+									className={`cat-mega-panel cat-mega-panel--brands${activeCategory === 'brands' ? ' is-active' : ''}`}
+									onMouseEnter={handlePanelEnter}
+									onMouseLeave={handlePanelLeave}
+								>
+									<div className={'brands-grid'}>
+										{BRANDS_DATA.map((brand) => (
+											<Link key={brand.name} href={`/product?brand=${encodeURIComponent(brand.name)}`}>
+												<div className={'brand-card'}>
+													<span className={'brand-name'}>{brand.name}</span>
+													<span className={'brand-tagline'}>{brand.tagline}</span>
+												</div>
+											</Link>
+										))}
+									</div>
+								</div>
+							</div>
 						</Box>
 						<Box component={'div'} className={'cat-search'}>
 							<SearchIcon className={'cat-search-icon'} />

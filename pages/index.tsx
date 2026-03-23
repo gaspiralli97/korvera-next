@@ -1,15 +1,16 @@
 import { NextPage } from 'next';
 import useDeviceDetect from '../libs/hooks/useDeviceDetect';
 import withLayoutMain from '../libs/components/layout/LayoutHome';
-import CommunityBoards from '../libs/components/homepage/CommunityBoards';
-import PopularProducts from '../libs/components/homepage/PopularProducts';
-import TopAgents from '../libs/components/homepage/TopAgents';
-import Events from '../libs/components/homepage/Events';
+import { Stack } from '@mui/material';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import TrendProducts from '../libs/components/homepage/TrendProducts';
 import TopProducts from '../libs/components/homepage/TopProducts';
-import { Stack } from '@mui/material';
-import Advertisement from '../libs/components/homepage/Advertisement';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import HomepageCategories from '../libs/components/homepage/HomepageCategories';
+import HomepageBrands from '../libs/components/homepage/HomepageBrands';
+import HomepageSkinSolutions from '../libs/components/homepage/HomepageSkinSolutions';
+import BeforeAfter from '../libs/components/homepage/BeforeAfter';
+import HomepageAIBeauty from '../libs/components/homepage/HomepageAIBeauty';
+import HomepageReviews from '../libs/components/homepage/HomepageReviews';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -23,23 +24,24 @@ const Home: NextPage = () => {
 	if (device === 'mobile') {
 		return (
 			<Stack className={'home-page'}>
+				<HomepageCategories />
 				<TrendProducts />
-				<PopularProducts />
-				<Advertisement />
 				<TopProducts />
-				<TopAgents />
+				<HomepageReviews />
 			</Stack>
 		);
 	} else {
 		return (
 			<Stack className={'home-page'}>
+				{/* Hero — rendered in LayoutHome (.header-main) */}
+				<HomepageCategories />
 				<TrendProducts />
-				<PopularProducts />
-				<Advertisement />
+				<HomepageBrands />
+				<HomepageSkinSolutions />
+				<BeforeAfter />
 				<TopProducts />
-				<TopAgents />
-				<Events />
-				<CommunityBoards />
+				<HomepageAIBeauty />
+				<HomepageReviews />
 			</Stack>
 		);
 	}
