@@ -42,6 +42,13 @@ This file provides operating guidance for coding agents working in this reposito
   - why it changed
   - how it was verified
 
+## UI Constraints
+
+- ONLY modify UI and styling when working on frontend tasks.
+- DO NOT modify hooks, API calls, state management, or business logic.
+- Preserve existing props and component interfaces.
+- Use SCSS modules and follow existing naming conventions.
+
 ## Safety Notes
 
 - Treat secrets and credentials as sensitive; never hardcode them.
