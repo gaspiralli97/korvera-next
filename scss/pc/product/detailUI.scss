@@ -1,0 +1,1075 @@
+// ─── DetailUI Page ────────────────────────────────────────────────────────────
+// Sephora-inspired cosmetics PDP. All classes scoped to #product-detail-ui-page.
+// Brand tokens from variables.scss: $font, $color-plum, $color-rose, $color-gold
+// ─────────────────────────────────────────────────────────────────────────────
+
+#product-detail-ui-page {
+	background: $color-white;
+	padding-top: 87px;
+	padding-bottom: 120px;
+
+	// ── Page wrapper ────────────────────────────────────────────────────────
+	.pdp-page-wrap {
+		width: 100%;
+		padding-top: 48px;
+		gap: 80px;
+	}
+
+	// ══════════════════════════════════════════════════════════════════════
+	// 1. HERO — 2-column layout
+	// ══════════════════════════════════════════════════════════════════════
+	.pdp-hero {
+		display: flex;
+		flex-direction: row;
+		gap: 60px;
+		align-items: flex-start;
+	}
+
+	// ── Gallery ─────────────────────────────────────────────────────────────
+	.pdp-gallery {
+		display: flex;
+		flex-direction: row;
+		gap: 16px;
+		flex-shrink: 0;
+		width: 560px;
+	}
+
+	.pdp-thumbs {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		width: 72px;
+	}
+
+	.pdp-thumb {
+		width: 72px;
+		height: 72px;
+		border-radius: 10px;
+		overflow: hidden;
+		cursor: pointer;
+		border: 2px solid transparent;
+		background: none;
+		padding: 0;
+		transition: border-color 0.18s, box-shadow 0.18s;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
+
+		&:hover { border-color: $color-rose; }
+
+		&.active {
+			border-color: $color-plum;
+			box-shadow: 0 0 0 3px $color-rose-light;
+		}
+	}
+
+	.pdp-main-img {
+		flex: 1;
+		height: 580px;
+		border-radius: 20px;
+		overflow: hidden;
+		background: $color-cream;
+		position: relative;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+			transition: transform 0.45s ease;
+
+			&:hover { transform: scale(1.04); }
+		}
+	}
+
+	.pdp-img-badge {
+		position: absolute;
+		top: 18px;
+		left: 18px;
+		background: $color-plum;
+		color: $color-white;
+		font-family: $font;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 1.5px;
+		padding: 5px 14px;
+		border-radius: 100px;
+	}
+
+	// ── Info panel ───────────────────────────────────────────────────────────
+	.pdp-info {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+
+	.pdp-brand {
+		font-family: $font;
+		font-size: 12px;
+		font-weight: 800;
+		color: $color-plum;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		margin-bottom: 10px;
+	}
+
+	.pdp-title {
+		font-family: $font;
+		font-size: 22px;
+		font-weight: 700;
+		color: $color-text-dark;
+		line-height: 1.35;
+		margin-bottom: 16px;
+	}
+
+	// Rating row
+	.pdp-rating-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 8px;
+		margin-bottom: 14px;
+		flex-wrap: wrap;
+	}
+
+	.pdp-stars {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.pdp-rating-score {
+		font-family: $font;
+		font-size: 14px;
+		font-weight: 700;
+		color: $color-text-dark;
+	}
+
+	.pdp-rating-count {
+		font-family: $font;
+		font-size: 13px;
+		color: $color-text-body;
+		text-decoration: underline;
+		cursor: pointer;
+
+		&:hover { color: $color-plum; }
+	}
+
+	.pdp-sep { color: $color-border-dark; font-size: 13px; }
+
+	.pdp-likes {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 4px;
+
+		p { font-family: $font; font-size: 13px; color: $color-text-body; }
+	}
+
+	// Praise
+	.pdp-praise {
+		background: $color-rose-pale;
+		border-radius: 8px;
+		padding: 10px 16px;
+		margin-bottom: 20px;
+	}
+
+	.pdp-praise-text {
+		font-family: $font;
+		font-size: 13px;
+		color: $color-text-body;
+
+		span {
+			color: $color-plum;
+			font-weight: 600;
+		}
+	}
+
+	.pdp-divider {
+		height: 1px;
+		background: $color-border;
+		margin-bottom: 20px;
+	}
+
+	// Price
+	.pdp-price-block {
+		display: flex;
+		flex-direction: row;
+		align-items: baseline;
+		gap: 16px;
+		margin-bottom: 8px;
+	}
+
+	.pdp-price {
+		font-family: $font;
+		font-size: 30px;
+		font-weight: 800;
+		color: $color-text-dark;
+		line-height: 1;
+	}
+
+	.pdp-installment {
+		p {
+			font-family: $font;
+			font-size: 13px;
+			color: $color-text-muted;
+
+			strong { color: $color-text-dark; }
+		}
+	}
+
+	.pdp-klarna {
+		color: $color-rose;
+		font-weight: 800;
+		font-style: italic;
+		letter-spacing: 0.3px;
+	}
+
+	// Subscribe note
+	.pdp-subscribe-note {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 8px;
+		background: #f6f4ff;
+		border-radius: 8px;
+		padding: 10px 14px;
+		margin-bottom: 22px;
+
+		p {
+			font-family: $font;
+			font-size: 13px;
+			color: $color-text-body;
+
+			strong { color: $color-plum; }
+		}
+	}
+
+	.pdp-subscribe-icon { font-size: 16px; line-height: 1; }
+
+	// Size selector
+	.pdp-size-block { margin-bottom: 22px; }
+
+	.pdp-field-label {
+		font-family: $font;
+		font-size: 11px;
+		font-weight: 700;
+		color: $color-text-muted;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		margin-bottom: 10px;
+	}
+
+	.pdp-size-options {
+		display: flex;
+		flex-direction: row;
+		gap: 10px;
+		flex-wrap: wrap;
+	}
+
+	.pdp-size-btn {
+		padding: 10px 22px;
+		border-radius: 10px;
+		border: 1.5px solid $color-border;
+		background: $color-white;
+		font-family: $font;
+		font-size: 13px;
+		font-weight: 500;
+		color: $color-text-body;
+		cursor: pointer;
+		transition: all 0.18s;
+
+		&:hover { border-color: $color-plum; color: $color-plum; }
+
+		&.active {
+			border-color: $color-plum;
+			background: #f5f0fb;
+			color: $color-plum;
+			font-weight: 700;
+		}
+	}
+
+	// Delivery row
+	.pdp-delivery-row {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 10px;
+		margin-bottom: 24px;
+	}
+
+	.pdp-delivery-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 4px;
+		padding: 14px 10px;
+		border-radius: 12px;
+		border: 1.5px solid $color-border;
+		background: $color-white;
+		cursor: pointer;
+		transition: border-color 0.18s, background 0.18s;
+		text-align: center;
+
+		&:hover { border-color: $color-rose; background: $color-rose-pale; }
+	}
+
+	.pdp-dc-icon { font-size: 22px; line-height: 1; }
+
+	.pdp-dc-label {
+		font-family: $font;
+		font-size: 11px;
+		font-weight: 700;
+		color: $color-text-dark;
+	}
+
+	.pdp-dc-sub {
+		font-family: $font;
+		font-size: 10px;
+		color: $color-text-muted;
+	}
+
+	// CTA row
+	.pdp-cta-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 18px;
+	}
+
+	.pdp-qty-control {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 0;
+		border: 1.5px solid $color-border;
+		border-radius: 12px;
+		overflow: hidden;
+		flex-shrink: 0;
+	}
+
+	.pdp-qty-btn {
+		width: 40px;
+		height: 52px;
+		border: none;
+		background: $color-white;
+		font-family: $font;
+		font-size: 18px;
+		color: $color-text-dark;
+		cursor: pointer;
+		transition: background 0.15s;
+
+		&:hover { background: $color-rose-pale; }
+	}
+
+	.pdp-qty-val {
+		font-family: $font;
+		font-size: 15px;
+		font-weight: 700;
+		color: $color-text-dark;
+		min-width: 36px;
+		text-align: center;
+	}
+
+	.pdp-add-btn {
+		flex: 1;
+		height: 52px;
+		border-radius: 12px;
+		background: $color-plum !important;
+		color: $color-white !important;
+		font-family: $font !important;
+		font-size: 15px !important;
+		font-weight: 700 !important;
+		text-transform: none !important;
+		letter-spacing: 0.3px !important;
+		gap: 8px !important;
+		transition: background 0.2s !important;
+
+		&:hover { background: $color-plum-light !important; }
+	}
+
+	.pdp-add-icon { font-size: 18px; line-height: 1; }
+
+	.pdp-wish-btn {
+		width: 52px;
+		height: 52px;
+		border-radius: 50%;
+		border: 1.5px solid $color-border;
+		background: $color-white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		flex-shrink: 0;
+		transition: border-color 0.18s, background 0.18s;
+
+		svg { color: $color-text-muted; }
+
+		&:hover { border-color: $color-rose; background: $color-rose-pale; svg { color: $color-rose; } }
+
+		&.active {
+			border-color: $color-rose;
+			background: $color-rose-pale;
+
+			svg { color: $color-rose; }
+		}
+	}
+
+	// Meta
+	.pdp-meta-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 20px;
+		flex-wrap: wrap;
+	}
+
+	.pdp-views {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 5px;
+
+		p { font-family: $font; font-size: 12px; color: $color-text-muted; }
+		svg { color: $color-text-muted; }
+	}
+
+	.pdp-trending {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 6px;
+		background: $color-text-dark;
+		border-radius: 100px;
+		padding: 6px 16px;
+
+		p {
+			font-family: $font;
+			font-size: 12px;
+			color: $color-white;
+
+			strong { color: $color-gold; }
+		}
+	}
+
+	.pdp-fire { font-size: 15px; line-height: 1; }
+
+	// ══════════════════════════════════════════════════════════════════════
+	// 2. HIGHLIGHTS — pill badges
+	// ══════════════════════════════════════════════════════════════════════
+	.pdp-highlights {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 12px;
+		padding: 36px 0;
+		border-top: 1px solid $color-border;
+		border-bottom: 1px solid $color-border;
+	}
+
+	.pdp-hl-pill {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 20px;
+		border-radius: 100px;
+		border: 1.5px solid $color-border;
+		background: $color-white;
+		cursor: default;
+		transition: border-color 0.18s, background 0.18s;
+
+		&:hover { border-color: $color-rose; background: $color-rose-pale; }
+	}
+
+	.pdp-hl-emoji { font-size: 18px; line-height: 1; }
+
+	.pdp-hl-label {
+		font-family: $font;
+		font-size: 13px;
+		font-weight: 600;
+		color: $color-text-dark;
+	}
+
+	// ══════════════════════════════════════════════════════════════════════
+	// 3. TABS
+	// ══════════════════════════════════════════════════════════════════════
+	.pdp-tabs-wrap { width: 100%; gap: 0; }
+
+	// Tab nav
+	.pdp-tab-nav {
+		display: flex;
+		flex-direction: row;
+		border-bottom: 2px solid $color-border;
+		margin-bottom: 44px;
+		gap: 0;
+	}
+
+	.pdp-tab-btn {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 16px 30px;
+		border: none;
+		background: transparent;
+		font-family: $font;
+		font-size: 14px;
+		font-weight: 600;
+		color: $color-text-muted;
+		cursor: pointer;
+		position: relative;
+		transition: color 0.18s;
+
+		&::after {
+			content: '';
+			position: absolute;
+			bottom: -2px;
+			left: 0;
+			width: 100%;
+			height: 2px;
+			background: $color-plum;
+			transform: scaleX(0);
+			transition: transform 0.22s ease;
+		}
+
+		&:hover { color: $color-text-dark; }
+
+		&.active {
+			color: $color-plum;
+
+			&::after { transform: scaleX(1); }
+		}
+	}
+
+	.pdp-tab-badge {
+		background: $color-rose-light;
+		color: $color-plum;
+		font-family: $font;
+		font-size: 11px;
+		font-weight: 700;
+		padding: 2px 8px;
+		border-radius: 100px;
+	}
+
+	// Tab panel
+	.pdp-tab-panel { width: 100%; gap: 40px; }
+
+	.pdp-section-title {
+		font-family: $font;
+		font-size: 18px;
+		font-weight: 700;
+		color: $color-text-dark;
+		margin-bottom: 18px;
+	}
+
+	// ── Description tab ────────────────────────────────────────────────────
+	.pdp-desc-block {
+		border-radius: 16px;
+		border: 1px solid $color-border;
+		padding: 32px 36px;
+	}
+
+	.pdp-desc-text {
+		font-family: $font;
+		font-size: 15px;
+		color: $color-text-body;
+		line-height: 1.85;
+	}
+
+	.pdp-details-table {
+		border-radius: 16px;
+		border: 1px solid $color-border;
+		overflow: hidden;
+	}
+
+	.pdp-section-title {
+		&:not(:first-of-type) { margin-top: 0; }
+	}
+
+	.pdp-details-table > .pdp-section-title {
+		padding: 20px 28px;
+		margin-bottom: 0;
+		border-bottom: 1px solid $color-border;
+		background: #faf8fd;
+		font-size: 15px;
+	}
+
+	.pdp-table-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.pdp-table-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 14px;
+		padding: 14px 28px;
+		border-bottom: 1px solid #faf0f6;
+
+		&:nth-child(even) { background: #fdfbff; }
+	}
+
+	.pdp-table-label {
+		font-family: $font;
+		font-size: 11px;
+		font-weight: 700;
+		color: $color-text-muted;
+		text-transform: uppercase;
+		letter-spacing: 0.7px;
+		width: 90px;
+		flex-shrink: 0;
+	}
+
+	.pdp-table-val {
+		font-family: $font;
+		font-size: 13px;
+		color: $color-text-dark;
+		font-weight: 500;
+	}
+
+	.pdp-certs-block {
+		border-radius: 16px;
+		border: 1px solid $color-border;
+		padding: 28px 32px;
+	}
+
+	.pdp-cert-row {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+
+	.pdp-cert-badge {
+		padding: 7px 18px;
+		border-radius: 100px;
+		background: $color-rose-pale;
+		border: 1px solid $color-rose-light;
+		font-family: $font;
+		font-size: 12px;
+		font-weight: 600;
+		color: $color-plum;
+		text-transform: capitalize;
+	}
+
+	// ── Ingredients tab ─────────────────────────────────────────────────────
+	.pdp-ing-section {
+		border-radius: 16px;
+		border: 1px solid $color-border;
+		padding: 32px 36px;
+	}
+
+	.pdp-ing-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+		gap: 16px;
+	}
+
+	.pdp-ing-card {
+		border-radius: 14px;
+		border: 1px solid $color-border;
+		background: #faf8fd;
+		padding: 20px 22px;
+		gap: 8px;
+		transition: box-shadow 0.18s;
+
+		&:hover { box-shadow: 0 4px 16px rgba($color-plum, 0.08); }
+	}
+
+	.pdp-ing-header {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.pdp-ing-emoji { font-size: 22px; line-height: 1; }
+
+	.pdp-ing-name {
+		font-family: $font;
+		font-size: 14px;
+		font-weight: 700;
+		color: $color-text-dark;
+	}
+
+	.pdp-ing-benefit {
+		font-family: $font;
+		font-size: 13px;
+		color: $color-text-body;
+		line-height: 1.65;
+	}
+
+	.pdp-full-ing {
+		border-radius: 16px;
+		border: 1px solid $color-border;
+		padding: 28px 36px;
+	}
+
+	.pdp-ing-list {
+		font-family: $font;
+		font-size: 13px;
+		color: $color-text-muted;
+		line-height: 1.9;
+	}
+
+	// ── Reviews tab ─────────────────────────────────────────────────────────
+	.pdp-reviews-summary {
+		display: flex;
+		flex-direction: row;
+		gap: 48px;
+		align-items: flex-start;
+		border-radius: 16px;
+		border: 1px solid $color-border;
+		padding: 32px 36px;
+	}
+
+	.pdp-avg-block {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 6px;
+		min-width: 110px;
+	}
+
+	.pdp-avg-num {
+		font-family: $font;
+		font-size: 56px;
+		font-weight: 800;
+		color: $color-text-dark;
+		line-height: 1;
+	}
+
+	.pdp-avg-sub {
+		font-family: $font;
+		font-size: 12px;
+		color: $color-text-muted;
+		text-align: center;
+		margin-top: 2px;
+	}
+
+	.pdp-rating-bars { flex: 1; gap: 10px; }
+
+	.pdp-bar-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.pdp-bar-stars {
+		font-family: $font;
+		font-size: 12px;
+		color: $color-text-muted;
+		width: 36px;
+		flex-shrink: 0;
+	}
+
+	.pdp-bar-track {
+		flex: 1;
+		height: 8px;
+		border-radius: 4px;
+		background: $color-border;
+		overflow: hidden;
+	}
+
+	.pdp-bar-fill {
+		height: 100%;
+		border-radius: 4px;
+		background: $color-plum;
+		transition: width 0.5s ease;
+	}
+
+	.pdp-bar-pct {
+		font-family: $font;
+		font-size: 12px;
+		color: $color-text-muted;
+		width: 34px;
+		text-align: right;
+	}
+
+	.pdp-pros-cons { flex: 1; gap: 20px; }
+
+	.pdp-pros, .pdp-cons { gap: 10px; }
+
+	.pdp-pc-label {
+		font-family: $font;
+		font-size: 11px;
+		font-weight: 700;
+		color: $color-text-dark;
+		text-transform: uppercase;
+		letter-spacing: 0.8px;
+	}
+
+	.pdp-tag {
+		display: inline-block;
+		padding: 5px 14px;
+		border-radius: 100px;
+		border: 1px solid $color-border;
+		background: $color-white;
+		font-family: $font;
+		font-size: 12px;
+		color: $color-text-body;
+		cursor: default;
+		margin: 0 4px 4px 0;
+		transition: all 0.15s;
+
+		&:hover { border-color: $color-plum; color: $color-plum; background: #f5f0fb; }
+	}
+
+	// Review cards
+	.pdp-review-cards { gap: 0; }
+
+	.pdp-review-card {
+		padding: 28px 0;
+		border-bottom: 1px solid $color-border;
+		gap: 10px;
+	}
+
+	.pdp-rv-header {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-start;
+	}
+
+	.pdp-rv-user {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 14px;
+	}
+
+	.pdp-rv-avatar {
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 2px solid $color-border;
+	}
+
+	.pdp-rv-user-info { gap: 2px; }
+
+	.pdp-rv-name {
+		font-family: $font;
+		font-size: 14px;
+		font-weight: 700;
+		color: $color-text-dark;
+	}
+
+	.pdp-rv-skin {
+		font-family: $font;
+		font-size: 12px;
+		color: $color-text-muted;
+	}
+
+	.pdp-rv-meta {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 4px;
+	}
+
+	.pdp-rv-date {
+		font-family: $font;
+		font-size: 12px;
+		color: $color-text-muted;
+	}
+
+	.pdp-rv-title {
+		font-family: $font;
+		font-size: 15px;
+		font-weight: 700;
+		color: $color-text-dark;
+		margin-top: 4px;
+	}
+
+	.pdp-rv-body {
+		font-family: $font;
+		font-size: 14px;
+		color: $color-text-body;
+		line-height: 1.75;
+	}
+
+	.pdp-rv-footer { margin-top: 4px; }
+
+	.pdp-rv-helpful {
+		font-family: $font;
+		font-size: 12px;
+		color: $color-text-muted;
+		cursor: pointer;
+
+		&:hover { color: $color-plum; }
+	}
+
+	// ══════════════════════════════════════════════════════════════════════
+	// 4. RECOMMENDED PRODUCTS
+	// ══════════════════════════════════════════════════════════════════════
+	.pdp-recommended { width: 100%; gap: 28px; }
+
+	.pdp-rec-head {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-end;
+	}
+
+	.pdp-rec-titles { gap: 4px; }
+
+	.pdp-rec-title {
+		font-family: $font;
+		font-size: 22px;
+		font-weight: 700;
+		color: $color-text-dark;
+	}
+
+	.pdp-rec-sub {
+		font-family: $font;
+		font-size: 13px;
+		color: $color-text-muted;
+	}
+
+	.pdp-rec-arrows {
+		display: flex;
+		flex-direction: row;
+		gap: 12px;
+
+		svg {
+			cursor: pointer;
+			color: $color-plum;
+			transition: color 0.18s;
+
+			&:hover { color: $color-rose; }
+		}
+	}
+
+	.pdp-rec-scroll {
+		display: flex;
+		flex-direction: row;
+		gap: 20px;
+		overflow-x: auto;
+		padding-bottom: 8px;
+		scroll-snap-type: x mandatory;
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar { display: none; }
+	}
+
+	.pdp-rec-card {
+		flex-shrink: 0;
+		width: 220px;
+		border-radius: 16px;
+		border: 1px solid $color-border;
+		background: $color-white;
+		overflow: hidden;
+		scroll-snap-align: start;
+		cursor: pointer;
+		transition: box-shadow 0.22s, transform 0.22s;
+
+		&:hover {
+			box-shadow: 0 8px 28px rgba($color-plum, 0.1);
+			transform: translateY(-3px);
+		}
+	}
+
+	.pdp-rec-img-wrap {
+		position: relative;
+		width: 100%;
+		height: 200px;
+		overflow: hidden;
+		background: $color-cream;
+	}
+
+	.pdp-rec-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform 0.3s ease;
+
+		.pdp-rec-card:hover & { transform: scale(1.05); }
+	}
+
+	.pdp-rec-wish {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		border: none;
+		background: rgba($color-white, 0.88);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: background 0.18s;
+
+		svg { color: $color-text-muted; }
+
+		&:hover { background: $color-rose-pale; svg { color: $color-rose; } }
+	}
+
+	.pdp-rec-body {
+		padding: 16px 16px 18px;
+		gap: 6px;
+	}
+
+	.pdp-rec-brand {
+		font-family: $font;
+		font-size: 10px;
+		font-weight: 800;
+		color: $color-plum;
+		text-transform: uppercase;
+		letter-spacing: 1.2px;
+	}
+
+	.pdp-rec-name {
+		font-family: $font;
+		font-size: 13px;
+		font-weight: 600;
+		color: $color-text-dark;
+		line-height: 1.4;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.pdp-rec-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 4px;
+	}
+
+	.pdp-rec-price {
+		font-family: $font;
+		font-size: 15px;
+		font-weight: 800;
+		color: $color-text-dark;
+	}
+
+	.pdp-rec-add-btn {
+		width: 100%;
+		height: 38px;
+		border-radius: 8px !important;
+		background: $color-plum !important;
+		color: $color-white !important;
+		font-family: $font !important;
+		font-size: 12px !important;
+		font-weight: 700 !important;
+		text-transform: none !important;
+		margin-top: 8px !important;
+		transition: background 0.2s !important;
+
+		&:hover { background: $color-plum-light !important; }
+	}
+}
