@@ -502,7 +502,7 @@
 					flex-direction: row;
 					.top-property-swiper {
 						width: 100%;
-						height: 400px;
+						height: 440px;
 						display: flex;
 						flex-direction: row;
 						.top-property-slide {
@@ -510,6 +510,116 @@
 							height: auto;
 							display: flex;
 							margin: 10px 0 0 10px;
+							.card-config {
+								width: 300px;
+								height: 413px;
+								border-radius: 12px;
+								background: #F5F2EC;
+								box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
+								.top {
+									position: relative;
+									width: 100%;
+									height: 240px;
+									a { height: 100%; }
+									img {
+										width: 100%;
+										height: 100%;
+										object-fit: cover;
+										border-radius: 12px 12px 0 0;
+									}
+									.top-badge {
+										position: absolute;
+										top: 20px;
+										left: 16px;
+										display: flex;
+										width: 80px;
+										height: 30px;
+										justify-content: center;
+										align-items: center;
+										border-radius: 6px;
+										padding: 6px 20px;
+										background: #eb6753;
+										color: #fff;
+										font-size: 12px;
+										font-weight: 600;
+										img { height: 16px; }
+									}
+									.price-box {
+										position: absolute;
+										bottom: 20px;
+										left: 20px;
+										padding: 8px 15px;
+										align-items: center;
+										border-radius: 6px;
+										border: 1px solid rgba(255, 255, 255, 0.5);
+										background: #F5F2EC;
+										p {
+											color: #181a20;
+											font-size: 15px;
+											font-weight: 600;
+										}
+									}
+								}
+								.bottom {
+									width: 100%;
+									height: 173px;
+									padding: 20px 16px 10px 16px;
+									.name-address {
+										width: 100%;
+										height: 48px;
+										gap: 5px;
+										margin-bottom: 20px;
+										.name {
+											width: 100%;
+											height: 23px;
+											overflow: hidden;
+											p {
+												color: #181a20;
+												font-size: 15px;
+												font-weight: 600;
+												text-transform: capitalize;
+											}
+										}
+										.address {
+											width: 100%;
+											overflow: hidden;
+											p { color: #717171; font-size: 13px; }
+										}
+									}
+									.options {
+										flex-direction: row;
+										width: 100%;
+										height: 20px;
+										gap: 20px;
+										margin-bottom: 10px;
+										.option {
+											flex-direction: row;
+											gap: 5px;
+											align-items: center;
+											p { color: #181a20; font-size: 13px; }
+										}
+									}
+									.divider {
+										width: 100%;
+										height: 1px;
+										background: #ddd;
+										margin-bottom: 17px;
+									}
+									.type-buttons {
+										flex-direction: row;
+										width: 100%;
+										justify-content: space-between;
+										align-items: center;
+										.type p { color: #181a20; }
+										.buttons {
+											flex-direction: row;
+											align-items: center;
+											svg { width: 24px; height: 24px; cursor: pointer; }
+											.view-cnt { font-size: 13px; }
+										}
+									}
+								}
+							}
 						}
 					}
 					.top-card-box {
@@ -742,7 +852,7 @@
 			height: 810px;
 			display: flex;
 			flex-direction: row;
-			background: #181a20;
+			background: #F5F2EC;
 			.container {
 				flex-direction: column;
 				align-items: center;
@@ -778,22 +888,24 @@
 							left: 10px;
 							right: 10px;
 							strong {
-								color: #f64747;
+								color: #F5F2EC;
 								font-family: $font;
 								font-size: 25px;
 								font-style: normal;
 								font-weight: 600;
 								line-height: normal;
 								text-transform: capitalize;
+								text-shadow: 0 1px 4px rgba(0,0,0,0.4);
 							}
 							span {
-								color: #f66767;
+								color: rgba(245,242,236,0.85);
 								font-family: $font;
 								font-size: 20px;
 								font-style: normal;
 								font-weight: 500;
 								line-height: 28px;
 								text-transform: capitalize;
+								text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 							}
 						}
 						.more {

@@ -3,14 +3,12 @@ import useDeviceDetect from '../libs/hooks/useDeviceDetect';
 import withLayoutMain from '../libs/components/layout/LayoutHome';
 import { Stack } from '@mui/material';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import TrendProducts from '../libs/components/homepage/TrendProducts';
-import TopProducts from '../libs/components/homepage/TopProducts';
 import HomepageCategories from '../libs/components/homepage/HomepageCategories';
-import HomepageBrands from '../libs/components/homepage/HomepageBrands';
+import ProductTabs from '../libs/components/homepage/ProductTabs';
 import HomepageSkinSolutions from '../libs/components/homepage/HomepageSkinSolutions';
-import BeforeAfter from '../libs/components/homepage/BeforeAfter';
-import HomepageAIBeauty from '../libs/components/homepage/HomepageAIBeauty';
-import HomepageReviews from '../libs/components/homepage/HomepageReviews';
+import HomepageSocialProof from '../libs/components/homepage/HomepageSocialProof';
+import Events from '../libs/components/homepage/Events';
+import HomepageBrands from '../libs/components/homepage/HomepageBrands';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -25,9 +23,8 @@ const Home: NextPage = () => {
 		return (
 			<Stack className={'home-page'}>
 				<HomepageCategories />
-				<TrendProducts />
-				<TopProducts />
-				<HomepageReviews />
+				<ProductTabs />
+				<HomepageSocialProof />
 			</Stack>
 		);
 	} else {
@@ -35,13 +32,11 @@ const Home: NextPage = () => {
 			<Stack className={'home-page'}>
 				{/* Hero — rendered in LayoutHome (.header-main) */}
 				<HomepageCategories />
-				<TrendProducts />
-				<HomepageBrands />
+				<ProductTabs />
 				<HomepageSkinSolutions />
-				<BeforeAfter />
-				<TopProducts />
-				<HomepageAIBeauty />
-				<HomepageReviews />
+				<HomepageSocialProof />
+				<Events />
+				<HomepageBrands />
 			</Stack>
 		);
 	}

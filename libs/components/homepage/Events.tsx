@@ -20,20 +20,20 @@ const eventsData: EventData[] = [
 		eventTitle: 'Glamour Makeup Line',
 		city: 'Makeup',
 		description: 'Explore our bold and elegant makeup line crafted for every skin tone and occasion.',
-		imageSrc: '/img/events/makeup.jpeg',
+		imageSrc: '/img/fiber/img2.jpg',
 	},
 	{
 		eventTitle: 'Hair & Body Essentials',
 		city: 'Haircare',
 		description: 'From scalp care to body butters — our hair and body essentials keep you feeling fresh and radiant.',
-		imageSrc: '/img/events/haircare.jpeg',
+		imageSrc: '/img/fiber/img4.jpg',
 	},
 	{
 		eventTitle: 'Wellness & Fragrance',
 		city: 'Wellness',
 		description:
 			'Indulge in our curated wellness and fragrance collection — crafted to elevate your self-care routine.',
-		imageSrc: '/img/events/wellness.jpeg',
+		imageSrc: '/img/fiber/img5.jpg',
 	},
 ];
 

@@ -24,7 +24,9 @@ const ProductCard = (props: ProductCardType) => {
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
 	const imagePath: string = property?.productImages[0]
-		? `${REACT_APP_API_URL}/${property?.productImages[0]}`
+		? property.productImages[0].startsWith('/')
+			? property.productImages[0]
+			: `${REACT_APP_API_URL}/${property.productImages[0]}`
 		: '/img/banner/header1.svg';
 
 	if (device === 'mobile') {
@@ -50,6 +52,17 @@ const ProductCard = (props: ProductCardType) => {
 					<Box component={'div'} className={'price-box'}>
 						<Typography>${formatterStr(property?.productPrice)}</Typography>
 					</Box>
+					<Link
+						href={{
+							pathname: '/product/detail',
+							query: { id: property?._id },
+						}}
+						className={'quicklook-link'}
+					>
+						<Box component={'div'} className={'quicklook-btn'}>
+							<Typography>Quick Look</Typography>
+						</Box>
+					</Link>
 				</Stack>
 				<Stack className="bottom">
 					<Stack className="name-address">

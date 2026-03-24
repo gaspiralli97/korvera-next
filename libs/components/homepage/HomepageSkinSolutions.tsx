@@ -1,94 +1,111 @@
 import React, { useState } from 'react';
-import Link from 'next/link';
-import { Stack, Box, Typography } from '@mui/material';
-import { SkinType } from '../../enums/product.enum';
+import { Stack, Box } from '@mui/material';
+import WestIcon from '@mui/icons-material/West';
+import EastIcon from '@mui/icons-material/East';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Navigation, Pagination } from 'swiper';
+import { Product } from '../../types/product/product';
+import { ProductsInquiry } from '../../types/product/product.input';
+import ProductCard from '../product/ProductCard';
+import { useMutation, useQuery } from '@apollo/client';
+import { GET_PRODUCTS } from '../../../apollo/user/query';
+import { T } from '../../types/common';
+import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
+import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
+import { Message } from '../../enums/common.enum';
+import { MOCK_PRODUCTS } from '../../data/mockProducts';
 
-const SOLUTIONS = [
-	{
-		type: SkinType.DRY,
-		label: 'Dry Skin',
-		headline: 'Deep Hydration Ritual',
-		desc: 'Restore the skin barrier with rich, nourishing formulas that lock in moisture throughout the day.',
-		steps: ['Gentle Cream Cleanser', 'Hydrating Toner', 'Barrier Repair Serum', 'Rich Moisturiser'],
-		image: '/img/fiber/img1.jpg',
-		accent: '#8B6914',
-	},
-	{
-		type: SkinType.OILY,
-		label: 'Oily Skin',
-		headline: 'Balance & Clarity',
-		desc: 'Control excess sebum and minimise pores with lightweight, non-comedogenic formulas.',
-		steps: ['Foam Cleanser', 'BHA Toner', 'Niacinamide Serum', 'Oil-Free Moisturiser'],
-		image: '/img/fiber/img6.jpg',
-		accent: '#3A5C38',
-	},
-	{
-		type: SkinType.SENSITIVE,
-		label: 'Sensitive Skin',
-		headline: 'Calm & Soothe',
-		desc: 'Fragrance-free, dermatologist-tested formulas that reduce redness and strengthen skin resilience.',
-		steps: ['Micellar Cleanser', 'Calming Essence', 'Centella Serum', 'Soothing Cream'],
-		image: '/img/fiber/img7.jpg',
-		accent: '#6B2D45',
-	},
-	{
-		type: SkinType.COMBINATION,
-		label: 'Combination',
-		headline: 'Balance in Two Zones',
-		desc: 'Address oily T-zones and dry cheeks with targeted multi-zone skincare routines.',
-		steps: ['Balancing Cleanser', 'Exfoliating Toner', 'Lightweight Serum', 'Dual-Zone Moisturiser'],
-		image: '/img/fiber/img4.jpg',
-		accent: '#2C5F7A',
-	},
-];
+interface HomepageSkinSolutionsProps {
+	initialInput: ProductsInquiry;
+}
 
-const HomepageSkinSolutions = () => {
-	const [active, setActive] = useState(0);
-	const current = SOLUTIONS[active];
+const HomepageSkinSolutions = (props: HomepageSkinSolutionsProps) => {
+	const { initialInput } = props;
+	const [products, setProducts] = useState<Product[]>([]);
+
+	/** APOLLO REQUESTS **/
+	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
+	const {
+		refetch: getProductsRefetch,
+	} = useQuery(GET_PRODUCTS, {
+		fetchPolicy:'cache-and-network',
+		variables:{input:initialInput},
+		notifyOnNetworkStatusChange:true,
+		onCompleted:(data:T)=>{
+			setProducts(data?.getProducts?.list);
+		},
+	});
+
+	/** HANDLERS **/
+	const likePropertyHandler = async (user:T, id:string) => {
+		try {
+			if(!id) return;
+			if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+
+			await likeTargetProduct({
+				variables:{input:id},
+			});
+			await getProductsRefetch({input:initialInput});
+
+			await sweetTopSmallSuccessAlert('success',800);
+		} catch (err:any) {
+			console.log('ERROR, likePropertyHandler', err.message);
+			sweetMixinErrorAlert(err.message).then();
+		}
+	};
+
+	if (!products) return null;
 
 	return (
-		<Stack className={'hp-skin-solutions'}>
+		<Stack className={'hp-recommend'}>
 			<Stack className={'container'}>
-				<Typography className={'hp-section-eyebrow'}>Skin Solutions</Typography>
-				<Typography className={'hp-section-title'}>Find Your Routine</Typography>
-
-				{/* Skin type tabs */}
-				<Box className={'hp-skin-tabs'}>
-					{SOLUTIONS.map((s, i) => (
-						<button
-							key={s.type}
-							className={`hp-skin-tab${active === i ? ' active' : ''}`}
-							onClick={() => setActive(i)}
-						>
-							{s.label}
-						</button>
-					))}
-				</Box>
-
-				{/* Active solution panel */}
-				<Box className={'hp-skin-panel'}>
-					<Box className={'hp-skin-panel-img'} style={{ backgroundImage: `url(${current.image})` }} />
-					<Box className={'hp-skin-panel-content'}>
-						<span className={'hp-skin-headline'}>{current.headline}</span>
-						<p className={'hp-skin-desc'}>{current.desc}</p>
-						<Box className={'hp-skin-steps'}>
-							{current.steps.map((step, i) => (
-								<Box key={step} className={'hp-skin-step'}>
-									<span className={'hp-skin-step-num'}>0{i + 1}</span>
-									<span className={'hp-skin-step-name'}>{step}</span>
-								</Box>
-							))}
-						</Box>
-						<Link href={`/product?skinType=${current.type}`}>
-							<button className={'hp-solid-btn'} style={{ backgroundColor: current.accent }}>
-								Shop This Routine
-							</button>
-						</Link>
+				<Stack className={'info-box'}>
+					<Box component={'div'} className={'left'}>
+						<span>Recommended for You</span>
+						<p>Picked based on what others love</p>
 					</Box>
-				</Box>
+					<Box component={'div'} className={'right'}>
+						<div className={'pagination-box'}>
+							<WestIcon className={'swiper-recommend-prev'} />
+							<div className={'swiper-recommend-pagination'}></div>
+							<EastIcon className={'swiper-recommend-next'} />
+						</div>
+					</Box>
+				</Stack>
+				<Stack className={'card-box'}>
+					<Swiper
+						className={'top-property-swiper'}
+						slidesPerView={4}
+						spaceBetween={15}
+						modules={[Autoplay, Navigation, Pagination]}
+						navigation={{
+							nextEl: '.swiper-recommend-next',
+							prevEl: '.swiper-recommend-prev',
+						}}
+						pagination={{
+							el: '.swiper-recommend-pagination',
+						}}
+					>
+						{(products.length > 0 ? products : MOCK_PRODUCTS).map((product: Product) => (
+							<SwiperSlide className={'top-property-slide'} key={product._id}>
+								<ProductCard property={product} likePropertyHandler={likePropertyHandler} />
+							</SwiperSlide>
+						))}
+					</Swiper>
+				</Stack>
 			</Stack>
 		</Stack>
 	);
+};
+
+HomepageSkinSolutions.defaultProps = {
+	initialInput: {
+		page: 1,
+		limit: 8,
+		sort: 'productRank',
+		direction: 'DESC',
+		search: {},
+	},
 };
 
 export default HomepageSkinSolutions;
