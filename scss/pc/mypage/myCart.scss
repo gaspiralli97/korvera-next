@@ -1,0 +1,250 @@
+#pc-wrap {
+	#my-cart-page {
+		width: 100%;
+		padding: 92px 0 120px;
+
+		.my-cart-wrap {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			gap: 28px;
+
+			.my-cart-head {
+				gap: 6px;
+
+				.my-cart-title {
+					color: #1b1b1b;
+					font-family: $font;
+					font-size: 36px;
+					font-weight: 500;
+					letter-spacing: 0.4px;
+				}
+
+				.my-cart-sub {
+					color: rgba(27, 27, 27, 0.55);
+					font-family: $font;
+					font-size: 14px;
+					font-weight: 400;
+					line-height: 1.6;
+				}
+			}
+
+			.my-cart-body {
+				width: 100%;
+				display: grid;
+				grid-template-columns: minmax(0, 1fr) 340px;
+				gap: 22px;
+			}
+
+			.my-cart-list {
+				border: 1px solid rgba(27, 27, 27, 0.08);
+				background: #f5f2ec;
+			}
+
+			.cart-item {
+				flex-direction: row;
+				gap: 16px;
+				padding: 20px;
+				border-bottom: 1px solid rgba(27, 27, 27, 0.08);
+
+				&:last-child {
+					border-bottom: none;
+				}
+
+				.thumb-wrap {
+					width: 132px;
+					height: 156px;
+					flex-shrink: 0;
+					background: #efebe5;
+
+					img {
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+					}
+				}
+
+				.item-info {
+					flex: 1;
+					gap: 6px;
+
+					.item-title {
+						color: #1b1b1b;
+						font-family: $font;
+						font-size: 20px;
+						font-weight: 400;
+						line-height: 1.3;
+					}
+
+					.item-meta {
+						color: rgba(27, 27, 27, 0.58);
+						font-family: $font;
+						font-size: 13px;
+						font-weight: 400;
+					}
+
+					.item-price {
+						color: #1b1b1b;
+						font-family: $font;
+						font-size: 19px;
+						font-weight: 500;
+						letter-spacing: 0.2px;
+					}
+
+					.item-controls {
+						margin-top: auto;
+						flex-direction: row;
+						align-items: center;
+						justify-content: space-between;
+						gap: 12px;
+
+						.qty-box {
+							flex-direction: row;
+							align-items: center;
+							border: 1px solid rgba(27, 27, 27, 0.16);
+
+							.qty-btn {
+								min-width: 38px;
+								width: 38px;
+								height: 38px;
+								padding: 0;
+								border-radius: 0;
+								color: #1b1b1b;
+								font-family: $font;
+								font-size: 18px;
+								font-weight: 500;
+							}
+
+							.qty-value {
+								width: 44px;
+								text-align: center;
+								color: #1b1b1b;
+								font-family: $font;
+								font-size: 14px;
+								font-weight: 500;
+							}
+						}
+
+						.remove-btn {
+							padding: 0;
+							min-width: auto;
+							border-radius: 0;
+							color: rgba(27, 27, 27, 0.52);
+
+							p {
+								font-family: $font;
+								font-size: 11px;
+								font-weight: 600;
+								letter-spacing: 1px;
+								text-transform: uppercase;
+							}
+						}
+					}
+				}
+			}
+
+			.my-cart-summary {
+				height: fit-content;
+				padding: 22px;
+				border: 1px solid rgba(27, 27, 27, 0.08);
+				background: #f5f2ec;
+				gap: 14px;
+
+				.summary-title {
+					color: #1b1b1b;
+					font-family: $font;
+					font-size: 20px;
+					font-weight: 500;
+				}
+
+				.summary-row {
+					flex-direction: row;
+					align-items: center;
+					justify-content: space-between;
+
+					p {
+						color: rgba(27, 27, 27, 0.75);
+						font-family: $font;
+						font-size: 14px;
+						font-weight: 400;
+					}
+
+					&.total {
+						p {
+							color: #1b1b1b;
+							font-size: 16px;
+							font-weight: 500;
+						}
+					}
+				}
+
+				.checkout-btn {
+					margin-top: 8px;
+					height: 46px;
+					border-radius: 0;
+					background: #2c2c2c;
+					color: #f5f2ec;
+
+					p {
+						font-family: $font;
+						font-size: 11px;
+						font-weight: 600;
+						letter-spacing: 1px;
+						text-transform: uppercase;
+					}
+
+					&:hover {
+						background: #1b1b1b;
+					}
+				}
+			}
+
+			.my-cart-empty {
+				width: 100%;
+				padding: 80px 20px;
+				align-items: center;
+				border: 1px solid rgba(27, 27, 27, 0.09);
+				background: #f5f2ec;
+				gap: 12px;
+
+				.empty-title {
+					color: #1b1b1b;
+					font-family: $font;
+					font-size: 30px;
+					font-weight: 400;
+					letter-spacing: 0.3px;
+				}
+
+				.empty-sub {
+					color: rgba(27, 27, 27, 0.52);
+					font-family: $font;
+					font-size: 14px;
+					font-weight: 400;
+					line-height: 1.7;
+					text-align: center;
+				}
+
+				.shop-btn {
+					margin-top: 8px;
+					height: 46px;
+					padding: 0 30px;
+					border-radius: 0;
+					background: #2c2c2c;
+					color: #f5f2ec;
+
+					p {
+						font-family: $font;
+						font-size: 11px;
+						font-weight: 600;
+						letter-spacing: 1px;
+						text-transform: uppercase;
+					}
+
+					&:hover {
+						background: #1b1b1b;
+					}
+				}
+			}
+		}
+	}
+}
