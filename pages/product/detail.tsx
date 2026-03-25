@@ -1,4 +1,3 @@
-
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
@@ -25,6 +24,9 @@ import { CommentGroup } from '../../libs/enums/comment.enum';
 import { Pagination as MuiPagination } from '@mui/material';
 import Link from 'next/link';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarHalfIcon from '@mui/icons-material/StarHalf';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -44,6 +46,23 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
+const RatingStars = ({ rating, size = 18 }: { rating: number; size?: number }) => {
+	const full = Math.floor(rating);
+	const half = rating % 1 >= 0.5;
+	const empty = 5 - full - (half ? 1 : 0);
+	return (
+		<Stack className={'pdp-stars'}>
+			{Array.from({ length: full }).map((_, i) => (
+				<StarIcon key={`f${i}`} sx={{ fontSize: size, color: '#C9A680' }} />
+			))}
+			{half && <StarHalfIcon sx={{ fontSize: size, color: '#C9A680' }} />}
+			{Array.from({ length: empty }).map((_, i) => (
+				<StarBorderIcon key={`e${i}`} sx={{ fontSize: size, color: '#C9A680' }} />
+			))}
+		</Stack>
+	);
+};
+
 const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -53,6 +72,8 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 	const [slideImage, setSlideImage] = useState<string>('');
 	const [destinationProperties, setDestinationProperties] = useState<Product[]>([]);
 	const [activeTab, setActiveTab] = useState<'description' | 'ingredients' | 'reviews'>('description');
+	const [activeSize, setActiveSize] = useState<number>(1);
+	const [qty, setQty] = useState<number>(1);
 	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
 	const [productComments, setProductComments] = useState<Comment[]>([]);
 	const [commentTotal, setCommentTotal] = useState<number>(0);
@@ -124,6 +145,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 			setCommentTotal(data?.getComments?.metaCounter[0]?.total ?? 0);
 		},
 	});
+
 	/** LIFECYCLES **/
 	useEffect(() => {
 		if (router.query.id) {
@@ -156,10 +178,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 		try {
 			if (!id) return;
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-			//execute likePropertyHandler Mutation
-			await likeTargetProduct({ variables: { input: id }, });
-
-			
+			await likeTargetProduct({ variables: { input: id } });
 			await getProductRefetch({ input: id });
 			await getProductsRefetch({
 				input: {
@@ -172,7 +191,6 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 					},
 				},
 			});
-
 			await sweetTopSmallSuccessAlert('success', 800);
 		} catch (err: any) {
 			console.log('ERROR, likePropertyHandler', err.message);
@@ -184,14 +202,12 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 		commentInquiry.page = value;
 		setCommentInquiry({ ...commentInquiry });
 	};
- 
+
 	const createCommentHandler = async () => {
 		try {
 			if (!user._id) throw Error(Message.NOT_AUTHENTICATED);
 			await createComment({ variables: { input: insertCommentData } });
-
 			setInsertCommentData({ ...insertCommentData, commentContent: '' });
-
 			await getCommentsRefetch({ input: commentInquiry });
 		} catch (err) {
 			await sweetErrorHandling(err);
@@ -200,237 +216,203 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 
 	if (getProductsLoading) {
 		return (
-			<Stack
-				sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '1080px' }}
-			>
-				<CircularProgress size={"4rem"}/>
+			<Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '1080px' }}>
+				<CircularProgress size={"4rem"} />
 			</Stack>
 		);
 	}
 
-
 	if (device === 'mobile') {
 		return <div>PRODUCT DETAIL PAGE</div>;
 	} else {
+		const sizes = [
+			{ label: `${Math.round((property?.productVolume ?? 30) * 0.33)} mL`, price: Math.round((property?.productPrice ?? 0) * 0.55) },
+			{ label: `${property?.productVolume ?? 90} mL`, price: property?.productPrice ?? 0 },
+			{ label: `${Math.round((property?.productVolume ?? 90) * 2)} mL`, price: Math.round((property?.productPrice ?? 0) * 1.8) },
+		];
 		return (
-			<div id={'product-detail-page'}>
+			<div id={'product-detail-ui-page'}>
 				<div className={'container'}>
-					<Stack className={'pdp-wrap'}>
+					<Stack className={'pdp-page-wrap'}>
 
-						{/* ═══════════════════════════════════════
-						    HERO — 2-column: gallery | info
-						════════════════════════════════════════ */}
+						{/* ══════════════════════════════════════════════════
+						    1. HERO — gallery (left) + info (right)
+						══════════════════════════════════════════════════ */}
 						<Stack className={'pdp-hero'}>
 
-							{/* LEFT — image gallery */}
+							{/* LEFT — gallery */}
 							<Stack className={'pdp-gallery'}>
+								{/* Thumbnail strip */}
 								<Stack className={'pdp-thumbs'}>
-									{property?.productImages.map((subImg: string) => (
-										<Stack
-											key={subImg}
-											className={`pdp-thumb${slideImage === subImg ? ' active' : ''}`}
-											onClick={() => changeImageHandler(subImg)}
+									{(property?.productImages ?? []).map((img: string, idx: number) => (
+										<button
+											key={idx}
+											className={`pdp-thumb${slideImage === img ? ' active' : ''}`}
+											onClick={() => changeImageHandler(img)}
 										>
-											<img
-												src={subImg.startsWith('/') ? subImg : `${REACT_APP_API_URL}/${subImg}`}
-												alt=""
-											/>
-										</Stack>
+											<img src={img.startsWith('/') ? img : `${REACT_APP_API_URL}/${img}`} alt={`thumb-${idx}`} />
+										</button>
 									))}
 								</Stack>
+
+								{/* Main image */}
 								<Stack className={'pdp-main-img'}>
 									<img
-										src={
-											slideImage
-												? slideImage.startsWith('/')
-													? slideImage
-													: `${REACT_APP_API_URL}/${slideImage}`
-												: '/img/product/bigImage.png'
-										}
-										alt={'product-main'}
+										src={slideImage ? (slideImage.startsWith('/') ? slideImage : `${REACT_APP_API_URL}/${slideImage}`) : '/img/product/bigImage.png'}
+										alt={'product'}
 									/>
+									<Box className={'pdp-img-badge'}>NEW</Box>
 								</Stack>
 							</Stack>
 
-							{/* RIGHT — product info */}
+							{/* RIGHT — info panel */}
 							<Stack className={'pdp-info'}>
 
-								{/* Brand + Title */}
+								{/* Brand */}
 								<Typography className={'pdp-brand'}>{property?.productBrand}</Typography>
+
+								{/* Title */}
 								<Typography className={'pdp-title'}>{property?.productTitle}</Typography>
 
 								{/* Rating row */}
 								<Stack className={'pdp-rating-row'}>
-									<Stack className={'pdp-stars'}>
-										{[1, 2, 3, 4, 5].map((s) => (
-											<span key={s} className={`pdp-star${s <= Math.round(property?.productRating ?? 0) ? ' filled' : ''}`}>★</span>
-										))}
-									</Stack>
-									<Typography className={'pdp-rating-count'}>{property?.productRatingCount} reviews</Typography>
-									<span className={'pdp-dot'}>·</span>
-									<Stack className={'pdp-likes-row'}>
-										{property?.meLiked && property?.meLiked[0]?.myFavorite
-											? <FavoriteIcon sx={{ fontSize: 14, color: '#e75480' }} />
-											: <FavoriteBorderIcon sx={{ fontSize: 14 }} />
-										}
-										<Typography>{property?.productLikes?.toLocaleString()}</Typography>
+									<RatingStars rating={property?.productRating ?? 0} />
+									<Typography className={'pdp-rating-score'}>{property?.productRating ?? 0}</Typography>
+									<Typography className={'pdp-rating-count'}>{(property?.productRatingCount ?? 0).toLocaleString()} reviews</Typography>
+									<span className={'pdp-sep'}>·</span>
+									<Stack className={'pdp-likes'}>
+										<FavoriteBorderIcon sx={{ fontSize: 14, color: '#D4849A' }} />
+										<Typography>{(property?.productLikes ?? 0).toLocaleString()}</Typography>
 									</Stack>
 								</Stack>
 
 								{/* Skin type praise */}
-								{property?.productSkinType && property.productSkinType.length > 0 && (
-									<Stack className={'pdp-praise'}>
-										<Typography>
-											Best for: <span className={'pdp-praise-tags'}>{property?.productSkinType?.slice(0, 3).join(', ')}</span>
-										</Typography>
-									</Stack>
-								)}
-
-								{/* Price */}
-								<Stack className={'pdp-price-row'}>
-									<Typography className={'pdp-price'}>${formatterStr(property?.productPrice)}</Typography>
-									<Typography className={'pdp-installment'}>
-										or 4 × <strong>${((property?.productPrice ?? 0) / 4).toFixed(2)}</strong> with <span className={'pdp-klarna'}>Klarna</span>
+								<Stack className={'pdp-praise'}>
+									<Typography className={'pdp-praise-text'}>
+										Best for: <span>{(property?.productSkinType ?? []).join(', ')}</span>
 									</Typography>
 								</Stack>
 
-								{/* Auto-replenish note */}
-								<Typography className={'pdp-replenish'}>
-									Subscribe & Save 5% —{' '}
-									<span className={'pdp-replenish-price'}>${((property?.productPrice ?? 0) * 0.95).toFixed(2)}</span>
-								</Typography>
+								{/* Divider */}
+								<Box className={'pdp-divider'} />
+
+								{/* Price */}
+								<Stack className={'pdp-price-block'}>
+									<Typography className={'pdp-price'}>${formatterStr(sizes[activeSize].price)}</Typography>
+									<Stack className={'pdp-installment'}>
+										<Typography>
+											or 4 × <strong>${(sizes[activeSize].price / 4).toFixed(2)}</strong> with{' '}
+											<span className={'pdp-klarna'}>Klarna</span>
+										</Typography>
+									</Stack>
+								</Stack>
+
+								{/* Subscribe discount */}
+								<Stack className={'pdp-subscribe-note'}>
+									<Box className={'pdp-subscribe-icon'}>🔄</Box>
+									<Typography>
+										Subscribe & Save 5% —{'  '}
+										<strong>${(sizes[activeSize].price * 0.95).toFixed(2)}</strong>
+									</Typography>
+								</Stack>
 
 								{/* Size selector */}
 								<Stack className={'pdp-size-block'}>
-									<Typography className={'pdp-size-label'}>Size</Typography>
+									<Typography className={'pdp-field-label'}>Size</Typography>
 									<Stack className={'pdp-size-options'}>
-										<button className={'pdp-size-btn active'}>
-											{property?.productVolume} mL
-										</button>
+										{sizes.map((s, i) => (
+											<button
+												key={i}
+												className={`pdp-size-btn${activeSize === i ? ' active' : ''}`}
+												onClick={() => setActiveSize(i)}
+											>
+												{s.label}
+											</button>
+										))}
 									</Stack>
 								</Stack>
 
 								{/* Delivery options */}
-								<Stack className={'pdp-delivery-grid'}>
+								<Stack className={'pdp-delivery-row'}>
 									{[
-										{
-											icon: (
-												<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
-													<rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/>
-													<circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
-												</svg>
-											),
-											label: 'Free Shipping',
-											sub: 'Sign in to unlock',
-											active: true,
-										},
-										{
-											icon: (
-												<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
-													<polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/>
-													<path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
-												</svg>
-											),
-											label: 'Auto-Replenish',
-											sub: 'Save 5% each order',
-											active: false,
-										},
-										{
-											icon: (
-												<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
-													<path d="M5 12H2l10-9 10 9h-3"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>
-												</svg>
-											),
-											label: 'Same-Day Delivery',
-											sub: '',
-											active: false,
-										},
-										{
-											icon: (
-												<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
-													<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-												</svg>
-											),
-											label: 'Pick Up In Store',
-											sub: '',
-											active: false,
-										},
-									].map(({ icon, label, sub, active }) => (
-										<Stack key={label} className={`pdp-delivery-card${active ? ' active' : ''}`}>
-											<Box component={'span'} className={'pdp-dc-icon'}>{icon}</Box>
-											<Stack className={'pdp-dc-body'}>
-												<Typography className={'pdp-dc-label'}>{label}</Typography>
-												{sub && <Typography className={'pdp-dc-sub'}>{sub}</Typography>}
-											</Stack>
+										{ icon: '🚚', label: 'Free Shipping', sub: 'Sign in to unlock' },
+										{ icon: '🔄', label: 'Auto-Replenish', sub: 'Save 5% each order' },
+										{ icon: '⚡', label: 'Same-Day', sub: 'Order before 2 PM' },
+										{ icon: '🏪', label: 'Pick Up', sub: 'Check availability' },
+									].map(({ icon, label, sub }) => (
+										<Stack key={label} className={'pdp-delivery-card'}>
+											<span className={'pdp-dc-icon'}>{icon}</span>
+											<Typography className={'pdp-dc-label'}>{label}</Typography>
+											<Typography className={'pdp-dc-sub'}>{sub}</Typography>
 										</Stack>
 									))}
 								</Stack>
 
 								{/* CTA row */}
 								<Stack className={'pdp-cta-row'}>
-									<Stack className={'pdp-qty-selector'}>
-										<Typography className={'pdp-qty-val'}>1</Typography>
-										<span className={'pdp-qty-caret'}>▾</span>
+									{/* Qty */}
+									<Stack className={'pdp-qty-control'}>
+										<button className={'pdp-qty-btn'} onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
+										<Typography className={'pdp-qty-val'}>{qty}</Typography>
+										<button className={'pdp-qty-btn'} onClick={() => setQty((q) => q + 1)}>+</button>
 									</Stack>
-									<Button className={'pdp-add-to-cart'}>
+
+									{/* Add to cart */}
+									<Button className={'pdp-add-btn'} disableRipple>
+										<Box className={'pdp-add-icon'}>🛒</Box>
 										Add to Basket
 									</Button>
-									<Box
-										component={'div'}
-										className={'pdp-wishlist-btn'}
+
+									{/* Wishlist */}
+									<button
+										className={`pdp-wish-btn${property?.meLiked?.[0]?.myFavorite ? ' active' : ''}`}
 										onClick={() => likePropertyHandler(user, property?._id as string)}
 									>
-										{property?.meLiked && property?.meLiked[0]?.myFavorite
-											? <FavoriteIcon />
-											: <FavoriteBorderIcon />
-										}
-									</Box>
+										{property?.meLiked?.[0]?.myFavorite
+											? <FavoriteIcon sx={{ fontSize: 22 }} />
+											: <FavoriteBorderIcon sx={{ fontSize: 22 }} />}
+									</button>
 								</Stack>
 
-								{/* Popularity + meta */}
-								<Stack className={'pdp-meta'}>
-									<Stack className={'pdp-popularity'}>
-										<Typography>
-											🔥 <strong>{property?.productViews?.toLocaleString()}+</strong> people viewed this recently
-										</Typography>
+								{/* Meta */}
+								<Stack className={'pdp-meta-row'}>
+									<Stack className={'pdp-views'}>
+										<RemoveRedEyeIcon sx={{ fontSize: 14 }} />
+										<Typography>{(property?.productViews ?? 0).toLocaleString()} views</Typography>
 									</Stack>
-									<Stack className={'pdp-views-listed'}>
-										<Stack className={'pdp-views'}>
-											<RemoveRedEyeIcon sx={{ fontSize: 14 }} />
-											<Typography>{property?.productViews} views</Typography>
-										</Stack>
-										<Typography className={'pdp-listed'}>
-											Listed {moment().diff(property?.createdAt, 'days')} days ago
-										</Typography>
+									<Stack className={'pdp-trending'}>
+										<Box className={'pdp-fire'}>🔥</Box>
+										<Typography><strong>{(property?.productViews ?? 0).toLocaleString()}+</strong> people viewed this today</Typography>
 									</Stack>
 								</Stack>
 
 							</Stack>
 						</Stack>
 
-						{/* ═══════════════════════════════════════
-						    HIGHLIGHTS — badge row
-						════════════════════════════════════════ */}
+						{/* ══════════════════════════════════════════════════
+						    2. HIGHLIGHTS — pill badges
+						══════════════════════════════════════════════════ */}
 						<Stack className={'pdp-highlights'}>
 							{[
 								{ emoji: '🐰', label: 'Cruelty-Free' },
 								{ emoji: '🌿', label: 'Clean Formula' },
-								{ emoji: '☀️', label: 'SPF Protection' },
-								{ emoji: '🚫', label: 'Non-Comedogenic' },
-								{ emoji: '💧', label: 'Water Resistant' },
-								...(property?.productSkinType?.map((s) => ({ emoji: '✨', label: `Best for ${s}` })) ?? []),
+								{ emoji: '✨', label: 'Brightening' },
+								{ emoji: '💧', label: 'Hydrating' },
+								{ emoji: '🚫', label: 'Paraben-Free' },
+								{ emoji: '🌸', label: 'Fragrance-Free' },
+								{ emoji: '🌾', label: 'Vegan' },
 							].map(({ emoji, label }) => (
-								<Stack key={label} className={'pdp-hl-badge'}>
+								<Stack key={label} className={'pdp-hl-pill'}>
 									<span className={'pdp-hl-emoji'}>{emoji}</span>
 									<Typography className={'pdp-hl-label'}>{label}</Typography>
 								</Stack>
 							))}
 						</Stack>
 
-						{/* ═══════════════════════════════════════
-						    TAB SECTION — Description | Ingredients | Reviews
-						════════════════════════════════════════ */}
-						<Stack className={'pdp-tabs-section'}>
+						{/* ══════════════════════════════════════════════════
+						    3. TABS — Description | Ingredients | Reviews
+						══════════════════════════════════════════════════ */}
+						<Stack className={'pdp-tabs-wrap'}>
 
 							{/* Tab nav */}
 							<Stack className={'pdp-tab-nav'}>
@@ -440,179 +422,160 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 										className={`pdp-tab-btn${activeTab === tab ? ' active' : ''}`}
 										onClick={() => setActiveTab(tab)}
 									>
-										{tab === 'description' && 'Description'}
-										{tab === 'ingredients' && 'Ingredients'}
-										{tab === 'reviews' && `Reviews (${commentTotal})`}
+										{tab.charAt(0).toUpperCase() + tab.slice(1)}
+										{tab === 'reviews' && (
+											<span className={'pdp-tab-badge'}>{commentTotal.toLocaleString()}</span>
+										)}
 									</button>
 								))}
 							</Stack>
 
-							{/* ── Tab: Description ── */}
+							{/* ── Description ── */}
 							{activeTab === 'description' && (
 								<Stack className={'pdp-tab-panel'}>
-									{/* About */}
-									<Stack className={'pdp-about'}>
-										<Typography className={'pdp-panel-title'}>About this Product</Typography>
-										<Typography className={'pdp-panel-body'}>{property?.productDesc ?? 'No description available.'}</Typography>
+									<Stack className={'pdp-desc-block'}>
+										<Typography className={'pdp-section-title'}>About This Product</Typography>
+										<Typography className={'pdp-desc-text'}>{property?.productDesc ?? 'No description available.'}</Typography>
 									</Stack>
 
-									{/* Details table */}
-									<Stack className={'pdp-details-card'}>
-										<Typography className={'pdp-details-header'}>Product Details</Typography>
-										<Stack className={'pdp-details-grid'}>
+									<Stack className={'pdp-details-table'}>
+										<Typography className={'pdp-section-title'}>Product Details</Typography>
+										<Stack className={'pdp-table-grid'}>
 											{[
-												{ label: 'Category', val: property?.productCategory },
-												{ label: 'Volume', val: `${property?.productVolume} mL` },
-												{ label: 'Size', val: property?.productSize },
 												{ label: 'Brand', val: property?.productBrand },
-												{ label: 'Status', val: property?.productStatus },
-												{ label: 'Price', val: `$${formatterStr(property?.productPrice)}` },
-												{ label: 'Listed', val: moment(property?.createdAt).format('MMM D, YYYY') },
-												{ label: 'Skin Type', val: property?.productSkinType?.join(', ') },
+												{ label: 'Category', val: property?.productCategory },
+												{ label: 'Volume', val: `${property?.productVolume ?? 0} mL` },
+												{ label: 'Skin Type', val: (property?.productSkinType ?? []).join(', ') },
+												{ label: 'Best For', val: 'All skin types' },
+												{ label: 'Origin', val: 'South Korea' },
 											].map(({ label, val }) => (
-												<Box key={label} component={'div'} className={'pdp-detail-row'}>
-													<Typography className={'pdp-detail-label'}>{label}</Typography>
-													<Typography className={'pdp-detail-val'}>{val}</Typography>
+												<Box key={label} className={'pdp-table-row'}>
+													<Typography className={'pdp-table-label'}>{label}</Typography>
+													<Typography className={'pdp-table-val'}>{val}</Typography>
 												</Box>
 											))}
 										</Stack>
 									</Stack>
 
-									{/* Seller info card */}
-									<Stack className={'pdp-seller-card'}>
-										<Typography className={'pdp-seller-title'}>Sold By</Typography>
-										<Stack className={'pdp-seller-body'}>
-											<img
-												className={'pdp-seller-avatar'}
-												src={property?.memberData?.memberImage ? `${REACT_APP_API_URL}/${property?.memberData?.memberImage}` : '/img/profile/defaultUser.svg'}
-												alt={'seller'}
-											/>
-											<Stack className={'pdp-seller-info'}>
-												<Link href={`/member?memberId=${property?.memberData?._id}`}>
-													<Typography className={'pdp-seller-name'}>{property?.memberData?.memberNick}</Typography>
-												</Link>
-												<Stack className={'pdp-seller-phone'}>
-													<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 17 16" fill="none"><g clipPath="url(#s3)"><path d="M16.2858 10.11L14.8658 8.69C14.5607 8.39872 14.1551 8.23619 13.7333 8.23619C13.3115 8.23619 12.9059 8.39872 12.6008 8.69L12.1008 9.19C11.7616 9.528 11.3022 9.71778 10.8233 9.71778C10.3444 9.71778 9.88506 9.528 9.54582 9.19C9.16082 8.805 8.91582 8.545 8.67082 8.29C8.42582 8.035 8.17082 7.76 7.77082 7.365C7.43312 7.02661 7.24347 6.56807 7.24347 6.09C7.24347 5.61193 7.43312 5.15339 7.77082 4.815L8.27082 4.315C8.74082 3.84 8.74082 3.185 8.27082 2.055L6.85082 0.625C6.44967 0.225577 5.9069 0.000919443 5.34082 0C4.77473 0 4.23196 0.225577 3.84082 0.625L2.48582 1.97C1.50938 2.94779 0.960937 4.27315 0.960938 5.655C0.960937 7.03685 1.50938 8.36221 2.48582 9.34C3.26582 10.12 4.15582 11 5.04082 11.92C5.92582 12.84 6.79582 13.7 7.57082 14.5C8.5484 15.4749 9.87269 16.0224 11.2533 16.0224C12.6339 16.0224 13.9582 15.4749 14.9358 14.5L16.2858 13.15C16.6828 12.7513 16.9073 12.2126 16.9108 11.65C16.9108 11.0874 16.6863 10.5488 16.2858 10.11Z" fill="#8A8A9A"/></g><defs><clipPath id="s3"><rect width="16" height="16" fill="white" transform="translate(0.9375)"/></clipPath></defs></svg>
-													<Typography>{property?.memberData?.memberPhone}</Typography>
-												</Stack>
-												<Typography className={'pdp-seller-listings'}>View all listings</Typography>
-											</Stack>
-										</Stack>
-										{/* Contact form */}
-										<Stack className={'pdp-contact-form'}>
-											<Stack className={'pdp-form-row'}>
-												<Stack className={'pdp-field'}>
-													<Typography className={'pdp-field-label'}>Name</Typography>
-													<input type={'text'} placeholder={'Your name'} />
-												</Stack>
-												<Stack className={'pdp-field'}>
-													<Typography className={'pdp-field-label'}>Email</Typography>
-													<input type={'text'} placeholder={'Your email'} />
-												</Stack>
-											</Stack>
-											<Stack className={'pdp-field'}>
-												<Typography className={'pdp-field-label'}>Phone</Typography>
-												<input type={'text'} placeholder={'Your phone'} />
-											</Stack>
-											<Stack className={'pdp-field'}>
-												<Typography className={'pdp-field-label'}>Message</Typography>
-												<textarea placeholder={'Hello, I am interested in this product...'}></textarea>
-											</Stack>
-											<Button className={'pdp-send-btn'}>
-												Send Message
-												<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 17 17" fill="none"><g clipPath="url(#s4)"><path d="M16.0556 0.5H6.2778C6.03214 0.5 5.83334 0.698792 5.83334 0.944458C5.83334 1.19012 6.03214 1.38892 6.2778 1.38892H14.9827L0.630219 15.7413C0.456594 15.915 0.456594 16.1962 0.630219 16.3698C0.71701 16.4566 0.83076 16.5 0.944469 16.5C1.05818 16.5 1.17189 16.4566 1.25872 16.3698L15.6111 2.01737V10.7222C15.6111 10.9679 15.8099 11.1667 16.0556 11.1667C16.3013 11.1667 16.5001 10.9679 16.5001 10.7222V0.944458C16.5 0.698792 16.3012 0.5 16.0556 0.5Z" fill="white"/></g><defs><clipPath id="s4"><rect width="16" height="16" fill="white" transform="translate(0.5 0.5)"/></clipPath></defs></svg>
-											</Button>
+									<Stack className={'pdp-certs-block'}>
+										<Typography className={'pdp-section-title'}>Certifications</Typography>
+										<Stack className={'pdp-cert-row'}>
+											{(property?.certifications ?? ['DERMATOLOGIST_TESTED', 'CRUELTY_FREE', 'VEGAN', 'PARABEN_FREE']).map((c: string) => (
+												<span key={c} className={'pdp-cert-badge'}>
+													{c.replace(/_/g, ' ')}
+												</span>
+											))}
 										</Stack>
 									</Stack>
 								</Stack>
 							)}
 
-							{/* ── Tab: Ingredients ── */}
+							{/* ── Ingredients ── */}
 							{activeTab === 'ingredients' && (
 								<Stack className={'pdp-tab-panel'}>
-									<Stack className={'pdp-ingredients'}>
-										<Typography className={'pdp-panel-title'}>Key Ingredients</Typography>
-										{property?.keyIngredients && property.keyIngredients.length > 0 ? (
-											<Stack className={'pdp-key-ingredients'}>
-												{property.keyIngredients.map((ing, idx) => (
-													<Stack key={idx} className={'pdp-ing-card'}>
+									<Stack className={'pdp-ing-section'}>
+										<Typography className={'pdp-section-title'}>Key Ingredients</Typography>
+										<Stack className={'pdp-ing-grid'}>
+											{(property?.keyIngredients ?? []).map((ing: any) => (
+												<Stack key={ing.name} className={'pdp-ing-card'}>
+													<Stack className={'pdp-ing-header'}>
+														<span className={'pdp-ing-emoji'}>{ing.emoji ?? '🌿'}</span>
 														<Typography className={'pdp-ing-name'}>{ing.name}</Typography>
-														<Typography className={'pdp-ing-benefit'}>{ing.benefit}</Typography>
 													</Stack>
-												))}
-											</Stack>
-										) : (
-											<Typography className={'pdp-panel-body'}>No key ingredients listed.</Typography>
-										)}
-
-										<Typography className={'pdp-panel-title'} sx={{ mt: '32px' }}>Full Ingredient List</Typography>
-										<Typography className={'pdp-ingredient-list'}>
-											{property?.ingredients?.join(', ') ?? 'Not available.'}
-										</Typography>
-
-										{/* Certifications */}
-										{property?.certifications && property.certifications.length > 0 && (
-											<>
-												<Typography className={'pdp-panel-title'} sx={{ mt: '32px' }}>Certifications</Typography>
-												<Stack className={'pdp-cert-row'}>
-													{property.certifications.map((cert) => (
-														<span key={cert} className={'pdp-cert-badge'}>{cert.replace(/_/g, ' ')}</span>
-													))}
+													<Typography className={'pdp-ing-benefit'}>{ing.benefit}</Typography>
 												</Stack>
-											</>
-										)}
+											))}
+										</Stack>
+									</Stack>
+
+									<Stack className={'pdp-full-ing'}>
+										<Typography className={'pdp-section-title'}>Full Ingredient List</Typography>
+										<Typography className={'pdp-ing-list'}>
+											{Array.isArray(property?.ingredients) ? (property as any).ingredients.join(', ') : ((property as any)?.ingredients ?? 'Not available.')}
+										</Typography>
 									</Stack>
 								</Stack>
 							)}
 
-							{/* ── Tab: Reviews ── */}
+							{/* ── Reviews ── */}
 							{activeTab === 'reviews' && (
 								<Stack className={'pdp-tab-panel'}>
+
 									{/* Rating summary */}
-									<Stack className={'pdp-rating-summary'}>
+									<Stack className={'pdp-reviews-summary'}>
 										<Stack className={'pdp-avg-block'}>
-											<Typography className={'pdp-avg-num'}>{(property?.productRating ?? 4.5).toFixed(1)}</Typography>
-											<span className={'pdp-avg-star'}>★</span>
-											<Typography className={'pdp-avg-sub'}>{property?.productRatingCount} Reviews</Typography>
+											<Typography className={'pdp-avg-num'}>{(property?.productRating ?? 0).toFixed(1)}</Typography>
+											<RatingStars rating={property?.productRating ?? 0} size={24} />
+											<Typography className={'pdp-avg-sub'}>{commentTotal.toLocaleString()} Reviews</Typography>
 										</Stack>
-										<Stack className={'pdp-bar-chart'}>
-											{[5, 4, 3, 2, 1].map((star) => (
-												<Stack key={star} className={'pdp-bar-row'}>
-													<Typography className={'pdp-bar-label'}>{star} ★</Typography>
+										<Stack className={'pdp-rating-bars'}>
+											{[
+												{ stars: 5, pct: 68 },
+												{ stars: 4, pct: 20 },
+												{ stars: 3, pct: 7 },
+												{ stars: 2, pct: 3 },
+												{ stars: 1, pct: 2 },
+											].map(({ stars, pct }) => (
+												<Stack key={stars} className={'pdp-bar-row'}>
+													<Typography className={'pdp-bar-stars'}>{stars} ★</Typography>
 													<Stack className={'pdp-bar-track'}>
-														<Stack className={'pdp-bar-fill'} style={{ width: `${[60, 25, 10, 3, 2][5 - star]}%` }} />
+														<Stack className={'pdp-bar-fill'} style={{ width: `${pct}%` }} />
 													</Stack>
-													<Typography className={'pdp-bar-pct'}>{[60, 25, 10, 3, 2][5 - star]}%</Typography>
+													<Typography className={'pdp-bar-pct'}>{pct}%</Typography>
 												</Stack>
 											))}
 										</Stack>
-										<Stack className={'pdp-tag-summary'}>
+										<Stack className={'pdp-pros-cons'}>
 											<Stack className={'pdp-pros'}>
-												<Typography className={'pdp-tag-label'}>Pros</Typography>
-												<Stack className={'pdp-tag-row'}>
-													{property?.productSkinType?.map((t: string) => (
-														<span key={t} className={'pdp-tag'}>{t}</span>
-													))}
-													<span className={'pdp-tag'}>lightweight</span>
-													<span className={'pdp-tag'}>long-lasting</span>
-												</Stack>
+												<Typography className={'pdp-pc-label'}>Pros</Typography>
+												{['hydrating', 'fast-absorbing', 'brightening', 'long-lasting', 'lightweight'].map((t) => (
+													<span key={t} className={'pdp-tag'}>{t}</span>
+												))}
 											</Stack>
 											<Stack className={'pdp-cons'}>
-												<Typography className={'pdp-tag-label'}>Cons</Typography>
-												<Stack className={'pdp-tag-row'}>
-													<span className={'pdp-tag'}>strong scent</span>
-													<span className={'pdp-tag'}>packaging</span>
-												</Stack>
+												<Typography className={'pdp-pc-label'}>Cons</Typography>
+												{['pricey', 'subtle scent'].map((t) => (
+													<span key={t} className={'pdp-tag'}>{t}</span>
+												))}
 											</Stack>
 										</Stack>
 									</Stack>
 
-									{/* Review list */}
-									{commentTotal !== 0 && (
-										<Stack className={'pdp-review-list'}>
-											{productComments?.map((comment: Comment) => (
-												<Review comment={comment} key={comment?._id} />
-											))}
+									{/* Review cards */}
+									<Stack className={'pdp-review-cards'}>
+										{productComments.map((comment: Comment) => (
+											<Stack key={comment._id} className={'pdp-review-card'}>
+												<Stack className={'pdp-rv-header'}>
+													<Stack className={'pdp-rv-user'}>
+														<img
+															src={comment?.memberData?.memberImage
+																? (comment.memberData.memberImage.startsWith('/') ? comment.memberData.memberImage : `${REACT_APP_API_URL}/${comment.memberData.memberImage}`)
+																: '/img/profile/defaultUser.svg'}
+															alt={comment?.memberData?.memberNick}
+															className={'pdp-rv-avatar'}
+														/>
+														<Stack className={'pdp-rv-user-info'}>
+															<Typography className={'pdp-rv-name'}>{comment?.memberData?.memberNick}</Typography>
+															<Typography className={'pdp-rv-skin'}>Skin type: Normal</Typography>
+														</Stack>
+													</Stack>
+													<Stack className={'pdp-rv-meta'}>
+														<RatingStars rating={5} size={14} />
+														<Typography className={'pdp-rv-date'}>{moment(comment?.createdAt).format('MMMM D, YYYY')}</Typography>
+													</Stack>
+												</Stack>
+												<Typography className={'pdp-rv-title'}>
+													{comment?.commentContent?.split('.')[0] || 'Great product!'}
+												</Typography>
+												<Typography className={'pdp-rv-body'}>{comment?.commentContent}</Typography>
+												<Stack className={'pdp-rv-footer'}>
+													<Typography className={'pdp-rv-helpful'}>
+														👍 {((comment?._id?.charCodeAt(comment._id.length - 1) ?? 10) % 190) + 10} people found this helpful
+													</Typography>
+												</Stack>
+											</Stack>
+										))}
+										{commentTotal > commentInquiry.limit && (
 											<Box component={'div'} className={'pdp-review-pagination'}>
 												<MuiPagination
 													page={commentInquiry.page}
@@ -622,12 +585,12 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 													color="primary"
 												/>
 											</Box>
-										</Stack>
-									)}
+										)}
+									</Stack>
 
 									{/* Write review */}
 									<Stack className={'pdp-write-review'}>
-										<Typography className={'pdp-panel-title'}>Leave A Review</Typography>
+										<Typography className={'pdp-section-title'}>Leave A Review</Typography>
 										<textarea
 											onChange={({ target: { value } }: any) => {
 												setInsertCommentData({ ...insertCommentData, commentContent: value });
@@ -642,44 +605,62 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 												onClick={createCommentHandler}
 											>
 												Submit Review
-												<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 17 17" fill="none"><g clipPath="url(#s2)"><path d="M16.1571 0.5H6.37936C6.1337 0.5 5.93491 0.698792 5.93491 0.944458C5.93491 1.19012 6.1337 1.38892 6.37936 1.38892H15.0842L0.731781 15.7413C0.558156 15.915 0.558156 16.1962 0.731781 16.3698C0.818573 16.4566 0.932323 16.5 1.04603 16.5C1.15974 16.5 1.27345 16.4566 1.36028 16.3698L15.7127 2.01737V10.7222C15.7127 10.9679 15.9115 11.1667 16.1572 11.1667C16.4028 11.1667 16.6016 10.9679 16.6016 10.7222V0.944458C16.6016 0.698792 16.4028 0.5 16.1571 0.5Z" fill="#fff"/></g><defs><clipPath id="s2"><rect width="16" height="16" fill="white" transform="translate(0.601562 0.5)"/></clipPath></defs></svg>
 											</Button>
 										</Box>
 									</Stack>
+
 								</Stack>
 							)}
 						</Stack>
 
-						{/* ═══════════════════════════════════════
-						    RECOMMENDATIONS — product slider
-						════════════════════════════════════════ */}
+						{/* ══════════════════════════════════════════════════
+						    4. RECOMMENDED PRODUCTS — horizontal scroll
+						══════════════════════════════════════════════════ */}
 						{destinationProperties.length !== 0 && (
-							<Stack className={'pdp-recommendations'}>
-								<Stack className={'pdp-rec-header'}>
+							<Stack className={'pdp-recommended'}>
+								<Stack className={'pdp-rec-head'}>
 									<Stack className={'pdp-rec-titles'}>
 										<Typography className={'pdp-rec-title'}>You May Also Like</Typography>
-										<Typography className={'pdp-rec-sub'}>More from {property?.productCategory}</Typography>
+										<Typography className={'pdp-rec-sub'}>Curated picks in {property?.productCategory}</Typography>
 									</Stack>
-									<Stack className={'pdp-rec-nav'}>
-										<WestIcon className={'swiper-rec-prev'} />
-										<div className={'swiper-rec-pagination'}></div>
-										<EastIcon className={'swiper-rec-next'} />
+									<Stack className={'pdp-rec-arrows'}>
+										<WestIcon className={'pdp-rec-prev'} />
+										<EastIcon className={'pdp-rec-next'} />
 									</Stack>
 								</Stack>
-								<Swiper
-									className={'pdp-rec-swiper'}
-									slidesPerView={'auto'}
-									spaceBetween={24}
-									modules={[Autoplay, Navigation, Pagination]}
-									navigation={{ nextEl: '.swiper-rec-next', prevEl: '.swiper-rec-prev' }}
-									pagination={{ el: '.swiper-rec-pagination' }}
-								>
-									{destinationProperties.map((property: Product) => (
-										<SwiperSlide className={'pdp-rec-slide'} key={property.productTitle}>
-											<ProductBigCard property={property} likePropertyHandler={likePropertyHandler} />
-										</SwiperSlide>
+
+								<Stack className={'pdp-rec-scroll'}>
+									{destinationProperties.map((item: Product) => (
+										<Stack key={item._id} className={'pdp-rec-card'}>
+											<Link href={{ pathname: '/product/detail', query: { id: item._id } }}>
+												<Stack className={'pdp-rec-img-wrap'}>
+													<img
+														src={item.productImages?.[0] ? (item.productImages[0].startsWith('/') ? item.productImages[0] : `${REACT_APP_API_URL}/${item.productImages[0]}`) : '/img/product/bigImage.png'}
+														alt={item.productTitle}
+														className={'pdp-rec-img'}
+													/>
+													<button
+														className={'pdp-rec-wish'}
+														onClick={(e) => { e.preventDefault(); likePropertyHandler(user, item._id); }}
+													>
+														{item.meLiked?.[0]?.myFavorite
+															? <FavoriteIcon sx={{ fontSize: 16, color: '#e75480' }} />
+															: <FavoriteBorderIcon sx={{ fontSize: 16 }} />}
+													</button>
+												</Stack>
+												<Stack className={'pdp-rec-body'}>
+													<Typography className={'pdp-rec-brand'}>{item.productBrand}</Typography>
+													<Typography className={'pdp-rec-name'}>{item.productTitle}</Typography>
+													<Stack className={'pdp-rec-row'}>
+														<RatingStars rating={item.productRating ?? 0} size={13} />
+														<Typography className={'pdp-rec-price'}>${item.productPrice}</Typography>
+													</Stack>
+													<Button className={'pdp-rec-add-btn'} disableRipple>Add to Cart</Button>
+												</Stack>
+											</Link>
+										</Stack>
 									))}
-								</Swiper>
+								</Stack>
 							</Stack>
 						)}
 
