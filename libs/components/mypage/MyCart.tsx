@@ -42,82 +42,164 @@ const MyCart: React.FC<MyCartProps> = () => {
 			<Box component={'div'} id={'my-cart-page'}>
 				<Box component={'div'} className={'container'}>
 					<Stack className={'my-cart-wrap'}>
-						<Stack className={'my-cart-head'}>
-							<Typography className={'my-cart-title'}>My Cart</Typography>
-							<Typography className={'my-cart-sub'}>Luxury essentials, ready for checkout.</Typography>
-						</Stack>
-
-						{cartItems.length === 0 ? (
-							<Stack className={'my-cart-empty'}>
-								<Typography className={'empty-title'}>Your cart is empty</Typography>
-								<Typography className={'empty-sub'}>Discover curated formulas designed for your routine.</Typography>
-								<Link href={'/product'}>
-									<Button className={'shop-btn'}>
-										<Typography>Shop Now</Typography>
+						<Stack className={'oy-cart-layout'}>
+							<Stack className={'oy-cart-left'}>
+								<Stack className={'oy-shipping-top'}>
+									<Typography className={'oy-ship-text'}>Shipping to USA</Typography>
+									<Button className={'oy-change-btn'}>
+										<Typography>Change</Typography>
 									</Button>
-								</Link>
-							</Stack>
-						) : (
-							<Stack className={'my-cart-body'}>
-								<Stack className={'my-cart-list'}>
-									{cartItems.map((item: CartItem) => (
-										<Stack className={'cart-item'} key={`${item.productId}-${item.size}`}>
-											<Box component={'div'} className={'thumb-wrap'}>
-												<img
-													src={
-														item.productImage
-															? item.productImage.startsWith('/')
-																? item.productImage
-																: `${REACT_APP_API_URL}/${item.productImage}`
-															: '/img/product/bigImage.png'
-													}
-													alt={item.productTitle}
-												/>
-											</Box>
-											<Stack className={'item-info'}>
-												<Typography className={'item-title'}>{item.productTitle}</Typography>
-												<Typography className={'item-meta'}>Size: {item.size}</Typography>
-												<Typography className={'item-price'}>${item.productPrice.toFixed(2)}</Typography>
-												<Stack className={'item-controls'}>
-													<Stack className={'qty-box'}>
-														<Button className={'qty-btn'} onClick={() => updateQty(item.productId, item.size, -1)}>
-															-
-														</Button>
-														<Typography className={'qty-value'}>{item.qty ?? 1}</Typography>
-														<Button className={'qty-btn'} onClick={() => updateQty(item.productId, item.size, 1)}>
-															+
-														</Button>
-													</Stack>
-													<Button className={'remove-btn'} onClick={() => removeItem(item.productId, item.size)}>
-														<Typography>Remove</Typography>
-													</Button>
-												</Stack>
-											</Stack>
-										</Stack>
-									))}
 								</Stack>
 
+								<Stack className={'oy-progress-card'}>
+									<Typography className={'oy-progress-text'}>
+										{shipping === 0
+											? 'You unlocked free shipping'
+											: `Add $${(50 - total).toFixed(2)} more for free shipping`}
+									</Typography>
+									<Box component={'div'} className={'oy-progress-track'}>
+										<Box
+											component={'div'}
+											className={'oy-progress-fill'}
+											sx={{ width: `${Math.min((total / 50) * 100, 100)}%` }}
+										/>
+									</Box>
+								</Stack>
+
+								{cartItems.length === 0 ? (
+									<Stack className={'my-cart-empty'}>
+										<Typography className={'empty-title'}>Your cart is empty</Typography>
+										<Typography className={'empty-sub'}>Discover curated formulas designed for your routine.</Typography>
+										<Link href={'/product'}>
+											<Button className={'shop-btn'}>
+												<Typography>Shop Now</Typography>
+											</Button>
+										</Link>
+									</Stack>
+								) : (
+									<Stack className={'oy-items-area'}>
+										<Stack className={'oy-items-head'}>
+											<Typography className={'oy-items-count'}>{cartItems.length} item(s)</Typography>
+											<Button className={'oy-remove-all'}>
+												<Typography>Remove all</Typography>
+											</Button>
+										</Stack>
+
+										<Stack className={'my-cart-list'}>
+											{cartItems.map((item: CartItem) => (
+												<Stack className={'cart-item'} key={`${item.productId}-${item.size}`}>
+													<Button className={'oy-heart-btn'}>
+														<Typography>♡</Typography>
+													</Button>
+
+													<Box component={'div'} className={'thumb-wrap'}>
+														<img
+															src={
+																item.productImage
+																	? item.productImage.startsWith('/')
+																		? item.productImage
+																		: `${REACT_APP_API_URL}/${item.productImage}`
+																	: '/img/product/bigImage.png'
+															}
+															alt={item.productTitle}
+														/>
+													</Box>
+
+													<Stack className={'item-info'}>
+														<Stack className={'oy-item-top'}>
+															<Stack className={'oy-item-name-col'}>
+																<Typography className={'oy-item-brand'}>
+																	{(item as any).productBrand ?? 'OLIVE YOUNG'}
+																</Typography>
+																<Typography className={'item-title'}>{item.productTitle}</Typography>
+															</Stack>
+															<Stack className={'oy-item-price-col'}>
+																{Boolean((item as any).oldPrice ?? (item as any).productOldPrice) && (
+																	<Typography className={'oy-item-old-price'}>
+																		$
+																		{Number((item as any).oldPrice ?? (item as any).productOldPrice).toFixed(2)}
+																	</Typography>
+																)}
+																<Typography className={'item-price'}>${item.productPrice.toFixed(2)}</Typography>
+															</Stack>
+														</Stack>
+
+														<Typography className={'item-meta'}>Size: {item.size}</Typography>
+
+														<Stack className={'item-controls'}>
+															<Stack className={'qty-box'}>
+																<Button className={'qty-btn'} onClick={() => updateQty(item.productId, item.size, -1)}>
+																	-
+																</Button>
+																<Typography className={'qty-value'}>{item.qty ?? 1}</Typography>
+																<Button className={'qty-btn'} onClick={() => updateQty(item.productId, item.size, 1)}>
+																	+
+																</Button>
+															</Stack>
+															<Button className={'remove-btn'} onClick={() => removeItem(item.productId, item.size)}>
+																<Typography>Remove</Typography>
+															</Button>
+														</Stack>
+													</Stack>
+												</Stack>
+											))}
+										</Stack>
+									</Stack>
+								)}
+							</Stack>
+
+							<Stack className={'oy-cart-right'}>
 								<Stack className={'my-cart-summary'}>
+									<Stack className={'oy-promo-row'}>
+										<Box component={'div'} className={'oy-promo-input-wrap'}>
+											<input className={'oy-promo-input'} placeholder={'Promo code'} />
+										</Box>
+										<Button className={'oy-apply-btn'}>
+											<Typography>Apply</Typography>
+										</Button>
+									</Stack>
+
+									<Stack className={'oy-coupon-sale'}>
+										<Typography className={'oy-coupon-label'}>Coupon / Sale</Typography>
+										<Typography className={'oy-coupon-value'}>-$0.00</Typography>
+									</Stack>
+
+									<Divider />
+
 									<Typography className={'summary-title'}>Order Summary</Typography>
 									<Stack className={'summary-row'}>
 										<Typography>Subtotal</Typography>
 										<Typography>${total.toFixed(2)}</Typography>
 									</Stack>
 									<Stack className={'summary-row'}>
-										<Typography>Shipping</Typography>
-										<Typography>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</Typography>
+										<Typography>Discount</Typography>
+										<Typography>-$0.00</Typography>
 									</Stack>
+									<Stack className={'summary-row'}>
+										<Typography>Shipping</Typography>
+										<Typography>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</Typography>
+									</Stack>
+
 									<Divider />
+
 									<Stack className={'summary-row total'}>
-										<Typography>Total</Typography>
+										<Typography>Estimated Total</Typography>
 										<Typography>${grandTotal.toFixed(2)}</Typography>
 									</Stack>
+
 									<Button className={'checkout-btn'}>
 										<Typography>Proceed to Checkout</Typography>
 									</Button>
+
+									<Stack className={'oy-payments-row'}>
+										<Typography className={'oy-pay-icon'}>VISA</Typography>
+										<Typography className={'oy-pay-icon'}>Mastercard</Typography>
+										<Typography className={'oy-pay-icon'}>PayPal</Typography>
+										<Typography className={'oy-pay-icon'}>Apple Pay</Typography>
+									</Stack>
 								</Stack>
 							</Stack>
-						)}
+						</Stack>
 					</Stack>
 				</Box>
 			</Box>
