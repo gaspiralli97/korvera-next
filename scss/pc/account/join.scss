@@ -7,20 +7,23 @@
    .container {
      align-items: center;
      .main {
-       width: 1200px;
-       height: 900px;
+      width: 740px;
+      min-height: 600px;
+      height: auto;
        display: flex;
-       flex-direction: row;
-       border-radius: 12px 0px 0px 12px;
+      flex-direction: row;
+      justify-content: center;
+      border-radius: 12px;
        background: #FFF;
        box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
        .left {
-         width: 50%;
+        width: 100%;
          height: 100%;
          display: flex;
          flex-direction: column;
          align-items: center;
          justify-content: center;
+        padding: 50px 0;
          .logo {
            display: flex;
            flex-direction: row;
@@ -65,9 +68,9 @@
 
            }
          }
-         .input-wrap {
-           margin-top: 45px;
-           width: 470px;
+        .input-wrap {
+          margin-top: 30px;
+          width: 430px;
            display: flex;
            flex-direction: column;
 
@@ -103,9 +106,9 @@
             }
           }
          }
-         .register {
-           margin-top: 45px;
-           width: 470px;
+        .register {
+          margin-top: 30px;
+          width: 430px;
            display: flex;
            flex-direction: column;
            align-items: center;
@@ -146,7 +149,7 @@
                color:  #181A20;
              }
            }
-           button {
+          > button {
              margin-top: 25px;
              width: 100%;
              height: 55px;
@@ -162,12 +165,54 @@
                filter: brightness(0) invert(1);
              }
            }
+
+          .social-auth {
+            margin-top: 18px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .social-auth-title {
+              margin-bottom: 12px;
+              color: #717171;
+              font-family: $font;
+              font-size: 13px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: normal;
+            }
+            .social-auth-buttons {
+              width: 100%;
+              display: flex;
+              flex-direction: row;
+              gap: 10px;
+              .social-btn {
+                min-width: 0;
+                flex: 1;
+                height: 42px;
+                border-radius: 8px;
+                border: 1px solid #DDD;
+                background: #FFF;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                font-family: $font;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: normal;
+                color: #181A20;
+                text-transform: none;
+              }
+            }
+          }
          }
          .ask-info {
-           margin-top: 90px;
+          margin-top: 50px;
            p {
              font-family: $font;
-             font-size: 20px;
+            font-size: 18px;
              font-style: normal;
              line-height: normal;
              font-weight: 400;
@@ -175,7 +220,7 @@
              b {
                margin-left: 10px;
                font-weight: 600;
-               font-size: 32px;
+              font-size: 26px;
                cursor: pointer;
                text-decoration: underline;
              }
@@ -183,10 +228,7 @@
          }
        }
        .right {
-         width: 50%;
-         height: 100%;
-         background-image: url("/img/banner/joinBg.svg");
-         background-size: cover;
+        display: none;
        }
      }
    }

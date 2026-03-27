@@ -168,6 +168,7 @@ const Join: NextPage = () => {
 
 								{loginView ? (
 									<Button
+										className={'auth-submit-btn'}
 										variant="contained"
 										endIcon={<img src="/img/icons/rightup.svg" alt="" />}
 										disabled={input.nick == '' || input.password == ''}
@@ -177,6 +178,7 @@ const Join: NextPage = () => {
 									</Button>
 								) : (
 									<Button
+										className={'auth-submit-btn'}
 										variant="contained"
 										disabled={input.nick == '' || input.password == '' || input.phone == '' || input.type == ''}
 										onClick={doSignUp}
@@ -185,6 +187,28 @@ const Join: NextPage = () => {
 										SIGNUP
 									</Button>
 								)}
+
+								<Box className={'social-auth'}>
+									<span className={'social-auth-title'}>{loginView ? 'Or login with' : 'Or sign up with'}</span>
+									<Stack className={'social-auth-buttons'}>
+										<Button className={'social-btn google'}>
+											<span className={'icon'}>G</span>
+											Google
+										</Button>
+										<Button className={'social-btn kakao'}>
+											<span className={'icon'}>K</span>
+											Kakao
+										</Button>
+										<Button className={'social-btn facebook'}>
+											<span className={'icon'}>f</span>
+											Facebook
+										</Button>
+										<Button className={'social-btn apple'}>
+											<span className={'icon'}></span>
+											Apple
+										</Button>
+									</Stack>
+								</Box>
 							</Box>
 							<Box className={'ask-info'}>
 								{loginView ? (
@@ -206,7 +230,6 @@ const Join: NextPage = () => {
 								)}
 							</Box>
 						</Stack>
-						<Stack className={'right'}></Stack>
 					</Stack>
 				</Stack>
 			</Stack>
