@@ -134,6 +134,168 @@ export const REMOVE_BOARD_ARTICLE_BY_ADMIN = gql`
 `;
 
 /**************************
+ *         NOTICE         *
+ *************************/
+
+export const CREATE_NOTICE_BY_ADMIN = gql`
+	mutation CreateNoticeByAdmin($input: NoticeInput!) {
+		createNoticeByAdmin(input: $input) {
+			_id
+			noticeCategory
+			noticePriority
+			noticeStatus
+			noticeTitle
+			noticeContent
+			noticeViews
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const UPDATE_NOTICE_BY_ADMIN = gql`
+	mutation UpdateNoticeByAdmin($input: NoticeUpdate!) {
+		updateNoticeByAdmin(input: $input) {
+			_id
+			noticeCategory
+			noticePriority
+			noticeStatus
+			noticeTitle
+			noticeContent
+			noticeViews
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const REMOVE_NOTICE_BY_ADMIN = gql`
+	mutation RemoveNoticeByAdmin($input: String!) {
+		removeNoticeByAdmin(noticeId: $input) {
+			_id
+			noticeCategory
+			noticePriority
+			noticeStatus
+			noticeTitle
+			noticeContent
+			noticeViews
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+/**************************
+ *         BANNER         *
+ *************************/
+
+export const CREATE_BANNER_BY_ADMIN = gql`
+	mutation CreateBannerByAdmin($input: BannerInput!) {
+		createBannerByAdmin(input: $input) {
+			_id
+			bannerTitle
+			bannerType
+			bannerImage
+			bannerLink
+			bannerPosition
+			bannerStatus
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const UPDATE_BANNER_BY_ADMIN = gql`
+	mutation UpdateBannerByAdmin($input: BannerUpdate!) {
+		updateBannerByAdmin(input: $input) {
+			_id
+			bannerTitle
+			bannerType
+			bannerImage
+			bannerLink
+			bannerPosition
+			bannerStatus
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const REMOVE_BANNER_BY_ADMIN = gql`
+	mutation RemoveBannerByAdmin($input: String!) {
+		removeBannerByAdmin(bannerId: $input) {
+			_id
+			bannerTitle
+			bannerType
+			bannerImage
+			bannerLink
+			bannerPosition
+			bannerStatus
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+/**************************
+ *          EVENT         *
+ *************************/
+
+export const CREATE_EVENT_BY_ADMIN = gql`
+	mutation CreateEventByAdmin($input: EventInput!) {
+		createEventByAdmin(input: $input) {
+			_id
+			eventTitle
+			eventCategory
+			eventDescription
+			eventImage
+			eventStatus
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const UPDATE_EVENT_BY_ADMIN = gql`
+	mutation UpdateEventByAdmin($input: EventUpdate!) {
+		updateEventByAdmin(input: $input) {
+			_id
+			eventTitle
+			eventCategory
+			eventDescription
+			eventImage
+			eventStatus
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const REMOVE_EVENT_BY_ADMIN = gql`
+	mutation RemoveEventByAdmin($input: String!) {
+		removeEventByAdmin(eventId: $input) {
+			_id
+			eventTitle
+			eventCategory
+			eventDescription
+			eventImage
+			eventStatus
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+/**************************
  *         COMMENT        *
  *************************/
 

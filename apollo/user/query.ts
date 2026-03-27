@@ -928,3 +928,80 @@ export const GET_MEMBER_FOLLOWINGS = gql`
 		}
 	}
 `;
+
+/**************************
+ *          EVENT         *
+ *************************/
+
+export const GET_EVENTS = gql`
+	query GetEvents($input: EventsInquiry!) {
+		getEvents(input: $input) {
+			list {
+				_id
+				eventTitle
+				eventCategory
+				eventDescription
+				eventImage
+				eventStatus
+				memberId
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
+ *         BANNER         *
+ *************************/
+
+export const GET_BANNERS = gql`
+	query GetBanners($input: BannersInquiry!) {
+		getBanners(input: $input) {
+			list {
+				_id
+				bannerTitle
+				bannerType
+				bannerImage
+				bannerLink
+				bannerPosition
+				bannerStatus
+				memberId
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
+ *         NOTICE         *
+ *************************/
+
+export const GET_NOTICES = gql`
+	query GetNotices($input: NoticesInquiry!) {
+		getNotices(input: $input) {
+			list {
+				_id
+				noticeCategory
+				noticePriority
+				noticeStatus
+				noticeTitle
+				noticeContent
+				noticeViews
+				memberId
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;

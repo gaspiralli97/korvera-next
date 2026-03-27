@@ -11,6 +11,7 @@ import Events from '../libs/components/homepage/Events';
 import HomepageBrands from '../libs/components/homepage/HomepageBrands';
 import HomepageQuizBanner from '../libs/components/homepage/HomepageQuizBanner';
 import TopAgents from '../libs/components/homepage/TopAgents';
+import PromoBanners from '../libs/components/homepage/PromoBanners';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -34,6 +35,7 @@ const Home: NextPage = () => {
 			<Stack className={'home-page'}>
 				{/* Hero — rendered in LayoutHome (.header-main) */}
 				<HomepageCategories />
+				<PromoBanners />
 				<ProductTabs />
 				<HomepageQuizBanner />
 				<HomepageSkinSolutions />

@@ -134,41 +134,49 @@ const withAdminLayout = (Component: ComponentType) => {
 							'& .MuiDrawer-paper': {
 								width: drawerWidth,
 								boxSizing: 'border-box',
+								display: 'flex',
+								flexDirection: 'column',
+								overflow: 'hidden',
 							},
 						}}
 						variant="permanent"
 						anchor="left"
 						className="aside"
 					>
-						<Toolbar sx={{ flexDirection: 'column', alignItems: 'flexStart' }}>
-							<Stack className={'logo-box'}>
-								<img src={'/img/logo/logoText.svg'} alt={'logo'} />
-							</Stack>
+						{/* Fixed header — logo + profile */}
+						<Box component={'div'} sx={{ flexShrink: 0 }}>
+							<Toolbar sx={{ flexDirection: 'column', alignItems: 'flexStart' }}>
+								<Stack className={'logo-box'}>
+									<img src={'/img/logo/logoText.svg'} alt={'logo'} />
+								</Stack>
 
-							<Stack
-								className="user"
-								direction={'row'}
-								alignItems={'center'}
-								sx={{
-									bgcolor: openMenu ? 'rgba(255, 255, 255, 0.04)' : 'none',
-									borderRadius: '8px',
-									px: '24px',
-									py: '11px',
-								}}
-							>
-								<Avatar
-									src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
-								/>
-								<Typography variant={'body2'} p={1} ml={1}>
-									{user?.memberNick} <br />
-									{user?.memberPhone}
-								</Typography>
-							</Stack>
-						</Toolbar>
+								<Stack
+									className="user"
+									direction={'row'}
+									alignItems={'center'}
+									sx={{
+										bgcolor: openMenu ? 'rgba(255, 255, 255, 0.04)' : 'none',
+										borderRadius: '8px',
+										px: '24px',
+										py: '11px',
+									}}
+								>
+									<Avatar
+										src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
+									/>
+									<Typography variant={'body2'} p={1} ml={1}>
+										{user?.memberNick} <br />
+										{user?.memberPhone}
+									</Typography>
+								</Stack>
+							</Toolbar>
+							<Divider />
+						</Box>
 
-						<Divider />
-
-						<MenuList />
+						{/* Scrollable menu area */}
+						<Box component={'div'} sx={{ flex: 1, overflowY: 'auto', pb: '16px' }}>
+							<MenuList />
+						</Box>
 					</Drawer>
 
 					<Box component={'div'} id="bunker" sx={{ flexGrow: 1 }}>
