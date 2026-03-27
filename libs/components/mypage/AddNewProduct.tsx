@@ -46,28 +46,28 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 		refetch: getProductRefetch,
 	} = useQuery(GET_PRODUCT, {
 		fetchPolicy: 'network-only',
+		skip: !router.query.productId,
 		variables: {
-			input: {
-				productId: router.query.productId,
-			},
+			input: router.query.productId as string,
 		},
 	});
 
 	/** LIFECYCLES **/
 	useEffect(() => {
+		const p = getProductData?.getProduct;
+		if (!p) return;
 		setInsertProductData({
-			...insertProductData,
-			productTitle: getProductData?.getProduct ? getProductData?.getProduct?.productTitle : '',
-			productPrice: getProductData?.getProduct ? getProductData?.getProduct?.productPrice : 0,
-			productCategory: getProductData?.getProduct ? getProductData?.getProduct?.productCategory : '',
-			productBrand: getProductData?.getProduct ? getProductData?.getProduct?.productBrand : '',
-			productVolume: getProductData?.getProduct ? getProductData?.getProduct?.productVolume : 0,
-			productSize: getProductData?.getProduct ? getProductData?.getProduct?.productSize : '',
-			productSkinType: getProductData?.getProduct ? getProductData?.getProduct?.productSkinType : [],
-			productDesc: getProductData?.getProduct ? getProductData?.getProduct?.productDesc : '',
-			productImages: getProductData?.getProduct ? getProductData?.getProduct?.productImages : [],
+			productTitle: p.productTitle ?? '',
+			productPrice: Number(p.productPrice) || 0,
+			productCategory: p.productCategory ?? '',
+			productBrand: p.productBrand ?? '',
+			productVolume: Number(p.productVolume) || 0,
+			productSize: p.productSize ?? '',
+			productSkinType: p.productSkinType ?? [],
+			productDesc: p.productDesc ?? '',
+			productImages: p.productImages ?? [],
 		});
-	}, [getProductLoading, getProductData]);
+	}, [getProductData]);
 
 	/** HANDLERS **/
 	async function uploadImages() {
