@@ -7,8 +7,8 @@
    .container {
      align-items: center;
      .main {
-      width: 740px;
-      min-height: 600px;
+      width: 570px;
+      min-height: 460px;
       height: auto;
        display: flex;
       flex-direction: row;
@@ -23,7 +23,7 @@
          flex-direction: column;
          align-items: center;
          justify-content: center;
-        padding: 50px 0;
+        padding: 38px 0;
          .logo {
            display: flex;
            flex-direction: row;
@@ -70,7 +70,7 @@
          }
         .input-wrap {
           margin-top: 30px;
-          width: 430px;
+          width: 330px;
            display: flex;
            flex-direction: column;
 
@@ -108,7 +108,7 @@
          }
         .register {
           margin-top: 30px;
-          width: 430px;
+          width: 330px;
            display: flex;
            flex-direction: column;
            align-items: center;
@@ -183,27 +183,53 @@
             }
             .social-auth-buttons {
               width: 100%;
-              display: flex;
-              flex-direction: row;
-              gap: 10px;
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 8px;
               .social-btn {
                 min-width: 0;
-                flex: 1;
-                height: 42px;
+                height: 40px;
                 border-radius: 8px;
-                border: 1px solid #DDD;
-                background: #FFF;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 6px;
+                gap: 8px;
                 font-family: $font;
                 font-size: 12px;
                 font-style: normal;
                 font-weight: 600;
                 line-height: normal;
-                color: #181A20;
                 text-transform: none;
+                cursor: pointer;
+                transition: opacity 0.15s;
+                &:hover { opacity: 0.88; }
+                .icon {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-shrink: 0;
+                  img, svg { width: 18px; height: 18px; }
+                }
+                &.google {
+                  border: 1px solid #DADCE0;
+                  background: #FFF;
+                  color: #3C4043;
+                }
+                &.kakao {
+                  border: none;
+                  background: #FEE500;
+                  color: #3C1E1E;
+                }
+                &.facebook {
+                  border: none;
+                  background: #1877F2;
+                  color: #FFF;
+                }
+                &.apple {
+                  border: none;
+                  background: #000;
+                  color: #FFF;
+                }
               }
             }
           }
