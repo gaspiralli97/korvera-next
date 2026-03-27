@@ -28,6 +28,17 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 	const [createProduct] = useMutation(CREATE_PRODUCT);
 	const [updateProduct] = useMutation(UPDATE_PRODUCT);
 
+	const toSafeNumber = (value: string): number => {
+		const parsed = Number(value);
+		return Number.isFinite(parsed) ? parsed : 0;
+	};
+
+	const getProductImageSrc = (image: string): string => {
+		if (!image) return '/img/product/bigImage.png';
+		if (image.startsWith('http://') || image.startsWith('https://') || image.startsWith('/')) return image;
+		return `${REACT_APP_API_URL}/${image}`;
+	};
+
 	const {
 		loading: getProductLoading,
 		data: getProductData,
@@ -62,10 +73,11 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 	async function uploadImages() {
 		try {
 			const formData = new FormData();
-			const selectedFiles = inputRef.current.files;
+			const selectedFiles = inputRef.current?.files;
+			const files = selectedFiles ? Array.from(selectedFiles) : [];
 
-			if (selectedFiles.length == 0) return false;
-			if (selectedFiles.length > 5) throw new Error('Cannot upload more than 5 images!');
+			if (files.length === 0) return false;
+			if (files.length > 5) throw new Error('Cannot upload more than 5 images!');
 
 			formData.append(
 				'operations',
@@ -74,24 +86,20 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 						imagesUploader(files: $files, target: $target)
 				  }`,
 					variables: {
-						files: [null, null, null, null, null],
+						files: files.map(() => null),
 						target: 'product',
 					},
 				}),
 			);
+			const map: Record<string, string[]> = {};
+			files.forEach((_, index) => {
+				map[String(index)] = [`variables.files.${index}`];
+			});
 			formData.append(
 				'map',
-				JSON.stringify({
-					'0': ['variables.files.0'],
-					'1': ['variables.files.1'],
-					'2': ['variables.files.2'],
-					'3': ['variables.files.3'],
-					'4': ['variables.files.4'],
-				}),
+				JSON.stringify(map),
 			);
-			for (const key in selectedFiles) {
-				if (/^\d+$/.test(key)) formData.append(`${key}`, selectedFiles[key]);
-			}
+			files.forEach((file, index) => formData.append(String(index), file));
 
 			const response = await axios.post(`${process.env.REACT_APP_API_GRAPHQL_URL}`, formData, {
 				headers: {
@@ -101,10 +109,11 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 				},
 			});
 
-			const responseImages = response.data.data.imagesUploader;
+			const responseImages = response?.data?.data?.imagesUploader;
+			if (!Array.isArray(responseImages)) throw new Error('Image upload response is invalid');
 
 			console.log('+responseImages: ', responseImages);
-			setInsertProductData({ ...insertProductData, productImages: responseImages });
+			setInsertProductData((prev) => ({ ...prev, productImages: responseImages }));
 		} catch (err: any) {
 			console.log('err: ', err.message);
 			await sweetMixinErrorAlert(err.message);
@@ -114,9 +123,11 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 	const doDisabledCheck = () => {
 		if (
 			insertProductData.productTitle === '' ||
+			!Number.isFinite(insertProductData.productPrice) ||
 			insertProductData.productPrice === 0 || // @ts-ignore
 			insertProductData.productCategory === '' || // @ts-ignore
 			insertProductData.productBrand === '' ||
+			!Number.isFinite(insertProductData.productVolume) ||
 			insertProductData.productVolume === 0 || // @ts-ignore
 			insertProductData.productSize === '' ||
 			insertProductData.productDesc === '' ||
@@ -214,12 +225,12 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Price</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
 										placeholder={'Price'}
 										value={insertProductData.productPrice}
 										onChange={({ target: { value } }) =>
-											setInsertProductData({ ...insertProductData, productPrice: parseInt(value) })
+											setInsertProductData({ ...insertProductData, productPrice: toSafeNumber(value) })
 										}
 									/>
 								</Stack>
@@ -287,7 +298,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 										placeholder={'Volume in ml'}
 										value={insertProductData.productVolume}
 										onChange={({ target: { value } }) =>
-											setInsertProductData({ ...insertProductData, productVolume: parseInt(value) })
+											setInsertProductData({ ...insertProductData, productVolume: toSafeNumber(value) })
 										}
 									/>
 								</Stack>
@@ -366,7 +377,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 							</Stack>
 							<Stack className="gallery-box">
 								{insertProductData?.productImages.map((image: string) => {
-									const imagePath: string = `${REACT_APP_API_URL}/${image}`;
+									const imagePath: string = getProductImageSrc(image);
 									return (
 										<Stack className="image-box" key={image}>
 											<img src={imagePath} alt="" />
