@@ -10,19 +10,18 @@ import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 
 interface PopularProductCardProps {
-	property: Product;
+	product: Product;
 }
 
 const PopularProductCard = (props: PopularProductCardProps) => {
-	const { property } = props;
+	const { product } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
 
 	/** HANDLERS **/
-	 const pushDetailHandler = async (propertyId:string) =>{
-        console.log("propertyId", propertyId);
-		await router.push({pathname:'/product/detail', query:{id:propertyId}});
+	const pushDetailHandler = async (productId: string) => {
+		await router.push({ pathname: '/product/detail', query: { id: productId } });
 	};
 
 	if (device === 'mobile') {
@@ -31,10 +30,10 @@ const PopularProductCard = (props: PopularProductCardProps) => {
 				<Box
 					component={'div'}
 					className={'card-img'}
-					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${property?.productImages[0]})` }}
-					onClick={() =>{pushDetailHandler(property._id);}}
+					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${product?.productImages[0]})` }}
+					onClick={() => pushDetailHandler(product._id)}
 				>
-					{property && property?.productRank >= topProductRank ? (
+					{product && product?.productRank >= topProductRank ? (
 						<div className={'status'}>
 							<img src="/img/icons/electricity.svg" alt="" />
 							<span>top</span>
@@ -42,34 +41,33 @@ const PopularProductCard = (props: PopularProductCardProps) => {
 					) : (
 						''
 					)}
-
-					<div className={'price'}>${property.productPrice}</div>
+					<div className={'price'}>${product.productPrice}</div>
 				</Box>
 				<Box component={'div'} className={'info'}>
-					<strong className={'title'} onClick={() =>{pushDetailHandler(property._id);}}>{property.productTitle}</strong>
-					<p className={'desc'}>{property.productBrand}</p>
+					<strong className={'title'} onClick={() => pushDetailHandler(product._id)}>{product.productTitle}</strong>
+					<p className={'desc'}>{product.productBrand}</p>
 					<div className={'options'}>
 						<div>
 							<img src="/img/icons/discovery.svg" alt="" />
-							<span>{property?.productCategory}</span>
+							<span>{product?.productCategory}</span>
 						</div>
 						<div>
 							<img src="/img/icons/tune.svg" alt="" />
-							<span>{property?.productSize}</span>
+							<span>{product?.productSize}</span>
 						</div>
 						<div>
 							<img src="/img/icons/expand.svg" alt="" />
-							<span>{property?.productVolume} ml</span>
+							<span>{product?.productVolume} ml</span>
 						</div>
 					</div>
 					<Divider sx={{ mt: '15px', mb: '17px' }} />
 					<div className={'bott'}>
-						<p>{property?.productStatus ?? ''}</p>
+						<p>{product?.productStatus ?? ''}</p>
 						<div className="view-like-box">
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
 							</IconButton>
-							<Typography className="view-cnt">{property?.productViews}</Typography>
+							<Typography className="view-cnt">{product?.productViews}</Typography>
 						</div>
 					</div>
 				</Box>
@@ -81,10 +79,10 @@ const PopularProductCard = (props: PopularProductCardProps) => {
 				<Box
 					component={'div'}
 					className={'card-img'}
-					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${property?.productImages[0]})` }}
-					onClick={() =>{pushDetailHandler(property._id);}}
+					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${product?.productImages[0]})` }}
+					onClick={() => pushDetailHandler(product._id)}
 				>
-					{property && property?.productRank >= topProductRank ? (
+					{product && product?.productRank >= topProductRank ? (
 						<div className={'status'}>
 							<img src="/img/icons/electricity.svg" alt="" />
 							<span>top</span>
@@ -92,34 +90,33 @@ const PopularProductCard = (props: PopularProductCardProps) => {
 					) : (
 						''
 					)}
-
-					<div className={'price'}>${property.productPrice}</div>
+					<div className={'price'}>${product.productPrice}</div>
 				</Box>
 				<Box component={'div'} className={'info'}>
-					<strong className={'title'} onClick={() =>{pushDetailHandler(property._id);}}>{property.productTitle}</strong>
-					<p className={'desc'}>{property.productBrand}</p>
+					<strong className={'title'} onClick={() => pushDetailHandler(product._id)}>{product.productTitle}</strong>
+					<p className={'desc'}>{product.productBrand}</p>
 					<div className={'options'}>
 						<div>
 							<img src="/img/icons/discovery.svg" alt="" />
-							<span>{property?.productCategory}</span>
+							<span>{product?.productCategory}</span>
 						</div>
 						<div>
 							<img src="/img/icons/tune.svg" alt="" />
-							<span>{property?.productSize}</span>
+							<span>{product?.productSize}</span>
 						</div>
 						<div>
 							<img src="/img/icons/expand.svg" alt="" />
-							<span>{property?.productVolume} ml</span>
+							<span>{product?.productVolume} ml</span>
 						</div>
 					</div>
 					<Divider sx={{ mt: '15px', mb: '17px' }} />
 					<div className={'bott'}>
-						<p>{property?.productStatus ?? ''}</p>
+						<p>{product?.productStatus ?? ''}</p>
 						<div className="view-like-box">
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
 							</IconButton>
-							<Typography className="view-cnt">{property?.productViews}</Typography>
+							<Typography className="view-cnt">{product?.productViews}</Typography>
 						</div>
 					</div>
 				</Box>

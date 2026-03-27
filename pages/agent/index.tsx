@@ -41,7 +41,7 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 	const [likeTargetMember] = useMutation(LIKE_TARGET_MEMBER);
 
 	const {
-		loading: getPropertiesLoading,
+		loading: getProductsLoading,
 		data: getAgentsData,
 		error: getAgentsError,
 		refetch: getAgentsRefetch,
@@ -120,88 +120,99 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 			await getAgentsRefetch({ input: searchFilter });
 			await sweetTopSmallSuccessAlert('success', 800);
 		} catch (err: any) {
-			console.log('ERROR, likePropertyHandler:', err.message);
+			console.log('ERROR, likeProductHandler:', err.message);
 			sweetMixinErrorAlert(err.message).then();
 		}
 	};
 
 	if (device === 'mobile') {
-		return <h1>AGENTS PAGE MOBILE</h1>;
+		return <h1>BRANDS PAGE MOBILE</h1>;
 	} else {
 		return (
 			<Stack className={'agent-list-page'}>
-				<Stack className={'container'}>
-					<Stack className={'filter'}>
-						<Box component={'div'} className={'left'}>
-							<input
-								type="text"
-								placeholder={'Search for an agent'}
-								value={searchText}
-								onChange={(e: any) => setSearchText(e.target.value)}
-								onKeyDown={(event: any) => {
-									if (event.key == 'Enter') {
-										setSearchFilter({
-											...searchFilter,
-											search: { ...searchFilter.search, text: searchText },
-										});
-									}
-								}}
-							/>
-						</Box>
-						<Box component={'div'} className={'right'}>
-							<span>Sort by</span>
-							<div>
-								<Button onClick={sortingClickHandler} endIcon={<KeyboardArrowDownRoundedIcon />}>
-									{filterSortName}
-								</Button>
-								<Menu anchorEl={anchorEl} open={sortingOpen} onClose={sortingCloseHandler} sx={{ paddingTop: '5px' }}>
-									<MenuItem onClick={sortingHandler} id={'recent'} disableRipple>
-										Recent
-									</MenuItem>
-									<MenuItem onClick={sortingHandler} id={'old'} disableRipple>
-										Oldest
-									</MenuItem>
-									<MenuItem onClick={sortingHandler} id={'likes'} disableRipple>
-										Likes
-									</MenuItem>
-									<MenuItem onClick={sortingHandler} id={'views'} disableRipple>
-										Views
-									</MenuItem>
-								</Menu>
-							</div>
+				{/* ── Page Header ── */}
+				<Stack className={'brands-page-header'}>
+					<Stack className={'container'}>
+						<Box component={'span'} className={'page-eyebrow'}>All Sellers</Box>
+						<Box component={'h1'} className={'page-title'}>Discover Brands</Box>
+						<Box component={'p'} className={'page-desc'}>
+							Explore our curated collection of trusted cosmetics brands and sellers
 						</Box>
 					</Stack>
+				</Stack>
+
+				<Stack className={'container'}>
+					{/* ── Filter Bar ── */}
+					<Stack className={'filter'}>
+						<Box component={'div'} className={'left'}>
+							<Box component={'div'} className={'search-wrap'}>
+								<img src="/img/icons/search.svg" alt="" className={'search-icon'} />
+								<input
+									type="text"
+									placeholder={'Search brands or sellers...'}
+									value={searchText}
+									onChange={(e: any) => setSearchText(e.target.value)}
+									onKeyDown={(event: any) => {
+										if (event.key === 'Enter') {
+											setSearchFilter({
+												...searchFilter,
+												search: { ...searchFilter.search, text: searchText },
+											});
+										}
+									}}
+								/>
+							</Box>
+						</Box>
+						<Box component={'div'} className={'right'}>
+							<Box component={'span'} className={'sort-label'}>Sort by</Box>
+							<Button onClick={sortingClickHandler} endIcon={<KeyboardArrowDownRoundedIcon />} className={'sort-btn'}>
+								{filterSortName}
+							</Button>
+							<Menu anchorEl={anchorEl} open={sortingOpen} onClose={sortingCloseHandler} sx={{ paddingTop: '5px' }}>
+								<MenuItem onClick={sortingHandler} id={'recent'} disableRipple>Recent</MenuItem>
+								<MenuItem onClick={sortingHandler} id={'old'} disableRipple>Oldest</MenuItem>
+								<MenuItem onClick={sortingHandler} id={'likes'} disableRipple>Most Liked</MenuItem>
+								<MenuItem onClick={sortingHandler} id={'views'} disableRipple>Most Viewed</MenuItem>
+							</Menu>
+						</Box>
+					</Stack>
+
+					{/* ── Results count ── */}
+					{agents.length > 0 && (
+						<Box component={'p'} className={'results-count'}>
+							{total} brand{total !== 1 ? 's' : ''} found
+						</Box>
+					)}
+
+					{/* ── Brand Grid ── */}
 					<Stack className={'card-wrap'}>
 						{agents?.length === 0 ? (
 							<div className={'no-data'}>
 								<img src="/img/icons/icoAlert.svg" alt="" />
-								<p>No Agents found!</p>
+								<p>No brands found!</p>
 							</div>
 						) : (
-							agents.map((agent: Member) => {
-								return <AgentCard agent={agent} key={agent._id} likeMemberHandler={likeMemberHandler} />;
-							})
+							agents.map((agent: Member) => (
+								<AgentCard agent={agent} key={agent._id} likeMemberHandler={likeMemberHandler} />
+							))
 						)}
 					</Stack>
-					<Stack className={'pagination'}>
-						<Stack className="pagination-box">
-							{agents.length !== 0 && Math.ceil(total / searchFilter.limit) > 1 && (
-								<Stack className="pagination-box">
-									<Pagination
-										page={currentPage}
-										count={Math.ceil(total / searchFilter.limit)}
-										onChange={paginationChangeHandler}
-										shape="circular"
-										color="primary"
-									/>
-								</Stack>
-							)}
-						</Stack>
 
+					{/* ── Pagination ── */}
+					<Stack className={'pagination'}>
+						{agents.length !== 0 && Math.ceil(total / searchFilter.limit) > 1 && (
+							<Pagination
+								page={currentPage}
+								count={Math.ceil(total / searchFilter.limit)}
+								onChange={paginationChangeHandler}
+								shape="circular"
+								color="primary"
+							/>
+						)}
 						{agents.length !== 0 && (
-							<span>
-								Total {total} agent{total > 1 ? 's' : ''} available
-							</span>
+							<Box component={'span'} className={'total-label'}>
+								Showing {agents.length} of {total} brands
+							</Box>
 						)}
 					</Stack>
 				</Stack>

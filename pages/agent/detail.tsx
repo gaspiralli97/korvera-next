@@ -4,8 +4,9 @@ import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import ProductBigCard from '../../libs/components/common/ProductBigCard';
 import ReviewCard from '../../libs/components/agent/ReviewCard';
-import { Box, Button, Pagination, Stack, Typography } from '@mui/material';
+import { Box, Button, Divider, Pagination, Stack, Typography } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { Product } from '../../libs/types/product/product';
@@ -35,8 +36,8 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 	const [agentId, setAgentId] = useState<string | null>(null);
 	const [agent, setAgent] = useState<Member | null>(null);
 	const [searchFilter, setSearchFilter] = useState<ProductsInquiry>(initialInput);
-	const [agentProperties, setAgentProperties] = useState<Product[]>([]);
-	const [propertyTotal, setPropertyTotal] = useState<number>(0);
+	const [agentProducts, setAgentProducts] = useState<Product[]>([]);
+	const [productTotal, setProductTotal] = useState<number>(0);
 	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
 	const [agentComments, setAgentComments] = useState<Comment[]>([]);
 	const [commentTotal, setCommentTotal] = useState<number>(0);
@@ -71,18 +72,18 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 	});
 
 	const {
-		loading: getPropertiesLoading,
-		data: getPropertiesData,
-		error: getPropertiesError,
-		refetch: getPropertiesRefetch,
+		loading: getProductsLoading,
+		data: getProductsData,
+		error: getProductsError,
+		refetch: getProductsRefetch,
 	} = useQuery(GET_PRODUCTS, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		skip: !searchFilter.search.memberId,
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setAgentProperties(data?.getProducts?.list);
-			setPropertyTotal(data?.getProducts?.metaCounter[0]?.total ?? 0);
+			setAgentProducts(data?.getProducts?.list);
+			setProductTotal(data?.getProducts?.metaCounter[0]?.total ?? 0);
 		},
 	});
 
@@ -108,7 +109,7 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 
 	useEffect(() => {
 		if (searchFilter.search.memberId) {
-			getPropertiesRefetch({ variables: { input: searchFilter } }).then();
+			getProductsRefetch({ variables: { input: searchFilter } }).then();
 		}
 	}, [searchFilter]);
 	useEffect(() => {
@@ -127,7 +128,7 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 		}
 	};
 
-	const propertyPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
+	const productPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
 		searchFilter.page = value;
 		setSearchFilter({ ...searchFilter });
 	};
@@ -154,7 +155,7 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 		}
 	};
 
-	const likePropertyHandler = async (user: any, id: string) => {
+	const likeProductHandler = async (user: any, id: string) => {
 		try {
 			if (!id) return;
 			if (!user._id) throw new Error(Messages.error2);
@@ -164,10 +165,10 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 					input: id,
 				},
 			});
-			await getPropertiesRefetch({ input: searchFilter });
+			await getProductsRefetch({ input: searchFilter });
 			await sweetTopSmallSuccessAlert('success', 800).then();
 		} catch (err: any) {
-			console.log('ERROR, likePropertyHandler:', err.message);
+			console.log('ERROR, likeProductHandler:', err.message);
 			sweetMixinErrorAlert(err.message).then();
 		}
 	};
@@ -177,58 +178,91 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 	} else {
 		return (
 			<Stack className={'agent-detail-page'}>
-				<Stack className={'container'}>
-					<Stack className={'agent-info'}>
-						<img
-							src={agent?.memberImage ? `${REACT_APP_API_URL}/${agent?.memberImage}` : '/img/profile/defaultUser.svg'}
-							alt=""
-						/>
-						<Box component={'div'} className={'info'} onClick={() => redirectToMemberPageHandler(agent?._id as string)}>
-							<strong>{agent?.memberFullName ?? agent?.memberNick}</strong>
-							<div>
-								<img src="/img/icons/call.svg" alt="" />
-								<span>{agent?.memberPhone}</span>
-							</div>
-						</Box>
-					</Stack>
-					<Stack className={'agent-home-list'}>
-						<Stack className={'card-wrap'}>
-							{agentProperties.map((property: Product) => {
-								return (
-									<div className={'wrap-main'} key={property?._id}>
-										<ProductBigCard property={property} key={property?._id} likePropertyHandler={likePropertyHandler}/>
-									</div>
-								);
-							})}
-						</Stack>
-						<Stack className={'pagination'}>
-							{propertyTotal ? (
-								<>
-									<Stack className="pagination-box">
-										<Pagination
-											page={searchFilter.page}
-											count={Math.ceil(propertyTotal / searchFilter.limit) || 1}
-											onChange={propertyPaginationChangeHandler}
-											shape="circular"
-											color="primary"
-										/>
+				{/* ── Seller Banner Header ── */}
+				<Stack className={'seller-banner'}>
+					<Stack className={'container'}>
+						<Stack className={'seller-header'}>
+							<Box component={'div'} className={'avatar-wrap'}>
+								<img
+									src={agent?.memberImage ? `${REACT_APP_API_URL}/${agent?.memberImage}` : '/img/profile/defaultUser.svg'}
+									alt="seller"
+									className={'seller-avatar'}
+								/>
+							</Box>
+							<Stack className={'seller-meta'}>
+								<Stack className={'name-row'}>
+									<Typography className={'seller-name'} onClick={() => redirectToMemberPageHandler(agent?._id as string)}>
+										{agent?.memberFullName ?? agent?.memberNick}
+									</Typography>
+									<Box component={'span'} className={'seller-badge'}>
+										<StorefrontIcon fontSize="small" />
+										{agent?.memberType}
+									</Box>
+								</Stack>
+								<Stack className={'contact-row'}>
+									<img src="/img/icons/call.svg" alt="" />
+									<Typography className={'phone-text'}>{agent?.memberPhone}</Typography>
+								</Stack>
+								<Stack className={'stats-row'}>
+									<Stack className={'stat-item'}>
+										<Typography className={'stat-value'}>{agent?.memberProducts ?? 0}</Typography>
+										<Typography className={'stat-label'}>Products</Typography>
 									</Stack>
-									<span>
-										Total {propertyTotal} propert{propertyTotal > 1 ? 'ies' : 'y'} available
-									</span>
-								</>
-							) : (
-								<div className={'no-data'}>
-									<img src="/img/icons/icoAlert.svg" alt="" />
-									<p>No properties found!</p>
-								</div>
-							)}
+									<Divider orientation="vertical" flexItem className={'stat-divider'} />
+									<Stack className={'stat-item'}>
+										<Typography className={'stat-value'}>{agent?.memberFollowers ?? 0}</Typography>
+										<Typography className={'stat-label'}>Followers</Typography>
+									</Stack>
+									<Divider orientation="vertical" flexItem className={'stat-divider'} />
+									<Stack className={'stat-item'}>
+										<Typography className={'stat-value'}>{agent?.memberLikes ?? 0}</Typography>
+										<Typography className={'stat-label'}>Likes</Typography>
+									</Stack>
+								</Stack>
+							</Stack>
 						</Stack>
 					</Stack>
+				</Stack>
+
+				<Stack className={'container'}>
+					{/* ── Products Section ── */}
+					<Stack className={'products-section'}>
+						<Stack className={'section-header'}>
+							<Typography className={'section-title'}>Products by this Seller</Typography>
+							<Typography className={'section-count'}>
+								{productTotal} product{productTotal !== 1 ? 's' : ''} available
+							</Typography>
+						</Stack>
+						<Stack className={'card-wrap'}>
+							{agentProducts.map((product: Product) => (
+								<div className={'wrap-main'} key={product?._id}>
+									<ProductBigCard product={product} likeProductHandler={likeProductHandler} />
+								</div>
+							))}
+						</Stack>
+						{productTotal ? (
+							<Stack className={'pagination'}>
+								<Pagination
+									page={searchFilter.page}
+									count={Math.ceil(productTotal / searchFilter.limit) || 1}
+									onChange={productPaginationChangeHandler}
+									shape="circular"
+									color="primary"
+								/>
+							</Stack>
+						) : (
+							<div className={'no-data'}>
+								<img src="/img/icons/icoAlert.svg" alt="" />
+								<p>No products found!</p>
+							</div>
+						)}
+					</Stack>
+
+					{/* ── Reviews Section ── */}
 					<Stack className={'review-box'}>
 						<Stack className={'main-intro'}>
-							<span>Reviews</span>
-							<p>we are glad to see you again</p>
+							<span>Customer Reviews</span>
+							<p>Share your experience with this seller</p>
 						</Stack>
 						{commentTotal !== 0 && (
 							<Stack className={'review-wrap'}>
@@ -238,9 +272,9 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 										{commentTotal} review{commentTotal > 1 ? 's' : ''}
 									</span>
 								</Box>
-								{agentComments?.map((comment: Comment) => {
-									return <ReviewCard comment={comment} key={comment?._id} />;
-								})}
+								{agentComments?.map((comment: Comment) => (
+									<ReviewCard comment={comment} key={comment?._id} />
+								))}
 								<Box component={'div'} className={'pagination-box'}>
 									<Pagination
 										page={commentInquiry.page}

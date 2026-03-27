@@ -17,47 +17,42 @@ import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAler
 
 interface TopProductsProps {
 	initialInput: ProductsInquiry;
-	
 }
 
 const TopProducts = (props: TopProductsProps) => {
 	const { initialInput } = props;
 	const device = useDeviceDetect();
-	const [topProperties, setTopProducts] = useState<Product[]>([]);
+	const [topProducts, setTopProducts] = useState<Product[]>([]);
 
 	/** APOLLO REQUESTS **/
-	const[likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
+	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
 
 	const {
-			loading:getPropertiesLoading,
-			data:getPropertiesData,
-			error:getPropertiesError,
-			refetch: getPropertiesRefetch,
-		}=useQuery(GET_PRODUCTS, {
-			fetchPolicy:'cache-and-network',
-			variables:{input:initialInput},
-			notifyOnNetworkStatusChange:true,
-			onCompleted:(data:T)=>{
-				setTopProducts(data?.getProducts?.list);
-			},
-		});
-	/** HANDLERS **/
+		loading: getProductsLoading,
+		data: getProductsData,
+		error: getProductsError,
+		refetch: getProductsRefetch,
+	} = useQuery(GET_PRODUCTS, {
+		fetchPolicy: 'cache-and-network',
+		variables: { input: initialInput },
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: T) => {
+			setTopProducts(data?.getProducts?.list);
+		},
+	});
 
-	const likePropertyHandler =async (user:T, id:string) =>{
-			try {
-				if(!id) return;
-				if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-	
-				await likeTargetProduct({
-					variables:{input:id},
-				});
-				await getPropertiesRefetch({input:initialInput});
-				
-				await sweetTopSmallSuccessAlert('success',800);
-			} catch (err:any) {
-				console.log('ERROR, likePropertyHandler', err.message);
-				sweetMixinErrorAlert(err.message).then();
-			}
+	/** HANDLERS **/
+	const likeProductHandler = async (user: T, id: string) => {
+		try {
+			if (!id) return;
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			await likeTargetProduct({ variables: { input: id } });
+			await getProductsRefetch({ input: initialInput });
+			await sweetTopSmallSuccessAlert('success', 800);
+		} catch (err: any) {
+			console.log('ERROR, likeProductHandler', err.message);
+			sweetMixinErrorAlert(err.message).then();
+		}
 	};
 
 	if (device === 'mobile') {
@@ -75,10 +70,10 @@ const TopProducts = (props: TopProductsProps) => {
 							spaceBetween={15}
 							modules={[Autoplay]}
 						>
-							{topProperties.map((property: Product) => {
+							{topProducts.map((product: Product) => {
 								return (
-									<SwiperSlide className={'top-property-slide'} key={property?._id}>
-										<TopProductCard property={property} likePropertyHandler={likePropertyHandler}/>
+									<SwiperSlide className={'top-property-slide'} key={product?._id}>
+										<TopProductCard product={product} likeProductHandler={likeProductHandler} />
 									</SwiperSlide>
 								);
 							})}
@@ -118,10 +113,10 @@ const TopProducts = (props: TopProductsProps) => {
 								el: '.swiper-top-pagination',
 							}}
 						>
-							{topProperties.map((property: Product) => {
+							{topProducts.map((product: Product) => {
 								return (
-									<SwiperSlide className={'top-property-slide'} key={property?._id}>
-										<TopProductCard property={property} likePropertyHandler={likePropertyHandler} />
+									<SwiperSlide className={'top-property-slide'} key={product?._id}>
+										<TopProductCard product={product} likeProductHandler={likeProductHandler} />
 									</SwiperSlide>
 								);
 							})}

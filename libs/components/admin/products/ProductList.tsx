@@ -40,53 +40,18 @@ interface HeadCell {
 }
 
 const headCells: readonly HeadCell[] = [
-	{
-		id: 'id',
-		numeric: true,
-		disablePadding: false,
-		label: 'MB ID',
-	},
-	{
-		id: 'title',
-		numeric: true,
-		disablePadding: false,
-		label: 'TITLE',
-	},
-	{
-		id: 'price',
-		numeric: false,
-		disablePadding: false,
-		label: 'PRICE',
-	},
-	{
-		id: 'agent',
-		numeric: false,
-		disablePadding: false,
-		label: 'SELLER',
-	},
-	{
-		id: 'location',
-		numeric: false,
-		disablePadding: false,
-		label: 'CATEGORY',
-	},
-	{
-		id: 'type',
-		numeric: false,
-		disablePadding: false,
-		label: 'SIZE',
-	},
-	{
-		id: 'status',
-		numeric: false,
-		disablePadding: false,
-		label: 'STATUS',
-	},
+	{ id: 'id', numeric: true, disablePadding: false, label: 'MB ID' },
+	{ id: 'title', numeric: true, disablePadding: false, label: 'TITLE' },
+	{ id: 'price', numeric: false, disablePadding: false, label: 'PRICE' },
+	{ id: 'agent', numeric: false, disablePadding: false, label: 'SELLER' },
+	{ id: 'location', numeric: false, disablePadding: false, label: 'CATEGORY' },
+	{ id: 'type', numeric: false, disablePadding: false, label: 'SIZE' },
+	{ id: 'status', numeric: false, disablePadding: false, label: 'STATUS' },
 ];
 
 interface EnhancedTableProps {
 	numSelected: number;
-	onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+	onRequestSort: (event: React.MouseEvent<unknown>, field: keyof Data) => void;
 	onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	order: Order;
 	orderBy: string;
@@ -114,22 +79,22 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 interface ProductPanelListType {
-	properties: Product[];
+	products: Product[];
 	anchorEl: any;
 	menuIconClickHandler: any;
 	menuIconCloseHandler: any;
-	updatePropertyHandler: any;
-	removePropertyHandler: any;
+	updateProductHandler: any;
+	removeProductHandler: any;
 }
 
 export const ProductPanelList = (props: ProductPanelListType) => {
 	const {
-		properties,
+		products,
 		anchorEl,
 		menuIconClickHandler,
 		menuIconCloseHandler,
-		updatePropertyHandler,
-		removePropertyHandler,
+		updateProductHandler,
+		removeProductHandler,
 	} = props;
 
 	return (
@@ -139,7 +104,7 @@ export const ProductPanelList = (props: ProductPanelListType) => {
 					{/*@ts-ignore*/}
 					<EnhancedTableHead />
 					<TableBody>
-						{properties.length === 0 && (
+						{products.length === 0 && (
 							<TableRow>
 								<TableCell align="center" colSpan={8}>
 									<span className={'no-data'}>data not found!</span>
@@ -147,65 +112,62 @@ export const ProductPanelList = (props: ProductPanelListType) => {
 							</TableRow>
 						)}
 
-						{properties.length !== 0 &&
-							properties.map((property: Product, index: number) => {
-								const propertyImage = `${REACT_APP_API_URL}/${property?.productImages[0]}`;
+						{products.length !== 0 &&
+							products.map((product: Product, index: number) => {
+								const productImage = `${REACT_APP_API_URL}/${product?.productImages[0]}`;
 
 								return (
-									<TableRow hover key={property?._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-										<TableCell align="left">{property._id}</TableCell>
+									<TableRow hover key={product?._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+										<TableCell align="left">{product._id}</TableCell>
 										<TableCell align="left" className={'name'}>
-											{ property.productStatus === ProductStatus.ACTIVE ? (
+											{product.productStatus === ProductStatus.ACTIVE ? (
 												<Stack direction={'row'}>
-                                                   <Link href={`/product/detail?id=${property?._id}`}>
-                                                      <div>
-                                                         <Avatar alt="Remy Sharp" src={propertyImage} sx={{ ml: '2px', mr: '10px' }} />
-                                                      </div>
-                                                   </Link>
-                                                   <Link href={`/product/detail?id=${property?._id}`}>
-                                                       <div>{property.productTitle}</div>
-                                                   </Link>
-                                                </Stack>
-                                              ) : (
-                                                <Stack direction={'row'}>
-                                                    <div>
-                                                       <Avatar alt="Remy Sharp" src={propertyImage} sx={{ ml: '2px', mr: '10px' }} />
-                                                    </div>
-                                                     <div style={{marginTop: "10px"}}>{property.productTitle}</div>
-                                                </Stack>
+													<Link href={`/product/detail?id=${product?._id}`}>
+														<div>
+															<Avatar alt="Remy Sharp" src={productImage} sx={{ ml: '2px', mr: '10px' }} />
+														</div>
+													</Link>
+													<Link href={`/product/detail?id=${product?._id}`}>
+														<div>{product.productTitle}</div>
+													</Link>
+												</Stack>
+											) : (
+												<Stack direction={'row'}>
+													<div>
+														<Avatar alt="Remy Sharp" src={productImage} sx={{ ml: '2px', mr: '10px' }} />
+													</div>
+													<div style={{ marginTop: '10px' }}>{product.productTitle}</div>
+												</Stack>
 											)}
-											
 										</TableCell>
-										<TableCell align="center">{property.productPrice}</TableCell>
-										<TableCell align="center">{property.memberData?.memberNick}</TableCell>
-										<TableCell align="center">{property.productCategory}</TableCell>
-										<TableCell align="center">{property.productSize}</TableCell>
+										<TableCell align="center">{product.productPrice}</TableCell>
+										<TableCell align="center">{product.memberData?.memberNick}</TableCell>
+										<TableCell align="center">{product.productCategory}</TableCell>
+										<TableCell align="center">{product.productSize}</TableCell>
 										<TableCell align="center">
-											{property.productStatus === ProductStatus.DELETE && (
+											{product.productStatus === ProductStatus.DELETE && (
 												<Button
 													variant="outlined"
 													sx={{ p: '3px', border: 'none', ':hover': { border: '1px solid #000000' } }}
-													onClick={() => removePropertyHandler(property._id)}
+													onClick={() => removeProductHandler(product._id)}
 												>
 													<DeleteIcon fontSize="small" />
 												</Button>
 											)}
 
-											{property.productStatus === ProductStatus.SOLD_OUT && (
-												<Button className={'badge warning'}>{property.productStatus}</Button>
+											{product.productStatus === ProductStatus.SOLD_OUT && (
+												<Button className={'badge warning'}>{product.productStatus}</Button>
 											)}
 
-											{property.productStatus === ProductStatus.ACTIVE && (
+											{product.productStatus === ProductStatus.ACTIVE && (
 												<>
 													<Button onClick={(e: any) => menuIconClickHandler(e, index)} className={'badge success'}>
-														{property.productStatus}
+														{product.productStatus}
 													</Button>
 
 													<Menu
 														className={'menu-modal'}
-														MenuListProps={{
-															'aria-labelledby': 'fade-button',
-														}}
+														MenuListProps={{ 'aria-labelledby': 'fade-button' }}
 														anchorEl={anchorEl[index]}
 														open={Boolean(anchorEl[index])}
 														onClose={menuIconCloseHandler}
@@ -213,10 +175,10 @@ export const ProductPanelList = (props: ProductPanelListType) => {
 														sx={{ p: 1 }}
 													>
 														{Object.values(ProductStatus)
-															.filter((ele) => ele !== property.productStatus)
+															.filter((ele) => ele !== product.productStatus)
 															.map((status: string) => (
 																<MenuItem
-																	onClick={() => updatePropertyHandler({ _id: property._id, productStatus: status })}
+																	onClick={() => updateProductHandler({ _id: product._id, productStatus: status })}
 																	key={status}
 																>
 																	<Typography variant={'subtitle1'} component={'span'}>

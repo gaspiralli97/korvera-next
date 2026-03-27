@@ -47,8 +47,8 @@ const BeforeAfterCard = ({ item }: { item: typeof CASES[0] }) => {
 	const onTouchMove = (e: React.TouchEvent) => updatePos(e.touches[0].clientX);
 
 	return (
-		<Box className={'ba-card'}>
-			<Box
+		<Box component={'div'} className={'ba-card'}>
+			<Box component={'div'}
 				ref={wrapRef}
 				className={'ba-slider'}
 				onMouseMove={onMouseMove}
@@ -58,34 +58,32 @@ const BeforeAfterCard = ({ item }: { item: typeof CASES[0] }) => {
 				onTouchEnd={() => setDragging(false)}
 			>
 				{/* After image — full width, behind */}
-				<Box className={'ba-img ba-img--after'} style={{ backgroundImage: `url(${item.after})` }}>
+				<Box component={'div'} className={'ba-img ba-img--after'} style={{ backgroundImage: `url(${item.after})` }}>
 					<span className={'ba-label ba-label--after'}>After</span>
 				</Box>
 
 				{/* Before image — clipped to left of slider */}
-				<Box
-					className={'ba-img ba-img--before'}
+				<Box component={'div'} className={'ba-img ba-img--before'}
 					style={{ backgroundImage: `url(${item.before})`, clipPath: `inset(0 ${100 - pos}% 0 0)` }}
 				>
 					<span className={'ba-label ba-label--before'}>Before</span>
 				</Box>
 
 				{/* Drag handle */}
-				<Box
-					className={'ba-handle'}
+				<Box component={'div'} className={'ba-handle'}
 					style={{ left: `${pos}%` }}
 					onMouseDown={() => setDragging(true)}
 					onTouchStart={() => setDragging(true)}
 				>
-					<Box className={'ba-handle-line'} />
-					<Box className={'ba-handle-knob'}>
+					<Box component={'div'} className={'ba-handle-line'} />
+					<Box component={'div'} className={'ba-handle-knob'}>
 						<span>{'‹'}</span>
 						<span>{'›'}</span>
 					</Box>
 				</Box>
 			</Box>
 
-			<Box className={'ba-meta'}>
+			<Box component={'div'} className={'ba-meta'}>
 				<span className={'ba-brand'}>{item.brand}</span>
 				<span className={'ba-product'}>{item.product}</span>
 				<span className={'ba-result'}>{item.result}</span>
@@ -99,14 +97,14 @@ const BeforeAfter = () => {
 	return (
 		<Stack className={'hp-before-after'}>
 			<Stack className={'container'}>
-				<Box className={'hp-ba-header'}>
+				<Box component={'div'} className={'hp-ba-header'}>
 					<Typography className={'hp-section-eyebrow'}>Real Results</Typography>
 					<Typography className={'hp-section-title'}>Before & After</Typography>
 					<p className={'hp-ba-subtitle'}>
 						Drag the slider to reveal real customer transformations.
 					</p>
 				</Box>
-				<Box className={'hp-ba-grid'}>
+				<Box component={'div'} className={'hp-ba-grid'}>
 					{CASES.map((item) => (
 						<BeforeAfterCard key={item.id} item={item} />
 					))}

@@ -11,7 +11,7 @@ import { ProductStatus } from '../../enums/product.enum';
 import { userVar } from '../../../apollo/store';
 import { useRouter } from 'next/router';
 import { UPDATE_PRODUCT } from '../../../apollo/user/mutation';
-import { GET_AGENT_PROPERTIES } from '../../../apollo/user/query';
+import { GET_SELLER_PRODUCTS } from '../../../apollo/user/query';
 import { sweetConfirmAlert, sweetErrorHandling } from '../../sweetAlert';
 
 const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
@@ -26,11 +26,11 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	const [updateProduct] = useMutation(UPDATE_PRODUCT);
 
 	const {
-		loading: getAgentPropertiesLoading,
-		data: getAgentPropertiesData,
-		error: getAgentPropertiesError,
-		refetch: getAgentPropertiesRefetch,
-	} = useQuery(GET_AGENT_PROPERTIES, {
+		loading: getSellerProductsLoading,
+		data: getSellerProductsData,
+		error: getSellerProductsError,
+		refetch: getSellerProductsRefetch,
+	} = useQuery(GET_SELLER_PRODUCTS, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		notifyOnNetworkStatusChange: true,
@@ -49,9 +49,9 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 		setSearchFilter({ ...searchFilter, search: { productStatus: value } });
 	};
 
-	const deletePropertyHandler = async (id: string) => {
+	const deleteProductHandler = async (id: string) => {
 		try {
-			if (await sweetConfirmAlert("Are you sure to delete this property?")) {
+			if (await sweetConfirmAlert("Are you sure to delete this product?")) {
 				await updateProduct({
 					variables: {
 						input: {
@@ -61,7 +61,7 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 					},
 				});
 			}
-			await getAgentPropertiesRefetch({ input: searchFilter });
+			await getSellerProductsRefetch({ input: searchFilter });
 		} catch (err: any) {
 			await sweetErrorHandling(err);
 		}
@@ -79,7 +79,7 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 					},
 				});
 			}
-			await getAgentPropertiesRefetch({ input: searchFilter }); 
+			await getSellerProductsRefetch({ input: searchFilter }); 
 		} catch (err: any) {
 			await sweetErrorHandling(err);
 		}
@@ -90,17 +90,17 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	}
 
 	if (device === 'mobile') {
-		return <div>KORVERA PROPERTIES MOBILE</div>;
+		return <div>MY PRODUCTS MOBILE</div>;
 	} else {
 		return (
-			<div id="my-property-page">
+			<div id="my-products-page">
 				<Stack className="main-title-box">
 					<Stack className="right-box">
-						<Typography className="main-title">My Properties</Typography>
+						<Typography className="main-title">My Products</Typography>
 						<Typography className="sub-title">We are glad to see you again!</Typography>
 					</Stack>
 				</Stack>
-				<Stack className="property-list-box">
+				<Stack className="product-list-box">
 					<Stack className="tab-name-box">
 						<Typography
 							onClick={() => changeStatusHandler(ProductStatus.ACTIVE)}
@@ -117,7 +117,7 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 					</Stack>
 					<Stack className="list-box">
 						<Stack className="listing-title-box">
-							<Typography className="title-text">Listing title</Typography>
+							<Typography className="title-text">Product title</Typography>
 							<Typography className="title-text">Date Published</Typography>
 							<Typography className="title-text">Status</Typography>
 							<Typography className="title-text">View</Typography>
@@ -127,14 +127,14 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 						{sellerProducts?.length === 0 ? (
 							<div className={'no-data'}>
 								<img src="/img/icons/icoAlert.svg" alt="" />
-								<p>No Property found!</p>
+								<p>No Products found!</p>
 							</div>
 						) : (
-							sellerProducts.map((property: Product) => {
+							sellerProducts.map((product: Product) => {
 								return (
 									<ProductCard
-										property={property}
-										deletePropertyHandler={deletePropertyHandler}
+										product={product}
+										deleteProductHandler={deleteProductHandler}
 										updateProductHandler={updateProductHandler}
 									/>
 								);
@@ -153,7 +153,7 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 									/>
 								</Stack>
 								<Stack className="total-result">
-									<Typography>{total} property available</Typography>
+									<Typography>{total} product{total !== 1 ? 's' : ''} available</Typography>
 								</Stack>
 							</Stack>
 						)}

@@ -13,135 +13,177 @@
 					height: auto;
 					display: flex;
 					flex-direction: row;
-					margin: 100px 0 200px 0;
-					border-radius: 12px;
-					border: 1px solid #c4c4c4;
-					background: #F5F2EC;
-					box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
+					align-items: flex-start;
+					margin: 100px 0 120px 0;
+					border-radius: 0;
+					border: none;
+					background: transparent;
+					box-shadow: none;
+					gap: 32px;
 					.left-config {
 						position: relative;
-						padding: 0 0 0 0;
-						width: 266px;
-						height: 700px;
-						border-radius: 12px;
-						background: #F5F2EC;
-						border: 1px solid rgba(196, 196, 196, 0.79);
-						box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
-						margin: 180px 20px 40px 20px;
-						.profile {
-							margin-top: 5px;
-							position: relative;
+						width: 240px;
+						flex-shrink: 0;
+						align-self: flex-start;
+						margin: 40px 24px 40px 24px;
+						border-radius: 0;
+						background: transparent;
+					}
+
+					// ── OliveYoung-style Sidebar ──
+					.my-menu {
+						width: 240px;
+						display: flex;
+						flex-direction: column;
+						background: #ffffff;
+						border: 1px solid #e8e0d5;
+						border-radius: 4px;
+						overflow: hidden;
+
+						// Header block
+						.menu-header {
+							background: #2b2b2b;
+							padding: 0;
 							display: flex;
-							flex-direction: row;
-							.profile-img {
-								img {
-									width: 79px;
-									height: 79px;
-									border-radius: 50%;
-									right: 30px;
-									bottom: 12px;
-									object-fit: cover;
-								}
-							}
-							.user-info {
-								margin-left: 20px;
+							flex-direction: column;
+
+							.menu-header-inner {
 								display: flex;
-								flex-direction: column;
-								.user-name {
-									color: #181a20;
-									font-family: $font;
-									font-size: 15px;
-									font-style: normal;
-									font-weight: 600;
-									line-height: normal;
+								flex-direction: row;
+								align-items: center;
+								gap: 12px;
+								padding: 20px 20px 12px;
+
+								.menu-avatar {
+									width: 44px;
+									height: 44px;
+									border-radius: 50%;
+									object-fit: cover;
+									border: 2px solid rgba(255, 255, 255, 0.2);
+									flex-shrink: 0;
 								}
-								.user-phone {
-									display: flex;
-									flex-direction: row;
-									img {
-										margin-top: 7px;
-										margin-right: 4px;
-										width: 16px;
-										height: 16px;
-									}
-								}
-								.view-list {
-									font-weight: bold;
-									color: red;
-								}
-							}
-						}
-						.sections {
-							height: auto;
-							gap: 45px;
-							margin-top: 30px;
-							.section {
-								height: auto;
-								.title {
-									font-family: $font;
-									font-size: 15px;
-									font-style: normal;
-									font-weight: 400;
-									line-height: 28px;
-								}
-								.sub-section {
-									width: 230px;
-									height: 26px;
+
+								.menu-header-info {
 									display: flex;
 									flex-direction: column;
-									align-items: center;
-									cursor: pointer;
-									padding: 0 5px 0 5px;
-									li {
-										height: 33px;
-										margin-bottom: 6px;
-										border-radius: 4px;
+									gap: 2px;
+
+									.menu-username {
+										color: #ffffff;
+										font-family: $font;
+										font-size: 14px;
+										font-weight: 700;
+										line-height: 1.2;
 									}
-									.focus {
-										height: 50px;
-										background: #000000;
-										border-radius: 10px;
-										p {
-											font-size: 14px;
-											color: #ffffff;
-										}
-									}
-									.flex-box {
-										display: flex;
-										align-items: center;
-										.com-icon {
-											display: flex;
-											flex-direction: row;
-											justify-content: flex-end;
-											margin-left: 11px;
-										}
-										p {
-											font-size: 14px;
-										}
+
+									.menu-userbadge {
+										color: rgba(255,255,255,0.55);
+										font-family: $font;
+										font-size: 11px;
+										font-weight: 400;
 									}
 								}
-								img {
-									width: 16px;
-									height: 16px;
-								}
-								.sub-title {
-									margin-left: 12px;
+							}
+
+							.menu-header-title {
+								color: #ffffff;
+								font-family: $font;
+								font-size: 22px;
+								font-weight: 700;
+								padding: 0 20px 20px;
+								line-height: 1;
+							}
+						}
+
+						// Each group section
+						.menu-section {
+							display: flex;
+							flex-direction: column;
+							padding: 16px 0 8px;
+							border-bottom: 1px solid #f0ece4;
+
+							&:last-child {
+								border-bottom: none;
+							}
+
+							.menu-section-title {
+								color: #181a20;
+								font-family: $font;
+								font-size: 13px;
+								font-weight: 700;
+								padding: 0 20px 8px;
+								letter-spacing: 0;
+							}
+
+							// Menu item link
+							.menu-item {
+								display: block;
+								padding: 9px 20px;
+								color: #444;
+								font-family: $font;
+								font-size: 13px;
+								font-weight: 400;
+								cursor: pointer;
+								transition: color 0.15s, background 0.15s;
+								line-height: 1.4;
+
+								&:hover {
 									color: #181a20;
-									font-family: $font;
-									font-size: 14px;
-									font-style: normal;
-									font-weight: 600;
-									line-height: 55px;
+									background: #faf9f7;
 								}
+
+								&.active {
+									color: #2ea84f;
+									font-weight: 600;
+								}
+
+								// "NEW" badge next to item
+								.menu-badge {
+									display: inline-block;
+									margin-left: 6px;
+									padding: 1px 6px;
+									background: #e91e63;
+									color: #fff;
+									font-family: $font;
+									font-size: 10px;
+									font-weight: 700;
+									border-radius: 4px;
+									vertical-align: middle;
+									letter-spacing: 0.3px;
+								}
+
+								&.menu-logout {
+									color: #999;
+
+									&:hover {
+										color: #e53935;
+										background: #fff5f5;
+									}
+								}
+
+								&.menu-admin {
+									color: #7b61ff;
+
+									&:hover {
+										background: #f3f0ff;
+									}
+								}
+							}
+
+							// Dashed divider inside a section
+							.menu-divider {
+								margin: 6px 20px;
+								border-bottom: 1px dashed #ddd;
 							}
 						}
 					}
 					.main-config {
 						position: relative;
-						width: 936px;
-						margin-top: 52px;
-						align-items: center;
-						gap: 109px;
+						flex: 1;
+						min-width: 0;
+						margin-top: 40px;
+						align-items: flex-start;
+						gap: 24px;
 						.list-config {
 							display: flex;
 							width: 100%;

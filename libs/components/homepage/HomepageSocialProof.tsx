@@ -171,7 +171,7 @@ const BeforeAfterCard = ({ item }: { item: typeof CASES[0] }) => {
 
 	return (
 		<Stack className={'ba-card'}>
-			<Box
+			<Box component={'div'}
 				ref={wrapRef}
 				className={'ba-slider'}
 				onMouseMove={onMouseMove}

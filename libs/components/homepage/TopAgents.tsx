@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Stack, Box } from '@mui/material';
+import { Stack, Box, Typography, Button } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import EastIcon from '@mui/icons-material/East';
+import WestIcon from '@mui/icons-material/West';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import TopAgentCard from './TopAgentCard';
@@ -23,92 +24,87 @@ const TopAgents = (props: TopAgentsProps) => {
 	const [topAgents, setTopAgents] = useState<Member[]>([]);
 
 	/** APOLLO REQUESTS **/
-	const {
-				loading:getSellersLoading,
-				data:getSellersData,
-				error:getSellersError,
-				refetch: getSellersRefetch,
-			}=useQuery(GET_SELLERS, {
-				fetchPolicy:'cache-and-network',
-				variables:{input:initialInput},
-				notifyOnNetworkStatusChange:true,
-				onCompleted:(data:T)=>{
-					setTopAgents(data?.getSellers?.list);
-				},
-			});
-	/** HANDLERS **/
+	const { loading: getSellersLoading } = useQuery(GET_SELLERS, {
+		fetchPolicy: 'cache-and-network',
+		variables: { input: initialInput },
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: T) => {
+			setTopAgents(data?.getSellers?.list);
+		},
+	});
+
+	if (!topAgents.length) return null;
 
 	if (device === 'mobile') {
 		return (
-			<Stack className={'top-agents'}>
+			<Stack className={'top-brands-section'}>
 				<Stack className={'container'}>
-					<Stack className={'info-box'}>
-						<span>Top Sellers</span>
+					<Stack className={'section-header'}>
+						<Typography className={'section-title'}>Top Sellers</Typography>
 					</Stack>
-					<Stack className={'wrapper'}>
-						<Swiper
-							className={'top-agents-swiper'}
-							slidesPerView={'auto'}
-							centeredSlides={true}
-							spaceBetween={29}
-							modules={[Autoplay]}
-						>
-							{topAgents.map((agent: Member) => {
-								return (
-									<SwiperSlide className={'top-agents-slide'} key={agent?._id}>
-										<TopAgentCard agent={agent} key={agent?.memberNick} />
-									</SwiperSlide>
-								);
-							})}
-						</Swiper>
-					</Stack>
+					<Swiper
+						className={'top-brands-swiper'}
+						slidesPerView={'auto'}
+						centeredSlides={true}
+						spaceBetween={16}
+						modules={[Autoplay]}
+					>
+						{topAgents.map((agent: Member) => (
+							<SwiperSlide className={'top-brand-slide'} key={agent?._id}>
+								<TopAgentCard agent={agent} key={agent?.memberNick} />
+							</SwiperSlide>
+						))}
+					</Swiper>
 				</Stack>
 			</Stack>
 		);
 	} else {
 		return (
-			<Stack className={'top-agents'}>
+			<Stack className={'top-brands-section'}>
 				<Stack className={'container'}>
-					<Stack className={'info-box'}>
-						<Box component={'div'} className={'left'}>
-							<span>Top Sellers</span>
-							<p>Our Top Sellers always ready to serve you</p>
+					<Stack className={'section-header'}>
+						<Box component={'div'} className={'header-left'}>
+							<Typography className={'section-eyebrow'}>Discover Sellers</Typography>
+							<Typography className={'section-title'}>Top Brands & Sellers</Typography>
+							<Typography className={'section-desc'}>
+								Shop from our most trusted cosmetics sellers
+							</Typography>
 						</Box>
-						<Box component={'div'} className={'right'}>
-							<div className={'more-box'}>
-								<span>See All Sellers</span>
-								<img src="/img/icons/rightup.svg" alt="" />
-							</div>
-						</Box>
-					</Stack>
-					<Stack className={'wrapper'}>
-						<Box component={'div'} className={'switch-btn swiper-agents-prev'}>
-							<ArrowBackIosNewIcon />
-						</Box>
-						<Box component={'div'} className={'card-wrapper'}>
-							<Swiper
-								className={'top-agents-swiper'}
-								slidesPerView={'auto'}
-								spaceBetween={29}
-								modules={[Autoplay, Navigation, Pagination]}
-								navigation={{
-									nextEl: '.swiper-agents-next',
-									prevEl: '.swiper-agents-prev',
-								}}
+						<Box component={'div'} className={'header-right'}>
+							<Button
+								className={'see-all-btn'}
+								endIcon={<EastIcon />}
+								onClick={() => router.push('/agent')}
 							>
-								{topAgents.map((agent: Member) => {
-									return (
-										<SwiperSlide className={'top-agents-slide'} key={agent?._id}>
-											<TopAgentCard agent={agent} key={agent?.memberNick} />
-										</SwiperSlide>
-									);
-								})}
-							</Swiper>
-						</Box>
-						<Box component={'div'} className={'switch-btn swiper-agents-next'}>
-							<ArrowBackIosNewIcon />
+								See All Brands
+							</Button>
+							<Stack className={'swiper-nav'}>
+								<Box component={'div'} className={'nav-btn swiper-brands-prev'}>
+									<WestIcon />
+								</Box>
+								<Box component={'div'} className={'nav-btn swiper-brands-next'}>
+									<EastIcon />
+								</Box>
+							</Stack>
 						</Box>
 					</Stack>
+
+					<Swiper
+						className={'top-brands-swiper'}
+						slidesPerView={5}
+						spaceBetween={20}
+						modules={[Autoplay, Navigation, Pagination]}
+						navigation={{
+							nextEl: '.swiper-brands-next',
+							prevEl: '.swiper-brands-prev',
+						}}
+					>
+						{topAgents.map((agent: Member) => (
+							<SwiperSlide className={'top-brand-slide'} key={agent?._id}>
+								<TopAgentCard agent={agent} key={agent?.memberNick} />
+							</SwiperSlide>
+						))}
+					</Swiper>
 				</Stack>
 			</Stack>
 		);

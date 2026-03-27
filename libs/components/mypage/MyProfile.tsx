@@ -16,9 +16,12 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 	const token = getJwtToken();
 	const user = useReactiveVar(userVar);
 	const [updateData, setUpdateData] = useState<MemberUpdate>(initialValues);
+	const [newPassword, setNewPassword] = useState<string>('');
+	const [confirmPassword, setConfirmPassword] = useState<string>('');
 
 	/** APOLLO REQUESTS **/
-	const [updateMember] = useMutation(UPDATE_MEMBER)
+	const [updateMember] = useMutation(UPDATE_MEMBER);
+
 	/** LIFECYCLES **/
 	useEffect(() => {
 		setUpdateData({
@@ -34,14 +37,12 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 	const uploadImage = async (e: any) => {
 		try {
 			const image = e.target.files[0];
-			console.log('+image:', image);
-
 			const formData = new FormData();
 			formData.append(
 				'operations',
 				JSON.stringify({
 					query: `mutation ImageUploader($file: Upload!, $target: String!) {
-						imageUploader(file: $file, target: $target) 
+						imageUploader(file: $file, target: $target)
 				  }`,
 					variables: {
 						file: null,
@@ -66,7 +67,6 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 			});
 
 			const responseImage = response.data.data.imageUploader;
-			console.log('+responseImage: ', responseImage);
 			updateData.memberImage = responseImage;
 			setUpdateData({ ...updateData });
 
@@ -76,25 +76,41 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 		}
 	};
 
-	const updatePropertyHandler = useCallback(async () => {
+	const updateMemberHandler = useCallback(async () => {
 		try {
 			if (!user._id) throw new Error(Messages.error2);
 			updateData._id = user._id;
 			const result = await updateMember({
-				variables: {
-					input: updateData,
-				},
+				variables: { input: updateData },
 			});
-
 			// @ts-ignore
 			const jwtToken = result.data.updateMember?.accessToken;
 			await updateStorage({ jwtToken });
 			updateUserInfo(result.data.updateMember?.accessToken);
-			await sweetMixinSuccessAlert('information updated successfully.');
+			await sweetMixinSuccessAlert('Profile updated successfully.');
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
 	}, [updateData]);
+
+	const updatePasswordHandler = useCallback(async () => {
+		try {
+			if (!user._id) throw new Error(Messages.error2);
+			if (newPassword !== confirmPassword) throw new Error('Passwords do not match.');
+			const result = await updateMember({
+				variables: { input: { _id: user._id, memberPassword: newPassword } },
+			});
+			// @ts-ignore
+			const jwtToken = result.data.updateMember?.accessToken;
+			await updateStorage({ jwtToken });
+			updateUserInfo(result.data.updateMember?.accessToken);
+			setNewPassword('');
+			setConfirmPassword('');
+			await sweetMixinSuccessAlert('Password updated successfully.');
+		} catch (err: any) {
+			sweetErrorHandling(err).then();
+		}
+	}, [newPassword, confirmPassword]);
 
 	const doDisabledCheck = () => {
 		if (
@@ -107,96 +123,144 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 		}
 	};
 
-	console.log('+updateData', updateData);
+	const doPasswordDisabledCheck = () => {
+		return newPassword.length < 6 || confirmPassword.length < 6;
+	};
 
 	if (device === 'mobile') {
 		return <>MY PROFILE PAGE MOBILE</>;
 	} else
 		return (
 			<div id="my-profile-page">
-				<Stack className="main-title-box">
-					<Stack className="right-box">
-						<Typography className="main-title">My Profile</Typography>
-						<Typography className="sub-title">We are glad to see you again!</Typography>
-					</Stack>
-				</Stack>
-				<Stack className="top-box">
-					<Stack className="photo-box">
-						<Typography className="title">Photo</Typography>
-						<Stack className="image-big-box">
-							<Stack className="image-box">
-								<img
-									src={
-										updateData?.memberImage
-											? `${REACT_APP_API_URL}/${updateData?.memberImage}`
-											: `/img/profile/defaultUser.svg`
-									}
-									alt=""
-								/>
-							</Stack>
-							<Stack className="upload-big-box">
-								<input
-									type="file"
-									hidden
-									id="hidden-input"
-									onChange={uploadImage}
-									accept="image/jpg, image/jpeg, image/png"
-								/>
-								<label htmlFor="hidden-input" className="labeler">
-									<Typography>Upload Profile Image</Typography>
-								</label>
-								<Typography className="upload-text">A photo must be in JPG, JPEG or PNG format!</Typography>
-							</Stack>
-						</Stack>
-					</Stack>
-					<Stack className="small-input-box">
-						<Stack className="input-box">
-							<Typography className="title">Username</Typography>
+
+				{/* ── Page Header ── */}
+				<div className="mp-header">
+					<span className="mp-eyebrow">My Account</span>
+					<h2 className="mp-title">Account Information</h2>
+					<p className="mp-sub">Manage your profile details and security settings</p>
+				</div>
+
+				{/* ── Section 1: Profile Info ── */}
+				<div className="mp-section">
+					<div className="mp-section-head">
+						<span className="mp-section-label">Profile Details</span>
+					</div>
+
+					<div className="mp-photo-row">
+						<div className="mp-avatar-wrap">
+							<img
+								src={
+									updateData?.memberImage
+										? `${REACT_APP_API_URL}/${updateData?.memberImage}`
+										: `/img/profile/defaultUser.svg`
+								}
+								alt="avatar"
+								className="mp-avatar"
+							/>
+						</div>
+						<div className="mp-upload-wrap">
+							<input
+								type="file"
+								hidden
+								id="hidden-input"
+								onChange={uploadImage}
+								accept="image/jpg, image/jpeg, image/png"
+							/>
+							<label htmlFor="hidden-input" className="mp-upload-btn">
+								Upload New Photo
+							</label>
+							<span className="mp-upload-hint">JPG, JPEG or PNG · Max 5MB</span>
+						</div>
+					</div>
+
+					<div className="mp-fields-row">
+						<div className="mp-field">
+							<label className="mp-label">Username</label>
 							<input
 								type="text"
+								className="mp-input"
 								placeholder="Your username"
 								value={updateData.memberNick}
 								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberNick: value })}
 							/>
-						</Stack>
-						<Stack className="input-box">
-							<Typography className="title">Phone</Typography>
+						</div>
+						<div className="mp-field">
+							<label className="mp-label">Phone</label>
 							<input
 								type="text"
-								placeholder="Your Phone"
+								className="mp-input"
+								placeholder="Your phone number"
 								value={updateData.memberPhone}
 								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })}
 							/>
-						</Stack>
-					</Stack>
-					<Stack className="address-box">
-						<Typography className="title">Address</Typography>
+						</div>
+					</div>
+
+					<div className="mp-field mp-field--full">
+						<label className="mp-label">Delivery Address</label>
 						<input
 							type="text"
-							placeholder="Your address"
+							className="mp-input"
+							placeholder="Your delivery address"
 							value={updateData.memberAddress}
 							onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberAddress: value })}
 						/>
-					</Stack>
-					<Stack className="about-me-box">
-						<Button className="update-button" onClick={updatePropertyHandler} disabled={doDisabledCheck()}>
-							<Typography>Update Profile</Typography>
-							<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
-								<g clipPath="url(#clip0_7065_6985)">
-									<path
-										d="M12.6389 0H4.69446C4.49486 0 4.33334 0.161518 4.33334 0.361122C4.33334 0.560727 4.49486 0.722245 4.69446 0.722245H11.7672L0.105803 12.3836C-0.0352676 12.5247 -0.0352676 12.7532 0.105803 12.8942C0.176321 12.9647 0.268743 13 0.361131 13C0.453519 13 0.545907 12.9647 0.616459 12.8942L12.2778 1.23287V8.30558C12.2778 8.50518 12.4393 8.6667 12.6389 8.6667C12.8385 8.6667 13 8.50518 13 8.30558V0.361122C13 0.161518 12.8385 0 12.6389 0Z"
-										fill="white"
-									/>
-								</g>
-								<defs>
-									<clipPath id="clip0_7065_6985">
-										<rect width="13" height="13" fill="white" />
-									</clipPath>
-								</defs>
-							</svg>
-						</Button>
-					</Stack>
-				</Stack>
+					</div>
+
+					<div className="mp-actions">
+						<button
+							className="mp-btn mp-btn--primary"
+							onClick={updateMemberHandler}
+							disabled={doDisabledCheck()}
+						>
+							Save Changes
+						</button>
+					</div>
+				</div>
+
+				{/* ── Section 2: Password ── */}
+				<div className="mp-section">
+					<div className="mp-section-head">
+						<span className="mp-section-label">Change Password</span>
+					</div>
+
+					<div className="mp-fields-row">
+						<div className="mp-field">
+							<label className="mp-label">New Password</label>
+							<input
+								type="password"
+								className="mp-input"
+								placeholder="Min. 6 characters"
+								value={newPassword}
+								onChange={({ target: { value } }) => setNewPassword(value)}
+							/>
+						</div>
+						<div className="mp-field">
+							<label className="mp-label">Confirm Password</label>
+							<input
+								type="password"
+								className="mp-input"
+								placeholder="Repeat new password"
+								value={confirmPassword}
+								onChange={({ target: { value } }) => setConfirmPassword(value)}
+							/>
+							{confirmPassword && newPassword !== confirmPassword && (
+								<span className="mp-field-error">Passwords do not match</span>
+							)}
+						</div>
+					</div>
+
+					<div className="mp-actions">
+						<button
+							className="mp-btn mp-btn--primary"
+							onClick={updatePasswordHandler}
+							disabled={doPasswordDisabledCheck()}
+						>
+							Update Password
+						</button>
+					</div>
+				</div>
+
 			</div>
 		);
 };

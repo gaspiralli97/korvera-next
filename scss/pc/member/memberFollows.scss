@@ -5,164 +5,216 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+
 		.main-title-box {
 			width: 100%;
 			height: auto;
 			flex-direction: row;
 			justify-content: space-between;
+
 			.right-box {
-				width: 315px;
 				.main-title {
 					color: #181a20;
 					font-family: $font;
-					font-size: 30px;
+					font-size: 26px;
 					font-style: normal;
-					font-weight: 600;
+					font-weight: 700;
 					line-height: normal;
-					letter-spacing: 0.6px;
-					text-transform: capitalize;
+					letter-spacing: 0.4px;
 				}
 			}
 		}
+
 		.follows-list-box {
 			width: 100%;
-			margin-top: 85px;
-			gap: 15px;
+			margin-top: 32px;
+			gap: 0;
+
 			.listing-title-box {
 				width: 100%;
 				height: auto;
 				flex-direction: row;
-				gap: 110px;
-				padding: 18px 34px 18px 33px;
-				border-radius: 12px;
-				background: #F5F2EC;
 				justify-content: space-between;
+				padding: 14px 24px;
+				border-radius: 8px 8px 0 0;
+				background: #f5f2ec;
+				border-bottom: 2px solid #e0d8cc;
+
 				.title-text {
-					color: #181a20;
+					color: #888;
 					font-family: $font;
-					font-size: 15px;
-					font-style: normal;
+					font-size: 12px;
 					font-weight: 600;
-					line-height: normal;
+					text-transform: uppercase;
+					letter-spacing: 0.6px;
 				}
 			}
+
 			.follows-card-box {
-				padding-right: 30px;
-				padding-bottom: 5px;
+				padding: 20px 24px;
 				width: 100%;
 				height: auto;
 				flex-direction: row;
 				align-items: center;
-				gap: 10px;
-				border-bottom: 1px solid #ddd;
+				gap: 12px;
+				border-bottom: 1px solid #f0ece4;
+				background: #ffffff;
+				transition: background 0.15s;
+
+				&:hover {
+					background: #faf9f7;
+				}
+
 				.info {
-					width: 300px;
+					width: 280px;
 					display: flex;
 					flex-direction: row;
 					align-items: center;
 					cursor: pointer;
+					gap: 16px;
+
 					.image-box {
-						width: 110px;
-						height: 110px;
+						width: 64px;
+						height: 64px;
+						flex-shrink: 0;
 						overflow: hidden;
-						margin-right: 25px;
+
 						img {
 							width: 100%;
 							height: 100%;
 							object-fit: cover;
 							border-radius: 50%;
+							border: 2px solid #e8e0d5;
 						}
 					}
+
 					.information-box {
-						width: auto;
-						height: auto;
-						padding: 5px 0px;
 						.name {
 							color: #181a20;
 							font-family: $font;
-							font-size: 13px;
-							font-style: normal;
+							font-size: 14px;
 							font-weight: 600;
 							line-height: normal;
+
+							&:hover {
+								text-decoration: underline;
+							}
 						}
 					}
 				}
+
 				.details-box {
-					width: 300px;
+					flex: 1;
 					display: flex;
 					flex-direction: row;
-					justify-content: space-between;
+					justify-content: center;
+					gap: 32px;
+
 					.info-box {
 						display: flex;
+						flex-direction: column;
 						align-items: center;
-						img {
-							width: 24px;
-							height: 24px;
-						}
+						gap: 2px;
+
+						img,
 						svg {
-							width: 24px;
-							height: 24px;
+							width: 20px;
+							height: 20px;
 							cursor: pointer;
+							color: #ccc;
+							transition: color 0.15s;
+
+							&:hover {
+								color: #e91e63;
+							}
 						}
+
 						p {
-							color: #181a20;
+							color: #888;
 							font-family: $font;
-							font-size: 15px;
-							font-style: normal;
-							font-weight: 600;
-							line-height: normal;
+							font-size: 11px;
+							font-weight: 500;
+							text-transform: uppercase;
+							letter-spacing: 0.3px;
 						}
+
 						span {
-							margin-left: 4px;
 							color: #181a20;
 							font-family: $font;
-							font-size: 13px;
-							font-style: normal;
-							font-weight: 600;
-							line-height: normal;
+							font-size: 14px;
+							font-weight: 700;
 						}
 					}
 				}
+
 				.action-box {
-					width: 300px;
+					width: 200px;
 					height: 100%;
 					flex-direction: row;
 					align-items: center;
 					justify-content: flex-end;
-					gap: 20px;
-					button {
-						border: 1px solid #b9b9b9;
-						color: #181a20;
+					gap: 12px;
+
+					.following-label {
+						color: #888;
 						font-family: $font;
-						font-size: 14px;
-						font-style: normal;
-						font-weight: 400;
-						line-height: normal;
-					}
-					p {
-						color: #b9b9b9;
-						font-family: $font;
-						font-size: 14px;
+						font-size: 12px;
 						font-style: italic;
 						font-weight: 400;
-						line-height: normal;
+					}
+
+					.follow-btn {
+						background: #181a20;
+						color: #ffffff;
+						font-family: $font;
+						font-size: 13px;
+						font-weight: 600;
+						text-transform: none;
+						border-radius: 6px;
+						padding: 7px 20px;
+						border: none;
+						letter-spacing: 0.2px;
+
+						&:hover {
+							background: #0f3460;
+						}
+					}
+
+					.unfollow-btn {
+						background: transparent;
+						color: #888;
+						font-family: $font;
+						font-size: 13px;
+						font-weight: 500;
+						text-transform: none;
+						border-radius: 6px;
+						padding: 7px 20px;
+						border: 1px solid #ccc;
+						letter-spacing: 0.2px;
+
+						&:hover {
+							background: #fff0f0;
+							border-color: #e57373;
+							color: #e57373;
+						}
 					}
 				}
 			}
 		}
+
 		.pagination-config {
 			width: 100%;
 			height: auto;
 			justify-content: center;
 			align-items: center;
 			margin-top: 30px;
+
 			.total-result {
 				p {
-					color: #181a20;
+					color: #888;
 					text-align: center;
 					font-family: $font;
-					font-size: 14px;
-					font-style: normal;
+					font-size: 13px;
 					font-weight: 400;
 					line-height: 26px;
 				}

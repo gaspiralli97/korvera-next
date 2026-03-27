@@ -1,4 +1,4 @@
-.property-big-card-box {
+.product-big-card-box {
 	position: relative;
 	margin-right: 8px;
 	margin-left: 8px;
@@ -7,13 +7,82 @@
 	height: 455px;
 	display: flex;
 	flex-direction: column;
-	.card-img {
-		position: relative;
+
+	// ── Gallery: thumb strip + main image ──
+	.card-gallery {
+		display: flex;
+		flex-direction: row;
+		gap: 8px;
 		width: 100%;
 		height: 264px;
+	}
+
+	.thumb-strip {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		width: 60px;
+		flex-shrink: 0;
+	}
+
+	.thumb-item {
+		width: 60px;
+		height: 60px;
+		border-radius: 8px;
 		background-size: cover;
-		border-radius: 12px 12px 0px 0px;
+		background-position: center;
+		border: 2px solid transparent;
 		cursor: pointer;
+		transition: border-color 0.15s;
+		flex-shrink: 0;
+
+		&:hover {
+			border-color: #aaa;
+		}
+
+		&.active {
+			border-color: #181a20;
+		}
+	}
+
+	// ── Zoom panel (appears to the right of the card on hover) ──
+	.zoom-panel {
+		position: absolute;
+		left: calc(100% + 12px);
+		top: 0;
+		width: 340px;
+		height: 340px;
+		background-size: 300%;
+		background-repeat: no-repeat;
+		border-radius: 14px;
+		border: 1px solid #e0d8cc;
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+		z-index: 200;
+		pointer-events: none;
+	}
+
+	.card-img {
+		position: relative;
+		flex: 1;
+		min-width: 0;
+		height: 264px;
+		background-size: cover;
+		background-position: center;
+		border-radius: 12px 12px 0px 0px;
+		cursor: crosshair;
+
+		// ── Magnifier lens overlay ──
+		.zoom-lens {
+			position: absolute;
+			width: 80px;
+			height: 80px;
+			border: 2px solid rgba(255, 255, 255, 0.9);
+			background: rgba(255, 255, 255, 0.15);
+			border-radius: 4px;
+			pointer-events: none;
+			z-index: 10;
+			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+		}
 		div.status {
 			position: absolute;
 			padding: 6px 34px;
@@ -226,91 +295,6 @@
 			.view-cnt {
 				font-size: 13px;
 			}
-		}
-	}
-}
-.community-general-card-config {
-	position: relative;
-	height: auto;
-	gap: 20px;
-	border-radius: 12px;
-	cursor: pointer;
-	.image-box {
-		width: 100%;
-		height: 283px;
-		.card-img {
-			width: 100%;
-			height: 100%;
-			border-radius: 12px;
-		}
-	}
-	.desc-box {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-		width: 100%;
-		height: 80px;
-		.title {
-			color: #717171;
-			font-family: $font;
-			font-size: 13px;
-			font-style: normal;
-			font-weight: 400;
-			line-height: normal;
-		}
-		.desc {
-			color: #181a20;
-			font-family: $font;
-			font-size: 15px;
-			font-style: normal;
-			font-weight: 600;
-			line-height: 26px;
-			text-transform: capitalize;
-		}
-		.buttons {
-			width: auto;
-			display: flex;
-			flex-direction: row;
-			justify-content: center;
-			align-items: center;
-			svg {
-				width: 24px;
-				height: 24px;
-				cursor: pointer;
-			}
-			.view-cnt {
-				font-size: 13px;
-			}
-		}
-	}
-	.date-box {
-		position: absolute;
-		width: 70px;
-		height: 69.014px;
-		align-items: center;
-		justify-content: center;
-		top: 235px;
-		right: 20px;
-		border-radius: 12px;
-		background: #F5F2EC;
-		box-shadow: 0px 6px 15px 0px rgba(64, 79, 104, 0.05);
-		.month {
-			color: #181a20;
-			text-align: center;
-			font-family: $font;
-			font-size: 13px;
-			font-style: normal;
-			font-weight: 400;
-			line-height: normal;
-		}
-		.day {
-			color: #181a20;
-			font-family: $font;
-			font-size: 20px;
-			font-style: normal;
-			font-weight: 600;
-			line-height: normal;
 		}
 	}
 }

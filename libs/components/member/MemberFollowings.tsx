@@ -131,10 +131,10 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 									<Stack className="action-box">
 										{follower.meFollowed && follower.meFollowed[0]?.myFollowing ? (
 											<>
-												<Typography>Following</Typography>
+												<Typography className={'following-label'}>Following</Typography>
 												<Button
 													variant="outlined"
-													sx={{ background: '#f78181', ':hover': { background: '#f06363' } }}
+													className={'unfollow-btn'}
 													onClick={() =>
 														unsubscribeHandler(follower?.followingData?._id, getMemberFollowingsRefetch, followInquiry)
 													}
@@ -145,7 +145,7 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 										) : (
 											<Button
 												variant="contained"
-												sx={{ background: '#60eb60d4', ':hover': { background: '#60eb60d4' } }}
+												className={'follow-btn'}
 												onClick={() =>
 													subscribeHandler(follower?.followingData?._id, getMemberFollowingsRefetch, followInquiry)
 												}

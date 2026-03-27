@@ -66,17 +66,17 @@ const MemberMenu = (props: MemberMenuProps) => {
 						<>
 							<Button
 								variant="outlined"
-								sx={{ background: '#b9b9b9' }}
+								className={'unfollow-btn'}
 								onClick={() => unsubscribeHandler(member?._id, getMemberRefetch, memberId)}
 							>
 								Unfollow
 							</Button>
-							<Typography>Following</Typography>
+							<Typography className={'following-label'}>Following</Typography>
 						</>
 					) : (
 						<Button
 							variant="contained"
-							sx={{ background: '#ff5d18', ':hover': { background: '#ff5d18' } }}
+							className={'follow-btn'}
 							onClick={() => subscribeHandler(member?._id, getMemberRefetch, memberId)}
 						>
 							Follow
@@ -106,7 +106,7 @@ const MemberMenu = (props: MemberMenuProps) => {
 												<img className={'com-icon'} src={'/img/icons/home.svg'} alt={'com-icon'} />
 											)}
 											<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-												Properties
+												Products
 											</Typography>
 											<Typography className="count-title" variant="subtitle1">
 												{member?.memberProducts}

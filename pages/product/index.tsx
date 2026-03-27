@@ -30,7 +30,7 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 	const [searchFilter, setSearchFilter] = useState<ProductsInquiry>(
 		router?.query?.input ? JSON.parse(router?.query?.input as string) : initialInput,
 	);
-	const [properties, setProperties] = useState<Product[]>([]);
+	const [products, setProducts] = useState<Product[]>([]);
 	const [total, setTotal] = useState<number>(0);
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -40,16 +40,16 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 	/** APOLLO REQUESTS **/
     const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
 	const {
-			loading:getPropertiesLoading,
-			data:getPropertiesData,
-			error:getPropertiesError,
-			refetch: getPropertiesRefetch,
+			loading:getProductsLoading,
+			data:getProductsData,
+			error:getProductsError,
+			refetch: getProductsRefetch,
 		}=useQuery(GET_PRODUCTS, {
 			fetchPolicy:'network-only',
 			variables:{input:searchFilter},
 			notifyOnNetworkStatusChange:true,
 			onCompleted:(data:T)=>{
-				setProperties(data?.getProducts?.list);
+				setProducts(data?.getProducts?.list);
 				setTotal(data?.getProducts?.metaCounter[0]?.total);
 			},
 		});
@@ -66,7 +66,7 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 
 	useEffect(() => {
 		console.log('searchFilter', searchFilter);
-		// getPropertiesRefetch({input:searchFilter}).then(); agar bekenndan kerak bulsa
+		// getProductsRefetch({input:searchFilter}).then(); agar bekenndan kerak bulsa
 	}, [searchFilter]);
 
 	/** HANDLERS **/
@@ -82,7 +82,7 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 		setCurrentPage(value);
 	};
 
-	const likePropertyHandler =async (user:T, id:string) =>{
+	const likeProductHandler =async (user:T, id:string) =>{
 			try {
 				if(!id) return;
 				if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
@@ -90,11 +90,11 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 				await likeTargetProduct({
 					variables:{input:id},
 				});
-				await getPropertiesRefetch({input:initialInput});
+				await getProductsRefetch({input:initialInput});
 				
 				await sweetTopSmallSuccessAlert('success',800);
 			} catch (err:any) {
-				console.log('ERROR, likePropertyHandler', err.message);
+				console.log('ERROR, likeProductHandler', err.message);
 				sweetMixinErrorAlert(err.message).then();
 			}
 		};
@@ -128,10 +128,10 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 	};
 
 	if (device === 'mobile') {
-		return <h1>PROPERTIES MOBILE</h1>;
+		return <h1>PRODUCTS MOBILE</h1>;
 	} else {
 		return (
-			<div id="property-list-page" style={{ position: 'relative' }}>
+			<div id="product-list-page" style={{ position: 'relative' }}>
 				<div className="container">
 					<Box component={'div'} className={'right'}>
 						<span>Sort by</span>
@@ -167,19 +167,19 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 							</Menu>
 						</div>
 					</Box>
-					<Stack className={'property-page'}>
+					<Stack className={'product-page'}>
 						<Stack className={'filter-config'}>
 							{/* @ts-ignore */}
 							<Filter searchFilter={searchFilter} setSearchFilter={setSearchFilter} initialInput={initialInput} />
 						</Stack>
 						<Stack className="main-config" mb={'76px'}>
 							<Stack className={'list-config'}>
-								{(properties?.length > 0 ? properties : MOCK_PRODUCTS).map((property: Product) => (
-									<ProductCard property={property} likePropertyHandler={likePropertyHandler} key={property?._id} />
+								{(products?.length > 0 ? products : MOCK_PRODUCTS).map((product: Product) => (
+									<ProductCard product={product} likeProductHandler={likeProductHandler} key={product?._id} />
 								))}
 							</Stack>
 							<Stack className="pagination-config">
-								{properties.length !== 0 && (
+								{products.length !== 0 && (
 									<Stack className="pagination-box">
 										<Pagination
 											page={currentPage}
@@ -191,7 +191,7 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 									</Stack>
 								)}
 
-								{properties.length !== 0 && (
+								{products.length !== 0 && (
 									<Stack className="total-result">
 										<Typography>
 											Total {total} product{total > 1 ? 's' : ''} available

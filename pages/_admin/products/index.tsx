@@ -19,13 +19,13 @@ import { useMutation, useQuery } from '@apollo/client';
 import { GET_ALL_PRODUCTS_BY_ADMIN } from '../../../apollo/admin/query';
 import { T } from '../../../libs/types/common';
 
-const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
+const AdminProducts: NextPage = ({ initialInquiry, ...props }: any) => {
 	const [anchorEl, setAnchorEl] = useState<[] | HTMLElement[]>([]);
-	const [propertiesInquiry, setProductsInquiry] = useState<AllProductsInquiry>(initialInquiry);
-	const [properties, setProperties] = useState<Product[]>([]);
-	const [propertiesTotal, setPropertiesTotal] = useState<number>(0);
+	const [productsInquiry, setProductsInquiry] = useState<AllProductsInquiry>(initialInquiry);
+	const [products, setProducts] = useState<Product[]>([]);
+	const [productsTotal, setProductsTotal] = useState<number>(0);
 	const [value, setValue] = useState(
-		propertiesInquiry?.search?.productStatus ? propertiesInquiry?.search?.productStatus : 'ALL',
+		productsInquiry?.search?.productStatus ? productsInquiry?.search?.productStatus : 'ALL',
 	);
 	const [searchType, setSearchType] = useState('ALL');
 
@@ -40,31 +40,31 @@ const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
 		refetch: getAllProductsByAdminRefetch,
 	} = useQuery(GET_ALL_PRODUCTS_BY_ADMIN, {
 		fetchPolicy: 'network-only',
-		variables: { input: propertiesInquiry },
+		variables: { input: productsInquiry },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setProperties(data?.getAllProductsByAdmin?.list);
-			setPropertiesTotal(data?.getAllProductsByAdmin?.metaCounter[0]?.total ?? 0);
+			setProducts(data?.getAllProductsByAdmin?.list);
+			setProductsTotal(data?.getAllProductsByAdmin?.metaCounter[0]?.total ?? 0);
 		},
 	});
 
 	/** LIFECYCLES **/
-	useEffect(() => { 
-		getAllProductsByAdminRefetch({ input: propertiesInquiry }).then();
-	}, [propertiesInquiry]);
+	useEffect(() => {
+		getAllProductsByAdminRefetch({ input: productsInquiry }).then();
+	}, [productsInquiry]);
 
 	/** HANDLERS **/
 	const changePageHandler = async (event: unknown, newPage: number) => {
-		propertiesInquiry.page = newPage + 1;
-		await getAllProductsByAdminRefetch({ input: propertiesInquiry });
-		setProductsInquiry({ ...propertiesInquiry });
+		productsInquiry.page = newPage + 1;
+		await getAllProductsByAdminRefetch({ input: productsInquiry });
+		setProductsInquiry({ ...productsInquiry });
 	};
 
 	const changeRowsPerPageHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
-		propertiesInquiry.limit = parseInt(event.target.value, 10);
-		propertiesInquiry.page = 1;
-		await getAllProductsByAdminRefetch({ input: propertiesInquiry });
-		setProductsInquiry({ ...propertiesInquiry });
+		productsInquiry.limit = parseInt(event.target.value, 10);
+		productsInquiry.page = 1;
+		await getAllProductsByAdminRefetch({ input: productsInquiry });
+		setProductsInquiry({ ...productsInquiry });
 	};
 
 	const menuIconClickHandler = (e: any, index: number) => {
@@ -79,35 +79,30 @@ const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
 
 	const tabChangeHandler = async (event: any, newValue: string) => {
 		setValue(newValue);
-
-		setProductsInquiry({ ...propertiesInquiry, page: 1, sort: 'createdAt' });
+		setProductsInquiry({ ...productsInquiry, page: 1, sort: 'createdAt' });
 
 		switch (newValue) {
 			case 'ACTIVE':
-				setProductsInquiry({ ...propertiesInquiry, search: { productStatus: ProductStatus.ACTIVE } });
+				setProductsInquiry({ ...productsInquiry, search: { productStatus: ProductStatus.ACTIVE } });
 				break;
 			case 'SOLD_OUT':
-				setProductsInquiry({ ...propertiesInquiry, search: { productStatus: ProductStatus.SOLD_OUT } });
+				setProductsInquiry({ ...productsInquiry, search: { productStatus: ProductStatus.SOLD_OUT } });
 				break;
 			case 'DELETE':
-				setProductsInquiry({ ...propertiesInquiry, search: { productStatus: ProductStatus.DELETE } });
+				setProductsInquiry({ ...productsInquiry, search: { productStatus: ProductStatus.DELETE } });
 				break;
 			default:
-				delete propertiesInquiry?.search?.productStatus;
-				setProductsInquiry({ ...propertiesInquiry });
+				delete productsInquiry?.search?.productStatus;
+				setProductsInquiry({ ...productsInquiry });
 				break;
 		}
 	};
 
-	const removePropertyHandler = async (id: string) => {
+	const removeProductHandler = async (id: string) => {
 		try {
 			if (await sweetConfirmAlert('Are you sure to remove?')) {
-				await removeProductByAdmin({
-					variables: {
-						input: id,
-					},
-				});
-				await getAllProductsByAdminRefetch({ input: propertiesInquiry });
+				await removeProductByAdmin({ variables: { input: id } });
+				await getAllProductsByAdminRefetch({ input: productsInquiry });
 			}
 			menuIconCloseHandler();
 		} catch (err: any) {
@@ -118,37 +113,30 @@ const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
 	const searchTypeHandler = async (newValue: string) => {
 		try {
 			setSearchType(newValue);
-
 			if (newValue !== 'ALL') {
 				setProductsInquiry({
-					...propertiesInquiry,
+					...productsInquiry,
 					page: 1,
 					sort: 'createdAt',
 					search: {
-						...propertiesInquiry.search,
+						...productsInquiry.search,
 						productCategoryList: [newValue as ProductCategory],
 					},
 				});
 			} else {
-				delete propertiesInquiry?.search?.productCategoryList;
-				setProductsInquiry({ ...propertiesInquiry });
+				delete productsInquiry?.search?.productCategoryList;
+				setProductsInquiry({ ...productsInquiry });
 			}
 		} catch (err: any) {
 			console.log('searchTypeHandler: ', err.message);
 		}
 	};
 
-	const updatePropertyHandler = async (updateData: ProductUpdate) => {
+	const updateProductHandler = async (updateData: ProductUpdate) => {
 		try {
-			console.log('+updateData: ', updateData);
-			await updateProductByAdmin({
-				variables: {
-					input: updateData,
-				},
-			});
-
+			await updateProductByAdmin({ variables: { input: updateData } });
 			menuIconCloseHandler();
-			await getAllProductsByAdminRefetch({ input: propertiesInquiry });
+			await getAllProductsByAdminRefetch({ input: productsInquiry });
 		} catch (err: any) {
 			menuIconCloseHandler();
 			sweetErrorHandling(err).then();
@@ -158,7 +146,7 @@ const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
 	return (
 		<Box component={'div'} className={'content'}>
 			<Typography variant={'h2'} className={'tit'} sx={{ mb: '24px' }}>
-				Property List
+				Product List
 			</Typography>
 			<Box component={'div'} className={'table-wrap'}>
 				<Box component={'div'} sx={{ width: '100%', typography: 'body1' }}>
@@ -182,7 +170,7 @@ const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
 								<ListItem
 									onClick={(e: any) => tabChangeHandler(e, 'SOLD_OUT')}
 									value="SOLD_OUT"
-									className={value === 'SOLD' ? 'li on' : 'li'}
+									className={value === 'SOLD_OUT' ? 'li on' : 'li'}
 								>
 									Sold
 								</ListItem>
@@ -200,9 +188,9 @@ const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
 									<MenuItem value={'ALL'} onClick={() => searchTypeHandler('ALL')}>
 										ALL
 									</MenuItem>
-									{Object.values(ProductCategory).map((location: string) => (
-										<MenuItem value={location} onClick={() => searchTypeHandler(location)} key={location}>
-											{location}
+									{Object.values(ProductCategory).map((category: string) => (
+										<MenuItem value={category} onClick={() => searchTypeHandler(category)} key={category}>
+											{category}
 										</MenuItem>
 									))}
 								</Select>
@@ -210,20 +198,20 @@ const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
 							<Divider />
 						</Box>
 						<ProductPanelList
-							properties={properties}
+							products={products}
 							anchorEl={anchorEl}
 							menuIconClickHandler={menuIconClickHandler}
 							menuIconCloseHandler={menuIconCloseHandler}
-							updatePropertyHandler={updatePropertyHandler}
-							removePropertyHandler={removePropertyHandler}
+							updateProductHandler={updateProductHandler}
+							removeProductHandler={removeProductHandler}
 						/>
 
 						<TablePagination
 							rowsPerPageOptions={[10, 20, 40, 60]}
 							component="div"
-							count={propertiesTotal}
-							rowsPerPage={propertiesInquiry?.limit}
-							page={propertiesInquiry?.page - 1}
+							count={productsTotal}
+							rowsPerPage={productsInquiry?.limit}
+							page={productsInquiry?.page - 1}
 							onPageChange={changePageHandler}
 							onRowsPerPageChange={changeRowsPerPageHandler}
 						/>
@@ -234,7 +222,7 @@ const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
 	);
 };
 
-AdminProperties.defaultProps = {
+AdminProducts.defaultProps = {
 	initialInquiry: {
 		page: 1,
 		limit: 10,
@@ -244,4 +232,4 @@ AdminProperties.defaultProps = {
 	},
 };
 
-export default withAdminLayout(AdminProperties);
+export default withAdminLayout(AdminProducts);

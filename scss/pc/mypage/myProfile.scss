@@ -1,318 +1,228 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// My Profile — Sephora-style
+// ─────────────────────────────────────────────────────────────────────────────
 #pc-wrap {
 	#my-page {
 		#my-profile-page {
 			width: 100%;
-			height: auto;
 			display: flex;
 			flex-direction: column;
-			gap: 20px;
-			.main-title-box {
-				width: auto;
-				height: auto;
+			gap: 28px;
+
+			// ── Page Header ────────────────────────────────────────────────────
+			.mp-header {
+				padding-bottom: 28px;
+				border-bottom: 1px solid #e8e0d8;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.mp-eyebrow {
+				font-family: $font;
+				font-size: 11px;
+				font-weight: 700;
+				letter-spacing: 2.5px;
+				text-transform: uppercase;
+				color: #c9a96e;
+				margin-bottom: 8px;
+			}
+
+			.mp-title {
+				font-family: $font;
+				font-size: 28px;
+				font-weight: 800;
+				color: #1a1a1a;
+				line-height: 1.15;
+				letter-spacing: -0.5px;
+				margin: 0 0 6px;
+			}
+
+			.mp-sub {
+				font-family: $font;
+				font-size: 13px;
+				color: #999;
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			// ── Section card ───────────────────────────────────────────────────
+			.mp-section {
+				background: #fff;
+				border: 1px solid #e8e0d8;
+				border-radius: 4px;
+				padding: 32px 36px;
+				display: flex;
+				flex-direction: column;
+				gap: 24px;
+			}
+
+			.mp-section-head {
+				padding-bottom: 18px;
+				border-bottom: 1px solid #f0ebe4;
+			}
+
+			.mp-section-label {
+				font-family: $font;
+				font-size: 11px;
+				font-weight: 700;
+				letter-spacing: 2px;
+				text-transform: uppercase;
+				color: #1a1a1a;
+			}
+
+			// ── Photo row ──────────────────────────────────────────────────────
+			.mp-photo-row {
+				display: flex;
 				flex-direction: row;
-				justify-content: space-between;
-				.right-box {
-					width: 315px;
-					.main-title {
-						color: #181a20;
-						font-family: $font;
-						font-size: 30px;
-						font-style: normal;
-						font-weight: 600;
-						line-height: normal;
-						letter-spacing: 0.6px;
-						text-transform: capitalize;
-					}
-					.sub-title {
-						color: #181a20;
-						font-family: $font;
-						font-size: 14px;
-						font-style: normal;
-						font-weight: 400;
-						line-height: 26px;
-					}
+				align-items: center;
+				gap: 32px;
+			}
+
+			.mp-avatar-wrap {
+				flex-shrink: 0;
+			}
+
+			.mp-avatar {
+				width: 88px;
+				height: 88px;
+				border-radius: 50%;
+				object-fit: cover;
+				border: 2px solid #e8e0d8;
+				display: block;
+			}
+
+			.mp-upload-wrap {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+
+			.mp-upload-btn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				height: 40px;
+				padding: 0 20px;
+				border: 1px solid #1a1a1a;
+				border-radius: 2px;
+				font-family: $font;
+				font-size: 12px;
+				font-weight: 700;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+				color: #1a1a1a;
+				cursor: pointer;
+				background: #fff;
+				transition: background 0.2s, color 0.2s;
+				width: fit-content;
+
+				&:hover {
+					background: #1a1a1a;
+					color: #fff;
 				}
 			}
-			.top-box {
-				width: 100%;
-				padding: 30px;
-				margin-top: 35px;
-				gap: 25px;
-				border-radius: 12px;
-				border: 1px solid #c4c4c4;
-				background: #F5F2EC;
-				box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
-				.photo-box {
-					gap: 23px;
-					.title {
-						color: #181a20;
-						font-family: $font;
-						font-size: 17px;
-						font-style: normal;
-						font-weight: 600;
-						line-height: normal;
-					}
-					.image-big-box {
-						flex-direction: row;
-						gap: 50px;
-						.image-box {
-							position: relative;
-							width: 194px;
-							height: 157px;
-							img {
-								width: 100%;
-								height: 100%;
-								object-fit: cover;
-								border-radius: 15px;
-								object-fit: cover;
-							}
-							.delete-box {
-								position: absolute;
-								top: 10px;
-								left: 10px;
-								width: 36px;
-								height: 32px;
-								background-color: #F5F2EC;
-								align-items: center;
-								justify-content: center;
-								border-radius: 12px;
-							}
-						}
-						.upload-big-box {
-							align-self: flex-end;
-							gap: 22px;
-							.labeler {
-								display: flex;
-								width: 210.023px;
-								height: 40.135px;
-								justify-content: center;
-								align-items: center;
-								cursor: pointer;
-								border-radius: 12px;
-								border: 1px solid #181a20;
-								p {
-									color: #181a20;
-									font-family: $font;
-									font-size: 13px;
-									font-style: normal;
-									font-weight: 600;
-									line-height: normal;
-								}
-							}
-							.upload-text {
-								color: #181a20;
-								font-family: $font;
-								font-size: 12px;
-								font-style: normal;
-								font-weight: 400;
-								line-height: 26px;
-							}
-						}
-					}
-				}
-				.small-input-box {
-					width: 100%;
-					height: auto;
-					flex-direction: row;
-					flex-wrap: wrap;
-					gap: 30px;
-					.input-box {
-						width: 48%;
-						gap: 10px;
-						.title {
-							color: #181a20;
-							font-family: $font;
-							font-size: 12px;
-							font-style: normal;
-							font-weight: 600;
-							line-height: normal;
-						}
-						input {
-							height: 55px;
-							outline: none;
-							padding: 0px 15px;
-							border-radius: 8px;
-							border: 1px solid #ddd;
-							::placeholder {
-								color: #717171;
-								font-family: $font;
-								font-size: 12px;
-								font-style: normal;
-								font-weight: 400;
-								line-height: 26px;
-							}
-						}
-					}
-				}
-				.address-box {
-					gap: 10px;
-					.title {
-						color: #181a20;
-						font-family: $font;
-						font-size: 12px;
-						font-style: normal;
-						font-weight: 600;
-						line-height: normal;
-					}
-					input {
-						height: 55px;
-						outline: none;
-						padding: 0px 15px;
-						border-radius: 8px;
-						border: 1px solid #ddd;
-						::placeholder {
-							color: #717171;
-							font-family: $font;
-							font-size: 12px;
-							font-style: normal;
-							font-weight: 400;
-							line-height: 26px;
-						}
-					}
-				}
-				.about-me-box {
-					gap: 10px;
-					.title {
-						color: #181a20;
-						font-family: $font;
-						font-size: 12px;
-						font-style: normal;
-						font-weight: 600;
-						line-height: normal;
-					}
-					.about-textarea {
-						height: 170px;
-						padding: 20px 15px;
-						border-radius: 8px;
-						border: 1px solid #ddd;
-						color: #717171;
-						font-family: $font;
-						font-size: 12px;
-						font-style: normal;
-						font-weight: 400;
-						line-height: 26px;
-					}
-					.update-button {
-						display: flex;
-						width: 170px;
-						height: 38px;
-						justify-content: center;
-						align-items: center;
-						gap: 10px;
-						align-self: flex-end;
-						margin-top: 30px;
-						border-radius: 12px;
-						background-color: #000000;
-						p {
-							color: #fff;
-							font-family: $font;
-							font-size: 13px;
-							font-style: normal;
-							font-weight: 600;
-							line-height: normal;
-						}
-					}
-					button:disabled {
-						background: #181a2045;
-					}
+
+			.mp-upload-hint {
+				font-family: $font;
+				font-size: 12px;
+				color: #aaa;
+			}
+
+			// ── Fields ─────────────────────────────────────────────────────────
+			.mp-fields-row {
+				display: flex;
+				flex-direction: row;
+				gap: 24px;
+
+				.mp-field {
+					flex: 1;
 				}
 			}
-			.bottom-box {
-				width: 100%;
-				padding: 30px;
-				gap: 25px;
-				border-radius: 12px;
-				border: 1px solid #c4c4c4;
-				background: #F5F2EC;
-				box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
-				.top-inner-box {
-					gap: 20px;
-					.title {
-						color: #181a20;
-						font-family: $font;
-						font-size: 15px;
-						font-style: normal;
-						font-weight: 600;
-						line-height: normal;
-					}
-					.old-password-box {
-						gap: 10px;
-						.title {
-							color: #181a20;
-							font-family: $font;
-							font-size: 12px;
-							font-style: normal;
-							font-weight: 600;
-							line-height: normal;
-						}
-						input {
-							width: 50%;
-							height: 55px;
-							outline: none;
-							padding: 0px 15px;
-							border-radius: 8px;
-							border: 1px solid #ddd;
-							::placeholder {
-								color: #717171;
-								font-family: $font;
-								font-size: 12px;
-								font-style: normal;
-								font-weight: 400;
-								line-height: 26px;
-							}
-						}
-					}
-				}
-				.bottom-inner-box {
+
+			.mp-field {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+
+				&--full {
 					width: 100%;
-					flex-direction: row;
-					gap: 45px;
-					.new-password-box {
-						width: 100%;
-						gap: 10px;
-						.title {
-							color: #181a20;
-							font-family: $font;
-							font-size: 12px;
-							font-style: normal;
-							font-weight: 600;
-							line-height: normal;
-						}
-						input {
-							height: 55px;
-							outline: none;
-							padding: 0px 15px;
-							border-radius: 8px;
-							border: 1px solid #ddd;
-							::placeholder {
-								color: #717171;
-								font-family: $font;
-								font-size: 12px;
-								font-style: normal;
-								font-weight: 400;
-								line-height: 26px;
-							}
-						}
-					}
 				}
-				.change-password {
-					display: flex;
-					width: 170px;
-					height: 38px;
-					justify-content: center;
-					align-items: center;
-					gap: 10px;
-					align-self: flex-end;
-					margin-top: 18px;
-					border-radius: 12px;
-					background-color: #000000;
-					p {
-						color: #fff;
-						font-family: $font;
-						font-size: 13px;
-						font-style: normal;
-						font-weight: 600;
-						line-height: normal;
+			}
+
+			.mp-label {
+				font-family: $font;
+				font-size: 11px;
+				font-weight: 700;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+				color: #555;
+			}
+
+			.mp-input {
+				height: 48px;
+				padding: 0 16px;
+				border: 1px solid #e8e0d8;
+				border-radius: 2px;
+				font-family: $font;
+				font-size: 14px;
+				color: #1a1a1a;
+				background: #faf8f6;
+				outline: none;
+				transition: border-color 0.2s, background 0.2s;
+
+				&::placeholder {
+					color: #bbb;
+					font-size: 13px;
+				}
+
+				&:focus {
+					border-color: #1a1a1a;
+					background: #fff;
+				}
+			}
+
+			.mp-field-error {
+				font-family: $font;
+				font-size: 12px;
+				color: #c0392b;
+				margin-top: 2px;
+			}
+
+			// ── Actions ────────────────────────────────────────────────────────
+			.mp-actions {
+				display: flex;
+				justify-content: flex-end;
+				padding-top: 8px;
+				border-top: 1px solid #f0ebe4;
+			}
+
+			.mp-btn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				height: 46px;
+				padding: 0 32px;
+				border: none;
+				border-radius: 2px;
+				font-family: $font;
+				font-size: 12px;
+				font-weight: 700;
+				letter-spacing: 1.5px;
+				text-transform: uppercase;
+				cursor: pointer;
+				transition: background 0.2s;
+
+				&--primary {
+					background: #1a1a1a;
+					color: #fff;
+
+					&:hover {
+						background: #333;
+					}
+
+					&:disabled {
+						background: #ccc;
+						cursor: not-allowed;
 					}
 				}
 			}

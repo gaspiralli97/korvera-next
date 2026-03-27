@@ -41,7 +41,7 @@ const MyFavorites: NextPage = () => {
 	const paginationHandler = (e: T, value: number) => {
 		setSearchFavorites({ ...searchFavorites, page: value });
 	};
-	const likePropertyHandler = async (user: any, id: string) => {
+	const likeProductHandler = async (user: any, id: string) => {
 		try {
 			if (!id) return;
 			if (!user?._id) throw new Error(Messages.error2);
@@ -54,7 +54,7 @@ const MyFavorites: NextPage = () => {
 
 			await getFavoritesRefetch({ input: searchFavorites });
 		} catch (err: any) {
-			console.log('ERROR, likePropertyHandler:', err.message);
+			console.log('ERROR, likeProductHandler:', err.message);
 			await sweetMixinErrorAlert(err.message).then();
 		}
 	};
@@ -73,7 +73,7 @@ const MyFavorites: NextPage = () => {
 				<Stack className="favorites-list-box">
 					{myFavorites?.length ? (
 						myFavorites?.map((property: Product) => {
-							return <ProductCard property={property} likePropertyHandler={likePropertyHandler} myFavorites={true} />;
+							return <ProductCard product={property} likeProductHandler={likeProductHandler} myFavorites={true} />;
 						})
 					) : (
 						<div className={'no-data'}>

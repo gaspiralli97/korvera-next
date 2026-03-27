@@ -47,7 +47,7 @@ const ProductTabs = () => {
 	});
 
 	/** HANDLERS **/
-	const likePropertyHandler = async (user:T, id:string) => {
+	const likeProductHandler = async (user:T, id:string) => {
 		try {
 			if(!id) return;
 			if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
@@ -59,7 +59,7 @@ const ProductTabs = () => {
 
 			await sweetTopSmallSuccessAlert('success',800);
 		} catch (err:any) {
-			console.log('ERROR, likePropertyHandler', err.message);
+			console.log('ERROR, likeProductHandler', err.message);
 			sweetMixinErrorAlert(err.message).then();
 		}
 	};
@@ -73,7 +73,7 @@ const ProductTabs = () => {
 	return (
 		<Stack className={'hp-product-tabs'}>
 			<Stack className={'container'}>
-				<Box className={'hp-pt-header'}>
+				<Box component={'div'} className={'hp-pt-header'}>
 					<Typography className={'hp-section-eyebrow'}>Discover</Typography>
 					<Typography className={'hp-section-title'}>Shop by Mood</Typography>
 				</Box>
@@ -107,7 +107,7 @@ const ProductTabs = () => {
 					>
 						{(products.length > 0 ? products : MOCK_PRODUCTS).map((product: Product) => (
 							<SwiperSlide key={product._id} className={'pt-slide'}>
-								<ProductCard property={product} likePropertyHandler={likePropertyHandler} />
+								<ProductCard product={product} likeProductHandler={likeProductHandler} />
 							</SwiperSlide>
 						))}
 					</Swiper>
