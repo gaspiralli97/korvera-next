@@ -9,6 +9,8 @@ import HomepageSkinSolutions from '../libs/components/homepage/HomepageSkinSolut
 import HomepageSocialProof from '../libs/components/homepage/HomepageSocialProof';
 import Events from '../libs/components/homepage/Events';
 import HomepageBrands from '../libs/components/homepage/HomepageBrands';
+import HomepageQuizBanner from '../libs/components/homepage/HomepageQuizBanner';
+import TopAgents from '../libs/components/homepage/TopAgents';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -33,8 +35,10 @@ const Home: NextPage = () => {
 				{/* Hero — rendered in LayoutHome (.header-main) */}
 				<HomepageCategories />
 				<ProductTabs />
+				<HomepageQuizBanner />
 				<HomepageSkinSolutions />
 				<HomepageSocialProof />
+				<TopAgents />
 				<Events />
 				<HomepageBrands />
 			</Stack>

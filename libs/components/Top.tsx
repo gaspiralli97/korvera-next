@@ -154,6 +154,7 @@ const Top = () => {
 				setBgColor(true);
 				break;
 			default:
+				setBgColor(false);
 				break;
 		}
 	}, [router]);
@@ -305,6 +306,7 @@ const Top = () => {
 								<span>AI Beauty</span>
 							</Box>
 							<Link href={'/'}><span className={'nav-text-link'}>Home</span></Link>
+					<Link href={'/community?articleCategory=FREE'}><span className={'nav-text-link'}>Community</span></Link>
 							<Box component={'div'} className={'cs-dropdown-wrap'}
 								onMouseEnter={handleCsEnter}
 								onMouseLeave={handleCsLeave}
@@ -407,7 +409,9 @@ const Top = () => {
 								<span className={'nav-text-link'}>Wishlist</span>
 							</Link>
 
+							<Link href={'/cart'}>
 							<span className={'nav-text-link'}>My cart</span>
+						</Link>
 						</Box>
 					</Stack>
 				</Stack>

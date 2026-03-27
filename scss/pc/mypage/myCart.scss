@@ -1,0 +1,611 @@
+#pc-wrap {
+	#my-cart-page {
+		width: 100%;
+		padding: 40px 0 100px;
+
+		.oy-cart-wrap {
+			width: 100%;
+			gap: 20px;
+		}
+
+		// Page title
+		.oy-cart-title {
+			font-family: $font;
+			font-size: 26px;
+			font-weight: 700;
+			color: #1b1b1b;
+			letter-spacing: 0.2px;
+		}
+
+		// Two-column layout
+		.oy-cart-layout {
+			width: 100%;
+			flex-direction: row;
+			align-items: flex-start;
+			gap: 20px;
+		}
+
+		// ─── LEFT column ───────────────────────────────
+		.oy-cart-left {
+			flex: 1;
+			gap: 12px;
+			min-width: 0;
+		}
+
+		// Shipping bar
+		.oy-ship-bar {
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			padding: 14px 18px;
+			border: 1px solid #e8e8e8;
+			border-radius: 10px;
+			background: #fafafa;
+
+			.oy-ship-left {
+				flex-direction: row;
+				align-items: center;
+				gap: 10px;
+
+				.oy-flag {
+					font-size: 22px;
+					line-height: 1;
+				}
+
+				.oy-ship-text {
+					font-family: $font;
+					font-size: 14px;
+					font-weight: 500;
+					color: #1b1b1b;
+				}
+			}
+
+			.oy-change-btn {
+				min-width: auto;
+				padding: 0;
+				color: #555;
+				font-family: $font;
+				font-size: 13px;
+				font-weight: 500;
+				text-decoration: underline;
+				background: none;
+
+				&:hover {
+					background: none;
+					color: #111;
+				}
+			}
+		}
+
+		// Progress bar
+		.oy-progress-wrap {
+			gap: 8px;
+			padding: 0 2px;
+
+			.oy-progress-label {
+				font-family: $font;
+				font-size: 13px;
+				font-weight: 400;
+				color: #2d2d2d;
+			}
+
+			.oy-progress-track {
+				position: relative;
+				width: 100%;
+				height: 8px;
+				border-radius: 999px;
+				background: #e8f5e9;
+				overflow: hidden;
+			}
+
+			.oy-progress-fill {
+				height: 100%;
+				background: #4caf50;
+				border-radius: 999px;
+				transition: width 0.3s ease;
+			}
+		}
+
+		// Empty state
+		.oy-empty-box {
+			align-items: center;
+			justify-content: center;
+			gap: 12px;
+			padding: 80px 20px;
+			border: 1px solid #eee;
+			border-radius: 12px;
+			background: #fff;
+
+			.oy-empty-title {
+				font-family: $font;
+				font-size: 24px;
+				font-weight: 600;
+				color: #1b1b1b;
+			}
+
+			.oy-empty-sub {
+				font-family: $font;
+				font-size: 14px;
+				font-weight: 400;
+				color: #767676;
+				text-align: center;
+			}
+
+			.oy-shop-btn {
+				margin-top: 8px;
+				height: 46px;
+				padding: 0 32px;
+				border-radius: 10px;
+				background: #161616;
+				color: #fff;
+				font-family: $font;
+				font-size: 13px;
+				font-weight: 600;
+				text-transform: none;
+
+				&:hover { background: #000; }
+			}
+		}
+
+		// Items section
+		.oy-items-section {
+			gap: 0;
+		}
+
+		.oy-items-header {
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 2px 12px;
+
+			.oy-items-count {
+				font-family: $font;
+				font-size: 17px;
+				font-weight: 600;
+				color: #1b1b1b;
+			}
+
+			.oy-remove-all-btn {
+				min-width: auto;
+				padding: 0;
+				background: none;
+				color: #767676;
+				font-family: $font;
+				font-size: 13px;
+				font-weight: 500;
+				text-decoration: underline;
+				text-transform: none;
+
+				&:hover {
+					background: none;
+					color: #333;
+				}
+			}
+		}
+
+		// Items list
+		.oy-items-list {
+			border: 1px solid #e8e8e8;
+			border-radius: 12px;
+			overflow: hidden;
+			background: #fff;
+		}
+
+		// Single item
+		.oy-item {
+			position: relative;
+			flex-direction: row;
+			align-items: flex-start;
+			gap: 14px;
+			padding: 20px 16px;
+			border-bottom: 1px solid #f2f2f2;
+
+			&:last-child {
+				border-bottom: none;
+			}
+
+			// Heart button
+			.oy-wish-btn {
+				position: absolute;
+				top: 16px;
+				right: 16px;
+				background: none;
+				border: none;
+				cursor: pointer;
+				padding: 4px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				&:hover svg {
+					color: #e75480 !important;
+				}
+			}
+
+			// Product image
+			.oy-item-thumb {
+				width: 90px;
+				height: 110px;
+				flex-shrink: 0;
+				border: 1px solid #f0f0f0;
+				border-radius: 8px;
+				overflow: hidden;
+				background: #f7f7f7;
+
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+			}
+
+			// Product info
+			.oy-item-info {
+				flex: 1;
+				gap: 14px;
+				padding-right: 28px;
+
+				.oy-item-top-row {
+					flex-direction: row;
+					align-items: flex-start;
+					justify-content: space-between;
+					gap: 12px;
+				}
+
+				.oy-item-name-col {
+					flex: 1;
+					gap: 4px;
+				}
+
+				.oy-item-brand {
+					font-family: $font;
+					font-size: 12px;
+					font-weight: 700;
+					color: #1b1b1b;
+					text-transform: uppercase;
+					letter-spacing: 0.6px;
+				}
+
+				.oy-item-title {
+					font-family: $font;
+					font-size: 14px;
+					font-weight: 400;
+					color: #1b1b1b;
+					line-height: 1.4;
+				}
+
+				.oy-item-size {
+					font-family: $font;
+					font-size: 12px;
+					font-weight: 400;
+					color: #767676;
+					margin-top: 2px;
+				}
+
+				.oy-item-price {
+					font-family: $font;
+					font-size: 15px;
+					font-weight: 700;
+					color: #1b1b1b;
+					white-space: nowrap;
+				}
+
+				.oy-item-bottom-row {
+					flex-direction: row;
+					align-items: center;
+					justify-content: space-between;
+				}
+
+				// Qty control
+				.oy-qty-box {
+					flex-direction: row;
+					align-items: center;
+					border: 1px solid #ddd;
+					border-radius: 6px;
+					overflow: hidden;
+					background: #fafafa;
+					width: fit-content;
+
+					.oy-qty-btn {
+						width: 36px;
+						height: 34px;
+						background: none;
+						border: none;
+						cursor: pointer;
+						font-size: 17px;
+						color: #1b1b1b;
+						font-family: $font;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+
+						&:hover {
+							background: #f0f0f0;
+						}
+					}
+
+					.oy-qty-val {
+						width: 38px;
+						text-align: center;
+						font-family: $font;
+						font-size: 14px;
+						font-weight: 600;
+						color: #1b1b1b;
+						border-left: 1px solid #ddd;
+						border-right: 1px solid #ddd;
+						padding: 4px 0;
+					}
+				}
+
+				.oy-remove-btn {
+					background: none;
+					border: none;
+					cursor: pointer;
+					font-family: $font;
+					font-size: 12px;
+					font-weight: 500;
+					color: #767676;
+					text-decoration: underline;
+					padding: 0;
+
+					&:hover {
+						color: #e74c3c;
+					}
+				}
+			}
+		}
+
+		// ─── RIGHT column ──────────────────────────────
+		.oy-cart-right {
+			width: 350px;
+			flex-shrink: 0;
+			gap: 12px;
+			position: sticky;
+			top: 100px;
+		}
+
+		// Promos & Offers card
+		.oy-promo-card {
+			border: 1px solid #e8e8e8;
+			border-radius: 12px;
+			padding: 18px;
+			background: #fff;
+			gap: 14px;
+
+			.oy-promo-card-header {
+				flex-direction: row;
+				align-items: center;
+				justify-content: space-between;
+
+				.oy-promo-card-title {
+					font-family: $font;
+					font-size: 15px;
+					font-weight: 700;
+					color: #1b1b1b;
+				}
+
+				.oy-more-btn {
+					min-width: auto;
+					padding: 0;
+					background: none;
+					color: #767676;
+					font-family: $font;
+					font-size: 13px;
+					font-weight: 500;
+					text-transform: none;
+
+					&:hover { background: none; color: #333; }
+				}
+			}
+
+			.oy-promo-row-item {
+				flex-direction: row;
+				align-items: center;
+				justify-content: space-between;
+				gap: 8px;
+
+				.oy-promo-row-label {
+					font-family: $font;
+					font-size: 13px;
+					font-weight: 600;
+					color: #1b1b1b;
+				}
+
+				.oy-promo-row-value {
+					font-family: $font;
+					font-size: 13px;
+					font-weight: 600;
+					color: #1b1b1b;
+				}
+
+				.oy-sign-in-link {
+					font-family: $font;
+					font-size: 12px;
+					font-weight: 400;
+					color: #767676;
+					text-decoration: underline;
+					cursor: pointer;
+				}
+			}
+
+			.oy-promo-input-row {
+				flex-direction: row;
+				align-items: center;
+				gap: 8px;
+
+				.oy-promo-input {
+					flex: 1;
+					height: 42px;
+					padding: 0 12px;
+					border: 1px solid #ddd;
+					border-radius: 8px;
+					background: #fff;
+					outline: none;
+					font-family: $font;
+					font-size: 13px;
+					color: #1b1b1b;
+
+					&::placeholder {
+						color: #aaa;
+					}
+
+					&:focus {
+						border-color: #1b1b1b;
+					}
+				}
+
+				.oy-apply-btn {
+					height: 42px;
+					padding: 0 18px;
+					border-radius: 8px;
+					background: #1b1b1b;
+					color: #fff;
+					font-family: $font;
+					font-size: 13px;
+					font-weight: 600;
+					text-transform: none;
+
+					&:hover { background: #000; }
+				}
+			}
+		}
+
+		// Order Preview card
+		.oy-order-card {
+			border: 1px solid #e8e8e8;
+			border-radius: 12px;
+			padding: 18px;
+			background: #fff;
+			gap: 10px;
+
+			.oy-order-title {
+				font-family: $font;
+				font-size: 16px;
+				font-weight: 700;
+				color: #1b1b1b;
+				margin-bottom: 2px;
+			}
+
+			.oy-order-row {
+				flex-direction: row;
+				align-items: center;
+				justify-content: space-between;
+
+				.oy-order-label {
+					font-family: $font;
+					font-size: 13px;
+					font-weight: 400;
+					color: #555;
+
+					&.oy-underline {
+						text-decoration: underline;
+						cursor: pointer;
+					}
+				}
+
+				.oy-order-value {
+					font-family: $font;
+					font-size: 13px;
+					font-weight: 500;
+					color: #1b1b1b;
+
+					&.oy-discount {
+						color: #e74c3c;
+					}
+
+					&.oy-orange {
+						color: #e08020;
+					}
+				}
+			}
+
+			.oy-total-row {
+				align-items: center;
+				margin-top: 4px;
+
+				.oy-total-label {
+					font-family: $font;
+					font-size: 15px;
+					font-weight: 700;
+					color: #1b1b1b;
+				}
+
+				.oy-total-items {
+					font-family: $font;
+					font-size: 12px;
+					font-weight: 400;
+					color: #767676;
+				}
+
+				.oy-total-value {
+					font-family: $font;
+					font-size: 17px;
+					font-weight: 700;
+					color: #1b1b1b;
+				}
+			}
+		}
+
+		// Checkout button
+		.oy-checkout-btn {
+			width: 100%;
+			height: 52px;
+			border-radius: 10px;
+			background: #1b1b1b;
+			color: #fff;
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 700;
+			letter-spacing: 0.6px;
+			text-transform: none;
+
+			&:hover { background: #000; }
+		}
+
+		// Currency note
+		.oy-currency-note {
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 400;
+			color: #999;
+			line-height: 1.6;
+			padding: 0 2px;
+		}
+
+		// Payment methods
+		.oy-payments-wrap {
+			gap: 10px;
+			padding: 0 2px;
+
+			.oy-payments-title {
+				font-family: $font;
+				font-size: 13px;
+				font-weight: 600;
+				color: #1b1b1b;
+			}
+
+			.oy-payments-icons {
+				flex-direction: row;
+				flex-wrap: wrap;
+				gap: 6px;
+			}
+
+			.oy-pay-badge {
+				border: 1px solid #e6e6e6;
+				border-radius: 6px;
+				background: #fff;
+				overflow: hidden;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				img {
+					width: 50px;
+					height: 32px;
+					object-fit: contain;
+					display: block;
+				}
+			}
+		}
+	}
+}

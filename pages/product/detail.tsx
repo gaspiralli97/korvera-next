@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutFull from '../../libs/components/layout/LayoutFull';
@@ -17,7 +17,7 @@ import { Product } from '../../libs/types/product/product';
 import moment from 'moment';
 import { formatterStr } from '../../libs/utils';
 import { REACT_APP_API_URL } from '../../libs/config';
-import { userVar } from '../../apollo/store';
+import { userVar, cartVar, saveCart, CartItem } from '../../apollo/store';
 import { CommentInput, CommentsInquiry } from '../../libs/types/comment/comment.input';
 import { Comment } from '../../libs/types/comment/comment';
 import { CommentGroup } from '../../libs/enums/comment.enum';
@@ -63,17 +63,23 @@ const RatingStars = ({ rating, size = 18 }: { rating: number; size?: number }) =
 	);
 };
 
-const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
+const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
 	const [productId, setProductId] = useState<string | null>(null);
-	const [property, setProperty] = useState<Product | null>(null);
+	const [product, setProduct] = useState<Product | null>(null);
 	const [slideImage, setSlideImage] = useState<string>('');
-	const [destinationProperties, setDestinationProperties] = useState<Product[]>([]);
+	const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 	const [activeTab, setActiveTab] = useState<'description' | 'ingredients' | 'reviews'>('description');
 	const [activeSize, setActiveSize] = useState<number>(1);
 	const [qty, setQty] = useState<number>(1);
+	const [isZooming, setIsZooming] = useState(false);
+	const [lensPos, setLensPos] = useState({ x: 0, y: 0 });
+	const [zoomBg, setZoomBg] = useState({ x: 0, y: 0 });
+	const [panelPos, setPanelPos] = useState({ left: 0, top: 0 });
+	const imgRef = useRef<HTMLDivElement>(null);
+	const heroRef = useRef<HTMLDivElement>(null);
 	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
 	const [productComments, setProductComments] = useState<Comment[]>([]);
 	const [commentTotal, setCommentTotal] = useState<number>(0);
@@ -98,7 +104,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 		skip: !productId,
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			if (data?.getProduct) setProperty(data?.getProduct);
+			if (data?.getProduct) setProduct(data?.getProduct);
 			if (data?.getProduct) setSlideImage(data?.getProduct?.productImages[0]);
 		},
 	});
@@ -117,14 +123,14 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 				sort: 'createdAt',
 				direction: Direction.DESC,
 				search: {
-					categoryList: property?.productCategory ? [property?.productCategory] : [],
+					categoryList: product?.productCategory ? [product?.productCategory] : [],
 				},
 			},
 		},
-		skip: !productId && !property,
+		skip: !productId && !product,
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			if (data?.getProducts?.list) setDestinationProperties(data?.getProducts?.list);
+			if (data?.getProducts?.list) setRelatedProducts(data?.getProducts?.list);
 		},
 	});
 
@@ -170,11 +176,31 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 	}, [commentInquiry]);
 
 	/** HANDLERS **/
+	const LENS_SIZE = 100;
+
+	const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+		const rect = imgRef.current?.getBoundingClientRect();
+		if (!rect) return;
+		const rawX = e.clientX - rect.left;
+		const rawY = e.clientY - rect.top;
+		const x = Math.max(0, Math.min(rawX - LENS_SIZE / 2, rect.width - LENS_SIZE));
+		const y = Math.max(0, Math.min(rawY - LENS_SIZE / 2, rect.height - LENS_SIZE));
+		setLensPos({ x, y });
+		const bgX = rect.width === LENS_SIZE ? 0 : (x / (rect.width - LENS_SIZE)) * 100;
+		const bgY = rect.height === LENS_SIZE ? 0 : (y / (rect.height - LENS_SIZE)) * 100;
+		setZoomBg({ x: bgX, y: bgY });
+		// Position relative to pdp-hero so panel scrolls with page
+		const heroRect = heroRef.current?.getBoundingClientRect();
+		if (heroRect) {
+			setPanelPos({ left: rect.right - heroRect.left + 16, top: rect.top - heroRect.top });
+		}
+	};
+
 	const changeImageHandler = (image: string) => {
 		setSlideImage(image);
 	};
 
-	const likePropertyHandler = async (user: T, id: string) => {
+	const likeProductHandler = async (user: T, id: string) => {
 		try {
 			if (!id) return;
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
@@ -187,15 +213,41 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 					sort: 'createdAt',
 					direction: Direction.DESC,
 					search: {
-						categoryList: [property?.productCategory],
+						categoryList: [product?.productCategory],
 					},
 				},
 			});
 			await sweetTopSmallSuccessAlert('success', 800);
 		} catch (err: any) {
-			console.log('ERROR, likePropertyHandler', err.message);
+			console.log('ERROR, likeProductHandler', err.message);
 			sweetMixinErrorAlert(err.message).then();
 		}
+	};
+
+	const addToCartHandler = () => {
+		const newItem: CartItem = {
+			productId: product?._id ?? '',
+			productTitle: product?.productTitle ?? '',
+			productBrand: product?.productBrand ?? '',
+			productPrice: sizes[activeSize].price,
+			productImage: product?.productImages?.[0] ?? '',
+			qty,
+			size: sizes[activeSize].label,
+		};
+		const current = cartVar();
+		const existing = current.findIndex((i) => i.productId === newItem.productId && i.size === newItem.size);
+		let updated: CartItem[];
+		if (existing >= 0) {
+			updated = current.map((item, idx) =>
+				idx === existing ? { ...item, qty: item.qty + qty } : item,
+			);
+		} else {
+			updated = [...current, newItem];
+		}
+		cartVar(updated);
+		saveCart(updated);
+		sweetTopSmallSuccessAlert('Added to basket!', 800);
+		setTimeout(() => router.push('/cart'), 800);
 	};
 
 	const commentPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
@@ -226,9 +278,9 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 		return <div>PRODUCT DETAIL PAGE</div>;
 	} else {
 		const sizes = [
-			{ label: `${Math.round((property?.productVolume ?? 30) * 0.33)} mL`, price: Math.round((property?.productPrice ?? 0) * 0.55) },
-			{ label: `${property?.productVolume ?? 90} mL`, price: property?.productPrice ?? 0 },
-			{ label: `${Math.round((property?.productVolume ?? 90) * 2)} mL`, price: Math.round((property?.productPrice ?? 0) * 1.8) },
+			{ label: `${Math.round((product?.productVolume ?? 30) * 0.33)} mL`, price: Math.round((product?.productPrice ?? 0) * 0.55) },
+			{ label: `${product?.productVolume ?? 90} mL`, price: product?.productPrice ?? 0 },
+			{ label: `${Math.round((product?.productVolume ?? 90) * 2)} mL`, price: Math.round((product?.productPrice ?? 0) * 1.8) },
 		];
 		return (
 			<div id={'product-detail-ui-page'}>
@@ -238,13 +290,13 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 						{/* ══════════════════════════════════════════════════
 						    1. HERO — gallery (left) + info (right)
 						══════════════════════════════════════════════════ */}
-						<Stack className={'pdp-hero'}>
+						<Stack ref={heroRef} className={'pdp-hero'}>
 
 							{/* LEFT — gallery */}
 							<Stack className={'pdp-gallery'}>
 								{/* Thumbnail strip */}
 								<Stack className={'pdp-thumbs'}>
-									{(property?.productImages ?? []).map((img: string, idx: number) => (
+									{(product?.productImages ?? []).map((img: string, idx: number) => (
 										<button
 											key={idx}
 											className={`pdp-thumb${slideImage === img ? ' active' : ''}`}
@@ -255,41 +307,66 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 									))}
 								</Stack>
 
-								{/* Main image */}
-								<Stack className={'pdp-main-img'}>
-									<img
-										src={slideImage ? (slideImage.startsWith('/') ? slideImage : `${REACT_APP_API_URL}/${slideImage}`) : '/img/product/bigImage.png'}
-										alt={'product'}
-									/>
-									<Box className={'pdp-img-badge'}>NEW</Box>
+								{/* Main image + magnifier lens */}
+								<Stack
+									ref={imgRef}
+									className={'pdp-main-img-wrap'}
+									onMouseEnter={() => setIsZooming(true)}
+									onMouseLeave={() => setIsZooming(false)}
+									onMouseMove={handleMouseMove}
+								>
+									<Stack className={'pdp-main-img'}>
+										<img
+											src={slideImage ? (slideImage.startsWith('/') ? slideImage : `${REACT_APP_API_URL}/${slideImage}`) : '/img/product/bigImage.png'}
+											alt={'product'}
+										/>
+										<Box className={'pdp-img-badge'}>NEW</Box>
+										{/* Lens inside overflow:hidden so box-shadow clips to image bounds */}
+										{isZooming && (
+											<div className={'pdp-zoom-lens'} style={{ left: lensPos.x, top: lensPos.y }} />
+										)}
+									</Stack>
 								</Stack>
+
+								{/* Zoom panel — fixed so scroll doesn't move it */}
+								{isZooming && (
+									<div
+										className={'pdp-zoom-panel'}
+										style={{
+											backgroundImage: `url(${slideImage ? (slideImage.startsWith('/') ? slideImage : `${REACT_APP_API_URL}/${slideImage}`) : '/img/product/bigImage.png'})`,
+											backgroundPosition: `${zoomBg.x}% ${zoomBg.y}%`,
+											left: panelPos.left,
+											top: panelPos.top,
+										}}
+									/>
+								)}
 							</Stack>
 
 							{/* RIGHT — info panel */}
 							<Stack className={'pdp-info'}>
 
 								{/* Brand */}
-								<Typography className={'pdp-brand'}>{property?.productBrand}</Typography>
+								<Typography className={'pdp-brand'}>{product?.productBrand}</Typography>
 
 								{/* Title */}
-								<Typography className={'pdp-title'}>{property?.productTitle}</Typography>
+								<Typography className={'pdp-title'}>{product?.productTitle}</Typography>
 
 								{/* Rating row */}
 								<Stack className={'pdp-rating-row'}>
-									<RatingStars rating={property?.productRating ?? 0} />
-									<Typography className={'pdp-rating-score'}>{property?.productRating ?? 0}</Typography>
-									<Typography className={'pdp-rating-count'}>{(property?.productRatingCount ?? 0).toLocaleString()} reviews</Typography>
+									<RatingStars rating={product?.productRating ?? 0} />
+									<Typography className={'pdp-rating-score'}>{product?.productRating ?? 0}</Typography>
+									<Typography className={'pdp-rating-count'}>{(product?.productRatingCount ?? 0).toLocaleString()} reviews</Typography>
 									<span className={'pdp-sep'}>·</span>
 									<Stack className={'pdp-likes'}>
 										<FavoriteBorderIcon sx={{ fontSize: 14, color: '#D4849A' }} />
-										<Typography>{(property?.productLikes ?? 0).toLocaleString()}</Typography>
+										<Typography>{(product?.productLikes ?? 0).toLocaleString()}</Typography>
 									</Stack>
 								</Stack>
 
 								{/* Skin type praise */}
 								<Stack className={'pdp-praise'}>
 									<Typography className={'pdp-praise-text'}>
-										Best for: <span>{(property?.productSkinType ?? []).join(', ')}</span>
+										Best for: <span>{(product?.productSkinType ?? []).join(', ')}</span>
 									</Typography>
 								</Stack>
 
@@ -358,17 +435,17 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 									</Stack>
 
 									{/* Add to cart */}
-									<Button className={'pdp-add-btn'} disableRipple>
+									<Button className={'pdp-add-btn'} disableRipple onClick={addToCartHandler}>
 										<Box className={'pdp-add-icon'}>🛒</Box>
 										Add to Basket
 									</Button>
 
 									{/* Wishlist */}
 									<button
-										className={`pdp-wish-btn${property?.meLiked?.[0]?.myFavorite ? ' active' : ''}`}
-										onClick={() => likePropertyHandler(user, property?._id as string)}
+										className={`pdp-wish-btn${product?.meLiked?.[0]?.myFavorite ? ' active' : ''}`}
+										onClick={() => likeProductHandler(user, product?._id as string)}
 									>
-										{property?.meLiked?.[0]?.myFavorite
+										{product?.meLiked?.[0]?.myFavorite
 											? <FavoriteIcon sx={{ fontSize: 22 }} />
 											: <FavoriteBorderIcon sx={{ fontSize: 22 }} />}
 									</button>
@@ -378,11 +455,11 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 								<Stack className={'pdp-meta-row'}>
 									<Stack className={'pdp-views'}>
 										<RemoveRedEyeIcon sx={{ fontSize: 14 }} />
-										<Typography>{(property?.productViews ?? 0).toLocaleString()} views</Typography>
+										<Typography>{(product?.productViews ?? 0).toLocaleString()} views</Typography>
 									</Stack>
 									<Stack className={'pdp-trending'}>
 										<Box className={'pdp-fire'}>🔥</Box>
-										<Typography><strong>{(property?.productViews ?? 0).toLocaleString()}+</strong> people viewed this today</Typography>
+										<Typography><strong>{(product?.productViews ?? 0).toLocaleString()}+</strong> people viewed this today</Typography>
 									</Stack>
 								</Stack>
 
@@ -435,17 +512,17 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 								<Stack className={'pdp-tab-panel'}>
 									<Stack className={'pdp-desc-block'}>
 										<Typography className={'pdp-section-title'}>About This Product</Typography>
-										<Typography className={'pdp-desc-text'}>{property?.productDesc ?? 'No description available.'}</Typography>
+										<Typography className={'pdp-desc-text'}>{product?.productDesc ?? 'No description available.'}</Typography>
 									</Stack>
 
 									<Stack className={'pdp-details-table'}>
 										<Typography className={'pdp-section-title'}>Product Details</Typography>
 										<Stack className={'pdp-table-grid'}>
 											{[
-												{ label: 'Brand', val: property?.productBrand },
-												{ label: 'Category', val: property?.productCategory },
-												{ label: 'Volume', val: `${property?.productVolume ?? 0} mL` },
-												{ label: 'Skin Type', val: (property?.productSkinType ?? []).join(', ') },
+												{ label: 'Brand', val: product?.productBrand },
+												{ label: 'Category', val: product?.productCategory },
+												{ label: 'Volume', val: `${product?.productVolume ?? 0} mL` },
+												{ label: 'Skin Type', val: (product?.productSkinType ?? []).join(', ') },
 												{ label: 'Best For', val: 'All skin types' },
 												{ label: 'Origin', val: 'South Korea' },
 											].map(({ label, val }) => (
@@ -460,7 +537,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 									<Stack className={'pdp-certs-block'}>
 										<Typography className={'pdp-section-title'}>Certifications</Typography>
 										<Stack className={'pdp-cert-row'}>
-											{(property?.certifications ?? ['DERMATOLOGIST_TESTED', 'CRUELTY_FREE', 'VEGAN', 'PARABEN_FREE']).map((c: string) => (
+											{(product?.certifications ?? ['DERMATOLOGIST_TESTED', 'CRUELTY_FREE', 'VEGAN', 'PARABEN_FREE']).map((c: string) => (
 												<span key={c} className={'pdp-cert-badge'}>
 													{c.replace(/_/g, ' ')}
 												</span>
@@ -476,7 +553,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 									<Stack className={'pdp-ing-section'}>
 										<Typography className={'pdp-section-title'}>Key Ingredients</Typography>
 										<Stack className={'pdp-ing-grid'}>
-											{(property?.keyIngredients ?? []).map((ing: any) => (
+											{(product?.keyIngredients ?? []).map((ing: any) => (
 												<Stack key={ing.name} className={'pdp-ing-card'}>
 													<Stack className={'pdp-ing-header'}>
 														<span className={'pdp-ing-emoji'}>{ing.emoji ?? '🌿'}</span>
@@ -491,7 +568,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 									<Stack className={'pdp-full-ing'}>
 										<Typography className={'pdp-section-title'}>Full Ingredient List</Typography>
 										<Typography className={'pdp-ing-list'}>
-											{Array.isArray(property?.ingredients) ? (property as any).ingredients.join(', ') : ((property as any)?.ingredients ?? 'Not available.')}
+											{Array.isArray(product?.ingredients) ? (product as any).ingredients.join(', ') : ((product as any)?.ingredients ?? 'Not available.')}
 										</Typography>
 									</Stack>
 								</Stack>
@@ -504,8 +581,8 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 									{/* Rating summary */}
 									<Stack className={'pdp-reviews-summary'}>
 										<Stack className={'pdp-avg-block'}>
-											<Typography className={'pdp-avg-num'}>{(property?.productRating ?? 0).toFixed(1)}</Typography>
-											<RatingStars rating={property?.productRating ?? 0} size={24} />
+											<Typography className={'pdp-avg-num'}>{(product?.productRating ?? 0).toFixed(1)}</Typography>
+											<RatingStars rating={product?.productRating ?? 0} size={24} />
 											<Typography className={'pdp-avg-sub'}>{commentTotal.toLocaleString()} Reviews</Typography>
 										</Stack>
 										<Stack className={'pdp-rating-bars'}>
@@ -616,12 +693,12 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 						{/* ══════════════════════════════════════════════════
 						    4. RECOMMENDED PRODUCTS — horizontal scroll
 						══════════════════════════════════════════════════ */}
-						{destinationProperties.length !== 0 && (
+						{relatedProducts.length !== 0 && (
 							<Stack className={'pdp-recommended'}>
 								<Stack className={'pdp-rec-head'}>
 									<Stack className={'pdp-rec-titles'}>
 										<Typography className={'pdp-rec-title'}>You May Also Like</Typography>
-										<Typography className={'pdp-rec-sub'}>Curated picks in {property?.productCategory}</Typography>
+										<Typography className={'pdp-rec-sub'}>Curated picks in {product?.productCategory}</Typography>
 									</Stack>
 									<Stack className={'pdp-rec-arrows'}>
 										<WestIcon className={'pdp-rec-prev'} />
@@ -630,7 +707,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 								</Stack>
 
 								<Stack className={'pdp-rec-scroll'}>
-									{destinationProperties.map((item: Product) => (
+									{relatedProducts.map((item: Product) => (
 										<Stack key={item._id} className={'pdp-rec-card'}>
 											<Link href={{ pathname: '/product/detail', query: { id: item._id } }}>
 												<Stack className={'pdp-rec-img-wrap'}>
@@ -641,7 +718,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 													/>
 													<button
 														className={'pdp-rec-wish'}
-														onClick={(e) => { e.preventDefault(); likePropertyHandler(user, item._id); }}
+														onClick={(e) => { e.preventDefault(); likeProductHandler(user, item._id); }}
 													>
 														{item.meLiked?.[0]?.myFavorite
 															? <FavoriteIcon sx={{ fontSize: 16, color: '#e75480' }} />
@@ -671,9 +748,9 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 	}
 };
 
-export default PropertyDetail;
+export default withLayoutFull(ProductDetail);
 
-PropertyDetail.defaultProps = {
+ProductDetail.defaultProps = {
 	initialComment: {
 		page: 1,
 		limit: 5,

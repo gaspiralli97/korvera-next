@@ -1,185 +1,305 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Community Page — Sephora-style
+// ─────────────────────────────────────────────────────────────────────────────
 #pc-wrap {
 	#community-list-page {
-		position: relative;
-		.container {
-			padding-top: 100px;
+		background: #faf8f6;
+		min-height: 100vh;
+		padding-bottom: 80px;
+
+		.comm-container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 40px;
+			box-sizing: border-box;
+		}
+
+		// ── Page Header ────────────────────────────────────────────────────────
+		.comm-header {
+			display: flex;
+			flex-direction: row;
+			align-items: flex-end;
+			justify-content: space-between;
+			padding: 72px 0 48px;
+			border-bottom: 1px solid #e8e0d8;
+		}
+
+		.comm-header-left {
+			display: flex;
 			flex-direction: column;
-			gap: 64px;
-			.main-box {
-				flex-direction: row;
-				gap: 31px;
-				.left-config {
-					width: 266px;
-					height: fit-content;
-					gap: 30px;
-					padding: 30px 15px 57px 21px;
-					margin-top: 100px;
-					margin-bottom: 50px;
-					border-radius: 12px;
-					border: 1px solid rgba(196, 196, 196, 0.79);
-					background: #F5F2EC;
-					box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
-					.image-info {
-						width: 100%;
-						flex-direction: row;
-						gap: 11px;
-						img {
-							width: 80px;
-							height: 80px;
-							border-radius: 50%;
-							object-fit: cover;
-						}
-						.community-name {
-							.name {
-								margin-top: 15px;
-								color: #181a20;
-								font-family: $font;
-								font-size: 15px;
-								font-style: normal;
-								font-weight: 600;
-								line-height: normal;
-							}
-						}
-					}
-					.tab-button {
-						width: 216.612px;
-						height: 36px;
-						padding: 0;
-						justify-content: center;
-						align-items: center;
-						border-radius: 6px;
-						border: 1px solid #181a20;
-						margin-bottom: 10px;
-						color: #181a20;
-						font-family: $font;
-						font-size: 14px;
-						font-style: normal;
-						font-weight: 500;
-						line-height: 150%;
-						letter-spacing: -0.266px;
-					}
-					.tab-button.active {
-						width: 216.612px;
-						height: 36px;
-						padding: 0;
-						justify-content: center;
-						align-items: center;
-						background-color: #000000;
-						color: #ffffff;
-						border-radius: 6px;
-						margin-bottom: 10px;
-						font-family: $font;
-						font-size: 14px;
-						font-style: normal;
-						font-weight: 500;
-						line-height: 150%;
-						letter-spacing: -0.266px;
-					}
-				}
-				.right-config {
-					width: 100%;
-					height: auto;
-					.panel-config {
-						width: 100%;
-						height: auto;
-						.title-box {
-							width: 100%;
-							height: auto;
-							flex-direction: row;
-							justify-content: space-between;
-							align-items: center;
-							margin-bottom: 45px;
-							.left {
-								width: 60%;
-								height: auto;
-								.title {
-									color: #000;
-									font-family: $font;
-									font-size: 24px;
-									font-style: normal;
-									font-weight: 600;
-									line-height: normal;
-									letter-spacing: 0.24px;
-								}
-								.sub-title {
-									color: #757575;
-									font-family: $font;
-									font-size: 13px;
-									font-style: normal;
-									font-weight: 700;
-									line-height: normal;
-									letter-spacing: 0.325px;
-								}
-							}
-							.right {
-								width: 91px;
-								height: 32px;
-								border-radius: 4px;
-								background: #eb6753;
-								color: #fff;
-								font-family: $font;
-								font-size: 13px;
-								font-style: normal;
-								font-weight: 500;
-								line-height: normal;
-								letter-spacing: 0.39px;
-							}
-						}
-						.list-box {
-							width: 100%;
-							height: auto;
-							flex-direction: row;
-							flex-wrap: wrap;
-							gap: 30px;
-						}
-					}
-				}
+		}
+
+		.comm-eyebrow {
+			display: inline-block;
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 2.5px;
+			text-transform: uppercase;
+			color: #c9a96e;
+			margin-bottom: 10px;
+		}
+
+		.comm-title {
+			font-family: $font;
+			font-size: 44px;
+			font-weight: 800;
+			color: #1a1a1a;
+			line-height: 1.1;
+			letter-spacing: -1px;
+			margin: 0 0 10px;
+		}
+
+		.comm-sub {
+			font-family: $font;
+			font-size: 15px;
+			color: #888;
+			line-height: 1.6;
+			margin: 0;
+		}
+
+		.comm-write-btn {
+			height: 48px !important;
+			padding: 0 28px !important;
+			background: #1a1a1a !important;
+			color: #fff !important;
+			border-radius: 2px !important;
+			font-family: $font !important;
+			font-size: 12px !important;
+			font-weight: 700 !important;
+			letter-spacing: 1.5px;
+			text-transform: uppercase !important;
+			white-space: nowrap;
+			flex-shrink: 0;
+			margin-bottom: 4px;
+			transition: background 0.2s !important;
+
+			&:hover {
+				background: #333 !important;
 			}
-			.similar-articles-config {
-				width: 100%;
-				height: auto;
-				gap: 75px;
-				padding: 30px 9px 28px 9px;
-				border-radius: 10px;
-				border: 1px solid #c4c4c4;
-				.similar-articles-title {
-					padding-left: 56px;
-					color: #000;
-					font-family: $font;
-					font-size: 30px;
-					font-style: normal;
-					font-weight: 600;
-					line-height: normal;
-				}
-				.articles-box-row {
-					width: 100%;
-					height: auto;
-					flex-direction: row;
-					gap: 5px;
-				}
+		}
+
+		// ── Tabs ───────────────────────────────────────────────────────────────
+		.comm-tabs-wrap {
+			padding: 32px 0 0;
+			border-bottom: 1px solid #e8e0d8;
+			margin-bottom: 48px;
+		}
+
+		.comm-tab-list {
+			.MuiTabs-flexContainer {
+				gap: 0;
 			}
-			.pagination-config {
-				width: 100%;
-				align-items: center;
-				justify-content: center;
-				margin-bottom: 50px;
-				gap: 20px;
-				padding-left: 270px;
-				.pagination-box {
-					align-items: center;
-					justify-content: center;
-				}
-				.total-result {
-					p {
-						color: #181a20;
-						text-align: center;
-						font-family: $font;
-						font-size: 14px;
-						font-style: normal;
-						font-weight: 400;
-						line-height: 26px;
-					}
-				}
+		}
+
+		.comm-tab {
+			font-family: $font !important;
+			font-size: 13px !important;
+			font-weight: 600 !important;
+			letter-spacing: 1px;
+			text-transform: uppercase !important;
+			color: #888 !important;
+			padding: 14px 24px !important;
+			min-width: 0 !important;
+			border-bottom: 2px solid transparent;
+			transition: color 0.2s, border-color 0.2s !important;
+
+			&:hover {
+				color: #1a1a1a !important;
+			}
+
+			&--active {
+				color: #1a1a1a !important;
+				border-bottom: 2px solid #1a1a1a !important;
+			}
+		}
+
+		// ── Tab Panel ──────────────────────────────────────────────────────────
+		.comm-panel {
+			padding: 0 !important;
+		}
+
+		// ── Cards Grid ─────────────────────────────────────────────────────────
+		.comm-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 32px;
+		}
+
+		// ── No Data ────────────────────────────────────────────────────────────
+		.comm-no-data {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 80px 0;
+			gap: 16px;
+
+			img {
+				width: 48px;
+				height: 48px;
+				opacity: 0.4;
+			}
+
+			p {
+				font-family: $font;
+				font-size: 15px;
+				color: #aaa;
+			}
+		}
+
+		// ── Pagination ─────────────────────────────────────────────────────────
+		.comm-pagination {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 12px;
+			padding-top: 56px;
+		}
+
+		.comm-total {
+			font-family: $font !important;
+			font-size: 13px !important;
+			color: #aaa !important;
+		}
+	}
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Community Card — Sephora editorial style
+// ─────────────────────────────────────────────────────────────────────────────
+.community-general-card-config {
+	position: relative;
+	background: #fff;
+	border: 1px solid #e8e0d8;
+	border-radius: 4px;
+	overflow: hidden;
+	cursor: pointer;
+	gap: 0;
+	transition: box-shadow 0.25s, transform 0.25s;
+	width: 100% !important;
+
+	&:hover {
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+		transform: translateY(-3px);
+	}
+
+	.image-box {
+		width: 100%;
+		height: 220px;
+		overflow: hidden;
+
+		.card-img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			border-radius: 0;
+			display: block;
+			transition: transform 0.4s ease;
+		}
+	}
+
+	&:hover .image-box .card-img {
+		transform: scale(1.04);
+	}
+
+	.desc-box {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
+		width: 100%;
+		height: auto;
+		padding: 20px 20px 16px;
+		box-sizing: border-box;
+
+		.desc {
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 1.5px;
+			text-transform: uppercase;
+			color: #c9a96e;
+			margin-bottom: 8px;
+			cursor: pointer;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+
+		.title {
+			font-family: $font;
+			font-size: 16px;
+			font-weight: 700;
+			color: #1a1a1a;
+			line-height: 1.45;
+			margin-bottom: 16px;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+		}
+
+		.buttons {
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			gap: 4px;
+			border-top: 1px solid #f0ebe4;
+			padding-top: 12px;
+
+			svg {
+				width: 16px;
+				height: 16px;
+				color: #aaa;
+			}
+
+			.view-cnt {
+				font-family: $font;
+				font-size: 12px;
+				color: #aaa;
+				margin-right: 8px;
+			}
+		}
+	}
+
+	// Date badge — repositioned as a small top-left chip
+	.date-box {
+		position: absolute;
+		top: 14px;
+		left: 14px;
+		width: auto;
+		height: auto;
+		padding: 4px 10px;
+		border-radius: 2px;
+		background: rgba(255, 255, 255, 0.92);
+		backdrop-filter: blur(4px);
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 3px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+		.month {
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 600;
+			color: #1a1a1a;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		.day {
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 700;
+			color: #1a1a1a;
+			p {
+				font-size: 11px;
+				font-weight: 700;
+				color: #1a1a1a;
+				margin: 0;
 			}
 		}
 	}

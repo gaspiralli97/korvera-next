@@ -74,6 +74,21 @@ const withLayoutBasic = (Component: any) => {
 					desc = 'Beauty enthusiast profile';
 					bgImage = '/img/banner/mypage.jpeg';
 					break;
+				case '/cart':
+					title = 'My Basket';
+					desc = 'Review your selected items';
+					bgImage = '/img/banner/mypage.jpeg';
+					break;
+				case '/order':
+					title = 'Place Order';
+					desc = 'Complete your purchase';
+					bgImage = '/img/banner/mypage.jpeg';
+					break;
+				case '/order/success':
+					title = 'Order Confirmed';
+					desc = 'Thank you for shopping with Korvera';
+					bgImage = '/img/banner/mypage.jpeg';
+					break;
 				default:
 					break;
 			}

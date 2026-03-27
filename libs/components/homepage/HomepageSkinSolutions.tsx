@@ -37,7 +37,7 @@ const HomepageSkinSolutions = (props: HomepageSkinSolutionsProps) => {
 	});
 
 	/** HANDLERS **/
-	const likePropertyHandler = async (user:T, id:string) => {
+	const likeProductHandler = async (user:T, id:string) => {
 		try {
 			if(!id) return;
 			if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
@@ -49,7 +49,7 @@ const HomepageSkinSolutions = (props: HomepageSkinSolutionsProps) => {
 
 			await sweetTopSmallSuccessAlert('success',800);
 		} catch (err:any) {
-			console.log('ERROR, likePropertyHandler', err.message);
+			console.log('ERROR, likeProductHandler', err.message);
 			sweetMixinErrorAlert(err.message).then();
 		}
 	};
@@ -88,7 +88,7 @@ const HomepageSkinSolutions = (props: HomepageSkinSolutionsProps) => {
 					>
 						{(products.length > 0 ? products : MOCK_PRODUCTS).map((product: Product) => (
 							<SwiperSlide className={'top-property-slide'} key={product._id}>
-								<ProductCard property={product} likePropertyHandler={likePropertyHandler} />
+								<ProductCard product={product} likeProductHandler={likeProductHandler} />
 							</SwiperSlide>
 						))}
 					</Swiper>

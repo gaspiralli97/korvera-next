@@ -22,43 +22,39 @@ interface TrendProductsProps {
 const TrendProducts = (props: TrendProductsProps) => {
 	const { initialInput } = props;
 	const device = useDeviceDetect();
-	const [trendProperties, setTrendProducts] = useState<Product[]>([]);
+	const [trendProducts, setTrendProducts] = useState<Product[]>([]);
 
 	/** APOLLO REQUESTS **/
 	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
 	const {
-		loading:getPropertiesLoading,
-		data:getPropertiesData,
-		error:getPropertiesError,
-		refetch: getPropertiesRefetch,
-	}=useQuery(GET_PRODUCTS, {
-		fetchPolicy:'cache-and-network',
-		variables:{input:initialInput},
-		notifyOnNetworkStatusChange:true,
-		onCompleted:(data:T)=>{
+		loading: getProductsLoading,
+		data: getProductsData,
+		error: getProductsError,
+		refetch: getProductsRefetch,
+	} = useQuery(GET_PRODUCTS, {
+		fetchPolicy: 'cache-and-network',
+		variables: { input: initialInput },
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: T) => {
 			setTrendProducts(data?.getProducts?.list);
 		},
 	});
-	/** HANDLERS **/
-	const likePropertyHandler =async (user:T, id:string) =>{
-		try {
-			if(!id) return;
-			if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 
-			await likeTargetProduct({
-				variables:{input:id},
-			});
-            await getPropertiesRefetch({input:initialInput});
-			
-			await sweetTopSmallSuccessAlert('success',800);
-		} catch (err:any) {
-			console.log('ERROR, likePropertyHandler', err.message);
+	/** HANDLERS **/
+	const likeProductHandler = async (user: T, id: string) => {
+		try {
+			if (!id) return;
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			await likeTargetProduct({ variables: { input: id } });
+			await getProductsRefetch({ input: initialInput });
+			await sweetTopSmallSuccessAlert('success', 800);
+		} catch (err: any) {
+			console.log('ERROR, likeProductHandler', err.message);
 			sweetMixinErrorAlert(err.message).then();
 		}
 	};
 
-	if (trendProperties) console.log('trendProperties:', trendProperties);
-	if (!trendProperties) return null;
+	if (!trendProducts) return null;
 
 	if (device === 'mobile') {
 		return (
@@ -68,7 +64,7 @@ const TrendProducts = (props: TrendProductsProps) => {
 						<span>Trending Products</span>
 					</Stack>
 					<Stack className={'card-box'}>
-						{trendProperties.length === 0 ? (
+						{trendProducts.length === 0 ? (
 							<Box component={'div'} className={'empty-list'}>
 								Trends Empty
 							</Box>
@@ -80,10 +76,10 @@ const TrendProducts = (props: TrendProductsProps) => {
 								spaceBetween={15}
 								modules={[Autoplay]}
 							>
-								{trendProperties.map((property: Product) => {
+								{trendProducts.map((product: Product) => {
 									return (
-										<SwiperSlide key={property._id} className={'trend-property-slide'}>
-											<TrendProductCard property={property} likePropertyHandler={likePropertyHandler} />
+										<SwiperSlide key={product._id} className={'trend-property-slide'}>
+											<TrendProductCard product={product} likeProductHandler={likeProductHandler} />
 										</SwiperSlide>
 									);
 								})}
@@ -111,7 +107,7 @@ const TrendProducts = (props: TrendProductsProps) => {
 						</Box>
 					</Stack>
 					<Stack className={'card-box'}>
-						{trendProperties.length === 0 ? (
+						{trendProducts.length === 0 ? (
 							<Box component={'div'} className={'empty-list'}>
 								Trends Empty
 							</Box>
@@ -129,10 +125,10 @@ const TrendProducts = (props: TrendProductsProps) => {
 									el: '.swiper-trend-pagination',
 								}}
 							>
-								{trendProperties.map((property: Product) => {
+								{trendProducts.map((product: Product) => {
 									return (
-										<SwiperSlide key={property._id} className={'trend-property-slide'}>
-											<TrendProductCard property={property} likePropertyHandler={likePropertyHandler} />
+										<SwiperSlide key={product._id} className={'trend-property-slide'}>
+											<TrendProductCard product={product} likeProductHandler={likeProductHandler} />
 										</SwiperSlide>
 									);
 								})}

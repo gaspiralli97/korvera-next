@@ -21,7 +21,7 @@ const HomepageBrands = () => {
 			<Stack className={'container'}>
 				<Typography className={'hp-section-eyebrow'}>Featured Brands</Typography>
 				<Typography className={'hp-section-title'}>Korean Beauty, Curated</Typography>
-				<Box className={'hp-brands-grid'}>
+				<Box component={'div'} className={'hp-brands-grid'}>
 					{BRANDS.map((brand) => (
 						<Link key={brand.name} href={`/product?brand=${encodeURIComponent(brand.name)}`}>
 							<Box className={'hp-brand-tile'}>

@@ -30,23 +30,23 @@ const AdminCommunity: NextPage = ({ initialInquiry, ...props }: any) => {
 	const [searchType, setSearchType] = useState('ALL');
 
 	/** APOLLO REQUESTS **/
-   const [updateBoardArticleByAdmin] = useMutation(UPDATE_BOARD_ARTICLE_BY_ADMIN);
-  const [removeBoardArticleByAdmin] = useMutation(REMOVE_BOARD_ARTICLE_BY_ADMIN);
+	const [updateBoardArticleByAdmin] = useMutation(UPDATE_BOARD_ARTICLE_BY_ADMIN);
+	const [removeBoardArticleByAdmin] = useMutation(REMOVE_BOARD_ARTICLE_BY_ADMIN);
 
-  const {
-    loading: getAllBoardArticlesByAdminLoading,
-    data: getAllBoardArticlesByAdminData,
-    error: getAllBoardArticlesByAdminError,
-    refetch: getAllBoardArticlesByAdminRefetch,
-  } = useQuery(GET_ALL_BOARD_ARTICLES_BY_ADMIN, {
-    fetchPolicy: 'network-only',
-    variables: { input: communityInquiry },
-    notifyOnNetworkStatusChange: true,
-    onCompleted: (data: T) => {
-      setArticles(data?.getAllBoardArticlesByAdmin?.list);
-      setArticleTotal(data?.getAllBoardArticlesByAdmin?.metaCounter[0]?.total ?? 0);
-    },
-  });
+	const {
+		loading: getAllBoardArticlesByAdminLoading,
+		data: getAllBoardArticlesByAdminData,
+		error: getAllBoardArticlesByAdminError,
+		refetch: getAllBoardArticlesByAdminRefetch,
+	} = useQuery(GET_ALL_BOARD_ARTICLES_BY_ADMIN, {
+		fetchPolicy: 'network-only',
+		variables: { input: communityInquiry },
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: T) => {
+			setArticles(data?.getAllBoardArticlesByAdmin?.list);
+			setArticleTotal(data?.getAllBoardArticlesByAdmin?.metaCounter[0]?.total ?? 0);
+		},
+	});
 
 	/** LIFECYCLES **/
 	useEffect(() => {
@@ -79,7 +79,6 @@ const AdminCommunity: NextPage = ({ initialInquiry, ...props }: any) => {
 
 	const tabChangeHandler = async (event: any, newValue: string) => {
 		setValue(newValue);
-
 		setCommunityInquiry({ ...communityInquiry, page: 1, sort: 'createdAt' });
 
 		switch (newValue) {
@@ -120,45 +119,34 @@ const AdminCommunity: NextPage = ({ initialInquiry, ...props }: any) => {
 	};
 
 	const updateArticleHandler = async (updateData: BoardArticleUpdate) => {
-    try {
-      console.log('+updateData: ', updateData);
-      await updateBoardArticleByAdmin({
-        variables: {
-          input: updateData,
-        },
-      });
-      await getAllBoardArticlesByAdminRefetch({ input: communityInquiry });
-      menuIconCloseHandler();
-    } catch (err: any) {
-      menuIconCloseHandler();
-      sweetErrorHandling(err).then();
-    }
-  };
-
+		try {
+			await updateBoardArticleByAdmin({
+				variables: { input: updateData },
+			});
+			menuIconCloseHandler();
+			await getAllBoardArticlesByAdminRefetch({ input: communityInquiry });
+		} catch (err: any) {
+			menuIconCloseHandler();
+			sweetErrorHandling(err).then();
+		}
+	};
 
 	const removeArticleHandler = async (id: string) => {
-    try {
-      removeBoardArticleByAdmin({
-        variables: {
-          input: id,
-        }
-      });
-      await getAllBoardArticlesByAdminRefetch({ input: communityInquiry });
-      if (await sweetConfirmAlert('Are you sure to remove?')) {
-      }
-    } catch (err: any) {
-      sweetErrorHandling(err).then();
-    }
-  };
-
-
-	console.log('+communityInquiry', communityInquiry);
-	console.log('+articles', articles);
+		try {
+			if (await sweetConfirmAlert('Are you sure to remove?')) {
+				await removeBoardArticleByAdmin({ variables: { input: id } });
+				await getAllBoardArticlesByAdminRefetch({ input: communityInquiry });
+			}
+			menuIconCloseHandler();
+		} catch (err: any) {
+			sweetErrorHandling(err).then();
+		}
+	};
 
 	return (
 		<Box component={'div'} className={'content'}>
 			<Typography variant={'h2'} className={'tit'} sx={{ mb: '24px' }}>
-				Arricle List
+				Article List
 			</Typography>
 			<Box component={'div'} className={'table-wrap'}>
 				<Box component={'div'} sx={{ width: '100%', typography: 'body1' }}>

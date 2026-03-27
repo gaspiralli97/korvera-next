@@ -1,0 +1,265 @@
+#pc-wrap {
+	#my-order-success-page {
+		width: 100%;
+		padding: 60px 0 100px;
+
+		.os-wrap {
+			width: 100%;
+			gap: 32px;
+		}
+
+		// Header
+		.os-header {
+			align-items: center;
+			gap: 10px;
+
+			.os-check-icon {
+				font-size: 64px;
+				color: #4caf50;
+			}
+
+			.os-title {
+				font-family: $font;
+				font-size: 28px;
+				font-weight: 700;
+				color: #1b1b1b;
+			}
+
+			.os-order-num {
+				font-family: $font;
+				font-size: 14px;
+				font-weight: 600;
+				color: #767676;
+				letter-spacing: 0.4px;
+			}
+
+			.os-sub {
+				font-family: $font;
+				font-size: 14px;
+				font-weight: 400;
+				color: #767676;
+				text-align: center;
+				max-width: 420px;
+				line-height: 1.6;
+			}
+		}
+
+		// Two-column layout
+		.os-layout {
+			flex-direction: row;
+			align-items: flex-start;
+			gap: 20px;
+			width: 100%;
+		}
+
+		// Items card
+		.os-items-card {
+			flex: 1;
+			border: 1px solid #e8e8e8;
+			border-radius: 12px;
+			padding: 20px;
+			background: #fff;
+			gap: 14px;
+			min-width: 0;
+		}
+
+		.os-card-title {
+			font-family: $font;
+			font-size: 16px;
+			font-weight: 700;
+			color: #1b1b1b;
+		}
+
+		.os-items-list {
+			gap: 0;
+		}
+
+		.os-item {
+			flex-direction: row;
+			align-items: center;
+			gap: 12px;
+			padding: 14px 0;
+			border-bottom: 1px solid #f2f2f2;
+
+			&:last-child {
+				border-bottom: none;
+			}
+		}
+
+		.os-item-thumb {
+			width: 70px;
+			height: 88px;
+			flex-shrink: 0;
+			border: 1px solid #f0f0f0;
+			border-radius: 8px;
+			overflow: hidden;
+			background: #f7f7f7;
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+
+		.os-item-info {
+			flex: 1;
+			gap: 3px;
+		}
+
+		.os-item-brand {
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 700;
+			color: #1b1b1b;
+			text-transform: uppercase;
+			letter-spacing: 0.6px;
+		}
+
+		.os-item-title {
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 400;
+			color: #1b1b1b;
+			line-height: 1.4;
+		}
+
+		.os-item-meta {
+			font-family: $font;
+			font-size: 12px;
+			font-weight: 400;
+			color: #767676;
+		}
+
+		.os-item-price {
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 700;
+			color: #1b1b1b;
+			white-space: nowrap;
+		}
+
+		// Totals
+		.os-totals {
+			gap: 8px;
+		}
+
+		.os-total-row {
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.os-total-label {
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 400;
+			color: #555;
+		}
+
+		.os-total-value {
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 500;
+			color: #1b1b1b;
+		}
+
+		.os-grand {
+			.os-grand-label {
+				font-family: $font;
+				font-size: 15px;
+				font-weight: 700;
+				color: #1b1b1b;
+			}
+
+			.os-grand-value {
+				font-family: $font;
+				font-size: 17px;
+				font-weight: 700;
+				color: #1b1b1b;
+			}
+		}
+
+		// Right column
+		.os-right {
+			width: 320px;
+			flex-shrink: 0;
+			gap: 14px;
+			position: sticky;
+			top: 100px;
+		}
+
+		.os-delivery-card {
+			border: 1px solid #e8e8e8;
+			border-radius: 12px;
+			padding: 20px;
+			background: #fff;
+			gap: 8px;
+
+			.os-delivery-date {
+				font-family: $font;
+				font-size: 18px;
+				font-weight: 700;
+				color: #4caf50;
+			}
+
+			.os-delivery-note {
+				font-family: $font;
+				font-size: 12px;
+				font-weight: 400;
+				color: #767676;
+				line-height: 1.6;
+			}
+		}
+
+		.os-actions {
+			gap: 10px;
+		}
+
+		.os-orders-btn {
+			width: 100%;
+			height: 50px;
+			border-radius: 10px;
+			background: #1b1b1b;
+			color: #fff;
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 700;
+			text-transform: none;
+
+			&:hover { background: #000; }
+		}
+
+		.os-shop-btn {
+			width: 100%;
+			height: 44px;
+			border-radius: 10px;
+			background: transparent;
+			color: #767676;
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 500;
+			text-transform: none;
+			border: 1px solid #e8e8e8;
+
+			&:hover {
+				background: #f7f7f7;
+				color: #1b1b1b;
+			}
+		}
+
+		// No order
+		.os-no-order {
+			align-items: center;
+			gap: 16px;
+			padding: 60px 20px;
+
+			.os-no-order-text {
+				font-family: $font;
+				font-size: 16px;
+				font-weight: 400;
+				color: #767676;
+			}
+		}
+	}
+}

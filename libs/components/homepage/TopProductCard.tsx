@@ -11,20 +11,19 @@ import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 
 interface TopProductCardProps {
-	property: Product;
-	likePropertyHandler:any;
+	product: Product;
+	likeProductHandler: any;
 }
 
 const TopProductCard = (props: TopProductCardProps) => {
-	const { property, likePropertyHandler } = props;
+	const { product, likeProductHandler } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
 
 	/** HANDLERS **/
-	const pushDetailHandler = async (propertyId:string) =>{
-        console.log("propertyId", propertyId);
-		await router.push({pathname:'/product/detail', query:{id:propertyId}});
+	const pushDetailHandler = async (productId: string) => {
+		await router.push({ pathname: '/product/detail', query: { id: productId } });
 	};
 
 	if (device === 'mobile') {
@@ -33,44 +32,44 @@ const TopProductCard = (props: TopProductCardProps) => {
 				<Box
 					component={'div'}
 					className={'card-img'}
-					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${property?.productImages[0]})` }}
-					onClick={() =>{pushDetailHandler(property._id);}}
+					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${product?.productImages[0]})` }}
+					onClick={() => pushDetailHandler(product._id)}
 				>
-					<div>${property?.productPrice}</div>
+					<div>${product?.productPrice}</div>
 				</Box>
 				<Box component={'div'} className={'info'}>
-					<strong className={'title'} onClick={() =>{pushDetailHandler(property._id);}}>{property?.productTitle}</strong>
-					<p className={'desc'}>{property?.productBrand}</p>
+					<strong className={'title'} onClick={() => pushDetailHandler(product._id)}>{product?.productTitle}</strong>
+					<p className={'desc'}>{product?.productBrand}</p>
 					<div className={'options'}>
 						<div>
 							<img src="/img/icons/discovery.svg" alt="" />
-							<span>{property?.productCategory}</span>
+							<span>{product?.productCategory}</span>
 						</div>
 						<div>
 							<img src="/img/icons/tune.svg" alt="" />
-							<span>{property?.productSize}</span>
+							<span>{product?.productSize}</span>
 						</div>
 						<div>
 							<img src="/img/icons/expand.svg" alt="" />
-							<span>{property?.productVolume} ml</span>
+							<span>{product?.productVolume} ml</span>
 						</div>
 					</div>
 					<Divider sx={{ mt: '15px', mb: '17px' }} />
 					<div className={'bott'}>
-						<p>{property?.productStatus ?? ''}</p>
+						<p>{product?.productStatus ?? ''}</p>
 						<div className="view-like-box">
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
 							</IconButton>
-							<Typography className="view-cnt">{property?.productViews}</Typography>
-							<IconButton color={'default'} onClick={()=> likePropertyHandler(user, property?._id)}>
-								{property?.meLiked && property?.meLiked[0]?.myFavorite ? (
+							<Typography className="view-cnt">{product?.productViews}</Typography>
+							<IconButton color={'default'} onClick={() => likeProductHandler(user, product?._id)}>
+								{product?.meLiked && product?.meLiked[0]?.myFavorite ? (
 									<FavoriteIcon style={{ color: 'red' }} />
 								) : (
 									<FavoriteIcon />
 								)}
 							</IconButton>
-							<Typography className="view-cnt">{property?.productLikes}</Typography>
+							<Typography className="view-cnt">{product?.productLikes}</Typography>
 						</div>
 					</div>
 				</Box>
@@ -82,44 +81,44 @@ const TopProductCard = (props: TopProductCardProps) => {
 				<Box
 					component={'div'}
 					className={'card-img'}
-					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${property?.productImages[0]})` }}
-					onClick={() =>{pushDetailHandler(property._id);}}
+					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${product?.productImages[0]})` }}
+					onClick={() => pushDetailHandler(product._id)}
 				>
-					<div>${property?.productPrice}</div>
+					<div>${product?.productPrice}</div>
 				</Box>
 				<Box component={'div'} className={'info'}>
-					<strong className={'title'} onClick={() =>{pushDetailHandler(property._id);}}>{property?.productTitle}</strong>
-					<p className={'desc'}>{property?.productBrand}</p>
+					<strong className={'title'} onClick={() => pushDetailHandler(product._id)}>{product?.productTitle}</strong>
+					<p className={'desc'}>{product?.productBrand}</p>
 					<div className={'options'}>
 						<div>
 							<img src="/img/icons/discovery.svg" alt="" />
-							<span>{property?.productCategory}</span>
+							<span>{product?.productCategory}</span>
 						</div>
 						<div>
 							<img src="/img/icons/tune.svg" alt="" />
-							<span>{property?.productSize}</span>
+							<span>{product?.productSize}</span>
 						</div>
 						<div>
 							<img src="/img/icons/expand.svg" alt="" />
-							<span>{property?.productVolume} ml</span>
+							<span>{product?.productVolume} ml</span>
 						</div>
 					</div>
 					<Divider sx={{ mt: '15px', mb: '17px' }} />
 					<div className={'bott'}>
-						<p>{property?.productStatus ?? ''}</p>
+						<p>{product?.productStatus ?? ''}</p>
 						<div className="view-like-box">
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
 							</IconButton>
-							<Typography className="view-cnt">{property?.productViews}</Typography>
-							<IconButton color={'default'} onClick={()=> likePropertyHandler(user, property?._id)} >
-								{property?.meLiked && property?.meLiked[0]?.myFavorite ? (
+							<Typography className="view-cnt">{product?.productViews}</Typography>
+							<IconButton color={'default'} onClick={() => likeProductHandler(user, product?._id)}>
+								{product?.meLiked && product?.meLiked[0]?.myFavorite ? (
 									<FavoriteIcon style={{ color: 'red' }} />
 								) : (
 									<FavoriteIcon />
 								)}
 							</IconButton>
-							<Typography className="view-cnt">{property?.productLikes}</Typography>
+							<Typography className="view-cnt">{product?.productLikes}</Typography>
 						</div>
 					</div>
 				</Box>

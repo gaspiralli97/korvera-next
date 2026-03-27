@@ -1,0 +1,413 @@
+#pc-wrap {
+	#my-order-page {
+		width: 100%;
+		padding: 40px 0 100px;
+
+		.oo-order-wrap {
+			width: 100%;
+			gap: 20px;
+		}
+
+		// Page title
+		.oo-order-title {
+			font-family: $font;
+			font-size: 26px;
+			font-weight: 700;
+			color: #1b1b1b;
+			letter-spacing: 0.2px;
+		}
+
+		// Two-column layout
+		.oo-order-layout {
+			width: 100%;
+			flex-direction: row;
+			align-items: flex-start;
+			gap: 20px;
+		}
+
+		// ─── LEFT column ───────────────────────────────
+		.oo-order-left {
+			flex: 1;
+			gap: 16px;
+			min-width: 0;
+		}
+
+		// Section card
+		.oo-section-card {
+			border: 1px solid #e8e8e8;
+			border-radius: 12px;
+			padding: 20px;
+			background: #fff;
+			gap: 14px;
+		}
+
+		.oo-section-header {
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.oo-section-header-left {
+			flex-direction: row;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.oo-flag {
+			font-size: 20px;
+			line-height: 1;
+		}
+
+		.oo-section-title {
+			font-family: $font;
+			font-size: 16px;
+			font-weight: 700;
+			color: #1b1b1b;
+		}
+
+		.oo-section-sub {
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 400;
+			color: #767676;
+
+			strong {
+				font-weight: 600;
+				color: #1b1b1b;
+			}
+		}
+
+		// Form rows
+		.oo-form-row {
+			flex-direction: row;
+			gap: 12px;
+			width: 100%;
+		}
+
+		.oo-input-wrap {
+			flex: 1;
+			gap: 5px;
+
+			&.oo-input-wrap--sm {
+				flex: 0 0 140px;
+			}
+		}
+
+		.oo-label {
+			font-family: $font;
+			font-size: 12px;
+			font-weight: 600;
+			color: #555;
+		}
+
+		.oo-input {
+			width: 100%;
+			height: 44px;
+			padding: 0 12px;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			background: #fff;
+			outline: none;
+			font-family: $font;
+			font-size: 13px;
+			color: #1b1b1b;
+			box-sizing: border-box;
+
+			&::placeholder {
+				color: #aaa;
+			}
+
+			&:focus {
+				border-color: #1b1b1b;
+			}
+		}
+
+		// Checkbox row
+		.oo-checkbox-row {
+			flex-direction: row;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.oo-checkbox {
+			padding: 0;
+			color: #bbb;
+
+			&.Mui-checked {
+				color: #1b1b1b;
+			}
+		}
+
+		.oo-checkbox-label {
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 400;
+			color: #555;
+		}
+
+		// Save & Continue button
+		.oo-save-btn {
+			align-self: flex-start;
+			height: 44px;
+			padding: 0 28px;
+			border-radius: 8px;
+			background: #1b1b1b;
+			color: #fff;
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 600;
+			text-transform: none;
+
+			&:hover { background: #000; }
+		}
+
+		// Points
+		.oo-points-row {
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+		}
+
+		.oo-points-balance {
+			font-family: $font;
+			font-size: 22px;
+			font-weight: 700;
+			color: #1b1b1b;
+		}
+
+		.oo-points-input-row {
+			flex-direction: row;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.oo-points-input {
+			width: 120px;
+			height: 40px;
+		}
+
+		.oo-use-all-btn {
+			height: 40px;
+			padding: 0 16px;
+			border-radius: 8px;
+			background: #f0f0f0;
+			color: #1b1b1b;
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 600;
+			text-transform: none;
+
+			&:hover { background: #e0e0e0; }
+		}
+
+		.oo-points-note {
+			font-family: $font;
+			font-size: 12px;
+			font-weight: 400;
+			color: #767676;
+		}
+
+		// Payment method
+		.oo-pay-option {
+			border: 1px solid #e8e8e8;
+			border-radius: 10px;
+			padding: 12px 14px;
+			gap: 0;
+			transition: border-color 0.15s;
+
+			&.oo-pay-option--active {
+				border-color: #1b1b1b;
+			}
+		}
+
+		.oo-form-control-label {
+			margin: 0;
+			width: 100%;
+
+			.MuiFormControlLabel-label {
+				flex: 1;
+			}
+		}
+
+		.oo-radio {
+			color: #bbb;
+			padding: 0 8px 0 0;
+
+			&.Mui-checked {
+				color: #1b1b1b;
+			}
+		}
+
+		.oo-pay-label-row {
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+		}
+
+		.oo-pay-name {
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 500;
+			color: #1b1b1b;
+		}
+
+		.oo-pay-icon {
+			width: 50px;
+			height: 32px;
+			object-fit: contain;
+		}
+
+		.oo-pay-icons-row {
+			flex-direction: row;
+			gap: 4px;
+		}
+
+		// Card fields
+		.oo-card-fields {
+			gap: 10px;
+			padding: 12px 0 4px;
+		}
+
+		// ─── RIGHT column ──────────────────────────────
+		.oo-order-right {
+			width: 340px;
+			flex-shrink: 0;
+			gap: 14px;
+			position: sticky;
+			top: 100px;
+		}
+
+		// Summary card
+		.oo-summary-card {
+			border: 1px solid #e8e8e8;
+			border-radius: 12px;
+			padding: 18px;
+			background: #fff;
+			gap: 10px;
+		}
+
+		.oo-summary-title {
+			font-family: $font;
+			font-size: 16px;
+			font-weight: 700;
+			color: #1b1b1b;
+			margin-bottom: 2px;
+		}
+
+		.oo-summary-row {
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.oo-summary-label {
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 400;
+			color: #555;
+		}
+
+		.oo-summary-value {
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 500;
+			color: #1b1b1b;
+
+			&.oo-discount {
+				color: #e74c3c;
+			}
+		}
+
+		.oo-total-row {
+			align-items: center;
+			margin-top: 4px;
+		}
+
+		.oo-total-label {
+			font-family: $font;
+			font-size: 15px;
+			font-weight: 700;
+			color: #1b1b1b;
+		}
+
+		.oo-total-value {
+			font-family: $font;
+			font-size: 17px;
+			font-weight: 700;
+			color: #1b1b1b;
+		}
+
+		// Agree section
+		.oo-agree-section {
+			border: 1px solid #e8e8e8;
+			border-radius: 12px;
+			padding: 18px;
+			background: #fff;
+			gap: 12px;
+		}
+
+		.oo-agree-label {
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 700;
+			color: #1b1b1b;
+		}
+
+		.oo-terms-text {
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 400;
+			color: #767676;
+			line-height: 1.7;
+		}
+
+		.oo-terms-link {
+			color: #1b1b1b;
+			text-decoration: underline;
+			cursor: pointer;
+		}
+
+		// Place Order button
+		.oo-place-order-btn {
+			width: 100%;
+			height: 52px;
+			border-radius: 10px;
+			background: #1b1b1b;
+			color: #fff;
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 700;
+			letter-spacing: 0.6px;
+			text-transform: none;
+
+			&:hover { background: #000; }
+
+			&.oo-place-order-btn--disabled,
+			&.Mui-disabled {
+				background: #ccc;
+				color: #fff;
+			}
+		}
+
+		// Back to cart button
+		.oo-back-btn {
+			width: 100%;
+			height: 42px;
+			border-radius: 10px;
+			background: transparent;
+			color: #767676;
+			font-family: $font;
+			font-size: 13px;
+			font-weight: 500;
+			text-transform: none;
+			border: 1px solid #e8e8e8;
+
+			&:hover {
+				background: #f7f7f7;
+				color: #1b1b1b;
+			}
+		}
+	}
+}

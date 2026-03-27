@@ -295,7 +295,7 @@ const HeaderFilter = (props: HeaderFilterProps) => {
 														?.slice(0)
 														.reverse()
 														.map((vol: number) => (
-															<MenuItem value={vol} disabled={searchFilter?.search?.volumesRange?.start >= vol} key={vol}>
+															<MenuItem value={vol} disabled={(searchFilter?.search?.volumesRange?.start ?? 0) >= vol} key={vol}>
 																{vol}
 															</MenuItem>
 														))}
