@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	TableCell,
 	TableHead,
@@ -6,186 +6,133 @@ import {
 	TableRow,
 	Table,
 	TableContainer,
-	Button,
 	Menu,
-	Fade,
 	MenuItem,
+	IconButton,
 } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/material';
-import { NoticeStatus } from '../../../enums/notice.enum';
-import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-interface Data {
-	category: string;
+export interface MockFaq {
+	id: string;
 	title: string;
-	writer: string;
-	date: string;
+	category: string;
+	content: string;
 	status: string;
+	createdAt: string;
 }
 
-type Order = 'asc' | 'desc';
-
-interface HeadCell {
-	disablePadding: boolean;
-	id: keyof Data;
-	label: string;
-	numeric: boolean;
+interface FaqArticlesPanelListProps {
+	faqs: MockFaq[];
+	onStatusChange: (id: string, status: string) => void;
+	onDelete: (id: string) => void;
 }
 
-const headCells: readonly HeadCell[] = [
-	{
-		id: 'category',
-		numeric: true,
-		disablePadding: false,
-		label: 'CATEGORY',
-	},
-	{
-		id: 'title',
-		numeric: true,
-		disablePadding: false,
-		label: 'TITLE',
-	},
-	{
-		id: 'writer',
-		numeric: true,
-		disablePadding: false,
-		label: 'WRITER',
-	},
-	{
-		id: 'date',
-		numeric: true,
-		disablePadding: false,
-		label: 'DATE',
-	},
-	{
-		id: 'status',
-		numeric: false,
-		disablePadding: false,
-		label: 'STATUS',
-	},
-];
+export const FaqArticlesPanelList = (props: FaqArticlesPanelListProps) => {
+	const { faqs, onStatusChange, onDelete } = props;
 
-interface EnhancedTableProps {
-	numSelected: number;
-	onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
-	onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-	order: Order;
-	orderBy: string;
-	rowCount: number;
-}
+	const [anchorEl, setAnchorEl] = useState<{ [key: string]: HTMLElement | null }>({});
 
-function EnhancedTableHead(props: EnhancedTableProps) {
-	return (
-		<TableHead>
-			<TableRow>
-				{headCells.map((headCell) => (
-					<TableCell
-						key={headCell.id}
-						align={headCell.numeric ? 'left' : 'center'}
-						padding={headCell.disablePadding ? 'none' : 'normal'}
-					>
-						{headCell.label}
-					</TableCell>
-				))}
-			</TableRow>
-		</TableHead>
-	);
-}
+	const handleMenuOpen = (e: React.MouseEvent<HTMLElement>, id: string) => {
+		setAnchorEl((prev) => ({ ...prev, [id]: e.currentTarget }));
+	};
 
-interface FaqArticlesPanelListType {
-	dense?: boolean;
-	faqsData: any[];
-	anchorEl: any;
-	menuIconClickHandler: any;
-	menuIconCloseHandler: any;
-	updateFaqHandler: any;
-	removeFaqHandler: any;
-}
+	const handleMenuClose = (id: string) => {
+		setAnchorEl((prev) => ({ ...prev, [id]: null }));
+	};
 
-export const FaqArticlesPanelList = (props: FaqArticlesPanelListType) => {
-	const {
-		dense,
-		faqsData,
-		anchorEl,
-		menuIconClickHandler,
-		menuIconCloseHandler,
-		updateFaqHandler,
-		removeFaqHandler,
-	} = props;
-
-	/** APOLLO REQUESTS **/
-	/** LIFECYCLES **/
-	/** HANDLERS **/
+	const getStatusBadgeClass = (status: string): string => {
+		if (status === 'ACTIVE') return 'badge success';
+		if (status === 'INACTIVE') return 'badge warning';
+		if (status === 'DELETE') return 'badge delete';
+		return 'badge warning';
+	};
 
 	return (
 		<Stack>
 			<TableContainer>
-				<Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
-					{/*@ts-ignore*/}
-					<EnhancedTableHead />
+				<Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={'medium'}>
+					<TableHead>
+						<TableRow>
+							<TableCell align={'left'}>ID</TableCell>
+							<TableCell align={'left'}>CATEGORY</TableCell>
+							<TableCell align={'left'}>TITLE</TableCell>
+							<TableCell align={'left'}>CONTENT</TableCell>
+							<TableCell align={'left'}>STATUS</TableCell>
+							<TableCell align={'left'}>CREATED</TableCell>
+							<TableCell align={'center'}>ACTIONS</TableCell>
+						</TableRow>
+					</TableHead>
 					<TableBody>
-						{faqsData.length === 0 && (
+						{faqs.length === 0 && (
 							<TableRow>
-								<TableCell align="center" colSpan={5}>
-									<span className={'no-data'}>data not found!</span>
+								<TableCell align={'center'} colSpan={7}>
+									<span className={'no-data'}>No FAQs found</span>
 								</TableCell>
 							</TableRow>
 						)}
 
-						{faqsData.length !== 0 &&
-							faqsData.map((faq: any, index: number) => (
-								<TableRow hover key={faq?._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-									<TableCell align="left">{faq?.noticeCategory}</TableCell>
-									<TableCell align="left">{faq?.noticeTitle}</TableCell>
-									<TableCell align="left">{faq?.memberData?.memberNick}</TableCell>
-									<TableCell align="left">{faq?.createdAt}</TableCell>
-									<TableCell align="center">
-										{faq?.noticeStatus === NoticeStatus.DELETE && (
-											<Button
-												variant="outlined"
-												sx={{ p: '3px', border: 'none', ':hover': { border: '1px solid #000000' } }}
-												onClick={() => removeFaqHandler(faq._id)}
+						{faqs.length !== 0 &&
+							faqs.map((faq: MockFaq) => (
+								<TableRow hover key={faq.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+									<TableCell align={'left'}>
+										<Typography variant={'body2'} sx={{ color: '#8A8A9A', fontSize: '12px' }}>
+											{faq.id}
+										</Typography>
+									</TableCell>
+									<TableCell align={'left'}>{faq.category}</TableCell>
+									<TableCell align={'left'}>{faq.title}</TableCell>
+									<TableCell align={'left'}>
+										{faq.content.length > 60 ? faq.content.substring(0, 60) + '...' : faq.content}
+									</TableCell>
+									<TableCell align={'left'}>
+										<span className={getStatusBadgeClass(faq.status)}>{faq.status}</span>
+									</TableCell>
+									<TableCell align={'left'}>{faq.createdAt}</TableCell>
+									<TableCell align={'center'}>
+										<IconButton size={'small'} onClick={(e) => handleMenuOpen(e, faq.id)}>
+											<MoreVertIcon fontSize={'small'} />
+										</IconButton>
+										<Menu
+											className={'menu-modal'}
+											MenuListProps={{ 'aria-labelledby': 'faq-action-button' }}
+											anchorEl={anchorEl[faq.id] ?? null}
+											open={Boolean(anchorEl[faq.id])}
+											onClose={() => handleMenuClose(faq.id)}
+											sx={{ p: 1 }}
+										>
+											<MenuItem
+												onClick={() => {
+													onStatusChange(faq.id, 'ACTIVE');
+													handleMenuClose(faq.id);
+												}}
 											>
-												<DeleteIcon fontSize="small" />
-											</Button>
-										)}
-
-										{faq?.noticeStatus !== NoticeStatus.DELETE && (
-											<>
-												<Button
-													onClick={(e: any) => menuIconClickHandler(e, index)}
-													className={faq?.noticeStatus === NoticeStatus.ACTIVE ? 'badge success' : 'badge warning'}
-												>
-													{faq?.noticeStatus}
-												</Button>
-
-												<Menu
-													className={'menu-modal'}
-													MenuListProps={{
-														'aria-labelledby': 'fade-button',
-													}}
-													anchorEl={anchorEl[index]}
-													open={Boolean(anchorEl[index])}
-													onClose={menuIconCloseHandler}
-													TransitionComponent={Fade}
-													sx={{ p: 1 }}
-												>
-													{Object.values(NoticeStatus)
-														.filter((ele) => ele !== faq?.noticeStatus)
-														.map((status: string) => (
-															<MenuItem
-																onClick={() => updateFaqHandler({ _id: faq._id, noticeStatus: status })}
-																key={status}
-															>
-																<Typography variant={'subtitle1'} component={'span'}>
-																	{status}
-																</Typography>
-															</MenuItem>
-														))}
-												</Menu>
-											</>
-										)}
+												<Typography variant={'subtitle1'} component={'span'} sx={{ color: '#2e7d32' }}>
+													Set Active
+												</Typography>
+											</MenuItem>
+											<MenuItem
+												onClick={() => {
+													onStatusChange(faq.id, 'INACTIVE');
+													handleMenuClose(faq.id);
+												}}
+											>
+												<Typography variant={'subtitle1'} component={'span'} sx={{ color: '#ed6c02' }}>
+													Set Inactive
+												</Typography>
+											</MenuItem>
+											<MenuItem
+												onClick={() => {
+													onDelete(faq.id);
+													handleMenuClose(faq.id);
+												}}
+											>
+												<Typography variant={'subtitle1'} component={'span'} sx={{ color: '#d32f2f' }}>
+													Delete
+												</Typography>
+											</MenuItem>
+										</Menu>
 									</TableCell>
 								</TableRow>
 							))}

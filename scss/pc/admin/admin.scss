@@ -48,8 +48,8 @@
     }
     li.on {
       font-weight: 600;
-      background: #FDF4F4;
-      color: #F54D56;
+      background: rgba(44, 22, 84, 0.06);
+      color: #2C1654;
       span {
         color: #212121;
       }
@@ -60,7 +60,8 @@
     margin-left: auto;
     padding: 116px 24px;
     align-items: center;
-    .flex-space {
+    .flex-space,
+    .flex_space {
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -129,6 +130,8 @@
     }
     .content {
       width: 100%;
+      min-width: 0;
+      overflow-x: hidden;
       .no-data {
         font-size: 16px;
       }
@@ -267,12 +270,12 @@
       }
       button:nth-child(2) {
         color:#fff;
-        box-shadow: rgb(255 48 48 / 24%) 0px 8px 16px 0px;
+        box-shadow: rgb(44 22 84 / 24%) 0px 8px 16px 0px;
       }
     }
     .btn-complete {
       color:#fff;
-      box-shadow: rgb(255 48 48 / 24%) 0px 8px 16px 0px;
+      box-shadow: rgb(44 22 84 / 24%) 0px 8px 16px 0px;
     }
     .btn-action {
       position: static;
@@ -283,7 +286,7 @@
     .btn-add {
       color: #fff;
       font-weight: 500;
-      box-shadow: rgb(255 48 48 / 24%) 0px 8px 16px 0px;
+      box-shadow: rgb(44 22 84 / 24%) 0px 8px 16px 0px;
     }
     .btn-cancel {
       color: #757575;
@@ -292,7 +295,10 @@
     .btn-upload {
       border: 1px dashed #eee;
     }
-    .btn-text { color: #e92c28; }
+    .btn-text { color: #2C1654; }
+    .MuiButton-root {
+      color: #fff;
+    }
     .btn-window {
       color: #757575;
       margin-left: 8px;
@@ -324,8 +330,8 @@
         }
         li.on {
           font-weight: 500;
-          color: #e92c28;
-          border-bottom: 2px solid #e92c28;
+          color: #2C1654;
+          border-bottom: 2px solid #2C1654;
         }
       }
       &.check-table-wrap {
@@ -404,7 +410,7 @@
       }
       .flex-box {
         button {
-          color: #e92c28;
+          color: #2C1654;
           font-weight: 500;
           margin-right: 8px;
         }
@@ -488,6 +494,169 @@
     .MuiTableContainer-root {
       box-shadow: none;
     }
+  }
+}
+
+// ─── ADMIN DASHBOARD & SHARED CARD STYLES ───────────────────────
+#pc-wrap {
+  #bunker {
+
+    // KPI GRID — shared across dashboard, analytics, reports, payouts
+    // grid-template-columns is set per-page via sx prop
+    .kpi-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .kpi-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px 16px;
+      border: 1px solid #EAE0E8;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: default;
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 28px rgba(44, 22, 84, 0.1);
+      }
+
+      &.kpi-card-spark {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+      }
+    }
+
+    .kpi-icon-wrap {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      .kpi-emoji { font-size: 20px; }
+    }
+
+    .kpi-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .kpi-label {
+      font-size: 11px !important;
+      color: #8A8A9A;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .kpi-value {
+      font-size: 20px !important;
+      font-weight: 700 !important;
+      color: #1A1A2E;
+      line-height: 1.2;
+      margin-bottom: 3px;
+      white-space: nowrap;
+    }
+
+    .kpi-trend {
+      font-size: 10px !important;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .up-txt   { color: #4A9B6F; }
+    .warn-txt { color: #E8A84A; }
+
+    // CHART CARD — shared
+    .chart-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 24px;
+      border: 1px solid #EAE0E8;
+    }
+
+    .chart-section-title {
+      font-size: 15px !important;
+      font-weight: 600 !important;
+      color: #1A1A2E;
+      margin-bottom: 2px;
+    }
+
+    .chart-canvas-wrap {
+      position: relative;
+      height: 230px;
+      canvas { max-width: 100%; }
+    }
+
+    // CHART GRID — shared
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 20px;
+    }
+
+    // DASHBOARD-SPECIFIC
+    .content.dashboard {
+
+      .db-brand-badge {
+        background: #fff;
+        border: 1px solid #EAE0E8;
+        border-radius: 12px;
+        padding: 12px 20px;
+        text-align: right;
+      }
+
+      // BOTTOM GRID
+      .bottom-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 20px;
+      }
+
+      .db-table-card {
+        background: #fff !important;
+        border: 1px solid #EAE0E8 !important;
+        border-radius: 14px !important;
+        box-shadow: none !important;
+      }
+    }
+  }
+}
+
+// ─── COUPON FORM + SETTINGS FORM ────────────────────────────────
+#pc-wrap #bunker {
+  .coupon-form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .settings-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
+
+// ─── ORDER STATUS BADGES ─────────────────────────────────────────
+#pc-wrap #bunker {
+  .shipped {
+    color: #1565C0;
+    background: rgba(21, 101, 192, 0.1);
+    border-radius: 4px;
+  }
+  .confirmed {
+    color: #229a16;
+    background: rgba(84, 214, 44, 0.16);
+    border-radius: 4px;
   }
 }
 

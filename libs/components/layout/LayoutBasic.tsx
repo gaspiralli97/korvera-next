@@ -89,6 +89,16 @@ const withLayoutBasic = (Component: any) => {
 					desc = 'Thank you for shopping with Korvera';
 					bgImage = '/img/banner/mypage.jpeg';
 					break;
+				case '/quiz':
+					title = 'Beauty Quiz';
+					desc = 'Find your perfect routine';
+					bgImage = '/img/banner/products.jpg';
+					break;
+				case '/ai-chat':
+					title = 'AI Beauty Assistant';
+					desc = 'Get personalised beauty advice';
+					bgImage = '/img/banner/cs.webp';
+					break;
 				default:
 					break;
 			}

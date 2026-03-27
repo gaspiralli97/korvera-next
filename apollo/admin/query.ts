@@ -172,6 +172,83 @@ export const GET_ADMIN_DASHBOARD_STATS = gql`
 `;
 
 /**************************
+ *         NOTICE         *
+ *************************/
+
+export const GET_ALL_NOTICES_BY_ADMIN = gql`
+	query GetAllNoticesByAdmin($input: AllNoticesInquiry!) {
+		getAllNoticesByAdmin(input: $input) {
+			list {
+				_id
+				noticeCategory
+				noticePriority
+				noticeStatus
+				noticeTitle
+				noticeContent
+				noticeViews
+				memberId
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
+ *         BANNER         *
+ *************************/
+
+export const GET_ALL_BANNERS_BY_ADMIN = gql`
+	query GetAllBannersByAdmin($input: AllBannersInquiry!) {
+		getAllBannersByAdmin(input: $input) {
+			list {
+				_id
+				bannerTitle
+				bannerType
+				bannerImage
+				bannerLink
+				bannerPosition
+				bannerStatus
+				memberId
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
+ *          EVENT         *
+ *************************/
+
+export const GET_ALL_EVENTS_BY_ADMIN = gql`
+	query GetAllEventsByAdmin($input: AllEventsInquiry!) {
+		getAllEventsByAdmin(input: $input) {
+			list {
+				_id
+				eventTitle
+				eventCategory
+				eventDescription
+				eventImage
+				eventStatus
+				memberId
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
  *         COMMENT        *
  *************************/
 

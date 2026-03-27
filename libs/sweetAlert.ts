@@ -41,7 +41,7 @@ export const sweetConfirmAlert = (msg: string) => {
 			},
 			showCancelButton: true,
 			showConfirmButton: true,
-			confirmButtonColor: '#e92C28',
+			confirmButtonColor: '#2C1654',
 			cancelButtonColor: '#bdbdbd',
 		}).then((response) => {
 			if (response?.isConfirmed) resolve(true);
@@ -57,7 +57,7 @@ export const sweetLoginConfirmAlert = (msg: string) => {
 			showCancelButton: true,
 			showConfirmButton: true,
 			color: '#212121',
-			confirmButtonColor: '#e92C28',
+			confirmButtonColor: '#2C1654',
 			cancelButtonColor: '#bdbdbd',
 			confirmButtonText: 'Login',
 		}).then((response) => {
