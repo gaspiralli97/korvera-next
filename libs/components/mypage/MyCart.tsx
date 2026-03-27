@@ -1,46 +1,38 @@
-import React, { useState } from 'react';
-import { Stack, Box, Typography, Button, Divider } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
+import React from 'react';
 import { useReactiveVar } from '@apollo/client';
+import { Stack, Box, Typography, Button, Divider } from '@mui/material';
+import Link from 'next/link';
+import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { cartVar, saveCart, CartItem } from '../../../apollo/store';
 import { REACT_APP_API_URL } from '../../config';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-const MyCart = () => {
+interface MyCartProps {}
+
+const MyCart: React.FC<MyCartProps> = () => {
 	const device = useDeviceDetect();
-	const router = useRouter();
 	const cartItems = useReactiveVar(cartVar);
-	const [promoCode, setPromoCode] = useState<string>('');
-
-	const subtotal = cartItems.reduce((acc: number, item: CartItem) => acc + item.productPrice * item.qty, 0);
-	const shipping = subtotal >= 50 ? 0 : 5.99;
-	const grandTotal = subtotal + shipping;
-	const freeShippingProgress = Math.min((subtotal / 50) * 100, 100);
+	const total = cartItems.reduce((acc: number, item: CartItem) => acc + item.productPrice * (item.qty ?? 1), 0);
+	const shipping = total >= 50 ? 0 : 5.99;
+	const grandTotal = total + shipping;
 
 	/** HANDLERS **/
 	const updateQty = (productId: string, size: string, delta: number) => {
-		const updated = cartVar()
-			.map((item: CartItem) =>
-				item.productId === productId && item.size === size ? { ...item, qty: item.qty + delta } : item,
-			)
-			.filter((item: CartItem) => item.qty > 0);
-		cartVar(updated);
-		saveCart(updated);
+		const updatedItems = cartVar().map((item: CartItem) => {
+			if (item.productId === productId && item.size === size) {
+				const nextQty = (item.qty ?? 1) + delta;
+				return { ...item, qty: nextQty < 1 ? 1 : nextQty };
+			}
+			return item;
+		});
+
+		cartVar(updatedItems);
+		saveCart(updatedItems);
 	};
 
 	const removeItem = (productId: string, size: string) => {
-		const updated = cartVar().filter(
-			(item: CartItem) => !(item.productId === productId && item.size === size),
-		);
-		cartVar(updated);
-		saveCart(updated);
-	};
-
-	const removeAllHandler = () => {
-		cartVar([]);
-		saveCart([]);
+		const updatedItems = cartVar().filter((item: CartItem) => !(item.productId === productId && item.size === size));
+		cartVar(updatedItems);
+		saveCart(updatedItems);
 	};
 
 	if (device === 'mobile') {
@@ -49,80 +41,58 @@ const MyCart = () => {
 		return (
 			<Box component={'div'} id={'my-cart-page'}>
 				<Box component={'div'} className={'container'}>
-					<Stack className={'oy-cart-wrap'}>
-
-						{/* ── Page title ── */}
-						<Typography className={'oy-cart-title'}>Cart</Typography>
-
+					<Stack className={'my-cart-wrap'}>
 						<Stack className={'oy-cart-layout'}>
-
-							{/* ════════════════════════════════
-							    LEFT — Items
-							════════════════════════════════ */}
 							<Stack className={'oy-cart-left'}>
-
-								{/* Shipping destination */}
-								<Stack className={'oy-ship-bar'}>
-									<Stack className={'oy-ship-left'}>
-										<span className={'oy-flag'}>🇺🇸</span>
-										<Typography className={'oy-ship-text'}>Shipping to U.S.A</Typography>
-									</Stack>
-									<Button className={'oy-change-btn'} disableRipple>
-										Change
+								<Stack className={'oy-shipping-top'}>
+									<Typography className={'oy-ship-text'}>Shipping to USA</Typography>
+									<Button className={'oy-change-btn'}>
+										<Typography>Change</Typography>
 									</Button>
 								</Stack>
 
-								{/* Free shipping progress */}
-								<Stack className={'oy-progress-wrap'}>
-									<Typography className={'oy-progress-label'}>
+								<Stack className={'oy-progress-card'}>
+									<Typography className={'oy-progress-text'}>
 										{shipping === 0
-											? 'Qualifies for Free Shipping!'
-											: `Add $${(50 - subtotal).toFixed(2)} more to qualify for Free Shipping`}
+											? 'You unlocked free shipping'
+											: `Add $${(50 - total).toFixed(2)} more for free shipping`}
 									</Typography>
 									<Box component={'div'} className={'oy-progress-track'}>
 										<Box
 											component={'div'}
 											className={'oy-progress-fill'}
-											sx={{ width: `${freeShippingProgress}%` }}
+											sx={{ width: `${Math.min((total / 50) * 100, 100)}%` }}
 										/>
 									</Box>
 								</Stack>
 
-								{/* Items header */}
 								{cartItems.length === 0 ? (
-									<Stack className={'oy-empty-box'}>
-										<Typography className={'oy-empty-title'}>Your cart is empty</Typography>
-										<Typography className={'oy-empty-sub'}>
-											Discover curated formulas designed for your routine.
-										</Typography>
+									<Stack className={'my-cart-empty'}>
+										<Typography className={'empty-title'}>Your cart is empty</Typography>
+										<Typography className={'empty-sub'}>Discover curated formulas designed for your routine.</Typography>
 										<Link href={'/product'}>
-											<Button className={'oy-shop-btn'} disableRipple>
-												Shop Now
+											<Button className={'shop-btn'}>
+												<Typography>Shop Now</Typography>
 											</Button>
 										</Link>
 									</Stack>
 								) : (
-									<Stack className={'oy-items-section'}>
-										<Stack className={'oy-items-header'}>
-											<Typography className={'oy-items-count'}>
-												{cartItems.length} {cartItems.length === 1 ? 'item' : 'items'}
-											</Typography>
-											<Button className={'oy-remove-all-btn'} disableRipple onClick={removeAllHandler}>
-												Remove all
+									<Stack className={'oy-items-area'}>
+										<Stack className={'oy-items-head'}>
+											<Typography className={'oy-items-count'}>{cartItems.length} item(s)</Typography>
+											<Button className={'oy-remove-all'}>
+												<Typography>Remove all</Typography>
 											</Button>
 										</Stack>
 
-										<Stack className={'oy-items-list'}>
+										<Stack className={'my-cart-list'}>
 											{cartItems.map((item: CartItem) => (
-												<Stack key={`${item.productId}-${item.size}`} className={'oy-item'}>
+												<Stack className={'cart-item'} key={`${item.productId}-${item.size}`}>
+													<Button className={'oy-heart-btn'}>
+														<Typography>♡</Typography>
+													</Button>
 
-													{/* Heart */}
-													<button className={'oy-wish-btn'}>
-														<FavoriteBorderIcon sx={{ fontSize: 18, color: '#bbb' }} />
-													</button>
-
-													{/* Image */}
-													<Box component={'div'} className={'oy-item-thumb'}>
+													<Box component={'div'} className={'thumb-wrap'}>
 														<img
 															src={
 																item.productImage
@@ -135,42 +105,42 @@ const MyCart = () => {
 														/>
 													</Box>
 
-													{/* Info */}
-													<Stack className={'oy-item-info'}>
-														<Stack className={'oy-item-top-row'}>
+													<Stack className={'item-info'}>
+														<Stack className={'oy-item-top'}>
 															<Stack className={'oy-item-name-col'}>
-																<Typography className={'oy-item-brand'}>{item.productBrand}</Typography>
-																<Typography className={'oy-item-title'}>{item.productTitle}</Typography>
-																<Typography className={'oy-item-size'}>Size: {item.size}</Typography>
+																<Typography className={'oy-item-brand'}>
+																	{(item as any).productBrand ?? 'OLIVE YOUNG'}
+																</Typography>
+																<Typography className={'item-title'}>{item.productTitle}</Typography>
 															</Stack>
-															<Typography className={'oy-item-price'}>${item.productPrice.toFixed(2)}</Typography>
+															<Stack className={'oy-item-price-col'}>
+																{Boolean((item as any).oldPrice ?? (item as any).productOldPrice) && (
+																	<Typography className={'oy-item-old-price'}>
+																		$
+																		{Number((item as any).oldPrice ?? (item as any).productOldPrice).toFixed(2)}
+																	</Typography>
+																)}
+																<Typography className={'item-price'}>${item.productPrice.toFixed(2)}</Typography>
+															</Stack>
 														</Stack>
 
-														<Stack className={'oy-item-bottom-row'}>
-															<Stack className={'oy-qty-box'}>
-																<button
-																	className={'oy-qty-btn'}
-																	onClick={() => updateQty(item.productId, item.size, -1)}
-																>
-																	−
-																</button>
-																<Typography className={'oy-qty-val'}>{item.qty}</Typography>
-																<button
-																	className={'oy-qty-btn'}
-																	onClick={() => updateQty(item.productId, item.size, 1)}
-																>
+														<Typography className={'item-meta'}>Size: {item.size}</Typography>
+
+														<Stack className={'item-controls'}>
+															<Stack className={'qty-box'}>
+																<Button className={'qty-btn'} onClick={() => updateQty(item.productId, item.size, -1)}>
+																	-
+																</Button>
+																<Typography className={'qty-value'}>{item.qty ?? 1}</Typography>
+																<Button className={'qty-btn'} onClick={() => updateQty(item.productId, item.size, 1)}>
 																	+
-																</button>
+																</Button>
 															</Stack>
-															<button
-																className={'oy-remove-btn'}
-																onClick={() => removeItem(item.productId, item.size)}
-															>
-																Remove
-															</button>
+															<Button className={'remove-btn'} onClick={() => removeItem(item.productId, item.size)}>
+																<Typography>Remove</Typography>
+															</Button>
 														</Stack>
 													</Stack>
-
 												</Stack>
 											))}
 										</Stack>
@@ -178,127 +148,56 @@ const MyCart = () => {
 								)}
 							</Stack>
 
-							{/* ════════════════════════════════
-							    RIGHT — Summary
-							════════════════════════════════ */}
 							<Stack className={'oy-cart-right'}>
-
-								{/* Promos & Offers */}
-								<Stack className={'oy-promo-card'}>
-									<Stack className={'oy-promo-card-header'}>
-										<Typography className={'oy-promo-card-title'}>Promos & Offers</Typography>
-										<Button className={'oy-more-btn'} disableRipple>
-											More &gt;
+								<Stack className={'my-cart-summary'}>
+									<Stack className={'oy-promo-row'}>
+										<Box component={'div'} className={'oy-promo-input-wrap'}>
+											<input className={'oy-promo-input'} placeholder={'Promo code'} />
+										</Box>
+										<Button className={'oy-apply-btn'}>
+											<Typography>Apply</Typography>
 										</Button>
 									</Stack>
 
-									<Stack className={'oy-promo-row-item'}>
-										<Typography className={'oy-promo-row-label'}>Promo Code</Typography>
-										<Typography className={'oy-promo-row-value'}>-US$0.00</Typography>
-									</Stack>
-									<Stack className={'oy-promo-input-row'}>
-										<input
-											className={'oy-promo-input'}
-											placeholder={'Enter Promo Code'}
-											value={promoCode}
-											onChange={(e) => setPromoCode(e.target.value)}
-										/>
-										<Button className={'oy-apply-btn'} disableRipple>
-											Apply
-										</Button>
+									<Stack className={'oy-coupon-sale'}>
+										<Typography className={'oy-coupon-label'}>Coupon / Sale</Typography>
+										<Typography className={'oy-coupon-value'}>-$0.00</Typography>
 									</Stack>
 
-									<Stack className={'oy-promo-row-item'}>
-										<Typography className={'oy-promo-row-label'}>Coupon</Typography>
-										<Typography className={'oy-sign-in-link'}>
-											Sign in to check available coupons
-										</Typography>
+									<Divider />
+
+									<Typography className={'summary-title'}>Order Summary</Typography>
+									<Stack className={'summary-row'}>
+										<Typography>Subtotal</Typography>
+										<Typography>${total.toFixed(2)}</Typography>
+									</Stack>
+									<Stack className={'summary-row'}>
+										<Typography>Discount</Typography>
+										<Typography>-$0.00</Typography>
+									</Stack>
+									<Stack className={'summary-row'}>
+										<Typography>Shipping</Typography>
+										<Typography>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</Typography>
 									</Stack>
 
-									<Stack className={'oy-promo-row-item'}>
-										<Typography className={'oy-promo-row-label'}>Sale</Typography>
-										<Typography className={'oy-promo-row-value'}>-US$0.00</Typography>
-									</Stack>
-								</Stack>
+									<Divider />
 
-								{/* Order Preview */}
-								<Stack className={'oy-order-card'}>
-									<Typography className={'oy-order-title'}>Order Preview</Typography>
-
-									<Stack className={'oy-order-row'}>
-										<Typography className={'oy-order-label'}>Subtotal</Typography>
-										<Typography className={'oy-order-value'}>${subtotal.toFixed(2)}</Typography>
-									</Stack>
-									<Stack className={'oy-order-row'}>
-										<Typography className={'oy-order-label'}>Total Items Value</Typography>
-										<Typography className={'oy-order-value'}>${subtotal.toFixed(2)}</Typography>
-									</Stack>
-									<Stack className={'oy-order-row'}>
-										<Typography className={'oy-order-label'}>Total Discount</Typography>
-										<Typography className={'oy-order-value oy-discount'}>-$0.00</Typography>
+									<Stack className={'summary-row total'}>
+										<Typography>Estimated Total</Typography>
+										<Typography>${grandTotal.toFixed(2)}</Typography>
 									</Stack>
 
-									<Divider sx={{ my: '10px', borderColor: '#eee' }} />
+									<Button className={'checkout-btn'}>
+										<Typography>Proceed to Checkout</Typography>
+									</Button>
 
-									<Stack className={'oy-order-row'}>
-										<Typography className={'oy-order-label'}>Shipping</Typography>
-										<Typography className={'oy-order-value'}>
-											{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
-										</Typography>
-									</Stack>
-									<Stack className={'oy-order-row'}>
-										<Typography className={'oy-order-label oy-underline'}>Estimated Duties</Typography>
-										<Typography className={'oy-order-value oy-orange'}>Charged at customs</Typography>
-									</Stack>
-									<Stack className={'oy-order-row'}>
-										<Typography className={'oy-order-label oy-underline'}>Estimated Taxes</Typography>
-										<Typography className={'oy-order-value oy-orange'}>To be calculated</Typography>
-									</Stack>
-
-									<Divider sx={{ my: '10px', borderColor: '#eee' }} />
-
-									<Stack className={'oy-order-row oy-total-row'}>
-										<Stack>
-											<Typography className={'oy-total-label'}>Estimated Total</Typography>
-											<Typography className={'oy-total-items'}>({cartItems.length} items)</Typography>
-										</Stack>
-										<Typography className={'oy-total-value'}>${grandTotal.toFixed(2)}</Typography>
+									<Stack className={'oy-payments-row'}>
+										<Typography className={'oy-pay-icon'}>VISA</Typography>
+										<Typography className={'oy-pay-icon'}>Mastercard</Typography>
+										<Typography className={'oy-pay-icon'}>PayPal</Typography>
+										<Typography className={'oy-pay-icon'}>Apple Pay</Typography>
 									</Stack>
 								</Stack>
-
-								{/* Checkout */}
-								<Button className={'oy-checkout-btn'} disableRipple onClick={() => router.push('/order')}>
-									Proceed to Checkout
-								</Button>
-
-								{/* Currency note */}
-								<Typography className={'oy-currency-note'}>
-									- The final payment amount is calculated based on US$ or ¥, and the payment amount and the
-									charge amount may differ depending on the currency exchange rate and the time of the
-									transaction.
-								</Typography>
-
-								{/* Payment methods */}
-								<Stack className={'oy-payments-wrap'}>
-									<Typography className={'oy-payments-title'}>Supported payment methods</Typography>
-									<Stack className={'oy-payments-icons'}>
-										{[
-											{ name: 'PayPal', src: '/img/icons/payment/paypal.svg' },
-											{ name: 'Apple Pay', src: '/img/icons/payment/applepay.svg' },
-											{ name: 'VISA', src: '/img/icons/payment/visa.svg' },
-											{ name: 'Mastercard', src: '/img/icons/payment/mastercard.svg' },
-											{ name: 'AMEX', src: '/img/icons/payment/amex.svg' },
-											{ name: 'Discover', src: '/img/icons/payment/discover.svg' },
-											{ name: 'JCB', src: '/img/icons/payment/jcb.svg' },
-											{ name: 'Alipay+', src: '/img/icons/payment/alipay.svg' },
-										].map((method) => (
-											<Box key={method.name} component={'div'} className={'oy-pay-badge'}>
-												<img src={method.src} alt={method.name} />
-											</Box>
-										))}
-									</Stack>
-								</Stack>
-
 							</Stack>
 						</Stack>
 					</Stack>
