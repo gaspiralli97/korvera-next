@@ -33,8 +33,9 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 	/** HANDLERS **/
 	const uploadImage = async (e: any) => {
 		try {
-			const image = e.target.files[0];
+			const image = e.target.files?.[0];
 			console.log('+image:', image);
+			if (!image) return;
 
 			const formData = new FormData();
 			formData.append(
@@ -128,7 +129,9 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 								<img
 									src={
 										updateData?.memberImage
-											? `${REACT_APP_API_URL}/${updateData?.memberImage}`
+											? updateData.memberImage.startsWith('/')
+												? updateData.memberImage
+												: `${REACT_APP_API_URL}/${updateData?.memberImage}`
 											: `/img/profile/defaultUser.svg`
 									}
 									alt=""
