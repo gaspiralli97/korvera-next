@@ -13,7 +13,7 @@ import { userVar } from '../../../apollo/store';
 import { CREATE_PRODUCT, UPDATE_PRODUCT } from '../../../apollo/user/mutation';
 import { GET_PRODUCT } from '../../../apollo/user/query';
 
-const AddProperty = ({ initialValues, ...props }: any) => {
+const AddProduct = ({ initialValues, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const inputRef = useRef<any>(null);
@@ -187,7 +187,7 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 		return <div>ADD NEW PRODUCT MOBILE PAGE</div>;
 	} else {
 		return (
-			<div id="add-property-page">
+			<div id="add-product-page">
 				<Stack className="main-title-box">
 					<Typography className="main-title">Add New Product</Typography>
 					<Typography className="sub-title">We are glad to see you again!</Typography>
@@ -324,7 +324,7 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 								</Stack>
 							</Stack>
 
-							<Typography className="property-title">Product Description</Typography>
+							<Typography className="product-title">Product Description</Typography>
 							<Stack className="config-column">
 								<Typography className="title">Description</Typography>
 								<textarea
@@ -405,7 +405,7 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 	}
 };
 
-AddProperty.defaultProps = {
+AddProduct.defaultProps = {
 	initialValues: {
 		productTitle: '',
 		productPrice: 0,
@@ -419,4 +419,4 @@ AddProperty.defaultProps = {
 	},
 };
 
-export default AddProperty;
+export default AddProduct;
