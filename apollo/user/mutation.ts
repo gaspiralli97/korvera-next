@@ -62,6 +62,17 @@ export const LOGIN = gql`
 	}
 `;
 
+export const SETUP_ADMIN = gql`
+	mutation SetupAdmin($input: AdminSetupInput!) {
+		setupAdmin(input: $input) {
+			_id
+			memberNick
+			memberType
+			accessToken
+		}
+	}
+`;
+
 export const UPDATE_MEMBER = gql`
 	mutation UpdateMember($input: MemberUpdate!) {
 		updateMember(input: $input) {

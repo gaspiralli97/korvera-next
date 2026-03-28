@@ -5,9 +5,10 @@ import useDeviceDetect from '../../hooks/useDeviceDetect';
 import Link from 'next/link';
 import { Member } from '../../types/member/member';
 import { REACT_APP_API_URL } from '../../config';
-import { useQuery } from '@apollo/client';
+import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_MEMBER } from '../../../apollo/user/query';
 import { T } from '../../types/common';
+import { userVar } from '../../../apollo/store';
 
 interface MemberMenuProps {
 	subscribeHandler: any;
@@ -21,6 +22,7 @@ const MemberMenu = (props: MemberMenuProps) => {
 	const category: any = router.query?.category;
 	const [member, setMember] = useState<Member | null>(null);
 	const { memberId } = router.query;
+	const loggedInUser = useReactiveVar(userVar);
 
 	/** APOLLO REQUESTS **/
 
@@ -61,28 +63,30 @@ const MemberMenu = (props: MemberMenuProps) => {
 						<Typography className={'view-list'}>{member?.memberType}</Typography>
 					</Stack>
 				</Stack>
-				<Stack className="follow-button-box">
-					{member?.meFollowed && member?.meFollowed[0]?.myFollowing ? (
-						<>
+				{member?._id !== loggedInUser?._id && (
+					<Stack className="follow-button-box">
+						{member?.meFollowed && member?.meFollowed[0]?.myFollowing ? (
+							<>
+								<Button
+									variant="outlined"
+									className={'unfollow-btn'}
+									onClick={() => unsubscribeHandler(member?._id, getMemberRefetch, memberId)}
+								>
+									Unfollow
+								</Button>
+								<Typography className={'following-label'}>Following</Typography>
+							</>
+						) : (
 							<Button
-								variant="outlined"
-								className={'unfollow-btn'}
-								onClick={() => unsubscribeHandler(member?._id, getMemberRefetch, memberId)}
+								variant="contained"
+								className={'follow-btn'}
+								onClick={() => subscribeHandler(member?._id, getMemberRefetch, memberId)}
 							>
-								Unfollow
+								Follow
 							</Button>
-							<Typography className={'following-label'}>Following</Typography>
-						</>
-					) : (
-						<Button
-							variant="contained"
-							className={'follow-btn'}
-							onClick={() => subscribeHandler(member?._id, getMemberRefetch, memberId)}
-						>
-							Follow
-						</Button>
-					)}
-				</Stack>
+						)}
+					</Stack>
+				)}
 				<Stack className={'sections'}>
 					<Stack className={'section'}>
 						<Typography className="title" variant={'h5'}>
