@@ -184,6 +184,7 @@
 
 					.wrap-main {
 						display: flex;
+						.card-config { @include product-card(); }
 					}
 				}
 

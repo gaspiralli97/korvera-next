@@ -46,7 +46,8 @@ const TrendProducts = (props: TrendProductsProps) => {
 			if (!id) return;
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 			await likeTargetProduct({ variables: { input: id } });
-			await getProductsRefetch({ input: initialInput });
+			const result = await getProductsRefetch({ input: initialInput });
+			setTrendProducts(result.data?.getProducts?.list ?? []);
 			await sweetTopSmallSuccessAlert('success', 800);
 		} catch (err: any) {
 			console.log('ERROR, likeProductHandler', err.message);

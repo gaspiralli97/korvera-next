@@ -42,10 +42,9 @@ const HomepageSkinSolutions = (props: HomepageSkinSolutionsProps) => {
 			if(!id) return;
 			if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 
-			await likeTargetProduct({
-				variables:{input:id},
-			});
-			await getProductsRefetch({input:initialInput});
+			await likeTargetProduct({ variables:{input:id} });
+			const result = await getProductsRefetch({input:initialInput});
+			setProducts(result.data?.getProducts?.list ?? []);
 
 			await sweetTopSmallSuccessAlert('success',800);
 		} catch (err:any) {

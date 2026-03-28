@@ -3,11 +3,12 @@ import { useRouter } from 'next/router';
 import { Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import Link from 'next/link';
-import { useReactiveVar } from '@apollo/client';
+import { useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import { REACT_APP_API_URL } from '../../config';
 import { logOut } from '../../auth';
 import { sweetConfirmAlert } from '../../sweetAlert';
+import { GET_MEMBER } from '../../../apollo/user/query';
 
 const MyMenu = () => {
 	const device = useDeviceDetect();
@@ -15,11 +16,17 @@ const MyMenu = () => {
 	const category: any = router.query?.category ?? 'myProfile';
 	const user = useReactiveVar(userVar);
 
+	const { data: memberData } = useQuery(GET_MEMBER, {
+		fetchPolicy: 'network-only',
+		variables: { input: user?._id },
+		skip: !user?._id,
+	});
+
 	const isSeller = user?.memberType === 'SELLER';
 	const isAdmin = user?.memberType === 'ADMIN';
 	const isUser = user?.memberType === 'USER';
-	const memberFollowersCount = user?.memberFollowers ?? 0;
-	const memberFollowingsCount = user?.memberFollowings ?? 0;
+	const memberFollowersCount = memberData?.getMember?.memberFollowers ?? user?.memberFollowers ?? 0;
+	const memberFollowingsCount = memberData?.getMember?.memberFollowings ?? user?.memberFollowings ?? 0;
 
 	const logoutHandler = async () => {
 		try {
