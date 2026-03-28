@@ -9,6 +9,7 @@ export interface ProductUpdate {
 	productTitle?: string;
 	productPrice?: number;
 	productVolume?: number;
+	productLeftCount?: number;
 	productSize?: ProductSize;
 	productSkinType?: SkinType[];
 	productImages?: string[];

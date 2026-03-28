@@ -62,6 +62,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 			productCategory: p.productCategory ?? '',
 			productBrand: p.productBrand ?? '',
 			productVolume: Number(p.productVolume) || 0,
+			productLeftCount: Number(p.productLeftCount) || 0,
 			productSize: p.productSize ?? '',
 			productSkinType: p.productSkinType ?? [],
 			productDesc: p.productDesc ?? '',
@@ -303,6 +304,22 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
+									<Typography className="title">Stock Count</Typography>
+									<input
+										type="number"
+										min={0}
+										className="description-input"
+										placeholder={'Available quantity'}
+										value={insertProductData.productLeftCount ?? 0}
+										onChange={({ target: { value } }) =>
+											setInsertProductData({ ...insertProductData, productLeftCount: toSafeNumber(value) })
+										}
+									/>
+								</Stack>
+							</Stack>
+
+							<Stack className="config-row">
+								<Stack className="price-year-after-price">
 									<Typography className="title">Skin Type</Typography>
 									<select
 										className={'select-description'}
@@ -412,6 +429,7 @@ AddProduct.defaultProps = {
 		productCategory: '',
 		productBrand: '',
 		productVolume: 0,
+		productLeftCount: 0,
 		productSize: '',
 		productSkinType: [],
 		productDesc: '',

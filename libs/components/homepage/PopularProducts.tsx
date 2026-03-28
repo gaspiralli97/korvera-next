@@ -9,9 +9,12 @@ import PopularProductCard from './PopularProductCard';
 import { Product } from '../../types/product/product';
 import Link from 'next/link';
 import { ProductsInquiry } from '../../types/product/product.input';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
+import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
+import { Message } from '../../enums/common.enum';
+import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 
 interface PopularProductsProps {
 	initialInput: ProductsInquiry;
@@ -20,9 +23,10 @@ interface PopularProductsProps {
 const PopularProducts = (props: PopularProductsProps) => {
 	const { initialInput } = props;
 	const device = useDeviceDetect();
-	const [popularProperties, setPopularProducts] = useState<Product[]>([]);
+	const [popularProducts, setPopularProducts] = useState<Product[]>([]);
 
 	/** APOLLO REQUESTS **/
+	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
    const {
 		loading:getPropertiesLoading,
 		data:getPropertiesData,
@@ -37,28 +41,40 @@ const PopularProducts = (props: PopularProductsProps) => {
 		},
 	});
 	/** HANDLERS **/
+	const likeProductHandler = async (user: T, id: string) => {
+		try {
+			if (!id) return;
+			if (!user?._id) throw new Error(Message.NOT_AUTHENTICATED);
+			await likeTargetProduct({ variables: { input: id } });
+			await getPropertiesRefetch({ input: initialInput });
+			await sweetTopSmallSuccessAlert('success', 800);
+		} catch (err: any) {
+			console.log('ERROR, likeProductHandler', err.message);
+			sweetMixinErrorAlert(err.message).then();
+		}
+	};
 
-	if (!popularProperties) return null;
+	if (!popularProducts) return null;
 
 	if (device === 'mobile') {
 		return (
-			<Stack className={'popular-properties'}>
+			<Stack className={'popular-products'}>
 				<Stack className={'container'}>
 					<Stack className={'info-box'}>
 						<span>Popular Products</span>
 					</Stack>
 					<Stack className={'card-box'}>
 						<Swiper
-							className={'popular-property-swiper'}
+							className={'popular-product-swiper'}
 							slidesPerView={'auto'}
 							centeredSlides={true}
 							spaceBetween={25}
 							modules={[Autoplay]}
 						>
-							{popularProperties.map((property: Product) => {
+							{popularProducts.map((product: Product) => {
 								return (
-									<SwiperSlide key={property._id} className={'popular-property-slide'}>
-										<PopularProductCard property={property} />
+									<SwiperSlide key={product._id} className={'popular-product-slide'}>
+										<PopularProductCard product={product} likeProductHandler={likeProductHandler} />
 									</SwiperSlide>
 								);
 							})}
@@ -69,7 +85,7 @@ const PopularProducts = (props: PopularProductsProps) => {
 		);
 	} else {
 		return (
-			<Stack className={'popular-properties'}>
+			<Stack className={'popular-products'}>
 				<Stack className={'container'}>
 					<Stack className={'info-box'}>
 						<Box component={'div'} className={'left'}>
@@ -87,7 +103,7 @@ const PopularProducts = (props: PopularProductsProps) => {
 					</Stack>
 					<Stack className={'card-box'}>
 						<Swiper
-							className={'popular-property-swiper'}
+							className={'popular-product-swiper'}
 							slidesPerView={'auto'}
 							spaceBetween={25}
 							modules={[Autoplay, Navigation, Pagination]}
@@ -99,10 +115,10 @@ const PopularProducts = (props: PopularProductsProps) => {
 								el: '.swiper-popular-pagination',
 							}}
 						>
-							{popularProperties.map((property: Product) => {
+							{popularProducts.map((product: Product) => {
 								return (
-									<SwiperSlide key={property._id} className={'popular-property-slide'}>
-										<PopularProductCard property={property} />
+									<SwiperSlide key={product._id} className={'popular-product-slide'}>
+										<PopularProductCard product={product} likeProductHandler={likeProductHandler} />
 									</SwiperSlide>
 								);
 							})}

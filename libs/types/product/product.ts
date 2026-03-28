@@ -35,6 +35,7 @@ export interface Product {
 	productTitle: string;
 	productPrice: number;
 	productVolume: number;
+	productLeftCount?: number;
 	productSize: ProductSize;
 	productSkinType?: SkinType[];
 	productViews: number;

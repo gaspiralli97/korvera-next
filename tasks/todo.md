@@ -1,64 +1,56 @@
-# Refactoring: Property-based → Cosmetic/Product-based
+# Bosqichlar: Follow + Like standardization + Unified cards + productLeftCount
 
 ## Goal
-Rename all `property`-based naming to `product`/`cosmetic`-based naming across:
-- `pages/product/detail.tsx`
-- `pages/product/index.tsx`
-- `libs/components/product/ProductCard.tsx`
-- `libs/components/product/Filter.tsx`
-- `libs/components/common/ProductBigCard.tsx`
-- `scss/pc/product/detail.scss`
-- `scss/pc/product/product.scss`
-- `scss/pc/general.scss`
+Implement requested frontend and backend-aligned updates in three stages:
+1. Fix follow state query and standardize like icons.
+2. Unify homepage product cards through main `ProductCard` and keep zoom styles scoped.
+3. Add `productLeftCount` support on frontend and (if available) backend DTO layer.
 
-## Detailed Spec
+## Plan
 
-### Naming changes
+### Stage 1
+- [ ] `apollo/user/query.ts`: ensure `GET_MEMBER` requests
+      `meFollowed { memberId likeRefId myFollowing }`
+- [ ] Standardize like-icon rendering to:
+      liked -> `<FavoriteIcon sx={{ color: '#e91e63' }} />`
+      not liked -> `<FavoriteBorderIcon />`
+      in:
+      - `libs/components/product/ProductCard.tsx`
+      - `libs/components/homepage/TopProductCard.tsx`
+      - `libs/components/homepage/TrendProductCard.tsx`
+      - `libs/components/common/ProductBigCard.tsx`
+- [ ] `libs/components/homepage/PopularProductCard.tsx`:
+      add/ensure like button using the same pattern if missing
+- [ ] `libs/components/mypage/RecentlyVisited.tsx`: replace property-domain empty-state text
 
-| Old (property) | New (product/cosmetic) |
-|---|---|
-| `PropertyDetail` component | `ProductDetail` |
-| `property` state variable | `product` |
-| `properties` state variable | `products` |
-| `destinationProperties` | `similarProducts` |
-| `likePropertyHandler` | `likeProductHandler` |
-| `goPropertyDetatilPage` | `goProductDetailPage` |
-| `property-detail-page` id | `product-detail-page` |
-| `property-detail-config` class | `product-detail-config` |
-| `property-desc-config` class | `product-desc-config` |
-| `property-big-card-box` class | `product-big-card-box` |
-| `property-list-page` id | `product-list-page` |
-| `property-page` class | `product-page` |
-| `similar-properties-config` class | `similar-products-config` |
-| Interface `ProductCardType` prop `property` | `product` |
-| Interface `ProductBigCardProps` prop `property` | `product` |
-| Interface `FilterType` | `FilterProps` |
-| Mobile fallback "PROPERTY CARD" | "PRODUCT CARD" |
-| Mobile fallback "PROPERTY DETAIL PAGE" | "PRODUCT DETAIL PAGE" |
-| Mobile fallback "PROPERTIES MOBILE" | "PRODUCTS MOBILE" |
-| Mobile fallback "APARTMEND BIG CARD" | "PRODUCT BIG CARD" |
-| `ProductBigCard` real-estate icons (`bed.svg`, `room.svg`, `expand.svg`) | cosmetic-appropriate info (category, size, volume) |
+### Stage 2
+- [ ] Replace render output in:
+      - `libs/components/homepage/PopularProductCard.tsx`
+      - `libs/components/homepage/TopProductCard.tsx`
+      - `libs/components/homepage/TrendProductCard.tsx`
+      with thin wrappers around:
+      `<ProductCard product={...} likeProductHandler={...} />`
+- [ ] `scss/pc/general.scss`: keep `.zoom-lens` and `.zoom-panel` scoped under `.product-big-card-box` only
+- [ ] `scss/pc/homepage/homepage.scss`: rename clearly real-estate domain naming to cosmetics domain equivalents
+      and align any dependent component classNames only where needed to preserve rendering
 
-### SCSS class/id renames
-- `#property-detail-page` → `#product-detail-page`
-- `.property-detail-config` → `.product-detail-config`
-- `.property-desc-config` → `.product-desc-config`
-- `#property-list-page` → `#product-list-page`
-- `.property-page` → `.product-page`
-- `.similar-properties-config` → `.similar-products-config`
-- `.property-big-card-box` → `.product-big-card-box`
+### Stage 3
+- [ ] Frontend type updates for `productLeftCount`:
+      - `libs/types/product/product.input.ts`
+      - `libs/types/product/product.update.ts`
+      - `libs/types/product/product.ts`
+- [ ] `apollo/user/mutation.ts`:
+      add `productLeftCount` to `CREATE_PRODUCT` and `UPDATE_PRODUCT` selection sets
+- [ ] `libs/components/mypage/AddNewProduct.tsx`:
+      include `productLeftCount` in edit mapping, defaults, validation, and form field
+- [ ] Backend DTO updates (`apps/korvera-api/src/libs/dto/product/*.ts`) if backend repo is accessible in this environment
 
-## Checklist
-- [ ] pages/product/detail.tsx
-- [ ] pages/product/index.tsx
-- [ ] libs/components/product/ProductCard.tsx
-- [ ] libs/components/product/Filter.tsx
-- [ ] libs/components/common/ProductBigCard.tsx
-- [ ] scss/pc/product/detail.scss
-- [ ] scss/pc/product/product.scss
-- [ ] scss/pc/general.scss
-- [ ] Verify no broken references remain
-- [ ] git commit & push
+### Verification + Delivery
+- [ ] Run focused checks (TypeScript/lint or available build check)
+- [ ] Review diff for scope compliance (no unintended SCSS/backend/page changes beyond request)
+- [ ] Commit frontend changes and push branch
+- [ ] Commit backend changes and push branch (only if backend repo is available)
+- [ ] Update or create PR
 
 ## Review
 (to be filled after implementation)
