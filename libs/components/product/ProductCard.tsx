@@ -106,11 +106,11 @@ const ProductCard = (props: ProductCardType) => {
 									<RemoveRedEyeIcon />
 								</IconButton>
 								<Typography className="view-cnt">{product?.productViews}</Typography>
-								<IconButton color={'default'} onClick={() => likeProductHandler(user, product?._id)}>
+								<IconButton onClick={() => likeProductHandler(user, product?._id)}>
 									{product?.meLiked && product?.meLiked[0]?.myFavorite ? (
 										<FavoriteIcon sx={{ color: '#e91e63' }} />
 									) : (
-										<FavoriteBorderIcon />
+										<FavoriteBorderIcon sx={{ color: '#9e9e9e' }} />
 									)}
 								</IconButton>
 								<Typography className="view-cnt">{product?.productLikes}</Typography>

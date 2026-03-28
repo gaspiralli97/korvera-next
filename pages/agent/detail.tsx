@@ -161,6 +161,8 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 		try {
 			if (!user._id) throw new Error(Messages.error2);
 			await subscribe({ variables: { input: agentId } });
+			const cur = userVar();
+			userVar({ ...cur, memberFollowings: (cur?.memberFollowings || 0) + 1 });
 			await getMemberRefetch({ input: agentId });
 			await sweetTopSmallSuccessAlert('success', 800);
 		} catch (err: any) {
@@ -172,6 +174,8 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 		try {
 			if (!user._id) throw new Error(Messages.error2);
 			await unsubscribe({ variables: { input: agentId } });
+			const cur = userVar();
+			userVar({ ...cur, memberFollowings: Math.max(0, (cur?.memberFollowings || 0) - 1) });
 			await getMemberRefetch({ input: agentId });
 			await sweetTopSmallSuccessAlert('success', 800);
 		} catch (err: any) {
