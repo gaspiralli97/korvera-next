@@ -220,6 +220,7 @@ export const LIKE_TARGET_PRODUCT = gql`
 			productSkinType
 			productViews
 			productLikes
+			productRank
 			productRating
 			productRatingCount
 			productImages
@@ -230,6 +231,11 @@ export const LIKE_TARGET_PRODUCT = gql`
 			manufacturedAt
 			createdAt
 			updatedAt
+			meLiked {
+				memberId
+				likeRefId
+				myFavorite
+			}
 		}
 	}
 `;

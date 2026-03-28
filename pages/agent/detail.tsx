@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import ProductBigCard from '../../libs/components/common/ProductBigCard';
+import ProductCard from '../../libs/components/product/ProductCard';
 import ReviewCard from '../../libs/components/agent/ReviewCard';
 import { Box, Button, Divider, Pagination, Stack, Typography } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
@@ -277,7 +277,7 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 						<Stack className={'card-wrap'}>
 							{agentProducts.map((product: Product) => (
 								<div className={'wrap-main'} key={product?._id}>
-									<ProductBigCard product={product} likeProductHandler={likeProductHandler} />
+									<ProductCard product={product} likeProductHandler={likeProductHandler} />
 								</div>
 							))}
 						</Stack>
