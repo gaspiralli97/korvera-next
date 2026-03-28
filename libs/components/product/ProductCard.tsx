@@ -51,32 +51,33 @@ const ProductCard = (props: ProductCardType) => {
 							<Typography>TOP</Typography>
 						</Box>
 					)}
-					<Box component={'div'} className={'price-box'}>
-						<Typography>${formatterStr(product?.productPrice)}</Typography>
-					</Box>
-					<Link
-						href={{
-							pathname: '/product/detail',
-							query: { id: product?._id },
-						}}
-						className={'quicklook-link'}
-					>
-						<Box component={'div'} className={'quicklook-btn'}>
-							<Typography>Quick Look</Typography>
-						</Box>
-					</Link>
+					{!myFavorites && !recentlyVisited && (
+						<Link
+							href={{
+								pathname: '/product/detail',
+								query: { id: product?._id },
+							}}
+							className={'quicklook-link'}
+						>
+							<Box component={'div'} className={'quicklook-btn'}>
+								<Typography>Quick Look</Typography>
+							</Box>
+						</Link>
+					)}
 				</Stack>
 				<Stack className="bottom">
 					<Stack className="name-address">
-						<Stack className="name">
+						<Stack className="name-price-row">
 							<Link
 								href={{
 									pathname: '/product/detail',
 									query: { id: product?._id },
 								}}
+								className={'name-link'}
 							>
-								<Typography>{product.productTitle}</Typography>
+								<Typography className={'product-title'}>{product.productTitle}</Typography>
 							</Link>
+							<Typography className={'product-price'}>${formatterStr(product?.productPrice)}</Typography>
 						</Stack>
 						<Stack className="address">
 							<Typography>

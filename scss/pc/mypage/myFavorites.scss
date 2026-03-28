@@ -83,46 +83,46 @@
 								height: 16px;
 							}
 						}
-						.price-box {
-							position: absolute;
-							bottom: 20px;
-							left: 20px;
-							padding: 8px 15px;
-							align-items: center;
-							border-radius: 6px;
-							border: 1px solid rgba(255, 255, 255, 0.5);
-							background: #F5F2EC;
-							p {
-								color: #181a20;
-								font-family: $font;
-								font-size: 15px;
-								font-style: normal;
-								font-weight: 600;
-								line-height: normal;
-							}
 						}
-					}
 					.bottom {
 						width: 100%;
 						height: 173px;
 						padding: 20px 16px 10px 16px;
+						overflow: hidden;
 						.name-address {
 							width: 100%;
-							height: 48px;
 							gap: 5px;
 							margin-bottom: 20px;
-							.name {
+							.name-price-row {
+								flex-direction: row;
+								align-items: center;
+								justify-content: space-between;
 								width: 100%;
-								height: 23px;
+								gap: 8px;
 								overflow: hidden;
-								p {
+								.name-link {
+									flex: 1;
+									min-width: 0;
+									text-decoration: none;
+								}
+								.product-title {
 									color: #181a20;
 									font-family: $font;
-									font-size: 15px;
-									font-style: normal;
+									font-size: 14px;
 									font-weight: 600;
 									line-height: normal;
-									text-transform: capitalize;
+									white-space: nowrap;
+									overflow: hidden;
+									text-overflow: ellipsis;
+								}
+								.product-price {
+									color: #181a20;
+									font-family: $font;
+									font-size: 14px;
+									font-weight: 700;
+									line-height: normal;
+									white-space: nowrap;
+									flex-shrink: 0;
 								}
 							}
 							.address {
@@ -135,6 +135,9 @@
 									font-style: normal;
 									font-weight: 400;
 									line-height: normal;
+									white-space: nowrap;
+									overflow: hidden;
+									text-overflow: ellipsis;
 								}
 							}
 						}
