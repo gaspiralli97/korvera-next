@@ -114,7 +114,7 @@
 				}
 			}
 		}
-		.trend-properties {
+		.trend-products {
 			padding: 108px 0px 76px;
 			width: 100%;
 			height: 697px;
@@ -134,12 +134,12 @@
 						justify-content: center;
 						align-items: center;
 					}
-					.trend-property-swiper {
+					.trend-product-swiper {
 						width: 100%;
 						height: 400px;
 						display: flex;
 						flex-direction: row;
-						.trend-property-slide {
+						.trend-product-slide {
 							width: auto;
 							height: auto;
 							display: flex;
@@ -278,7 +278,7 @@
 				}
 			}
 		}
-		.popular-properties {
+		.popular-products {
 			padding: 132px 0px 94px;
 			width: 100%;
 			height: 816px;
@@ -295,12 +295,12 @@
 					display: flex;
 					flex-direction: row;
 					justify-content: space-between;
-					.popular-property-swiper {
+					.popular-product-swiper {
 						width: 100%;
 						height: 425px;
 						display: flex;
 						flex-direction: row;
-						.popular-property-slide {
+						.popular-product-slide {
 							width: auto;
 							height: auto;
 							display: flex;
@@ -487,7 +487,7 @@
 			transform: perspective(0px);
 			box-shadow: -3px 0px 20px 14px #34343480;
 		}
-		.top-properties {
+		.top-products {
 			padding: 108px 0px 76px;
 			width: 100%;
 			height: 697px;
@@ -500,12 +500,12 @@
 					margin-top: 64px;
 					display: flex;
 					flex-direction: row;
-					.top-property-swiper {
+					.top-product-swiper {
 						width: 100%;
 						height: 440px;
 						display: flex;
 						flex-direction: row;
-						.top-property-slide {
+						.top-product-slide {
 							width: auto;
 							height: auto;
 							display: flex;
@@ -754,7 +754,7 @@
 				}
 			}
 		}
-		.top-agents {
+		.top-sellers {
 			position: relative;
 			padding: 153px 0px 135px;
 			width: 100%;
@@ -787,7 +787,7 @@
 							width: 14px;
 							height: 14px;
 						}
-						&.swiper-agents-next {
+						&.swiper-sellers-next {
 							transform: rotate(180deg);
 						}
 					}
@@ -796,18 +796,18 @@
 						height: 280px;
 						display: flex;
 						flex-direction: row;
-						.top-agents-swiper {
+						.top-sellers-swiper {
 							width: 99.7%;
 							height: 280px;
 							display: flex;
 							flex-direction: row;
-							.top-agents-slide {
+							.top-sellers-slide {
 								width: auto;
 								height: auto;
 								display: flex;
 							}
 						}
-						.top-agent-card {
+						.top-seller-card {
 							width: 205px;
 							height: 280px;
 							display: flex;

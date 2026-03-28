@@ -58,7 +58,7 @@ const TrendProducts = (props: TrendProductsProps) => {
 
 	if (device === 'mobile') {
 		return (
-			<Stack className={'trend-properties'}>
+			<Stack className={'trend-products'}>
 				<Stack className={'container'}>
 					<Stack className={'info-box'}>
 						<span>Trending Products</span>
@@ -70,7 +70,7 @@ const TrendProducts = (props: TrendProductsProps) => {
 							</Box>
 						) : (
 							<Swiper
-								className={'trend-property-swiper'}
+								className={'trend-product-swiper'}
 								slidesPerView={'auto'}
 								centeredSlides={true}
 								spaceBetween={15}
@@ -78,7 +78,7 @@ const TrendProducts = (props: TrendProductsProps) => {
 							>
 								{trendProducts.map((product: Product) => {
 									return (
-										<SwiperSlide key={product._id} className={'trend-property-slide'}>
+										<SwiperSlide key={product._id} className={'trend-product-slide'}>
 											<TrendProductCard product={product} likeProductHandler={likeProductHandler} />
 										</SwiperSlide>
 									);
@@ -91,7 +91,7 @@ const TrendProducts = (props: TrendProductsProps) => {
 		);
 	} else {
 		return (
-			<Stack className={'trend-properties'}>
+			<Stack className={'trend-products'}>
 				<Stack className={'container'}>
 					<Stack className={'info-box'}>
 						<Box component={'div'} className={'left'}>
@@ -113,7 +113,7 @@ const TrendProducts = (props: TrendProductsProps) => {
 							</Box>
 						) : (
 							<Swiper
-								className={'trend-property-swiper'}
+								className={'trend-product-swiper'}
 								slidesPerView={'auto'}
 								spaceBetween={15}
 								modules={[Autoplay, Navigation, Pagination]}
@@ -127,7 +127,7 @@ const TrendProducts = (props: TrendProductsProps) => {
 							>
 								{trendProducts.map((product: Product) => {
 									return (
-										<SwiperSlide key={product._id} className={'trend-property-slide'}>
+										<SwiperSlide key={product._id} className={'trend-product-slide'}>
 											<TrendProductCard product={product} likeProductHandler={likeProductHandler} />
 										</SwiperSlide>
 									);

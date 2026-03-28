@@ -144,6 +144,7 @@ export const CREATE_PRODUCT = gql`
 			productTitle
 			productPrice
 			productVolume
+			productLeftCount
 			productSize
 			productSkinType
 			productViews
@@ -179,6 +180,7 @@ export const UPDATE_PRODUCT = gql`
 			productTitle
 			productPrice
 			productVolume
+			productLeftCount
 			productSize
 			productSkinType
 			productViews

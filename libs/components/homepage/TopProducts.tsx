@@ -57,14 +57,14 @@ const TopProducts = (props: TopProductsProps) => {
 
 	if (device === 'mobile') {
 		return (
-			<Stack className={'top-properties'}>
+			<Stack className={'top-products'}>
 				<Stack className={'container'}>
 					<Stack className={'info-box'}>
 						<span>Top Products</span>
 					</Stack>
 					<Stack className={'card-box'}>
 						<Swiper
-							className={'top-property-swiper'}
+							className={'top-product-swiper'}
 							slidesPerView={'auto'}
 							centeredSlides={true}
 							spaceBetween={15}
@@ -72,7 +72,7 @@ const TopProducts = (props: TopProductsProps) => {
 						>
 							{topProducts.map((product: Product) => {
 								return (
-									<SwiperSlide className={'top-property-slide'} key={product?._id}>
+									<SwiperSlide className={'top-product-slide'} key={product?._id}>
 										<TopProductCard product={product} likeProductHandler={likeProductHandler} />
 									</SwiperSlide>
 								);
@@ -84,7 +84,7 @@ const TopProducts = (props: TopProductsProps) => {
 		);
 	} else {
 		return (
-			<Stack className={'top-properties'}>
+			<Stack className={'top-products'}>
 				<Stack className={'container'}>
 					<Stack className={'info-box'}>
 						<Box component={'div'} className={'left'}>
@@ -101,7 +101,7 @@ const TopProducts = (props: TopProductsProps) => {
 					</Stack>
 					<Stack className={'card-box'}>
 						<Swiper
-							className={'top-property-swiper'}
+							className={'top-product-swiper'}
 							slidesPerView={'auto'}
 							spaceBetween={15}
 							modules={[Autoplay, Navigation, Pagination]}
@@ -115,7 +115,7 @@ const TopProducts = (props: TopProductsProps) => {
 						>
 							{topProducts.map((product: Product) => {
 								return (
-									<SwiperSlide className={'top-property-slide'} key={product?._id}>
+									<SwiperSlide className={'top-product-slide'} key={product?._id}>
 										<TopProductCard product={product} likeProductHandler={likeProductHandler} />
 									</SwiperSlide>
 								);

@@ -70,8 +70,8 @@ export const GET_MEMBER = gql(`
         updatedAt
         accessToken
         meFollowed {
-					followingId
-					followerId
+					memberId
+					likeRefId
 					myFollowing
 				}
     }

@@ -166,7 +166,7 @@ const ProductBigCard = (props: ProductBigCardProps) => {
 							}}
 						>
 							{product?.meLiked && product?.meLiked[0]?.myFavorite ? (
-								<FavoriteIcon style={{ color: '#e91e63' }} />
+								<FavoriteIcon sx={{ color: '#e91e63' }} />
 							) : (
 								<FavoriteBorderIcon />
 							)}
