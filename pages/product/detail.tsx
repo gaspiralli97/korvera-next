@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutFull from '../../libs/components/layout/LayoutFull';
@@ -67,6 +67,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
+	const queryProductId = typeof router.query.id === 'string' ? router.query.id : '';
 	const [productId, setProductId] = useState<string | null>(null);
 	const [product, setProduct] = useState<Product | null>(null);
 	const [slideImage, setSlideImage] = useState<string>('');
@@ -88,6 +89,17 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 		commentContent: '',
 		commentRefId: '',
 	});
+	const sizes = useMemo(
+		() => [
+			{ label: `${Math.round((product?.productVolume ?? 30) * 0.33)} mL`, price: Math.round((product?.productPrice ?? 0) * 0.55) },
+			{ label: `${product?.productVolume ?? 90} mL`, price: product?.productPrice ?? 0 },
+			{ label: `${Math.round((product?.productVolume ?? 90) * 2)} mL`, price: Math.round((product?.productPrice ?? 0) * 1.8) },
+		],
+		[product?.productVolume, product?.productPrice],
+	);
+	const safeActiveSize = Math.min(Math.max(activeSize, 0), Math.max(sizes.length - 1, 0));
+	const selectedSize = sizes[safeActiveSize] ?? { label: '0 mL', price: 0 };
+	const relatedCategoryList = product?.productCategory ? [product.productCategory] : [];
 
 	/** APOLLO REQUESTS **/
 	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
@@ -123,14 +135,16 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 				sort: 'createdAt',
 				direction: Direction.DESC,
 				search: {
-					categoryList: product?.productCategory ? [product?.productCategory] : [],
+					categoryList: relatedCategoryList,
 				},
 			},
 		},
 		skip: !productId && !product,
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			if (data?.getProducts?.list) setRelatedProducts(data?.getProducts?.list);
+			if (data?.getProducts?.list) {
+				setRelatedProducts(data.getProducts.list.filter((item: Product) => item?._id !== productId));
+			}
 		},
 	});
 
@@ -142,7 +156,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 	} = useQuery(GET_COMMENTS, {
 		fetchPolicy: 'cache-and-network',
 		variables: {
-			input: initialComment,
+			input: commentInquiry,
 		},
 		skip: !commentInquiry.search.commentRefId,
 		notifyOnNetworkStatusChange: true,
@@ -154,26 +168,21 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		if (router.query.id) {
-			setProductId(router.query.id as string);
-			setCommentInquiry({
-				...commentInquiry,
-				search: {
-					commentRefId: router.query.id as string,
-				},
-			});
-			setInsertCommentData({
-				...insertCommentData,
-				commentRefId: router.query.id as string,
-			});
-		}
-	}, [router]);
-
-	useEffect(() => {
-		if (commentInquiry.search.commentRefId) {
-			getCommentsRefetch({ input: commentInquiry });
-		}
-	}, [commentInquiry]);
+		if (!queryProductId) return;
+		setProductId(queryProductId);
+		setCommentInquiry((prev) => ({
+			...prev,
+			page: 1,
+			search: {
+				...prev.search,
+				commentRefId: queryProductId,
+			},
+		}));
+		setInsertCommentData((prev) => ({
+			...prev,
+			commentRefId: queryProductId,
+		}));
+	}, [queryProductId]);
 
 	/** HANDLERS **/
 	const LENS_SIZE = 100;
@@ -213,7 +222,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 					sort: 'createdAt',
 					direction: Direction.DESC,
 					search: {
-						categoryList: [product?.productCategory],
+						categoryList: relatedCategoryList,
 					},
 				},
 			});
@@ -225,21 +234,23 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 	};
 
 	const addToCartHandler = () => {
+		if (!product?._id) return;
+		const normalizedQty = Number.isFinite(qty) && qty > 0 ? Math.floor(qty) : 1;
 		const newItem: CartItem = {
 			productId: product?._id ?? '',
 			productTitle: product?.productTitle ?? '',
 			productBrand: product?.productBrand ?? '',
-			productPrice: sizes[activeSize].price,
+			productPrice: selectedSize.price,
 			productImage: product?.productImages?.[0] ?? '',
-			qty,
-			size: sizes[activeSize].label,
+			qty: normalizedQty,
+			size: selectedSize.label,
 		};
 		const current = cartVar();
 		const existing = current.findIndex((i) => i.productId === newItem.productId && i.size === newItem.size);
 		let updated: CartItem[];
 		if (existing >= 0) {
 			updated = current.map((item, idx) =>
-				idx === existing ? { ...item, qty: item.qty + qty } : item,
+				idx === existing ? { ...item, qty: item.qty + normalizedQty } : item,
 			);
 		} else {
 			updated = [...current, newItem];
@@ -251,22 +262,31 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 	};
 
 	const commentPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
-		commentInquiry.page = value;
-		setCommentInquiry({ ...commentInquiry });
+		setCommentInquiry((prev) => ({ ...prev, page: value }));
 	};
 
 	const createCommentHandler = async () => {
 		try {
 			if (!user._id) throw Error(Message.NOT_AUTHENTICATED);
-			await createComment({ variables: { input: insertCommentData } });
-			setInsertCommentData({ ...insertCommentData, commentContent: '' });
+			if (!insertCommentData.commentRefId) throw Error('Invalid product reference.');
+			const commentContent = insertCommentData.commentContent.trim();
+			if (!commentContent) return;
+			await createComment({
+				variables: {
+					input: {
+						...insertCommentData,
+						commentContent,
+					},
+				},
+			});
+			setInsertCommentData((prev) => ({ ...prev, commentContent: '' }));
 			await getCommentsRefetch({ input: commentInquiry });
 		} catch (err) {
 			await sweetErrorHandling(err);
 		}
 	};
 
-	if (getProductsLoading) {
+	if (getProductLoading) {
 		return (
 			<Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '1080px' }}>
 				<CircularProgress size={"4rem"} />
@@ -277,11 +297,6 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 	if (device === 'mobile') {
 		return <div>PRODUCT DETAIL PAGE</div>;
 	} else {
-		const sizes = [
-			{ label: `${Math.round((product?.productVolume ?? 30) * 0.33)} mL`, price: Math.round((product?.productPrice ?? 0) * 0.55) },
-			{ label: `${product?.productVolume ?? 90} mL`, price: product?.productPrice ?? 0 },
-			{ label: `${Math.round((product?.productVolume ?? 90) * 2)} mL`, price: Math.round((product?.productPrice ?? 0) * 1.8) },
-		];
 		return (
 			<div id={'product-detail-ui-page'}>
 				<div className={'container'}>
@@ -375,10 +390,10 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 
 								{/* Price */}
 								<Stack className={'pdp-price-block'}>
-									<Typography className={'pdp-price'}>${formatterStr(sizes[activeSize].price)}</Typography>
+									<Typography className={'pdp-price'}>${formatterStr(selectedSize.price)}</Typography>
 									<Stack className={'pdp-installment'}>
 										<Typography>
-											or 4 × <strong>${(sizes[activeSize].price / 4).toFixed(2)}</strong> with{' '}
+											or 4 × <strong>${(selectedSize.price / 4).toFixed(2)}</strong> with{' '}
 											<span className={'pdp-klarna'}>Klarna</span>
 										</Typography>
 									</Stack>
@@ -389,7 +404,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 									<Box className={'pdp-subscribe-icon'}>🔄</Box>
 									<Typography>
 										Subscribe & Save 5% —{'  '}
-										<strong>${(sizes[activeSize].price * 0.95).toFixed(2)}</strong>
+										<strong>${(selectedSize.price * 0.95).toFixed(2)}</strong>
 									</Typography>
 								</Stack>
 
@@ -670,7 +685,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 										<Typography className={'pdp-section-title'}>Leave A Review</Typography>
 										<textarea
 											onChange={({ target: { value } }: any) => {
-												setInsertCommentData({ ...insertCommentData, commentContent: value });
+												setInsertCommentData((prev) => ({ ...prev, commentContent: value }));
 											}}
 											value={insertCommentData.commentContent}
 											placeholder="Share your experience with this product..."
@@ -678,7 +693,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 										<Box className={'pdp-submit-row'} component={'div'}>
 											<Button
 												className={'pdp-submit-btn'}
-												disabled={insertCommentData.commentContent === '' || user?._id === ''}
+												disabled={insertCommentData.commentContent.trim() === '' || user?._id === ''}
 												onClick={createCommentHandler}
 											>
 												Submit Review
