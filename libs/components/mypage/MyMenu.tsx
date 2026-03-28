@@ -18,8 +18,8 @@ const MyMenu = () => {
 	const isSeller = user?.memberType === 'SELLER';
 	const isAdmin = user?.memberType === 'ADMIN';
 	const isUser = user?.memberType === 'USER';
-	const memberFollowersCount = (user as any)?.memberFollowers ?? 0;
-	const memberFollowingsCount = (user as any)?.memberFollowings ?? 0;
+	const memberFollowersCount = user?.memberFollowers ?? 0;
+	const memberFollowingsCount = user?.memberFollowings ?? 0;
 
 	const logoutHandler = async () => {
 		try {
