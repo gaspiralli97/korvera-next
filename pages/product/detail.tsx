@@ -89,6 +89,8 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 		commentContent: '',
 		commentRefId: '',
 	});
+	const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
+	const [reviewLikeMap, setReviewLikeMap] = useState<Record<string, boolean>>({});
 	const sizes = useMemo(
 		() => [
 			{ label: `${Math.round((product?.productVolume ?? 30) * 0.33)} mL`, price: Math.round((product?.productPrice ?? 0) * 0.55) },
@@ -100,6 +102,12 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 	const safeActiveSize = Math.min(Math.max(activeSize, 0), Math.max(sizes.length - 1, 0));
 	const selectedSize = sizes[safeActiveSize] ?? { label: '0 mL', price: 0 };
 	const relatedCategoryList = product?.productCategory ? [product.productCategory] : [];
+	const stockCount = Number(product?.productLeftCount);
+	const hasStockLimit = Number.isFinite(stockCount);
+	const maxQty = hasStockLimit ? Math.max(0, Math.floor(stockCount)) : Number.POSITIVE_INFINITY;
+	const outOfStock = hasStockLimit && maxQty <= 0;
+	const effectiveQty = Math.max(1, Number.isFinite(qty) ? Math.floor(qty) : 1);
+	const totalPrice = selectedSize.price * effectiveQty;
 
 	/** APOLLO REQUESTS **/
 	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
@@ -184,6 +192,24 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 		}));
 	}, [queryProductId]);
 
+	useEffect(() => {
+		if (!hasStockLimit) return;
+		setQty((prev) => {
+			const normalized = Math.max(1, Number.isFinite(prev) ? Math.floor(prev) : 1);
+			return Math.min(normalized, Math.max(maxQty, 1));
+		});
+	}, [hasStockLimit, maxQty]);
+
+	useEffect(() => {
+		setReviewLikeMap((prev) => {
+			const next: Record<string, boolean> = {};
+			productComments.forEach((comment: Comment) => {
+				next[comment._id] = prev[comment._id] ?? false;
+			});
+			return next;
+		});
+	}, [productComments]);
+
 	/** HANDLERS **/
 	const LENS_SIZE = 100;
 
@@ -209,11 +235,34 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 		setSlideImage(image);
 	};
 
+	const toggleLikeOnProduct = (target: Product, targetId: string): Product => {
+		if (!target || target._id !== targetId) return target;
+		const wasLiked = Boolean(target.meLiked?.[0]?.myFavorite);
+		const nextLiked = !wasLiked;
+		const nextLikes = Math.max(0, (target.productLikes ?? 0) + (nextLiked ? 1 : -1));
+		return {
+			...target,
+			productLikes: nextLikes,
+			meLiked: [
+				{
+					memberId: user?._id ?? '',
+					likeRefId: targetId,
+					myFavorite: nextLiked,
+				},
+			],
+		};
+	};
+
 	const likeProductHandler = async (user: T, id: string) => {
 		try {
 			if (!id) return;
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			setProduct((prev) => (prev ? toggleLikeOnProduct(prev, id) : prev));
+			setRelatedProducts((prev) => prev.map((item) => toggleLikeOnProduct(item, id)));
 			await likeTargetProduct({ variables: { input: id } });
+			await sweetTopSmallSuccessAlert('success', 800);
+		} catch (err: any) {
+			console.log('ERROR, likeProductHandler', err.message);
 			await getProductRefetch({ input: id });
 			await getProductsRefetch({
 				input: {
@@ -226,39 +275,55 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 					},
 				},
 			});
-			await sweetTopSmallSuccessAlert('success', 800);
-		} catch (err: any) {
-			console.log('ERROR, likeProductHandler', err.message);
 			sweetMixinErrorAlert(err.message).then();
 		}
 	};
 
-	const addToCartHandler = () => {
-		if (!product?._id) return;
-		const normalizedQty = Number.isFinite(qty) && qty > 0 ? Math.floor(qty) : 1;
-		const newItem: CartItem = {
-			productId: product?._id ?? '',
-			productTitle: product?.productTitle ?? '',
-			productBrand: product?.productBrand ?? '',
-			productPrice: selectedSize.price,
-			productImage: product?.productImages?.[0] ?? '',
-			qty: normalizedQty,
-			size: selectedSize.label,
-		};
-		const current = cartVar();
-		const existing = current.findIndex((i) => i.productId === newItem.productId && i.size === newItem.size);
-		let updated: CartItem[];
-		if (existing >= 0) {
-			updated = current.map((item, idx) =>
-				idx === existing ? { ...item, qty: item.qty + normalizedQty } : item,
-			);
-		} else {
-			updated = [...current, newItem];
+	const addToCartHandler = async () => {
+		try {
+			if (!product?._id) return;
+			if (isAddingToCart) return;
+			if (!selectedSize.label) {
+				await sweetMixinErrorAlert('Please select size.');
+				return;
+			}
+			if (outOfStock) {
+				await sweetMixinErrorAlert('This product is out of stock.');
+				return;
+			}
+			setIsAddingToCart(true);
+			const normalizedQty = Math.min(effectiveQty, maxQty);
+			const payload = {
+				productId: product._id,
+				quantity: normalizedQty,
+				selectedSize: selectedSize.label,
+			};
+			const newItem: CartItem = {
+				productId: payload.productId,
+				productTitle: product?.productTitle ?? '',
+				productBrand: product?.productBrand ?? '',
+				productPrice: selectedSize.price,
+				productImage: product?.productImages?.[0] ?? '',
+				qty: payload.quantity,
+				size: payload.selectedSize,
+			};
+			const current = cartVar();
+			const existing = current.findIndex((i) => i.productId === newItem.productId && i.size === newItem.size);
+			let updated: CartItem[];
+			if (existing >= 0) {
+				updated = current.map((item, idx) =>
+					idx === existing ? { ...item, qty: item.qty + normalizedQty } : item,
+				);
+			} else {
+				updated = [...current, newItem];
+			}
+			cartVar(updated);
+			saveCart(updated);
+			await sweetTopSmallSuccessAlert('Added to basket!', 800);
+			await router.push('/cart');
+		} finally {
+			setIsAddingToCart(false);
 		}
-		cartVar(updated);
-		saveCart(updated);
-		sweetTopSmallSuccessAlert('Added to basket!', 800);
-		setTimeout(() => router.push('/cart'), 800);
 	};
 
 	const commentPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
@@ -284,6 +349,21 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 		} catch (err) {
 			await sweetErrorHandling(err);
 		}
+	};
+
+	const toggleReviewLikeHandler = (commentId: string) => {
+		setReviewLikeMap((prev) => ({
+			...prev,
+			[commentId]: !prev[commentId],
+		}));
+	};
+
+	const increaseQtyHandler = () => {
+		setQty((prev) => Math.min(Math.max(maxQty, 1), prev + 1));
+	};
+
+	const decreaseQtyHandler = () => {
+		setQty((prev) => Math.max(1, prev - 1));
 	};
 
 	if (getProductLoading) {
@@ -373,7 +453,9 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 									<Typography className={'pdp-rating-count'}>{(product?.productRatingCount ?? 0).toLocaleString()} reviews</Typography>
 									<span className={'pdp-sep'}>·</span>
 									<Stack className={'pdp-likes'}>
-										<FavoriteBorderIcon sx={{ fontSize: 14, color: '#D4849A' }} />
+										{product?.meLiked?.[0]?.myFavorite
+											? <FavoriteIcon sx={{ fontSize: 14, color: '#D4849A' }} />
+											: <FavoriteBorderIcon sx={{ fontSize: 14, color: '#D4849A' }} />}
 										<Typography>{(product?.productLikes ?? 0).toLocaleString()}</Typography>
 									</Stack>
 								</Stack>
@@ -390,10 +472,10 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 
 								{/* Price */}
 								<Stack className={'pdp-price-block'}>
-									<Typography className={'pdp-price'}>${formatterStr(selectedSize.price)}</Typography>
+									<Typography className={'pdp-price'}>${formatterStr(totalPrice)}</Typography>
 									<Stack className={'pdp-installment'}>
 										<Typography>
-											or 4 × <strong>${(selectedSize.price / 4).toFixed(2)}</strong> with{' '}
+											or 4 × <strong>${(totalPrice / 4).toFixed(2)}</strong> with{' '}
 											<span className={'pdp-klarna'}>Klarna</span>
 										</Typography>
 									</Stack>
@@ -404,7 +486,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 									<Box className={'pdp-subscribe-icon'}>🔄</Box>
 									<Typography>
 										Subscribe & Save 5% —{'  '}
-										<strong>${(selectedSize.price * 0.95).toFixed(2)}</strong>
+										<strong>${(totalPrice * 0.95).toFixed(2)}</strong>
 									</Typography>
 								</Stack>
 
@@ -444,15 +526,15 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 								<Stack className={'pdp-cta-row'}>
 									{/* Qty */}
 									<Stack className={'pdp-qty-control'}>
-										<button className={'pdp-qty-btn'} onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
-										<Typography className={'pdp-qty-val'}>{qty}</Typography>
-										<button className={'pdp-qty-btn'} onClick={() => setQty((q) => q + 1)}>+</button>
+										<button className={'pdp-qty-btn'} onClick={decreaseQtyHandler}>−</button>
+										<Typography className={'pdp-qty-val'}>{effectiveQty}</Typography>
+										<button className={'pdp-qty-btn'} onClick={increaseQtyHandler}>+</button>
 									</Stack>
 
 									{/* Add to cart */}
-									<Button className={'pdp-add-btn'} disableRipple onClick={addToCartHandler}>
+									<Button className={'pdp-add-btn'} disableRipple onClick={addToCartHandler} disabled={isAddingToCart || outOfStock}>
 										<Box className={'pdp-add-icon'}>🛒</Box>
-										Add to Basket
+										{outOfStock ? 'Out of Stock' : isAddingToCart ? 'Adding...' : 'Add to Basket'}
 									</Button>
 
 									{/* Wishlist */}
@@ -661,8 +743,8 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 												</Typography>
 												<Typography className={'pdp-rv-body'}>{comment?.commentContent}</Typography>
 												<Stack className={'pdp-rv-footer'}>
-													<Typography className={'pdp-rv-helpful'}>
-														👍 {((comment?._id?.charCodeAt(comment._id.length - 1) ?? 10) % 190) + 10} people found this helpful
+													<Typography className={'pdp-rv-helpful'} onClick={() => toggleReviewLikeHandler(comment._id)}>
+														👍 {((comment?._id?.charCodeAt(comment._id.length - 1) ?? 10) % 190) + 10 + (reviewLikeMap[comment._id] ? 1 : 0)} people found this helpful
 													</Typography>
 												</Stack>
 											</Stack>
