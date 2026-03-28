@@ -23,6 +23,8 @@ const MemberMenu = (props: MemberMenuProps) => {
 	const [member, setMember] = useState<Member | null>(null);
 	const { memberId } = router.query;
 	const loggedInUser = useReactiveVar(userVar);
+	const targetMemberId = typeof memberId === 'string' ? memberId : member?._id;
+	const isOwnProfile = Boolean(targetMemberId && targetMemberId === loggedInUser?._id);
 
 	/** APOLLO REQUESTS **/
 
@@ -63,14 +65,14 @@ const MemberMenu = (props: MemberMenuProps) => {
 						<Typography className={'view-list'}>{member?.memberType}</Typography>
 					</Stack>
 				</Stack>
-				{member?._id !== loggedInUser?._id && (
+				{targetMemberId && !isOwnProfile && (
 					<Stack className="follow-button-box">
 						{member?.meFollowed && member?.meFollowed[0]?.myFollowing ? (
 							<>
 								<Button
 									variant="outlined"
 									className={'unfollow-btn'}
-									onClick={() => unsubscribeHandler(member?._id, getMemberRefetch, memberId)}
+									onClick={() => unsubscribeHandler(targetMemberId, getMemberRefetch, memberId)}
 								>
 									Unfollow
 								</Button>
@@ -80,7 +82,7 @@ const MemberMenu = (props: MemberMenuProps) => {
 							<Button
 								variant="contained"
 								className={'follow-btn'}
-								onClick={() => subscribeHandler(member?._id, getMemberRefetch, memberId)}
+								onClick={() => subscribeHandler(targetMemberId, getMemberRefetch, memberId)}
 							>
 								Follow
 							</Button>
