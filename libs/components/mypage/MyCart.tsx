@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Stack, Box, Typography, Button, Divider } from '@mui/material';
 import Link from 'next/link';
@@ -11,9 +11,15 @@ interface MyCartProps {}
 const MyCart: React.FC<MyCartProps> = () => {
 	const device = useDeviceDetect();
 	const cartItems = useReactiveVar(cartVar);
+	const [mounted, setMounted] = useState(false);
+	useEffect(() => { setMounted(true); }, []);
+
 	const total = cartItems.reduce((acc: number, item: CartItem) => acc + item.productPrice * (item.qty ?? 1), 0);
 	const shipping = total >= 50 ? 0 : 5.99;
 	const grandTotal = total + shipping;
+	const displayTotal = total;
+	const displayShipping = shipping;
+	const displayGrandTotal = grandTotal;
 
 	/** HANDLERS **/
 	const updateQty = (productId: string, size: string, delta: number) => {
@@ -35,6 +41,8 @@ const MyCart: React.FC<MyCartProps> = () => {
 		saveCart(updatedItems);
 	};
 
+	if (!mounted) return null;
+
 	if (device === 'mobile') {
 		return <div>MY CART</div>;
 	} else {
@@ -53,15 +61,15 @@ const MyCart: React.FC<MyCartProps> = () => {
 
 								<Stack className={'oy-progress-card'}>
 									<Typography className={'oy-progress-text'}>
-										{shipping === 0
+										{displayShipping === 0
 											? 'You unlocked free shipping'
-											: `Add $${(50 - total).toFixed(2)} more for free shipping`}
+											: `Add $${(50 - displayTotal).toFixed(2)} more for free shipping`}
 									</Typography>
 									<Box component={'div'} className={'oy-progress-track'}>
 										<Box
 											component={'div'}
 											className={'oy-progress-fill'}
-											sx={{ width: `${Math.min((total / 50) * 100, 100)}%` }}
+											sx={{ width: `${Math.min((displayTotal / 50) * 100, 100)}%` }}
 										/>
 									</Box>
 								</Stack>
@@ -177,14 +185,14 @@ const MyCart: React.FC<MyCartProps> = () => {
 									</Stack>
 									<Stack className={'summary-row'}>
 										<Typography>Shipping</Typography>
-										<Typography>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</Typography>
+										<Typography>{displayShipping === 0 ? 'FREE' : `$${displayShipping.toFixed(2)}`}</Typography>
 									</Stack>
 
 									<Divider />
 
 									<Stack className={'summary-row total'}>
 										<Typography>Estimated Total</Typography>
-										<Typography>${grandTotal.toFixed(2)}</Typography>
+										<Typography>${displayGrandTotal.toFixed(2)}</Typography>
 									</Stack>
 
 									<Button className={'checkout-btn'}>
