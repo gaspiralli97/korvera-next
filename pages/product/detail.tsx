@@ -81,6 +81,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 	const [panelPos, setPanelPos] = useState({ left: 0, top: 0 });
 	const imgRef = useRef<HTMLDivElement>(null);
 	const heroRef = useRef<HTMLDivElement>(null);
+	const tabsRef = useRef<HTMLDivElement>(null);
 	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
 	const [productComments, setProductComments] = useState<Comment[]>([]);
 	const [commentTotal, setCommentTotal] = useState<number>(0);
@@ -366,6 +367,11 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 		setQty((prev) => Math.max(1, prev - 1));
 	};
 
+	const scrollToReviewsHandler = () => {
+		setActiveTab('reviews');
+		setTimeout(() => tabsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+	};
+
 	if (getProductLoading) {
 		return (
 			<Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '1080px' }}>
@@ -450,9 +456,19 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 								<Stack className={'pdp-rating-row'}>
 									<RatingStars rating={product?.productRating ?? 0} />
 									<Typography className={'pdp-rating-score'}>{product?.productRating ?? 0}</Typography>
-									<Typography className={'pdp-rating-count'}>{(product?.productRatingCount ?? 0).toLocaleString()} reviews</Typography>
+									<Typography
+										className={'pdp-rating-count'}
+										onClick={scrollToReviewsHandler}
+										sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
+									>
+										{(product?.productRatingCount ?? 0).toLocaleString()} reviews
+									</Typography>
 									<span className={'pdp-sep'}>·</span>
-									<Stack className={'pdp-likes'}>
+									<Stack
+										className={'pdp-likes'}
+										onClick={() => likeProductHandler(user, product?._id ?? '')}
+										sx={{ cursor: 'pointer' }}
+									>
 										{product?.meLiked?.[0]?.myFavorite
 											? <FavoriteIcon sx={{ fontSize: 14, color: '#D4849A' }} />
 											: <FavoriteBorderIcon sx={{ fontSize: 14, color: '#D4849A' }} />}
@@ -586,7 +602,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 						{/* ══════════════════════════════════════════════════
 						    3. TABS — Description | Ingredients | Reviews
 						══════════════════════════════════════════════════ */}
-						<Stack className={'pdp-tabs-wrap'}>
+						<Stack className={'pdp-tabs-wrap'} ref={tabsRef as any}>
 
 							{/* Tab nav */}
 							<Stack className={'pdp-tab-nav'}>
