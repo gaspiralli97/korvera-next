@@ -19,7 +19,7 @@ import { Comment } from '../../libs/types/comment/comment';
 import { CommentGroup } from '../../libs/enums/comment.enum';
 import { Messages, REACT_APP_API_URL } from '../../libs/config';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { CREATE_COMMENT, LIKE_TARGET_PRODUCT } from '../../apollo/user/mutation';
+import { CREATE_COMMENT, LIKE_TARGET_PRODUCT, SUBSCRIBE, UNSUBSCRIBE } from '../../apollo/user/mutation';
 import { GET_COMMENTS, GET_MEMBER, GET_PRODUCTS } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 
@@ -50,6 +50,8 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 	/** APOLLO REQUESTS **/
 	const [createComment] = useMutation(CREATE_COMMENT);
 	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
+	const [subscribe] = useMutation(SUBSCRIBE);
+	const [unsubscribe] = useMutation(UNSUBSCRIBE);
 
 	const {
 		loading: getMemberLoading,
@@ -155,6 +157,28 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 		}
 	};
 
+	const followHandler = async () => {
+		try {
+			if (!user._id) throw new Error(Messages.error2);
+			await subscribe({ variables: { input: agentId } });
+			await getMemberRefetch({ input: agentId });
+			await sweetTopSmallSuccessAlert('success', 800);
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+		}
+	};
+
+	const unfollowHandler = async () => {
+		try {
+			if (!user._id) throw new Error(Messages.error2);
+			await unsubscribe({ variables: { input: agentId } });
+			await getMemberRefetch({ input: agentId });
+			await sweetTopSmallSuccessAlert('success', 800);
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+		}
+	};
+
 	const likeProductHandler = async (user: any, id: string) => {
 		try {
 			if (!id) return;
@@ -219,6 +243,19 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 										<Typography className={'stat-label'}>Likes</Typography>
 									</Stack>
 								</Stack>
+								{user?._id && user._id !== agentId && (
+									<Stack className={'follow-btn-wrap'}>
+										{agent?.meFollowed && agent?.meFollowed[0]?.myFollowing ? (
+											<Button variant="outlined" className={'unfollow-btn'} onClick={unfollowHandler}>
+												Unfollow
+											</Button>
+										) : (
+											<Button variant="contained" className={'follow-btn'} onClick={followHandler}>
+												Follow
+											</Button>
+										)}
+									</Stack>
+								)}
 							</Stack>
 						</Stack>
 					</Stack>
