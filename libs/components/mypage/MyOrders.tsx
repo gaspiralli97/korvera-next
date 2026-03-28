@@ -4,6 +4,8 @@ import useDeviceDetect from '../../hooks/useDeviceDetect';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { REACT_APP_API_URL } from '../../config';
+import { useReactiveVar } from '@apollo/client';
+import { userVar } from '../../../apollo/store';
 
 type OrderStatus = 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
 
@@ -81,9 +83,74 @@ const STATUS_COLORS: Record<OrderStatus, { bg: string; color: string }> = {
 const MyOrders = () => {
 	const device = useDeviceDetect();
 	const [expandedId, setExpandedId] = useState<string | null>(null);
+	const user = useReactiveVar(userVar);
+	const isSeller = user?.memberType === 'SELLER';
 
 	const toggleExpand = (orderId: string) => {
 		setExpandedId(expandedId === orderId ? null : orderId);
+	};
+
+	const getOrderActions = (status: OrderStatus, isSellerRole: boolean) => {
+		if (isSellerRole) {
+			if (status === 'Processing') {
+				return (
+					<Stack className={'mo-actions'} direction={'row'} gap={1}>
+						<Button variant={'contained'} size={'small'} onClick={() => console.log('Confirm Order')}>
+							Confirm Order
+						</Button>
+						<Button variant={'outlined'} size={'small'} onClick={() => console.log('Cancel Order')}>
+							Cancel Order
+						</Button>
+					</Stack>
+				);
+			}
+			if (status === 'Shipped') {
+				return (
+					<Stack className={'mo-actions'} direction={'row'} gap={1}>
+						<Button variant={'contained'} size={'small'} onClick={() => console.log('Mark as Delivered')}>
+							Mark as Delivered
+						</Button>
+					</Stack>
+				);
+			}
+			if (status === 'Delivered') {
+				return (
+					<Stack className={'mo-actions'} direction={'row'} gap={1}>
+						<Chip label={'Completed'} color={'success'} size={'small'} />
+					</Stack>
+				);
+			}
+			return null;
+		}
+
+		if (status === 'Processing') {
+			return (
+				<Stack className={'mo-actions'} direction={'row'} gap={1}>
+					<Button variant={'outlined'} size={'small'} onClick={() => console.log('Cancel Order')}>
+						Cancel Order
+					</Button>
+				</Stack>
+			);
+		}
+		if (status === 'Shipped') {
+			return (
+				<Stack className={'mo-actions'} direction={'row'} gap={1}>
+					<Button variant={'contained'} size={'small'} onClick={() => console.log('Track Shipment')}>
+						Track Shipment
+					</Button>
+				</Stack>
+			);
+		}
+		if (status === 'Delivered') {
+			return (
+				<Stack className={'mo-actions'} direction={'row'} gap={1}>
+					<Button variant={'contained'} size={'small'} onClick={() => console.log('Write Review')}>
+						Write Review
+					</Button>
+				</Stack>
+			);
+		}
+		return null;
 	};
 
 	if (device === 'mobile') {
@@ -133,6 +200,8 @@ const MyOrders = () => {
 									<Typography className={'mo-order-items-count'}>
 										{order.items.length} {order.items.length === 1 ? 'item' : 'items'}
 									</Typography>
+
+									{getOrderActions(order.status, isSeller)}
 
 									{/* Expanded items list */}
 									{isExpanded && (

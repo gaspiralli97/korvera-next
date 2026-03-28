@@ -17,6 +17,9 @@ const MyMenu = () => {
 
 	const isSeller = user?.memberType === 'SELLER';
 	const isAdmin = user?.memberType === 'ADMIN';
+	const isUser = user?.memberType === 'USER';
+	const memberFollowersCount = (user as any)?.memberFollowers ?? 0;
+	const memberFollowingsCount = (user as any)?.memberFollowings ?? 0;
 
 	const logoutHandler = async () => {
 		try {
@@ -71,11 +74,15 @@ const MyMenu = () => {
 			{/* ── My Activities ── */}
 			<Stack className={'menu-section'}>
 				<Typography className={'menu-section-title'}>My Activities</Typography>
-				{navLink('followers', 'My Followers')}
-				{navLink('followings', 'My Followings')}
+				{navLink('followers', `My Followers (${memberFollowersCount})`)}
+				{navLink('followings', `My Followings (${memberFollowingsCount})`)}
 				<div className={'menu-divider'} />
-				{navLink('myArticles', 'My Articles')}
-				{navLink('writeArticle', 'Write Article')}
+				{(!isUser && (isSeller || isAdmin)) && (
+					<>
+						{navLink('myArticles', 'My Articles')}
+						{navLink('writeArticle', 'Write Article')}
+					</>
+				)}
 			</Stack>
 
 			{/* ── My Store (SELLER only) ── */}
