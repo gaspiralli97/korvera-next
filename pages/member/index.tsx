@@ -59,6 +59,8 @@ const MemberPage: NextPage = () => {
 					input: id,
 				},
 			});
+			const cur = userVar();
+			userVar({ ...cur, memberFollowings: (cur?.memberFollowings || 0) + 1 });
 			await sweetTopSmallSuccessAlert('Followed!', 800);
 			await refetch({ input: query })
 		} catch (err: any) {
@@ -76,6 +78,8 @@ const MemberPage: NextPage = () => {
 					input: id,
 				},
 			});
+			const cur = userVar();
+			userVar({ ...cur, memberFollowings: Math.max(0, (cur?.memberFollowings || 0) - 1) });
 			await sweetTopSmallSuccessAlert('Unfollowed!', 800);
 			await refetch({ input: query })
 		} catch (err: any) {
