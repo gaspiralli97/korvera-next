@@ -6,7 +6,7 @@ const Article = () => {
 	const device = useDeviceDetect();
 
 	if (device === 'mobile') {
-		return <div>PROPERTY CARD</div>;
+		return <div>ARTICLE CARD</div>;
 	} else {
 		return (
 			<Stack className="card-config">
@@ -19,10 +19,10 @@ const Article = () => {
 				<Stack className="bottom">
 					<Stack className="name-address">
 						<Stack className="name">
-							<Typography>Equestrian Family Home</Typography>
+							<Typography>Skincare Routine Essentials</Typography>
 						</Stack>
 						<Stack className="address">
-							<Typography>Shillymdong, Kwanak-ku, Seoul </Typography>
+							<Typography>Dermatologist-approved glow tips</Typography>
 						</Stack>
 					</Stack>
 				</Stack>

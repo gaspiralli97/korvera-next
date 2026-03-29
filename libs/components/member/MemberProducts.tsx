@@ -15,28 +15,28 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	const router = useRouter();
 	const { memberId } = router.query;
 	const [searchFilter, setSearchFilter] = useState<ProductsInquiry>({ ...initialInput });
-	const [agentProperties, setAgentProperties] = useState<Product[]>([]);
+	const [memberProducts, setMemberProducts] = useState<Product[]>([]);
 	const [total, setTotal] = useState<number>(0);
 
 	/** APOLLO REQUESTS **/
 	const {
-		loading: getPropertiesLoading,
-		data: getPropertiesData,
-		error: getPropertiesError,
-		refetch: getPropertiesRefetch,
+		loading: getProductsLoading,
+		data: getProductsData,
+		error: getProductsError,
+		refetch: getProductsRefetch,
 	} = useQuery(GET_PRODUCTS, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		skip: !searchFilter?.search?.memberId,
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: any) => {
-			setAgentProperties(data?.getProducts?.list);
+			setMemberProducts(data?.getProducts?.list);
 			setTotal(data?.getProducts?.metaCounter[0]?.total ?? 0)
 		},
 	});
 	/** LIFECYCLES **/
 	useEffect(() => {
-		getPropertiesRefetch().then()
+		getProductsRefetch().then()
 	}, [searchFilter]);
 
 	useEffect(() => {
@@ -50,36 +50,36 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	};
 
 	if (device === 'mobile') {
-		return <div>KORVERA PROPERTIES MOBILE</div>;
+		return <div>KORVERA PRODUCTS MOBILE</div>;
 	} else {
 		return (
-			<div id="member-properties-page">
+			<div id="member-products-page">
 				<Stack className="main-title-box">
 					<Stack className="right-box">
-						<Typography className="main-title">Properties</Typography>
+						<Typography className="main-title">Products</Typography>
 					</Stack>
 				</Stack>
-				<Stack className="properties-list-box">
+				<Stack className="products-list-box">
 					<Stack className="list-box">
-						{agentProperties?.length > 0 && (
-							<Stack className="listing-title-box">
-								<Typography className="title-text">Listing title</Typography>
+						{memberProducts?.length > 0 && (
+							<Stack className="product-title-box">
+								<Typography className="title-text">Product title</Typography>
 								<Typography className="title-text">Date Published</Typography>
 								<Typography className="title-text">Status</Typography>
 								<Typography className="title-text">View</Typography>
 							</Stack>
 						)}
-						{agentProperties?.length === 0 && (
+						{memberProducts?.length === 0 && (
 							<div className={'no-data'}>
 								<img src="/img/icons/icoAlert.svg" alt="" />
-								<p>No Property found!</p>
+								<p>No Products found!</p>
 							</div>
 						)}
-						{agentProperties?.map((property: Product) => {
-							return <ProductCard product={property} memberPage={true} key={property?._id} />;
+						{memberProducts?.map((product: Product) => {
+							return <ProductCard product={product} memberPage={true} key={product?._id} />;
 						})}
 
-						{agentProperties.length !== 0 && (
+						{memberProducts.length !== 0 && (
 							<Stack className="pagination-config">
 								<Stack className="pagination-box">
 									<Pagination
@@ -91,7 +91,7 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 									/>
 								</Stack>
 								<Stack className="total-result">
-									<Typography>{total} property available</Typography>
+									<Typography>{total} product{total !== 1 ? 's' : ''} available</Typography>
 								</Stack>
 							</Stack>
 						)}

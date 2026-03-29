@@ -171,7 +171,7 @@
 							position: relative;
 							width: 100%;
 							gap: 10px;
-							.property-location { display: none; }
+							.product-location { display: none; }
 							.title-main {
 								display: none;
 							}
@@ -208,7 +208,7 @@
 									top: 18px;
 									left: 15px;
 								}
-								.property-checkbox {
+								.product-checkbox {
 									width: 16px;
 									height: 15px;
 									border-radius: 12px;
@@ -251,7 +251,7 @@
 								right: 13px;
 								top: 52px;
 							}
-							.property-type {
+							.product-type {
 								color: #181a20;
 								font-family: $font;
 								font-size: 14px;
