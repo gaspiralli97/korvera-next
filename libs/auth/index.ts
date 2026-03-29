@@ -1,6 +1,6 @@
 import decodeJWT from 'jwt-decode';
 import { initializeApollo } from '../../apollo/client';
-import { userVar } from '../../apollo/store';
+import { userVar, cartVar, switchUserCart } from '../../apollo/store';
 import { CustomJwtPayload } from '../types/customJwtPayload';
 import { sweetMixinErrorAlert } from '../sweetAlert';
 import { LOGIN, SIGN_UP } from '../../apollo/user/mutation';
@@ -153,6 +153,7 @@ export const updateUserInfo = (jwtToken: any) => {
 		memberWarnings: claims.memberWarnings,
 		memberBlocks: claims.memberBlocks,
 	});
+	switchUserCart(claims._id ?? '');
 };
 
 export const logOut = () => {
@@ -167,6 +168,7 @@ const deleteStorage = () => {
 };
 
 const deleteUserInfo = () => {
+	cartVar([]);
 	userVar({
 		_id: '',
 		memberType: '',

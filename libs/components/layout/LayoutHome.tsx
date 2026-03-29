@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import Head from 'next/head';
 import Top from '../Top';
@@ -16,12 +16,37 @@ const withLayoutMain = (Component: any) => {
 	return (props: any) => {
 		const device = useDeviceDetect();
 		const user = useReactiveVar(userVar);
+		const videoRef = useRef<HTMLVideoElement>(null);
+		const [muted, setMuted] = useState(true);
 
 		/** LIFECYCLES **/
 		useEffect(() => {
 			const jwt = getJwtToken();
 			if (jwt) updateUserInfo(jwt);
 		}, []);
+
+		useEffect(() => {
+			const video = videoRef.current;
+			if (!video) return;
+			const observer = new IntersectionObserver(
+				([entry]) => {
+					if (!entry.isIntersecting) {
+						video.muted = true;
+						setMuted(true);
+					}
+				},
+				{ threshold: 0.1 },
+			);
+			observer.observe(video);
+			return () => observer.disconnect();
+		}, []);
+
+		const toggleMute = () => {
+			const video = videoRef.current;
+			if (!video) return;
+			video.muted = !video.muted;
+			setMuted(video.muted);
+		};
 
 		/** HANDLERS **/
 
@@ -59,7 +84,20 @@ const withLayoutMain = (Component: any) => {
 							<Top />
 						</Stack>
 
-						<Stack className={'header-main'} />
+						<Stack className={'header-main'}>
+						<video
+							ref={videoRef}
+							className={'hero-video'}
+							src={'/video/ads2.mp4'}
+							autoPlay
+							loop
+							playsInline
+							muted
+						/>
+						<button className={'hero-mute-btn'} onClick={toggleMute}>
+							{muted ? '🔇' : '🔊'}
+						</button>
+					</Stack>
 
 						<Stack id={'main'}>
 							<Component {...props} />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack, Box, Typography, Button, Chip } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -9,7 +9,7 @@ import { userVar } from '../../../apollo/store';
 
 type OrderStatus = 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
 
-interface MockOrderItem {
+interface OrderItem {
 	productTitle: string;
 	productBrand: string;
 	productImage: string;
@@ -18,16 +18,23 @@ interface MockOrderItem {
 	size: string;
 }
 
-interface MockOrder {
+interface OrderRecord {
 	orderId: string;
 	createdAt: string;
 	status: OrderStatus;
-	items: MockOrderItem[];
+	items: OrderItem[];
 	total: number;
 	address: string;
 }
 
-const MOCK_ORDERS: MockOrder[] = [
+const STATUS_COLORS: Record<OrderStatus, { bg: string; color: string }> = {
+	Processing: { bg: '#fff3e0', color: '#e08020' },
+	Shipped:    { bg: '#e3f2fd', color: '#1565c0' },
+	Delivered:  { bg: '#e8f5e9', color: '#2e7d32' },
+	Cancelled:  { bg: '#fce4ec', color: '#c62828' },
+};
+
+const STATIC_ORDERS: OrderRecord[] = [
 	{
 		orderId: 'KRV-20260301-0012',
 		createdAt: 'Mar 1, 2026',
@@ -51,65 +58,53 @@ const MOCK_ORDERS: MockOrder[] = [
 			{ productBrand: 'MISSHA', productTitle: 'Time Revolution Night Repair Cream', productImage: '/img/product/bigImage.png', productPrice: 25.0, qty: 1, size: '50ml' },
 		],
 	},
-	{
-		orderId: 'KRV-20260110-0003',
-		createdAt: 'Jan 10, 2026',
-		status: 'Processing',
-		total: 38.5,
-		address: '789 Pine Rd, Chicago, IL 60601',
-		items: [
-			{ productBrand: 'ETUDE', productTitle: 'Soon Jung 2x Barrier Intensive Cream', productImage: '/img/product/bigImage.png', productPrice: 38.5, qty: 1, size: '60ml' },
-		],
-	},
-	{
-		orderId: 'KRV-20251220-0001',
-		createdAt: 'Dec 20, 2025',
-		status: 'Cancelled',
-		total: 22.0,
-		address: '321 Elm St, Houston, TX 77001',
-		items: [
-			{ productBrand: 'TORRIDEN', productTitle: 'DIVE-IN Low Molecule Hyaluronic Acid Serum', productImage: '/img/product/bigImage.png', productPrice: 22.0, qty: 1, size: '50ml' },
-		],
-	},
 ];
-
-const STATUS_COLORS: Record<OrderStatus, { bg: string; color: string }> = {
-	Processing: { bg: '#fff3e0', color: '#e08020' },
-	Shipped:    { bg: '#e3f2fd', color: '#1565c0' },
-	Delivered:  { bg: '#e8f5e9', color: '#2e7d32' },
-	Cancelled:  { bg: '#fce4ec', color: '#c62828' },
-};
 
 const MyOrders = () => {
 	const device = useDeviceDetect();
 	const [expandedId, setExpandedId] = useState<string | null>(null);
+	const [orders, setOrders] = useState<OrderRecord[]>([]);
 	const user = useReactiveVar(userVar);
 	const isSeller = user?.memberType === 'SELLER';
+
+	useEffect(() => {
+		const key = `korvera_orders_${user?._id ?? 'guest'}`;
+		try {
+			const raw = localStorage.getItem(key);
+			const localOrders: OrderRecord[] = raw ? JSON.parse(raw) : [];
+			setOrders([...localOrders, ...STATIC_ORDERS]);
+		} catch {
+			setOrders(STATIC_ORDERS);
+		}
+	}, [user?._id]);
 
 	const toggleExpand = (orderId: string) => {
 		setExpandedId(expandedId === orderId ? null : orderId);
 	};
 
-	const getOrderActions = (status: OrderStatus, isSellerRole: boolean) => {
+	const cancelOrder = (orderId: string) => {
+		const key = `korvera_orders_${user?._id ?? 'guest'}`;
+		const updated = orders.map((o) => o.orderId === orderId ? { ...o, status: 'Cancelled' as OrderStatus } : o);
+		setOrders(updated);
+		const staticIds = new Set(STATIC_ORDERS.map((o) => o.orderId));
+		const toSave = updated.filter((o) => !staticIds.has(o.orderId));
+		localStorage.setItem(key, JSON.stringify(toSave));
+	};
+
+	const getOrderActions = (status: OrderStatus, orderId: string, isSellerRole: boolean) => {
 		if (isSellerRole) {
 			if (status === 'Processing') {
 				return (
 					<Stack className={'mo-actions'} direction={'row'} gap={1}>
-						<Button variant={'contained'} size={'small'} onClick={() => console.log('Confirm Order')}>
-							Confirm Order
-						</Button>
-						<Button variant={'outlined'} size={'small'} onClick={() => console.log('Cancel Order')}>
-							Cancel Order
-						</Button>
+						<Button variant={'contained'} size={'small'}>Confirm Order</Button>
+						<Button variant={'outlined'} size={'small'} onClick={() => cancelOrder(orderId)}>Cancel Order</Button>
 					</Stack>
 				);
 			}
 			if (status === 'Shipped') {
 				return (
 					<Stack className={'mo-actions'} direction={'row'} gap={1}>
-						<Button variant={'contained'} size={'small'} onClick={() => console.log('Mark as Delivered')}>
-							Mark as Delivered
-						</Button>
+						<Button variant={'contained'} size={'small'}>Mark as Delivered</Button>
 					</Stack>
 				);
 			}
@@ -126,27 +121,21 @@ const MyOrders = () => {
 		if (status === 'Processing') {
 			return (
 				<Stack className={'mo-actions'} direction={'row'} gap={1}>
-					<Button variant={'outlined'} size={'small'} onClick={() => console.log('Cancel Order')}>
-						Cancel Order
-					</Button>
+					<Button variant={'outlined'} size={'small'} onClick={() => cancelOrder(orderId)}>Cancel Order</Button>
 				</Stack>
 			);
 		}
 		if (status === 'Shipped') {
 			return (
 				<Stack className={'mo-actions'} direction={'row'} gap={1}>
-					<Button variant={'contained'} size={'small'} onClick={() => console.log('Track Shipment')}>
-						Track Shipment
-					</Button>
+					<Button variant={'contained'} size={'small'}>Track Shipment</Button>
 				</Stack>
 			);
 		}
 		if (status === 'Delivered') {
 			return (
 				<Stack className={'mo-actions'} direction={'row'} gap={1}>
-					<Button variant={'contained'} size={'small'} onClick={() => console.log('Write Review')}>
-						Write Review
-					</Button>
+					<Button variant={'contained'} size={'small'}>Write Review</Button>
 				</Stack>
 			);
 		}
@@ -160,19 +149,18 @@ const MyOrders = () => {
 			<Stack className={'mo-orders-wrap'}>
 				<Typography className={'mo-orders-title'}>Order History</Typography>
 
-				{MOCK_ORDERS.length === 0 ? (
+				{orders.length === 0 ? (
 					<Stack className={'mo-empty'}>
 						<Typography className={'mo-empty-text'}>You have no orders yet.</Typography>
 					</Stack>
 				) : (
 					<Stack className={'mo-orders-list'}>
-						{MOCK_ORDERS.map((order) => {
-							const statusStyle = STATUS_COLORS[order.status];
+						{orders.map((order) => {
+							const statusStyle = STATUS_COLORS[order.status] ?? STATUS_COLORS['Processing'];
 							const isExpanded = expandedId === order.orderId;
 
 							return (
 								<Stack key={order.orderId} className={'mo-order-card'}>
-									{/* Order header row */}
 									<Stack className={'mo-order-header'} onClick={() => toggleExpand(order.orderId)}>
 										<Stack className={'mo-order-header-left'}>
 											<Typography className={'mo-order-id'}>#{order.orderId}</Typography>
@@ -193,17 +181,14 @@ const MyOrders = () => {
 										</Stack>
 									</Stack>
 
-									{/* Address row */}
 									<Typography className={'mo-order-address'}>📦 {order.address}</Typography>
 
-									{/* Items count summary */}
 									<Typography className={'mo-order-items-count'}>
 										{order.items.length} {order.items.length === 1 ? 'item' : 'items'}
 									</Typography>
 
-									{getOrderActions(order.status, isSeller)}
+									{getOrderActions(order.status, order.orderId, isSeller)}
 
-									{/* Expanded items list */}
 									{isExpanded && (
 										<Stack className={'mo-items-list'}>
 											{order.items.map((item, idx) => (

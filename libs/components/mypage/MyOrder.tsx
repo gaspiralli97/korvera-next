@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Stack, Box, Typography, Button, Divider, Radio, RadioGroup, FormControlLabel, Checkbox } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { useReactiveVar } from '@apollo/client';
-import { cartVar, saveCart, CartItem } from '../../../apollo/store';
+import { cartVar, saveCart, CartItem, userVar } from '../../../apollo/store';
 import { useRouter } from 'next/router';
 
 const MyOrder = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const cartItems = useReactiveVar(cartVar);
+	const user = useReactiveVar(userVar);
 
 	// Shipping address
 	const [firstName, setFirstName] = useState<string>('');
@@ -49,10 +50,12 @@ const MyOrder = () => {
 		const delivery = new Date(today);
 		delivery.setDate(today.getDate() + 7);
 		const deliveryStr = delivery.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+		const createdAt = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+		const fullAddress = [address, apt, city, stateVal, zip].filter(Boolean).join(', ');
 
 		const lastOrder = {
 			orderId,
-			createdAt: today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+			createdAt,
 			items: cartItems,
 			subtotal,
 			shipping,
@@ -60,9 +63,27 @@ const MyOrder = () => {
 			estimatedDelivery: deliveryStr,
 		};
 
+		const historyRecord = {
+			orderId,
+			createdAt,
+			status: 'Processing',
+			items: cartItems,
+			total: grandTotal,
+			address: fullAddress || 'N/A',
+		};
+
+		const historyKey = `korvera_orders_${user?._id ?? 'guest'}`;
+		let history: any[] = [];
+		try {
+			const raw = localStorage.getItem(historyKey);
+			if (raw) history = JSON.parse(raw);
+		} catch {}
+		history.unshift(historyRecord);
+		localStorage.setItem(historyKey, JSON.stringify(history));
+
 		localStorage.setItem('korvera_last_order', JSON.stringify(lastOrder));
 		cartVar([]);
-		saveCart([]);
+		saveCart([], user?._id ?? '');
 		router.push('/order/success');
 	};
 

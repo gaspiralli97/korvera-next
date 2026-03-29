@@ -319,7 +319,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 				updated = [...current, newItem];
 			}
 			cartVar(updated);
-			saveCart(updated);
+			saveCart(updated, user?._id ?? '');
 			await sweetTopSmallSuccessAlert('Added to basket!', 800);
 			await router.push('/cart');
 		} finally {
