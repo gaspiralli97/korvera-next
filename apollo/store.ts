@@ -12,55 +12,29 @@ export interface CartItem {
 	size: string;
 }
 
-const MOCK_CART: CartItem[] = [
-	{
-		productId: 'mock-1',
-		productTitle: 'Advanced Snail 96 Mucin Power Essence',
-		productBrand: 'COSRX',
-		productPrice: 25,
-		productImage: '/img/product/bigImage.png',
-		qty: 1,
-		size: '100 mL',
-	},
-	{
-		productId: 'mock-2',
-		productTitle: 'Water Sleeping Mask',
-		productBrand: 'Laneige',
-		productPrice: 30,
-		productImage: '/img/product/bigImage.png',
-		qty: 2,
-		size: '70 mL',
-	},
-	{
-		productId: 'mock-3',
-		productTitle: 'AHA/BHA Clarifying Treatment Toner',
-		productBrand: 'Some By Mi',
-		productPrice: 18,
-		productImage: '/img/product/bigImage.png',
-		qty: 1,
-		size: '150 mL',
-	},
-];
+const cartKey = (userId: string) => (userId ? `korvera_cart_${userId}` : 'korvera_cart_guest');
 
-const loadCart = (): CartItem[] => {
+const loadCart = (userId = ''): CartItem[] => {
 	if (typeof window === 'undefined') return [];
 	try {
-		const raw = localStorage.getItem('korvera_cart');
-		if (raw) return JSON.parse(raw);
-		// seed mock data for testing
-		localStorage.setItem('korvera_cart', JSON.stringify(MOCK_CART));
-		return MOCK_CART;
+		const raw = localStorage.getItem(cartKey(userId));
+		return raw ? JSON.parse(raw) : [];
 	} catch {
 		return [];
 	}
 };
 
-export const saveCart = (items: CartItem[]) => {
+export const saveCart = (items: CartItem[], userId = '') => {
 	if (typeof window === 'undefined') return;
-	localStorage.setItem('korvera_cart', JSON.stringify(items));
+	localStorage.setItem(cartKey(userId), JSON.stringify(items));
 };
 
 export const cartVar = makeVar<CartItem[]>(loadCart());
+
+export const switchUserCart = (userId: string) => {
+	const items = loadCart(userId);
+	cartVar(items);
+};
 export const themeVar = makeVar({});
 
 export const userVar = makeVar<CustomJwtPayload>({

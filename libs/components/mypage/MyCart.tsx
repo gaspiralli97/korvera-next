@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { cartVar, saveCart, CartItem } from '../../../apollo/store';
+import { userVar } from '../../../apollo/store';
 import { REACT_APP_API_URL } from '../../config';
 import { sweetConfirmAlert, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 
@@ -33,13 +34,22 @@ const MyCart: React.FC<MyCartProps> = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const cartItems = useReactiveVar(cartVar);
+	const user = useReactiveVar(userVar);
+	const userId = user?._id ?? '';
 	const [mounted, setMounted] = useState(false);
 	useEffect(() => { setMounted(true); }, []);
-	const [cartUIState, setCartUIState] = useState<CartUIState>({ shippingCountry: 'USA', isRemovingAll: false });
+	const [cartUIState, setCartUIState] = useState<CartUIState>(() => {
+		const saved = typeof window !== 'undefined' ? localStorage.getItem('shippingCountry') : null;
+		const country = (saved && (SHIPPING_COUNTRIES as string[]).includes(saved) ? saved : 'USA') as ShippingCountry;
+		return { shippingCountry: country, isRemovingAll: false };
+	});
 	const [countryAnchorEl, setCountryAnchorEl] = useState<null | HTMLElement>(null);
 	const total = cartItems.reduce((acc: number, item: CartItem) => acc + item.productPrice * (item.qty ?? 1), 0);
 	const shipping = total >= 50 ? 0 : 5.99;
 	const grandTotal = total + shipping;
+	const displayTotal = total;
+	const displayShipping = shipping;
+	const displayGrandTotal = grandTotal;
 	const isCountryMenuOpen = Boolean(countryAnchorEl);
 
 	/** HANDLERS **/
@@ -53,13 +63,13 @@ const MyCart: React.FC<MyCartProps> = () => {
 		});
 
 		cartVar(updatedItems);
-		saveCart(updatedItems);
+		saveCart(updatedItems, userId);
 	};
 
 	const removeItem = (productId: string, size: string) => {
 		const updatedItems = cartVar().filter((item: CartItem) => !(item.productId === productId && item.size === size));
 		cartVar(updatedItems);
-		saveCart(updatedItems);
+		saveCart(updatedItems, userId);
 	};
 
 	const handleOpenCountrySelector = (event: MouseEvent<HTMLButtonElement>) => {
@@ -72,6 +82,7 @@ const MyCart: React.FC<MyCartProps> = () => {
 
 	const handleCountryChange = (country: ShippingCountry) => {
 		setCartUIState((prev) => ({ ...prev, shippingCountry: country }));
+		localStorage.setItem('shippingCountry', country);
 		handleCloseCountrySelector();
 	};
 
@@ -88,13 +99,13 @@ const MyCart: React.FC<MyCartProps> = () => {
 		const previousItems = cartVar();
 		setCartUIState((prev) => ({ ...prev, isRemovingAll: true }));
 		cartVar([]);
-		saveCart([]);
+		saveCart([], userId);
 
 		try {
 			await sweetTopSmallSuccessAlert('All products removed.', 900);
 		} catch (err: unknown) {
 			cartVar(previousItems);
-			saveCart(previousItems);
+			saveCart(previousItems, userId);
 			const errorMessage = err instanceof Error ? err.message : 'Failed to remove all products.';
 			await sweetMixinErrorAlert(errorMessage);
 		} finally {
