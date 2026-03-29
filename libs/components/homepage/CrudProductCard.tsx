@@ -23,11 +23,11 @@ export interface CrudProduct {
 }
 
 interface CrudProductCardProps {
-	property: CrudProduct;
+	product: CrudProduct;
 }
 
 const CrudProductCard = (props: CrudProductCardProps) => {
-	const { property } = props;
+	const { product } = props;
 	const device = useDeviceDetect();
 
 	if (device === 'mobile') {
@@ -36,46 +36,46 @@ const CrudProductCard = (props: CrudProductCardProps) => {
 		return (
 			<Stack className="card-config">
 				<Stack className="top">
-					<img src={property.productImages[0]} alt="" />
+					<img src={product.productImages[0]} alt="" />
 					<Box component={'div'} className={'price-box'}>
-						<Typography>${property.productPrice}</Typography>
+						<Typography>${product.productPrice}</Typography>
 					</Box>
 				</Stack>
 				<Stack className="bottom">
 					<Stack className="name-address">
 						<Stack className="name">
-							<Typography>{property.productTitle}</Typography>
+							<Typography>{product.productTitle}</Typography>
 						</Stack>
 						<Stack className="address">
 							<Typography>
-								{property.productBrand}, {property.productCategory}
+								{product.productBrand}, {product.productCategory}
 							</Typography>
 						</Stack>
 					</Stack>
 					<Stack className="options">
 						<Stack className="option">
-							<Typography>{property.productCategory}</Typography>
+							<Typography>{product.productCategory}</Typography>
 						</Stack>
 						<Stack className="option">
-							<Typography>{property.productVolume} ml</Typography>
+							<Typography>{product.productVolume} ml</Typography>
 						</Stack>
 					</Stack>
 					<Stack className="divider"></Stack>
 					<Stack className="type-buttons">
 						<Stack className="type">
 							<Typography sx={{ fontWeight: 500, fontSize: '13px' }}>
-								{property.productStatus}
+								{product.productStatus}
 							</Typography>
 						</Stack>
 						<Stack className="buttons">
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
 							</IconButton>
-							<Typography className="view-cnt">{property.productViews}</Typography>
+							<Typography className="view-cnt">{product.productViews}</Typography>
 							<IconButton color={'default'}>
 								<FavoriteBorderIcon />
 							</IconButton>
-							<Typography className="view-cnt">{property.productLikes}</Typography>
+							<Typography className="view-cnt">{product.productLikes}</Typography>
 						</Stack>
 					</Stack>
 				</Stack>

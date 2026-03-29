@@ -25,7 +25,7 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const [total, setTotal] = useState<number>(0);
-	const category: any = router.query?.category ?? 'properties';
+	const category: any = router.query?.category ?? 'followings';
 	const [followInquiry, setFollowInquiry] = useState<FollowInquiry>(initialInput);
 	const [memberFollowings, setMemberFollowings] = useState<Following[]>([]);
 	const user = useReactiveVar(userVar);
@@ -75,7 +75,7 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 					</Stack>
 				</Stack>
 				<Stack className="follows-list-box">
-					<Stack className="listing-title-box">
+					<Stack className="follow-title-box">
 						<Typography className="title-text">Name</Typography>
 						<Typography className="title-text">Details</Typography>
 						<Typography className="title-text">Subscription</Typography>
