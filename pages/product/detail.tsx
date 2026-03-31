@@ -18,9 +18,8 @@ import moment from 'moment';
 import { formatterStr } from '../../libs/utils';
 import { REACT_APP_API_URL } from '../../libs/config';
 import { userVar, cartVar, saveCart, CartItem } from '../../apollo/store';
-import { CommentInput, CommentsInquiry } from '../../libs/types/comment/comment.input';
-import { Comment } from '../../libs/types/comment/comment';
-import { CommentGroup } from '../../libs/enums/comment.enum';
+import { Rating, RatingStats } from '../../libs/types/rating/rating';
+import { RatingInput, RatingsInquiry } from '../../libs/types/rating/rating.input';
 import { Pagination as MuiPagination } from '@mui/material';
 import Link from 'next/link';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -31,10 +30,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-import { GET_COMMENTS, GET_PRODUCTS, GET_PRODUCT } from '../../apollo/user/query';
+import { GET_RATINGS, GET_RATING_STATS, GET_PRODUCTS, GET_PRODUCT } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
-import { CREATE_COMMENT, LIKE_TARGET_PRODUCT } from '../../apollo/user/mutation';
+import { CREATE_RATING, LIKE_TARGET_PRODUCT } from '../../apollo/user/mutation';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 
 
@@ -63,7 +62,7 @@ const RatingStars = ({ rating, size = 18 }: { rating: number; size?: number }) =
 	);
 };
 
-const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
+const ProductDetail: NextPage = ({ initialRating, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
@@ -82,16 +81,16 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 	const imgRef = useRef<HTMLDivElement>(null);
 	const heroRef = useRef<HTMLDivElement>(null);
 	const tabsRef = useRef<HTMLDivElement>(null);
-	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
-	const [productComments, setProductComments] = useState<Comment[]>([]);
-	const [commentTotal, setCommentTotal] = useState<number>(0);
-	const [insertCommentData, setInsertCommentData] = useState<CommentInput>({
-		commentGroup: CommentGroup.PRODUCT,
-		commentContent: '',
-		commentRefId: '',
+	const [ratingInquiry, setRatingInquiry] = useState<RatingsInquiry>(initialRating);
+	const [productRatings, setProductRatings] = useState<Rating[]>([]);
+	const [ratingTotal, setRatingTotal] = useState<number>(0);
+	const [ratingStats, setRatingStats] = useState<RatingStats | null>(null);
+	const [insertRatingData, setInsertRatingData] = useState<RatingInput>({
+		productId: '',
+		ratingScore: 0,
+		reviewText: '',
 	});
 	const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
-	const [reviewLikeMap, setReviewLikeMap] = useState<Record<string, boolean>>({});
 	const sizes = useMemo(
 		() => [
 			{ label: `${Math.round((product?.productVolume ?? 30) * 0.33)} mL`, price: Math.round((product?.productPrice ?? 0) * 0.55) },
@@ -112,7 +111,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 
 	/** APOLLO REQUESTS **/
 	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
-	const [createComment] = useMutation(CREATE_COMMENT);
+	const [createRating] = useMutation(CREATE_RATING);
 
 	const {
 		loading: getProductLoading,
@@ -158,20 +157,33 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 	});
 
 	const {
-		loading: getCommentsLoading,
-		data: getCommentsData,
-		error: getCommentsError,
-		refetch: getCommentsRefetch,
-	} = useQuery(GET_COMMENTS, {
+		loading: getRatingsLoading,
+		data: getRatingsData,
+		error: getRatingsError,
+		refetch: getRatingsRefetch,
+	} = useQuery(GET_RATINGS, {
 		fetchPolicy: 'cache-and-network',
-		variables: {
-			input: commentInquiry,
-		},
-		skip: !commentInquiry.search.commentRefId,
+		variables: { input: ratingInquiry },
+		skip: !ratingInquiry.search.productId,
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			if (data?.getComments?.list) setProductComments(data?.getComments?.list);
-			setCommentTotal(data?.getComments?.metaCounter[0]?.total ?? 0);
+			if (data?.getRatings?.list) setProductRatings(data.getRatings.list);
+			setRatingTotal(data?.getRatings?.metaCounter[0]?.total ?? 0);
+		},
+	});
+
+	const {
+		loading: getRatingStatsLoading,
+		data: getRatingStatsData,
+		error: getRatingStatsError,
+		refetch: getRatingStatsRefetch,
+	} = useQuery(GET_RATING_STATS, {
+		fetchPolicy: 'cache-and-network',
+		variables: { input: productId },
+		skip: !productId,
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: T) => {
+			if (data?.getRatingStats) setRatingStats(data.getRatingStats);
 		},
 	});
 
@@ -179,17 +191,14 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 	useEffect(() => {
 		if (!queryProductId) return;
 		setProductId(queryProductId);
-		setCommentInquiry((prev) => ({
+		setRatingInquiry((prev) => ({
 			...prev,
 			page: 1,
-			search: {
-				...prev.search,
-				commentRefId: queryProductId,
-			},
+			search: { productId: queryProductId },
 		}));
-		setInsertCommentData((prev) => ({
+		setInsertRatingData((prev) => ({
 			...prev,
-			commentRefId: queryProductId,
+			productId: queryProductId,
 		}));
 	}, [queryProductId]);
 
@@ -201,15 +210,6 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 		});
 	}, [hasStockLimit, maxQty]);
 
-	useEffect(() => {
-		setReviewLikeMap((prev) => {
-			const next: Record<string, boolean> = {};
-			productComments.forEach((comment: Comment) => {
-				next[comment._id] = prev[comment._id] ?? false;
-			});
-			return next;
-		});
-	}, [productComments]);
 
 	/** HANDLERS **/
 	const LENS_SIZE = 100;
@@ -327,37 +327,32 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 		}
 	};
 
-	const commentPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
-		setCommentInquiry((prev) => ({ ...prev, page: value }));
+	const ratingPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
+		setRatingInquiry((prev) => ({ ...prev, page: value }));
 	};
 
-	const createCommentHandler = async () => {
+	const createRatingHandler = async () => {
 		try {
 			if (!user._id) throw Error(Message.NOT_AUTHENTICATED);
-			if (!insertCommentData.commentRefId) throw Error('Invalid product reference.');
-			const commentContent = insertCommentData.commentContent.trim();
-			if (!commentContent) return;
-			await createComment({
+			if (!insertRatingData.productId) throw Error('Invalid product reference.');
+			if (!insertRatingData.ratingScore || insertRatingData.ratingScore < 1) throw Error('Please select a star rating.');
+			const reviewText = (insertRatingData.reviewText ?? '').trim();
+			if (reviewText.length < 10) throw Error('Review must be at least 10 characters.');
+			await createRating({
 				variables: {
-					input: {
-						...insertCommentData,
-						commentContent,
-					},
+					input: { ...insertRatingData, reviewText },
 				},
 			});
-			setInsertCommentData((prev) => ({ ...prev, commentContent: '' }));
-			await getCommentsRefetch({ input: commentInquiry });
+			setInsertRatingData((prev) => ({ ...prev, ratingScore: 0, reviewText: '' }));
+			await getRatingsRefetch({ input: ratingInquiry });
+			await getRatingStatsRefetch({ input: productId });
+			await getProductRefetch({ input: productId });
+			await sweetTopSmallSuccessAlert('Review submitted!', 800);
 		} catch (err) {
 			await sweetErrorHandling(err);
 		}
 	};
 
-	const toggleReviewLikeHandler = (commentId: string) => {
-		setReviewLikeMap((prev) => ({
-			...prev,
-			[commentId]: !prev[commentId],
-		}));
-	};
 
 	const increaseQtyHandler = () => {
 		setQty((prev) => Math.min(Math.max(maxQty, 1), prev + 1));
@@ -437,7 +432,6 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 											backgroundImage: `url(${slideImage ? (slideImage.startsWith('/') ? slideImage : `${REACT_APP_API_URL}/${slideImage}`) : '/img/product/bigImage.png'})`,
 											backgroundPosition: `${zoomBg.x}% ${zoomBg.y}%`,
 											left: panelPos.left,
-											top: panelPos.top,
 										}}
 									/>
 								)}
@@ -489,12 +483,6 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 								{/* Price */}
 								<Stack className={'pdp-price-block'}>
 									<Typography className={'pdp-price'}>${formatterStr(totalPrice)}</Typography>
-									<Stack className={'pdp-installment'}>
-										<Typography>
-											or 4 × <strong>${(totalPrice / 4).toFixed(2)}</strong> with{' '}
-											<span className={'pdp-klarna'}>Klarna</span>
-										</Typography>
-									</Stack>
 								</Stack>
 
 								{/* Subscribe discount */}
@@ -582,22 +570,24 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 						{/* ══════════════════════════════════════════════════
 						    2. HIGHLIGHTS — pill badges
 						══════════════════════════════════════════════════ */}
-						<Stack className={'pdp-highlights'}>
-							{[
-								{ emoji: '🐰', label: 'Cruelty-Free' },
-								{ emoji: '🌿', label: 'Clean Formula' },
-								{ emoji: '✨', label: 'Brightening' },
-								{ emoji: '💧', label: 'Hydrating' },
-								{ emoji: '🚫', label: 'Paraben-Free' },
-								{ emoji: '🌸', label: 'Fragrance-Free' },
-								{ emoji: '🌾', label: 'Vegan' },
-							].map(({ emoji, label }) => (
-								<Stack key={label} className={'pdp-hl-pill'}>
-									<span className={'pdp-hl-emoji'}>{emoji}</span>
-									<Typography className={'pdp-hl-label'}>{label}</Typography>
-								</Stack>
-							))}
-						</Stack>
+						{(product?.certifications ?? []).length > 0 && (
+							<Stack className={'pdp-highlights'}>
+								{(product?.certifications ?? []).map((cert: string) => {
+									const CERT_EMOJI: Record<string, string> = {
+										ORGANIC: '🌿', VEGAN: '🌱', CRUELTY_FREE: '🐰',
+										PARABEN_FREE: '✨', ALCOHOL_FREE: '🚫', FRAGRANCE_FREE: '🍃',
+										DERMATOLOGIST_TESTED: '🔬', HYPOALLERGENIC: '🌸',
+										SULFATE_FREE: '💧', NATURAL: '🌾',
+									};
+									return (
+										<Stack key={cert} className={'pdp-hl-pill'}>
+											<span className={'pdp-hl-emoji'}>{CERT_EMOJI[cert] ?? '✔️'}</span>
+											<Typography className={'pdp-hl-label'}>{cert.replace(/_/g, ' ')}</Typography>
+										</Stack>
+									);
+								})}
+							</Stack>
+						)}
 
 						{/* ══════════════════════════════════════════════════
 						    3. TABS — Description | Ingredients | Reviews
@@ -614,7 +604,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 									>
 										{tab.charAt(0).toUpperCase() + tab.slice(1)}
 										{tab === 'reviews' && (
-											<span className={'pdp-tab-badge'}>{commentTotal.toLocaleString()}</span>
+											<span className={'pdp-tab-badge'}>{ratingTotal.toLocaleString()}</span>
 										)}
 									</button>
 								))}
@@ -650,7 +640,7 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 									<Stack className={'pdp-certs-block'}>
 										<Typography className={'pdp-section-title'}>Certifications</Typography>
 										<Stack className={'pdp-cert-row'}>
-											{(product?.certifications ?? ['DERMATOLOGIST_TESTED', 'CRUELTY_FREE', 'VEGAN', 'PARABEN_FREE']).map((c: string) => (
+											{(product?.certifications ?? []).map((c: string) => (
 												<span key={c} className={'pdp-cert-badge'}>
 													{c.replace(/_/g, ' ')}
 												</span>
@@ -696,81 +686,65 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 										<Stack className={'pdp-avg-block'}>
 											<Typography className={'pdp-avg-num'}>{(product?.productRating ?? 0).toFixed(1)}</Typography>
 											<RatingStars rating={product?.productRating ?? 0} size={24} />
-											<Typography className={'pdp-avg-sub'}>{commentTotal.toLocaleString()} Reviews</Typography>
+											<Typography className={'pdp-avg-sub'}>{ratingTotal.toLocaleString()} Review{ratingTotal !== 1 ? 's' : ''}</Typography>
 										</Stack>
-										<Stack className={'pdp-rating-bars'}>
-											{[
-												{ stars: 5, pct: 68 },
-												{ stars: 4, pct: 20 },
-												{ stars: 3, pct: 7 },
-												{ stars: 2, pct: 3 },
-												{ stars: 1, pct: 2 },
-											].map(({ stars, pct }) => (
-												<Stack key={stars} className={'pdp-bar-row'}>
-													<Typography className={'pdp-bar-stars'}>{stars} ★</Typography>
-													<Stack className={'pdp-bar-track'}>
-														<Stack className={'pdp-bar-fill'} style={{ width: `${pct}%` }} />
+										{ratingStats && ratingStats.totalRatings > 0 && (
+											<Stack className={'pdp-bar-block'}>
+												{([
+													{ label: '5 stars', count: ratingStats.fiveStars },
+													{ label: '4 stars', count: ratingStats.fourStars },
+													{ label: '3 stars', count: ratingStats.threeStars },
+													{ label: '2 stars', count: ratingStats.twoStars },
+													{ label: '1 star',  count: ratingStats.oneStar },
+												]).map(({ label, count }) => (
+													<Stack key={label} className={'pdp-bar-row'}>
+														<Typography className={'pdp-bar-label'}>{label}</Typography>
+														<Stack className={'pdp-bar-track'}>
+															<Stack
+																className={'pdp-bar-fill'}
+																style={{ width: `${Math.round((count / ratingStats.totalRatings) * 100)}%` }}
+															/>
+														</Stack>
+														<Typography className={'pdp-bar-pct'}>
+															{Math.round((count / ratingStats.totalRatings) * 100)}%
+														</Typography>
 													</Stack>
-													<Typography className={'pdp-bar-pct'}>{pct}%</Typography>
-												</Stack>
-											))}
-										</Stack>
-										<Stack className={'pdp-pros-cons'}>
-											<Stack className={'pdp-pros'}>
-												<Typography className={'pdp-pc-label'}>Pros</Typography>
-												{['hydrating', 'fast-absorbing', 'brightening', 'long-lasting', 'lightweight'].map((t) => (
-													<span key={t} className={'pdp-tag'}>{t}</span>
 												))}
 											</Stack>
-											<Stack className={'pdp-cons'}>
-												<Typography className={'pdp-pc-label'}>Cons</Typography>
-												{['pricey', 'subtle scent'].map((t) => (
-													<span key={t} className={'pdp-tag'}>{t}</span>
-												))}
-											</Stack>
-										</Stack>
+										)}
 									</Stack>
 
 									{/* Review cards */}
 									<Stack className={'pdp-review-cards'}>
-										{productComments.map((comment: Comment) => (
-											<Stack key={comment._id} className={'pdp-review-card'}>
+										{productRatings.map((rating: Rating) => (
+											<Stack key={rating._id} className={'pdp-review-card'}>
 												<Stack className={'pdp-rv-header'}>
 													<Stack className={'pdp-rv-user'}>
 														<img
-															src={comment?.memberData?.memberImage
-																? (comment.memberData.memberImage.startsWith('/') ? comment.memberData.memberImage : `${REACT_APP_API_URL}/${comment.memberData.memberImage}`)
+															src={rating?.memberData?.memberImage
+																? (rating.memberData.memberImage.startsWith('/') ? rating.memberData.memberImage : `${REACT_APP_API_URL}/${rating.memberData.memberImage}`)
 																: '/img/profile/defaultUser.svg'}
-															alt={comment?.memberData?.memberNick}
+															alt={rating?.memberData?.memberNick}
 															className={'pdp-rv-avatar'}
 														/>
 														<Stack className={'pdp-rv-user-info'}>
-															<Typography className={'pdp-rv-name'}>{comment?.memberData?.memberNick}</Typography>
-															<Typography className={'pdp-rv-skin'}>Skin type: Normal</Typography>
+															<Typography className={'pdp-rv-name'}>{rating?.memberData?.memberNick}</Typography>
+															<RatingStars rating={rating.ratingScore} size={14} />
 														</Stack>
 													</Stack>
 													<Stack className={'pdp-rv-meta'}>
-														<RatingStars rating={5} size={14} />
-														<Typography className={'pdp-rv-date'}>{moment(comment?.createdAt).format('MMMM D, YYYY')}</Typography>
+														<Typography className={'pdp-rv-date'}>{moment(rating?.createdAt).format('MMMM D, YYYY')}</Typography>
 													</Stack>
 												</Stack>
-												<Typography className={'pdp-rv-title'}>
-													{comment?.commentContent?.split('.')[0] || 'Great product!'}
-												</Typography>
-												<Typography className={'pdp-rv-body'}>{comment?.commentContent}</Typography>
-												<Stack className={'pdp-rv-footer'}>
-													<Typography className={'pdp-rv-helpful'} onClick={() => toggleReviewLikeHandler(comment._id)}>
-														👍 {((comment?._id?.charCodeAt(comment._id.length - 1) ?? 10) % 190) + 10 + (reviewLikeMap[comment._id] ? 1 : 0)} people found this helpful
-													</Typography>
-												</Stack>
+												<Typography className={'pdp-rv-body'}>{rating?.reviewText}</Typography>
 											</Stack>
 										))}
-										{commentTotal > commentInquiry.limit && (
+										{ratingTotal > ratingInquiry.limit && (
 											<Box component={'div'} className={'pdp-review-pagination'}>
 												<MuiPagination
-													page={commentInquiry.page}
-													count={Math.ceil(commentTotal / commentInquiry.limit)}
-													onChange={commentPaginationChangeHandler}
+													page={ratingInquiry.page}
+													count={Math.ceil(ratingTotal / ratingInquiry.limit)}
+													onChange={ratingPaginationChangeHandler}
 													shape="circular"
 													color="primary"
 												/>
@@ -781,18 +755,36 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 									{/* Write review */}
 									<Stack className={'pdp-write-review'}>
 										<Typography className={'pdp-section-title'}>Leave A Review</Typography>
+										<Stack className={'pdp-star-selector'}>
+											{[1, 2, 3, 4, 5].map((star) => (
+												<span
+													key={star}
+													className={'pdp-star-btn'}
+													onClick={() => setInsertRatingData((prev) => ({ ...prev, ratingScore: star }))}
+												>
+													{star <= insertRatingData.ratingScore
+														? <StarIcon sx={{ fontSize: 28, color: '#C9A680', cursor: 'pointer' }} />
+														: <StarBorderIcon sx={{ fontSize: 28, color: '#C9A680', cursor: 'pointer' }} />
+													}
+												</span>
+											))}
+										</Stack>
 										<textarea
 											onChange={({ target: { value } }: any) => {
-												setInsertCommentData((prev) => ({ ...prev, commentContent: value }));
+												setInsertRatingData((prev) => ({ ...prev, reviewText: value }));
 											}}
-											value={insertCommentData.commentContent}
-											placeholder="Share your experience with this product..."
+											value={insertRatingData.reviewText ?? ''}
+											placeholder="Share your experience with this product... (min 10 characters)"
 										/>
 										<Box className={'pdp-submit-row'} component={'div'}>
 											<Button
 												className={'pdp-submit-btn'}
-												disabled={insertCommentData.commentContent.trim() === '' || user?._id === ''}
-												onClick={createCommentHandler}
+												disabled={
+													!insertRatingData.ratingScore ||
+													(insertRatingData.reviewText ?? '').trim().length < 10 ||
+													!user?._id
+												}
+												onClick={createRatingHandler}
 											>
 												Submit Review
 											</Button>
@@ -864,11 +856,11 @@ const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
 export default withLayoutFull(ProductDetail);
 
 ProductDetail.defaultProps = {
-	initialComment: {
+	initialRating: {
 		page: 1,
 		limit: 5,
 		sort: 'createdAt',
 		direction: 'DESC',
-		search: { commentRefId: '' },
+		search: { productId: '' },
 	},
 };

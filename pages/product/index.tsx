@@ -16,7 +16,6 @@ import { GET_PRODUCTS } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import { LIKE_TARGET_PRODUCT } from '../../apollo/user/mutation';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
-import { MOCK_PRODUCTS } from '../../libs/data/mockProducts';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -112,7 +111,7 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 	const sortingHandler = (e: React.MouseEvent<HTMLLIElement>) => {
 		switch (e.currentTarget.id) {
 			case 'new':
-				setSearchFilter({ ...searchFilter, sort: 'createdAt', direction: Direction.ASC });
+				setSearchFilter({ ...searchFilter, sort: 'createdAt', direction: Direction.DESC });
 				setFilterSortName('New');
 				break;
 			case 'lowest':
@@ -174,7 +173,7 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 						</Stack>
 						<Stack className="main-config" mb={'76px'}>
 							<Stack className={'list-config'}>
-								{(products?.length > 0 ? products : MOCK_PRODUCTS).map((product: Product) => (
+								{products.map((product: Product) => (
 									<ProductCard product={product} likeProductHandler={likeProductHandler} key={product?._id} />
 								))}
 							</Stack>

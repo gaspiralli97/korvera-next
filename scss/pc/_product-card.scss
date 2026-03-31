@@ -17,12 +17,19 @@
 		width: 100%;
 		height: 240px;
 		overflow: hidden;
-		a { height: 100%; }
+		background: #ffffff;
+		a {
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 		img {
 			width: 100%;
 			height: 100%;
-			object-fit: cover;
-			border-radius: 12px 12px 0 0;
+			object-fit: contain;
+			padding: 16px;
+			border-radius: 0;
 		}
 		.top-badge {
 			position: absolute;

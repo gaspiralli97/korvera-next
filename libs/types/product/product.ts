@@ -1,4 +1,4 @@
-import { ProductCategory, ProductCertification, ProductStatus, ProductSize, SkinType, VariantType } from '../../enums/product.enum';
+import { ProductCategory, ProductCertification, ProductStatus, ProductSize, ProductSubCategory, SkinType, VariantType } from '../../enums/product.enum';
 import { Member } from '../member/member';
 
 export interface MeLiked {
@@ -30,6 +30,7 @@ export interface ProductVariant {
 export interface Product {
 	_id: string;
 	productCategory: ProductCategory;
+	productSubCategory?: ProductSubCategory;
 	productStatus: ProductStatus;
 	productBrand: string;
 	productTitle: string;

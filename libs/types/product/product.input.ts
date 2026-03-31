@@ -1,4 +1,4 @@
-import { ProductCategory, ProductCertification, ProductSize, ProductStatus, SkinType, VariantType } from '../../enums/product.enum';
+import { ProductCategory, ProductCertification, ProductSize, ProductStatus, ProductSubCategory, SkinType, VariantType } from '../../enums/product.enum';
 import { Direction } from '../../enums/common.enum';
 
 interface Range {
@@ -29,6 +29,7 @@ export interface ProductVariantInput {
 
 export interface ProductInput {
 	productCategory: ProductCategory;
+	productSubCategory?: ProductSubCategory;
 	productBrand: string;
 	productTitle: string;
 	productPrice: number;
@@ -57,6 +58,7 @@ export interface ProductInput {
 interface PISearch {
 	memberId?: string;
 	categoryList?: ProductCategory[];
+	subCategoryList?: ProductSubCategory[];
 	skinTypeList?: SkinType[];
 	pricesRange?: Range;
 	volumesRange?: Range;
@@ -74,6 +76,7 @@ export interface ProductsInquiry {
 interface PSSearch {
 	memberId?: string;
 	categoryList?: ProductCategory[];
+	subCategoryList?: ProductSubCategory[];
 	skinTypeList?: SkinType[];
 	pricesRange?: Range;
 	volumesRange?: Range;

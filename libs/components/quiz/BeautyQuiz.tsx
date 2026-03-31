@@ -3,12 +3,15 @@ import { Stack, Typography, Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useRouter } from 'next/router';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../../apollo/user/query';
+import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
 import { ProductsInquiry } from '../../types/product/product.input';
 import { Product } from '../../types/product/product';
 import { SkinType, ProductCategory } from '../../enums/product.enum';
 import { T } from '../../types/common';
+import { Message } from '../../enums/common.enum';
+import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import ProductCard from '../product/ProductCard';
 
 // ── Step definitions ──────────────────────────────────────────────────────────
@@ -101,6 +104,7 @@ const BeautyQuiz = () => {
 	const [answers, setAnswers] = useState<QuizAnswers>(INITIAL_ANSWERS);
 	const [showResults, setShowResults] = useState(false);
 	const [resultProducts, setResultProducts] = useState<Product[]>([]);
+	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
 
 	const totalSteps = STEPS.length;
 	const current = STEPS[step];
@@ -122,7 +126,7 @@ const BeautyQuiz = () => {
 	};
 
 	// ── Fetch results when showResults becomes true ──
-	const { loading: resultsLoading } = useQuery(GET_PRODUCTS, {
+	const { loading: resultsLoading, refetch: refetchResults } = useQuery(GET_PRODUCTS, {
 		fetchPolicy: 'network-only',
 		variables: { input: buildInquiry() },
 		skip: !showResults,
@@ -130,6 +134,19 @@ const BeautyQuiz = () => {
 			setResultProducts(data?.getProducts?.list ?? []);
 		},
 	});
+
+	const likeProductHandler = async (user: T, id: string) => {
+		try {
+			if (!id) return;
+			if (!user?._id) throw new Error(Message.NOT_AUTHENTICATED);
+			await likeTargetProduct({ variables: { input: id } });
+			const result = await refetchResults({ input: buildInquiry() });
+			setResultProducts(result.data?.getProducts?.list ?? []);
+			await sweetTopSmallSuccessAlert('success', 800);
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+		}
+	};
 
 	// ── Handlers ──
 	const selectOption = (stepId: string, value: string) => {
@@ -208,7 +225,7 @@ const BeautyQuiz = () => {
 						) : (
 							<div className="results-products-grid">
 								{resultProducts.map((product: Product) => (
-									<ProductCard key={product._id} product={product} />
+									<ProductCard key={product._id} product={product} likeProductHandler={likeProductHandler} />
 								))}
 							</div>
 						)}

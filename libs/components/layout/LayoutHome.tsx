@@ -8,6 +8,7 @@ import { userVar } from '../../../apollo/store';
 import { useReactiveVar } from '@apollo/client';
 import { getJwtToken, updateUserInfo } from '../../auth';
 import Chat from '../Chat';
+import AnnouncementBar from '../AnnouncementBar';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -58,6 +59,7 @@ const withLayoutMain = (Component: any) => {
 						<meta name={'title'} content={`Korvera`} />
 					</Head>
 					<Stack id="mobile-wrap">
+						<AnnouncementBar />
 						<Stack id={'top'}>
 							<Top />
 						</Stack>
@@ -80,6 +82,7 @@ const withLayoutMain = (Component: any) => {
 						<meta name={'title'} content={`Korvera`} />
 					</Head>
 					<Stack id="pc-wrap">
+						<AnnouncementBar />
 						<Stack id={'top'}>
 							<Top />
 						</Stack>

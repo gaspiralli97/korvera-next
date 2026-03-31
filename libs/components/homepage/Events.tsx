@@ -13,6 +13,37 @@ const CATEGORY_FALLBACK: Record<string, string> = {
 	BODYCARE: '/img/fiber/img7.jpg',
 };
 
+const MOCK_EVENTS = [
+	{
+		_id: 'mock-1',
+		eventTitle: 'Spring Glow Collection',
+		eventDescription: 'Brighten your skin this spring with our curated glow essentials',
+		eventCategory: 'SKINCARE',
+		eventImage: '/img/events/skincare.jpg',
+	},
+	{
+		_id: 'mock-2',
+		eventTitle: 'K-Beauty Makeup Edit',
+		eventDescription: 'Discover the latest trends in Korean makeup — from glass skin to bold lips',
+		eventCategory: 'MAKEUP',
+		eventImage: '/img/fiber/img2.jpg',
+	},
+	{
+		_id: 'mock-3',
+		eventTitle: 'Hair Repair Ritual',
+		eventDescription: 'Restore shine and strength with our top-rated haircare lineup',
+		eventCategory: 'HAIRCARE',
+		eventImage: '/img/fiber/img4.jpg',
+	},
+	{
+		_id: 'mock-4',
+		eventTitle: 'Signature Scents',
+		eventDescription: 'Explore unique fragrances that define your personal style',
+		eventCategory: 'FRAGRANCE',
+		eventImage: '/img/fiber/img3.jpg',
+	},
+];
+
 const EventCard = ({ event }: { event: any }) => {
 	const device = useDeviceDetect();
 	const imageSrc = event.eventImage || CATEGORY_FALLBACK[event.eventCategory] || '/img/fiber/img1.jpg';
@@ -56,7 +87,7 @@ const Events = () => {
 		},
 	});
 
-	const events = data?.getEvents?.list ?? [];
+	const events = data?.getEvents?.list?.length ? data.getEvents.list : MOCK_EVENTS;
 
 	if (device === 'mobile') {
 		return <div>EVENT CARD</div>;

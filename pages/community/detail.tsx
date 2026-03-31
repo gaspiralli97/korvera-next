@@ -264,19 +264,19 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 								value={articleCategory}
 							>
 								<Tab
-									value={'FREE'}
+									value={'SKINCARE_TIPS'}
 									label={'Free Board'}
-									className={`tab-button ${articleCategory === 'FREE' ? 'active' : ''}`}
+									className={`tab-button ${articleCategory === 'SKINCARE_TIPS' ? 'active' : ''}`}
 								/>
 								<Tab
-									value={'RECOMMEND'}
+									value={'PRODUCT_REVIEWS'}
 									label={'Recommendation'}
-									className={`tab-button ${articleCategory === 'RECOMMEND' ? 'active' : ''}`}
+									className={`tab-button ${articleCategory === 'PRODUCT_REVIEWS' ? 'active' : ''}`}
 								/>
 								<Tab
-									value={'NEWS'}
+									value={'BEAUTY_NEWS'}
 									label={'News'}
-									className={`tab-button ${articleCategory === 'NEWS' ? 'active' : ''}`}
+									className={`tab-button ${articleCategory === 'BEAUTY_NEWS' ? 'active' : ''}`}
 								/>
 								<Tab
 									value={'HUMOR'}

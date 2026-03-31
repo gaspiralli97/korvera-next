@@ -139,6 +139,7 @@ export const CREATE_PRODUCT = gql`
 		createProduct(input: $input) {
 			_id
 			productCategory
+			productSubCategory
 			productStatus
 			productBrand
 			productTitle
@@ -175,6 +176,7 @@ export const UPDATE_PRODUCT = gql`
 		updateProduct(input: $input) {
 			_id
 			productCategory
+			productSubCategory
 			productStatus
 			productBrand
 			productTitle
@@ -211,6 +213,7 @@ export const LIKE_TARGET_PRODUCT = gql`
 		likeTargetProduct(productId: $input) {
 			_id
 			productCategory
+			productSubCategory
 			productStatus
 			productBrand
 			productTitle

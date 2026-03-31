@@ -57,7 +57,7 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 			router.push(
 				{
 					pathname: router.pathname,
-					query: { articleCategory: 'FREE' },
+					query: { articleCategory: 'SKINCARE_TIPS' },
 				},
 				router.pathname,
 				{ shallow: true },
@@ -124,14 +124,14 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 								TabIndicatorProps={{ style: { display: 'none' } }}
 								className="comm-tab-list"
 							>
-								<Tab value={'FREE'} label={'Free Board'} className={`comm-tab ${searchCommunity.search.articleCategory === 'FREE' ? 'comm-tab--active' : ''}`} />
-								<Tab value={'RECOMMEND'} label={'Recommendation'} className={`comm-tab ${searchCommunity.search.articleCategory === 'RECOMMEND' ? 'comm-tab--active' : ''}`} />
-								<Tab value={'NEWS'} label={'News'} className={`comm-tab ${searchCommunity.search.articleCategory === 'NEWS' ? 'comm-tab--active' : ''}`} />
+								<Tab value={'SKINCARE_TIPS'} label={'Skincare Tips'} className={`comm-tab ${searchCommunity.search.articleCategory === 'SKINCARE_TIPS' ? 'comm-tab--active' : ''}`} />
+								<Tab value={'PRODUCT_REVIEWS'} label={'Product Reviews'} className={`comm-tab ${searchCommunity.search.articleCategory === 'PRODUCT_REVIEWS' ? 'comm-tab--active' : ''}`} />
+								<Tab value={'BEAUTY_NEWS'} label={'Beauty News'} className={`comm-tab ${searchCommunity.search.articleCategory === 'BEAUTY_NEWS' ? 'comm-tab--active' : ''}`} />
 								<Tab value={'HUMOR'} label={'Humor'} className={`comm-tab ${searchCommunity.search.articleCategory === 'HUMOR' ? 'comm-tab--active' : ''}`} />
 							</TabList>
 						</div>
 
-						{(['FREE', 'RECOMMEND', 'NEWS', 'HUMOR'] as const).map((cat) => (
+						{(['SKINCARE_TIPS', 'PRODUCT_REVIEWS', 'BEAUTY_NEWS', 'HUMOR'] as const).map((cat) => (
 							<TabPanel key={cat} value={cat} className="comm-panel">
 								{totalCount ? (
 									<div className="comm-grid">
@@ -182,7 +182,7 @@ Community.defaultProps = {
 		sort: 'createdAt',
 		direction: 'ASC',
 		search: {
-			articleCategory: 'FREE',
+			articleCategory: 'SKINCARE_TIPS',
 		},
 	},
 };

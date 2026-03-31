@@ -11,11 +11,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import { CaretDown } from 'phosphor-react';
 import useDeviceDetect from '../hooks/useDeviceDetect';
 import Link from 'next/link';
-import { useReactiveVar } from '@apollo/client';
+import { useReactiveVar, useQuery } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { Logout } from '@mui/icons-material';
 import { REACT_APP_API_URL } from '../config';
-import { ProductCategory } from '../enums/product.enum';
+import { ProductCategory, ProductSubCategory } from '../enums/product.enum';
+import { GET_PRODUCTS, GET_SELLERS } from '../../apollo/user/query';
+import { Product } from '../types/product/product';
+import { Member } from '../types/member/member';
 
 const categories = [
 	{ label: 'Skincare', value: ProductCategory.SKINCARE },
@@ -26,75 +29,119 @@ const categories = [
 	{ label: 'Wellness', value: ProductCategory.WELLNESS },
 ];
 
-const MEGA_MENU_DATA: Record<string, { cols: string[][]; image: string; tagline: string }> = {
+interface SubCatItem { label: string; value: ProductSubCategory }
+
+const MEGA_MENU_DATA: Record<string, { cols: SubCatItem[][]; tagline: string }> = {
 	[ProductCategory.SKINCARE]: {
 		cols: [
-			['Moisturisers', 'Cleansers', 'Toners'],
-			['Serums', 'Eye Care', 'Sunscreen'],
-			['Exfoliants', 'Face Masks', 'Mists'],
+			[
+				{ label: 'Cleansers', value: ProductSubCategory.CLEANSERS },
+				{ label: 'Toners', value: ProductSubCategory.TONERS },
+				{ label: 'Serums', value: ProductSubCategory.SERUMS },
+			],
+			[
+				{ label: 'Moisturisers', value: ProductSubCategory.MOISTURISERS },
+				{ label: 'Sunscreen', value: ProductSubCategory.SUNSCREEN },
+				{ label: 'Eye Care', value: ProductSubCategory.EYE_CARE },
+			],
+			[
+				{ label: 'Face Masks', value: ProductSubCategory.FACE_MASKS },
+				{ label: 'Acne Treatments', value: ProductSubCategory.ACNE_TREATMENTS },
+			],
 		],
-		image: '/img/events/skincare.jpg',
 		tagline: 'Rituals for radiant skin',
 	},
 	[ProductCategory.MAKEUP]: {
 		cols: [
-			['Foundation', 'Concealer', 'Primer'],
-			['Lipstick', 'Lip Gloss', 'Blush'],
-			['Mascara', 'Eyeshadow', 'Setting Spray'],
+			[
+				{ label: 'Foundation', value: ProductSubCategory.FOUNDATION },
+				{ label: 'Concealer', value: ProductSubCategory.CONCEALER },
+				{ label: 'Primer', value: ProductSubCategory.PRIMER },
+			],
+			[
+				{ label: 'Powder', value: ProductSubCategory.POWDER },
+				{ label: 'Blush & Bronzer', value: ProductSubCategory.BLUSH_BRONZER },
+				{ label: 'Lip Makeup', value: ProductSubCategory.LIP_MAKEUP },
+			],
+			[
+				{ label: 'Eye Makeup', value: ProductSubCategory.EYE_MAKEUP },
+				{ label: 'Brows', value: ProductSubCategory.BROWS },
+				{ label: 'Setting Products', value: ProductSubCategory.SETTING_PRODUCTS },
+			],
 		],
-		image: '/img/fiber/img2.jpg',
 		tagline: 'Colour, refined',
 	},
 	[ProductCategory.HAIRCARE]: {
 		cols: [
-			['Shampoo', 'Conditioner', 'Hair Masks'],
-			['Scalp Care', 'Hair Oils', 'Treatments'],
-			['Styling', 'Heat Protection', 'Dry Shampoo'],
+			[
+				{ label: 'Shampoo', value: ProductSubCategory.SHAMPOO },
+				{ label: 'Conditioner', value: ProductSubCategory.CONDITIONER },
+			],
+			[
+				{ label: 'Hair Treatments', value: ProductSubCategory.HAIR_TREATMENTS },
+				{ label: 'Scalp Care', value: ProductSubCategory.SCALP_CARE },
+			],
+			[
+				{ label: 'Hair Oils & Serums', value: ProductSubCategory.HAIR_OILS_SERUMS },
+				{ label: 'Styling', value: ProductSubCategory.STYLING },
+			],
 		],
-		image: '/img/fiber/img3.jpg',
 		tagline: 'Hair in its best form',
 	},
 	[ProductCategory.BODYCARE]: {
 		cols: [
-			['Body Lotion', 'Body Wash', 'Body Scrubs'],
-			['Deodorant', 'Hand Cream', 'Foot Care'],
-			['Sun Care', 'Body Oil', 'Self-Tan'],
+			[
+				{ label: 'Body Wash', value: ProductSubCategory.BODY_WASH },
+				{ label: 'Body Lotion', value: ProductSubCategory.BODY_LOTION },
+				{ label: 'Body Cream & Butter', value: ProductSubCategory.BODY_CREAM_BUTTER },
+			],
+			[
+				{ label: 'Body Scrubs', value: ProductSubCategory.BODY_SCRUBS },
+				{ label: 'Hand Care', value: ProductSubCategory.HAND_CARE },
+				{ label: 'Foot Care', value: ProductSubCategory.FOOT_CARE },
+			],
+			[
+				{ label: 'Deodorant', value: ProductSubCategory.DEODORANT },
+				{ label: 'Body Sunscreen', value: ProductSubCategory.BODY_SUNSCREEN },
+			],
 		],
-		image: '/img/fiber/img4.jpg',
 		tagline: 'Care from head to toe',
 	},
 	[ProductCategory.FRAGRANCE]: {
 		cols: [
-			['Eau de Parfum', 'Eau de Toilette', 'Body Mist'],
-			['Candles', 'Diffusers', 'Room Sprays'],
-			['Gift Sets', 'Travel Size', 'Layering'],
+			[
+				{ label: 'Perfume', value: ProductSubCategory.PERFUME },
+				{ label: 'Men', value: ProductSubCategory.MEN },
+			],
+			[
+				{ label: 'Women', value: ProductSubCategory.WOMEN },
+				{ label: 'Body Mist', value: ProductSubCategory.BODY_MIST },
+			],
+			[
+				{ label: 'Home Fragrance', value: ProductSubCategory.HOME_FRAGRANCE },
+			],
 		],
-		image: '/img/fiber/img5.jpg',
 		tagline: 'Scent as identity',
 	},
 	[ProductCategory.WELLNESS]: {
 		cols: [
-			['Supplements', 'Vitamins', 'Minerals'],
-			['Sleep & Calm', 'Immunity', 'Gut Health'],
-			['Inner Beauty', 'Energy', 'Fitness'],
+			[
+				{ label: 'Collagen', value: ProductSubCategory.COLLAGEN },
+				{ label: 'Vitamins', value: ProductSubCategory.VITAMINS },
+			],
+			[
+				{ label: 'Gut Health', value: ProductSubCategory.GUT_HEALTH },
+				{ label: 'Immunity', value: ProductSubCategory.IMMUNITY },
+			],
+			[
+				{ label: 'Sleep & Stress Support', value: ProductSubCategory.SLEEP_STRESS_SUPPORT },
+				{ label: 'Tools', value: ProductSubCategory.TOOLS },
+			],
 		],
-		image: '/img/fiber/img1.jpg',
 		tagline: 'Beauty from within',
 	},
 };
 
-const BRANDS_DATA = [
-	{ name: 'Sulwhasoo', tagline: 'Timeless Korean beauty' },
-	{ name: 'Laneige', tagline: 'Water science skincare' },
-	{ name: 'COSRX', tagline: 'Targeted skin solutions' },
-	{ name: 'Innisfree', tagline: 'Pure Jeju island nature' },
-	{ name: 'Some By Mi', tagline: '30 days miracle series' },
-	{ name: 'Missha', tagline: 'Premium beauty innovation' },
-	{ name: 'The Face Shop', tagline: 'Nature & derma science' },
-	{ name: 'AHC', tagline: 'Professional clinic care' },
-	{ name: 'Benton', tagline: 'Clean gentle skincare' },
-	{ name: 'Klairs', tagline: 'Simple sensitive-friendly' },
-];
 
 const Top = () => {
 	const device = useDeviceDetect();
@@ -113,6 +160,27 @@ const Top = () => {
 	const [searchQuery, setSearchQuery] = useState<string>('');
 	const [activeCategory, setActiveCategory] = useState<string | null>(null);
 	const hideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	const { data: featuredData } = useQuery(GET_PRODUCTS, {
+		fetchPolicy: 'cache-first',
+		variables: {
+			input: {
+				page: 1,
+				limit: 3,
+				sort: 'productRank',
+				direction: 'DESC',
+				search: { categoryList: activeCategory && activeCategory !== 'brands' ? [activeCategory as ProductCategory] : [] },
+			},
+		},
+		skip: !activeCategory || activeCategory === 'brands',
+	});
+	const featuredProducts: Product[] = featuredData?.getProducts?.list ?? [];
+
+	const { data: sellersData } = useQuery(GET_SELLERS, {
+		fetchPolicy: 'cache-first',
+		variables: { input: { page: 1, limit: 10, sort: 'memberRank', direction: 'DESC', search: {} } },
+	});
+	const sellers: Member[] = sellersData?.getSellers?.list ?? [];
 	const [csOpen, setCsOpen] = useState(false);
 	const csTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -276,14 +344,7 @@ const Top = () => {
 	} else {
 		return (
 			<Stack className={'navbar'}>
-				{/* Layer 1: Top Bar */}
-				<Stack className={'navbar-top'}>
-					<Stack className={'container'}>
-						<span className={'navbar-promo'}>Enjoy complimentary shipping on all orders over $50</span>
-					</Stack>
-				</Stack>
-
-				{/* Layer 2: Main Navbar — Aesop: 3-column, text only, no icons */}
+				{/* Layer 1: Main Navbar */}
 				<Stack className={`navbar-main ${colorChange ? 'transparent' : ''} ${bgColor ? 'transparent' : ''}`}>
 					<Stack className={'container'}>
 						{/* Left — text links */}
@@ -436,17 +497,37 @@ const Top = () => {
 										<div className={'cat-mega-cols'}>
 											{MEGA_MENU_DATA[cat.value]?.cols.map((col, ci) => (
 												<div key={ci} className={'cat-mega-col'}>
-													{col.map((item) => (
-														<Link key={item} href={`/product?productCategory=${cat.value}`}>
-															<span className={'cat-mega-item'}>{item}</span>
-														</Link>
-													))}
+													{col.map((item) => {
+														const href = `/product?input=${encodeURIComponent(JSON.stringify({ page: 1, limit: 9, sort: 'createdAt', direction: 'DESC', search: { categoryList: [cat.value], subCategoryList: [item.value] } }))}`;
+														return (
+															<Link key={item.value} href={href}>
+																<span className={'cat-mega-item'}>{item.label}</span>
+															</Link>
+														);
+													})}
 												</div>
 											))}
 										</div>
 										<div className={'cat-mega-featured'}>
-											<img src={MEGA_MENU_DATA[cat.value]?.image} alt={cat.label} />
-											<span className={'cat-mega-tagline'}>{MEGA_MENU_DATA[cat.value]?.tagline}</span>
+											<span className={'cat-mega-tagline'}>{MEGA_MENU_DATA[cat.value]?.tagline ?? ''}</span>
+											<div className={'cat-mega-products'}>
+												{featuredProducts.length > 0
+													? featuredProducts.map((p: Product) => {
+															const img = p.productImages?.[0]
+																? p.productImages[0].startsWith('/')
+																	? p.productImages[0]
+																	: `${REACT_APP_API_URL}/${p.productImages[0]}`
+																: '/img/banner/header1.svg';
+															return (
+																<Link key={p._id} href={`/product/detail?id=${p._id}`} className={'mega-product-card'}>
+																	<img src={img} alt={p.productTitle} className={'mega-product-img'} />
+																	<span className={'mega-product-title'}>{p.productTitle}</span>
+																	<span className={'mega-product-price'}>${p.productPrice}</span>
+																</Link>
+															);
+													  })
+													: null}
+											</div>
 										</div>
 									</div>
 								</div>
@@ -464,14 +545,22 @@ const Top = () => {
 									onMouseLeave={handlePanelLeave}
 								>
 									<div className={'brands-grid'}>
-										{BRANDS_DATA.map((brand) => (
-											<Link key={brand.name} href={`/product?brand=${encodeURIComponent(brand.name)}`}>
-												<div className={'brand-card'}>
-													<span className={'brand-name'}>{brand.name}</span>
-													<span className={'brand-tagline'}>{brand.tagline}</span>
-												</div>
-											</Link>
-										))}
+										{sellers.map((seller: Member) => {
+											const avatar = seller.memberImage
+												? seller.memberImage.startsWith('/')
+													? seller.memberImage
+													: `${REACT_APP_API_URL}/${seller.memberImage}`
+												: '/img/profile/defaultUser.svg';
+											return (
+												<Link key={seller._id} href={`/agent/detail?agentId=${seller._id}`}>
+													<div className={'brand-card'}>
+														<img src={avatar} alt={seller.memberNick} className={'brand-avatar'} />
+														<span className={'brand-name'}>{seller.memberNick}</span>
+														<span className={'brand-tagline'}>{seller.memberProducts ?? 0} products</span>
+													</div>
+												</Link>
+											);
+										})}
 									</div>
 								</div>
 							</div>

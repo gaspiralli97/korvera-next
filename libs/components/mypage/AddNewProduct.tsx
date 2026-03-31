@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { ProductCategory, SkinType, ProductSize } from '../../enums/product.enum';
+import { ProductCategory, SkinType, ProductSize, ProductSubCategory, ProductCertification } from '../../enums/product.enum';
 import { REACT_APP_API_URL } from '../../config';
 import { ProductInput } from '../../types/product/product.input';
 import axios from 'axios';
@@ -13,6 +13,36 @@ import { userVar } from '../../../apollo/store';
 import { CREATE_PRODUCT, UPDATE_PRODUCT } from '../../../apollo/user/mutation';
 import { GET_PRODUCT } from '../../../apollo/user/query';
 
+const SUB_CATEGORY_MAP: Record<ProductCategory, ProductSubCategory[]> = {
+	[ProductCategory.SKINCARE]: [
+		ProductSubCategory.CLEANSERS, ProductSubCategory.TONERS, ProductSubCategory.SERUMS,
+		ProductSubCategory.MOISTURISERS, ProductSubCategory.SUNSCREEN, ProductSubCategory.EYE_CARE,
+		ProductSubCategory.FACE_MASKS, ProductSubCategory.ACNE_TREATMENTS,
+	],
+	[ProductCategory.MAKEUP]: [
+		ProductSubCategory.FOUNDATION, ProductSubCategory.CONCEALER, ProductSubCategory.PRIMER,
+		ProductSubCategory.POWDER, ProductSubCategory.BLUSH_BRONZER, ProductSubCategory.LIP_MAKEUP,
+		ProductSubCategory.EYE_MAKEUP, ProductSubCategory.BROWS, ProductSubCategory.SETTING_PRODUCTS,
+	],
+	[ProductCategory.HAIRCARE]: [
+		ProductSubCategory.SHAMPOO, ProductSubCategory.CONDITIONER, ProductSubCategory.HAIR_TREATMENTS,
+		ProductSubCategory.SCALP_CARE, ProductSubCategory.HAIR_OILS_SERUMS, ProductSubCategory.STYLING,
+	],
+	[ProductCategory.BODYCARE]: [
+		ProductSubCategory.BODY_WASH, ProductSubCategory.BODY_LOTION, ProductSubCategory.BODY_CREAM_BUTTER,
+		ProductSubCategory.BODY_SCRUBS, ProductSubCategory.HAND_CARE, ProductSubCategory.FOOT_CARE,
+		ProductSubCategory.DEODORANT, ProductSubCategory.BODY_SUNSCREEN,
+	],
+	[ProductCategory.FRAGRANCE]: [
+		ProductSubCategory.MEN, ProductSubCategory.WOMEN, ProductSubCategory.BODY_MIST,
+		ProductSubCategory.HOME_FRAGRANCE, ProductSubCategory.PERFUME,
+	],
+	[ProductCategory.WELLNESS]: [
+		ProductSubCategory.COLLAGEN, ProductSubCategory.VITAMINS, ProductSubCategory.GUT_HEALTH,
+		ProductSubCategory.IMMUNITY, ProductSubCategory.SLEEP_STRESS_SUPPORT, ProductSubCategory.TOOLS,
+	],
+};
+
 const AddProduct = ({ initialValues, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -21,8 +51,17 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 	const [productCategories] = useState<ProductCategory[]>(Object.values(ProductCategory));
 	const [skinTypes] = useState<SkinType[]>(Object.values(SkinType));
 	const [productSizes] = useState<ProductSize[]>(Object.values(ProductSize));
+	const [allCertifications] = useState<ProductCertification[]>(Object.values(ProductCertification));
 	const token = getJwtToken();
 	const user = useReactiveVar(userVar);
+
+	const toggleCertification = (cert: ProductCertification) => {
+		const current = insertProductData.certifications ?? [];
+		const updated = current.includes(cert)
+			? current.filter((c) => c !== cert)
+			: [...current, cert];
+		setInsertProductData({ ...insertProductData, certifications: updated });
+	};
 
 	/** APOLLO REQUESTS **/
 	const [createProduct] = useMutation(CREATE_PRODUCT);
@@ -60,6 +99,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 			productTitle: p.productTitle ?? '',
 			productPrice: Number(p.productPrice) || 0,
 			productCategory: p.productCategory ?? '',
+			productSubCategory: p.productSubCategory ?? undefined,
 			productBrand: p.productBrand ?? '',
 			productVolume: Number(p.productVolume) || 0,
 			productLeftCount: Number(p.productLeftCount) || 0,
@@ -67,6 +107,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 			productSkinType: p.productSkinType ?? [],
 			productDesc: p.productDesc ?? '',
 			productImages: p.productImages ?? [],
+			certifications: p.certifications ?? [],
 		});
 	}, [getProductData]);
 
@@ -246,7 +287,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 										value={insertProductData.productCategory || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertProductData({ ...insertProductData, productCategory: value })
+											setInsertProductData({ ...insertProductData, productCategory: value, productSubCategory: undefined })
 										}
 									>
 										<>
@@ -263,6 +304,27 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 									<div className={'divider'}></div>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
+								<Stack className="price-year-after-price">
+									<Typography className="title">Select Subcategory</Typography>
+									<select
+										className={'select-description'}
+										value={insertProductData.productSubCategory || 'select'}
+										onChange={({ target: { value } }) =>
+											// @ts-ignore
+											setInsertProductData({ ...insertProductData, productSubCategory: value })
+										}
+									>
+										<option disabled={true} value={'select'}>Select</option>
+										{(SUB_CATEGORY_MAP[insertProductData.productCategory as ProductCategory] ?? []).map((sub) => (
+											<option value={sub} key={sub}>{sub.replace(/_/g, ' ')}</option>
+										))}
+									</select>
+									<div className={'divider'}></div>
+									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
+								</Stack>
+							</Stack>
+
+							<Stack className="config-row">
 								<Stack className="price-year-after-price">
 									<Typography className="title">Select Size</Typography>
 									<select
@@ -284,6 +346,26 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 												</option>
 											))}
 										</>
+									</select>
+									<div className={'divider'}></div>
+									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
+								</Stack>
+								<Stack className="price-year-after-price">
+									<Typography className="title">Skin Type</Typography>
+									<select
+										className={'select-description'}
+										value={(insertProductData.productSkinType || [])[0] || 'select'}
+										defaultValue={'select'}
+										onChange={({ target: { value } }) =>
+											setInsertProductData({ ...insertProductData, productSkinType: [value as SkinType] })
+										}
+									>
+										<option disabled={true} selected={true} value={'select'}>
+											Select
+										</option>
+										{skinTypes.map((type: string) => (
+											<option value={`${type}`} key={type}>{type}</option>
+										))}
 									</select>
 									<div className={'divider'}></div>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
@@ -317,28 +399,22 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 									/>
 								</Stack>
 							</Stack>
-
-							<Stack className="config-row">
-								<Stack className="price-year-after-price">
-									<Typography className="title">Skin Type</Typography>
-									<select
-										className={'select-description'}
-										value={(insertProductData.productSkinType || [])[0] || 'select'}
-										defaultValue={'select'}
-										onChange={({ target: { value } }) =>
-											setInsertProductData({ ...insertProductData, productSkinType: [value as SkinType] })
-										}
-									>
-										<option disabled={true} selected={true} value={'select'}>
-											Select
-										</option>
-										{skinTypes.map((type: string) => (
-											<option value={`${type}`} key={type}>{type}</option>
-										))}
-									</select>
-									<div className={'divider'}></div>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
-								</Stack>
+							<Stack className="config-column">
+								<Typography className="title">Certifications</Typography>
+								<div className={'certifications-grid'}>
+									{allCertifications.map((cert) => {
+										const selected = (insertProductData.certifications ?? []).includes(cert);
+										return (
+											<div
+												key={cert}
+												className={`cert-chip${selected ? ' selected' : ''}`}
+												onClick={() => toggleCertification(cert)}
+											>
+												{cert.replace(/_/g, ' ')}
+											</div>
+										);
+									})}
+								</div>
 							</Stack>
 
 							<Typography className="product-title">Product Description</Typography>
@@ -373,7 +449,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 								</svg>
 								<Stack className="text-box">
 									<Typography className="drag-title">Drag and drop images here</Typography>
-									<Typography className="format-title">Photos must be JPEG or PNG format and least 2048x768</Typography>
+									<Typography className="format-title">Photos must be JPEG or PNG or WEBP format and least 2048x768</Typography>
 								</Stack>
 								<Button
 									className="browse-button"
@@ -388,7 +464,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 										hidden={true}
 										onChange={uploadImages}
 										multiple={true}
-										accept="image/jpg, image/jpeg, image/png"
+										accept="image/jpg, image/jpeg, image/png, image/webp"
 									/>
 								</Button>
 							</Stack>

@@ -71,6 +71,38 @@
 					.config-column {
 						margin-top: 15px;
 						width: 100%;
+
+						.certifications-grid {
+							display: flex;
+							flex-wrap: wrap;
+							gap: 8px;
+							margin-top: 10px;
+
+							.cert-chip {
+								padding: 7px 14px;
+								border-radius: 50px;
+								border: 1.5px solid #e0d8cc;
+								background: #faf9f7;
+								color: #555;
+								font-size: 12px;
+								font-weight: 500;
+								cursor: pointer;
+								transition: all 0.2s;
+								text-transform: capitalize;
+
+								&:hover {
+									border-color: #181a20;
+									color: #181a20;
+								}
+
+								&.selected {
+									background: #181a20;
+									border-color: #181a20;
+									color: #ffffff;
+								}
+							}
+						}
+
 						.title {
 							color: #181a20;
 							font-family: $font;

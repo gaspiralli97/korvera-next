@@ -10,7 +10,7 @@ import RecentlyVisited from '../../libs/components/mypage/RecentlyVisited';
 import AddNewProduct from '../../libs/components/mypage/AddNewProduct';
 import MyProfile from '../../libs/components/mypage/MyProfile';
 import MyArticles from '../../libs/components/mypage/MyArticles';
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import MyMenu from '../../libs/components/mypage/MyMenu';
 import WriteArticle from '../../libs/components/mypage/WriteArticle';
@@ -20,6 +20,7 @@ import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } f
 import MemberFollowings from '../../libs/components/member/MemberFollowings';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { LIKE_TARGET_MEMBER, SUBSCRIBE, UNSUBSCRIBE } from '../../apollo/user/mutation';
+import { GET_MEMBER } from '../../apollo/user/query';
 import { Messages } from '../../libs/config';
 
 export const getStaticProps = async ({ locale }: any) => ({
@@ -38,6 +39,11 @@ const MyPage: NextPage = () => {
 	const [subscribe] = useMutation(SUBSCRIBE);
 	const [unsubscribe] = useMutation(UNSUBSCRIBE);
 	const [likeTargetMember] = useMutation(LIKE_TARGET_MEMBER);
+	const { refetch: refetchMember } = useQuery(GET_MEMBER, {
+		fetchPolicy: 'network-only',
+		variables: { input: user?._id },
+		skip: !user?._id,
+	});
 
 	/** LIFECYCLES **/
 	useEffect(() => {
@@ -58,6 +64,7 @@ const MyPage: NextPage = () => {
 			});
 			await sweetTopSmallSuccessAlert('Subscribe', 800);
 			await refetch({ input: query })
+			await refetchMember({ input: user._id });
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
@@ -75,6 +82,7 @@ const MyPage: NextPage = () => {
 			});
 			await sweetTopSmallSuccessAlert('Unsubscribe', 800);
 			await refetch({ input: query })
+			await refetchMember({ input: user._id });
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
