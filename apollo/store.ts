@@ -10,6 +10,7 @@ export interface CartItem {
 	productImage: string;
 	qty: number;
 	size: string;
+	stockCount?: number;
 }
 
 const cartKey = (userId: string) => (userId ? `korvera_cart_${userId}` : 'korvera_cart_guest');

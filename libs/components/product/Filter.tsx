@@ -21,6 +21,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { productVolume } from '../../config';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { useQuery } from '@apollo/client';
+import { GET_PRODUCT_BRANDS } from '../../../apollo/user/query';
+import { sweetMixinErrorAlert } from '../../sweetAlert';
 
 const MenuProps = {
 	PaperProps: {
@@ -29,6 +32,13 @@ const MenuProps = {
 		},
 	},
 };
+
+const RATINGS = [
+	{ label: '5 Stars', value: 5 },
+	{ label: '4 Stars & up', value: 4 },
+	{ label: '3 Stars & up', value: 3 },
+	{ label: '2 Stars & up', value: 2 },
+];
 
 interface FilterType {
 	searchFilter: ProductsInquiry;
@@ -40,11 +50,9 @@ const Filter = (props: FilterType) => {
 	const { searchFilter, setSearchFilter, initialInput } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
-	const [productCategory, setProductCategory] = useState<ProductCategory[]>(Object.values(ProductCategory));
-	const [skinType, setSkinType] = useState<SkinType[]>(Object.values(SkinType));
+	const [productCategory] = useState<ProductCategory[]>(Object.values(ProductCategory));
+	const [skinType] = useState<SkinType[]>(Object.values(SkinType));
 	const [searchText, setSearchText] = useState<string>('');
-	const BRANDS_MOCK = ['Sulwhasoo', 'Laneige', 'COSRX', 'Innisfree', 'Some By Mi', 'Missha', 'The Face Shop', 'AHC', 'Benton', 'Klairs'];
-	const RATINGS_MOCK = ['5 Stars', '4 Stars & up', '3 Stars & up', '2 Stars & up'];
 	const [openSections, setOpenSections] = useState({
 		category: true,
 		skinType: true,
@@ -53,6 +61,12 @@ const Filter = (props: FilterType) => {
 		brand: false,
 		rating: false,
 	});
+
+	/** APOLLO **/
+	const { data: brandsData } = useQuery(GET_PRODUCT_BRANDS, {
+		fetchPolicy: 'cache-first',
+	});
+	const brands: string[] = brandsData?.getProductBrands ?? [];
 
 	const toggleSection = (section: keyof typeof openSections) => {
 		setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -77,6 +91,21 @@ const Filter = (props: FilterType) => {
 
 		if (searchFilter?.search?.skinTypeList?.length == 0) {
 			delete searchFilter.search.skinTypeList;
+			router.push(`/product?input=${JSON.stringify({
+			...searchFilter,
+			search: {
+				...searchFilter.search,
+			},
+		})}`, `/product?input=${JSON.stringify({
+			...searchFilter,
+			search: {
+				...searchFilter.search,
+			},
+		})}`, { scroll: false }).then();
+		}
+
+		if (searchFilter?.search?.brandList?.length == 0) {
+			delete searchFilter.search.brandList;
 			router.push(`/product?input=${JSON.stringify({
 			...searchFilter,
 			search: {
@@ -129,7 +158,7 @@ const Filter = (props: FilterType) => {
 					);
 				}
 			} catch (err: any) {
-				console.log('ERROR, productCategorySelectHandler:', err);
+				await sweetMixinErrorAlert(err.message);
 			}
 		},
 		[searchFilter],
@@ -172,7 +201,78 @@ const Filter = (props: FilterType) => {
 					);
 				}
 			} catch (err: any) {
-				console.log('ERROR, skinTypeSelectHandler:', err);
+				await sweetMixinErrorAlert(err.message);
+			}
+		},
+		[searchFilter],
+	);
+
+	const brandSelectHandler = useCallback(
+		async (e: any) => {
+			try {
+				const isChecked = e.target.checked;
+				const value = e.target.value;
+				if (isChecked) {
+					await router.push(
+						`/product?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, brandList: [...(searchFilter?.search?.brandList || []), value] },
+						})}`,
+						`/product?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, brandList: [...(searchFilter?.search?.brandList || []), value] },
+						})}`,
+						{ scroll: false },
+					);
+				} else if (searchFilter?.search?.brandList?.includes(value)) {
+					await router.push(
+						`/product?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								brandList: searchFilter?.search?.brandList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						`/product?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								brandList: searchFilter?.search?.brandList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						{ scroll: false },
+					);
+				}
+			} catch (err: any) {
+				await sweetMixinErrorAlert(err.message);
+			}
+		},
+		[searchFilter],
+	);
+
+	const ratingSelectHandler = useCallback(
+		async (e: any, minRating: number) => {
+			try {
+				const isChecked = e.target.checked;
+				await router.push(
+					`/product?input=${JSON.stringify({
+						...searchFilter,
+						search: {
+							...searchFilter.search,
+							minRating: isChecked ? minRating : undefined,
+						},
+					})}`,
+					`/product?input=${JSON.stringify({
+						...searchFilter,
+						search: {
+							...searchFilter.search,
+							minRating: isChecked ? minRating : undefined,
+						},
+					})}`,
+					{ scroll: false },
+				);
+			} catch (err: any) {
+				await sweetMixinErrorAlert(err.message);
 			}
 		},
 		[searchFilter],
@@ -231,14 +331,14 @@ const Filter = (props: FilterType) => {
 						...searchFilter,
 						search: {
 							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, start: value * 1 },
+							pricesRange: { ...searchFilter.search.pricesRange, start: Number(value) },
 						},
 					})}`,
 					`/product?input=${JSON.stringify({
 						...searchFilter,
 						search: {
 							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, start: value * 1 },
+							pricesRange: { ...searchFilter.search.pricesRange, start: Number(value) },
 						},
 					})}`,
 					{ scroll: false },
@@ -249,14 +349,14 @@ const Filter = (props: FilterType) => {
 						...searchFilter,
 						search: {
 							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, end: value * 1 },
+							pricesRange: { ...searchFilter.search.pricesRange, end: Number(value) },
 						},
 					})}`,
 					`/product?input=${JSON.stringify({
 						...searchFilter,
 						search: {
 							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, end: value * 1 },
+							pricesRange: { ...searchFilter.search.pricesRange, end: Number(value) },
 						},
 					})}`,
 					{ scroll: false },
@@ -275,7 +375,7 @@ const Filter = (props: FilterType) => {
 				{ scroll: false },
 			);
 		} catch (err: any) {
-			console.log('ERROR, refreshHandler:', err);
+			await sweetMixinErrorAlert(err.message);
 		}
 	};
 
@@ -464,6 +564,7 @@ const Filter = (props: FilterType) => {
 						</Stack>
 					)}
 				</Stack>
+
 				{/* Brand */}
 				<Stack className={'filter-section'} mb={'4px'}>
 					<Stack className={'filter-section-header'} onClick={() => toggleSection('brand')}>
@@ -472,9 +573,17 @@ const Filter = (props: FilterType) => {
 					</Stack>
 					{openSections.brand && (
 						<Stack className={'filter-section-body'}>
-							{BRANDS_MOCK.map((brand) => (
+							{brands.map((brand) => (
 								<Stack className={'filter-check-row'} key={brand}>
-									<Checkbox id={brand} className={'filter-checkbox'} color="default" size="small" />
+									<Checkbox
+										id={brand}
+										className={'filter-checkbox'}
+										color="default"
+										size="small"
+										value={brand}
+										checked={(searchFilter?.search?.brandList || []).includes(brand)}
+										onChange={brandSelectHandler}
+									/>
 									<label htmlFor={brand} style={{ cursor: 'pointer' }}>
 										<Typography className={'filter-check-label'}>{brand}</Typography>
 									</label>
@@ -492,11 +601,18 @@ const Filter = (props: FilterType) => {
 					</Stack>
 					{openSections.rating && (
 						<Stack className={'filter-section-body'}>
-							{RATINGS_MOCK.map((r) => (
-								<Stack className={'filter-check-row'} key={r}>
-									<Checkbox id={r} className={'filter-checkbox'} color="default" size="small" />
-									<label htmlFor={r} style={{ cursor: 'pointer' }}>
-										<Typography className={'filter-check-label'}>{r}</Typography>
+							{RATINGS.map((r) => (
+								<Stack className={'filter-check-row'} key={r.value}>
+									<Checkbox
+										id={String(r.value)}
+										className={'filter-checkbox'}
+										color="default"
+										size="small"
+										checked={searchFilter?.search?.minRating === r.value}
+										onChange={(e) => ratingSelectHandler(e, r.value)}
+									/>
+									<label htmlFor={String(r.value)} style={{ cursor: 'pointer' }}>
+										<Typography className={'filter-check-label'}>{r.label}</Typography>
 									</label>
 								</Stack>
 							))}

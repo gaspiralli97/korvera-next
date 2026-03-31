@@ -6,6 +6,7 @@ import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import Notice from '../../libs/components/cs/Notice';
 import Faq from '../../libs/components/cs/Faq';
+import Inquiry from '../../libs/components/cs/Inquiry';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export const getStaticProps = async ({ locale }: any) => ({
@@ -59,6 +60,14 @@ const CS: NextPage = () => {
 							>
 								FAQ
 							</div>
+							<div
+								className={tab == 'inquiry' ? 'active' : ''}
+								onClick={() => {
+									changeTabHandler('inquiry');
+								}}
+							>
+								Inquiry
+							</div>
 						</Box>
 					</Box>
 
@@ -66,6 +75,8 @@ const CS: NextPage = () => {
 						{tab === 'notice' && <Notice />}
 
 						{tab === 'faq' && <Faq />}
+
+						{tab === 'inquiry' && <Inquiry />}
 					</Box>
 				</Stack>
 			</Stack>

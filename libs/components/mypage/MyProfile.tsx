@@ -72,7 +72,6 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 			setUpdateData((prev) => ({ ...prev, memberImage: responseImage }));
 			await sweetMixinSuccessAlert('Photo uploaded successfully.');
 		} catch (err: any) {
-			console.log('Error, uploadImage:', err);
 			await sweetMixinErrorAlert(err?.message ?? 'Image upload failed.');
 		}
 	};
@@ -84,8 +83,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 			const result = await updateMember({
 				variables: { input: updateData },
 			});
-			// @ts-ignore
-			const jwtToken = result.data.updateMember?.accessToken;
+			const jwtToken = (result.data as any)?.updateMember?.accessToken;
 			await updateStorage({ jwtToken });
 			updateUserInfo(result.data.updateMember?.accessToken);
 			await sweetMixinSuccessAlert('Profile updated successfully.');
@@ -101,8 +99,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 			const result = await updateMember({
 				variables: { input: { _id: user._id, memberPassword: newPassword } },
 			});
-			// @ts-ignore
-			const jwtToken = result.data.updateMember?.accessToken;
+			const jwtToken = (result.data as any)?.updateMember?.accessToken;
 			await updateStorage({ jwtToken });
 			updateUserInfo(result.data.updateMember?.accessToken);
 			setNewPassword('');

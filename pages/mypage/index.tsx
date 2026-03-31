@@ -53,7 +53,6 @@ const MyPage: NextPage = () => {
 	/** HANDLERS **/
 	const subscribeHandler = async (id: string, refetch: any, query: any) => {
 		try {
-			console.log('id: ', id);
 			if (!id) throw new Error(Messages.error1);
 			if (!user._id) throw new Error(Messages.error2);
 
@@ -100,7 +99,6 @@ const MyPage: NextPage = () => {
 			await sweetTopSmallSuccessAlert("Success!", 808);
 			await refetch({ input: query })
 		} catch (err: any) {
-			console.log('ERROR, likeMemberHandler:', err.message);
 			sweetMixinErrorAlert(err.message).then()
 		}
 	};

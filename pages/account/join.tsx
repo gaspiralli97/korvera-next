@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
@@ -19,6 +19,15 @@ const Join: NextPage = () => {
 	const device = useDeviceDetect();
 	const [input, setInput] = useState({ nick: '', password: '', phone: '', type: 'USER' });
 	const [loginView, setLoginView] = useState<boolean>(true);
+	const [rememberMe, setRememberMe] = useState<boolean>(true);
+
+	/** LIFECYCLE **/
+	useEffect(() => {
+		const savedNick = localStorage.getItem('korvera_remember_nick');
+		if (savedNick) {
+			setInput((prev) => ({ ...prev, nick: savedNick }));
+		}
+	}, []);
 
 	/** HANDLERS **/
 	const viewChangeHandler = (state: boolean) => {
@@ -42,17 +51,20 @@ const Join: NextPage = () => {
 	}, []);
 
 	const doLogin = useCallback(async () => {
-		console.warn(input);
 		try {
 			await logIn(input.nick, input.password);
+			if (rememberMe) {
+				localStorage.setItem('korvera_remember_nick', input.nick);
+			} else {
+				localStorage.removeItem('korvera_remember_nick');
+			}
 			await router.push(`${router.query.referrer ?? '/'}`);
 		} catch (err: any) {
 			await sweetMixinErrorAlert(err.message);
 		}
-	}, [input]);
+	}, [input, rememberMe]);
 
 	const doSignUp = useCallback(async () => {
-		console.warn(input);
 		try {
 			await signUp(input.nick, input.password, input.phone, input.type);
 			await router.push(`${router.query.referrer ?? '/'}`);
@@ -61,7 +73,13 @@ const Join: NextPage = () => {
 		}
 	}, [input]);
 
-	console.log('+input: ', input);
+	const handleSocialLogin = async (provider: string) => {
+		await sweetMixinErrorAlert(`${provider} login is coming soon.`);
+	};
+
+	const handleForgotPassword = async () => {
+		await sweetMixinErrorAlert('Password recovery is coming soon.');
+	};
 
 	if (device === 'mobile') {
 		return <div>LOGIN MOBILE</div>;
@@ -86,6 +104,7 @@ const Join: NextPage = () => {
 									<input
 										type="text"
 										placeholder={'Enter Nickname'}
+										value={input.nick}
 										onChange={(e) => handleInput('nick', e.target.value)}
 										required={true}
 										onKeyDown={(event) => {
@@ -97,7 +116,7 @@ const Join: NextPage = () => {
 								<div className={'input-box'}>
 									<span>Password</span>
 									<input
-										type="text"
+										type="password"
 										placeholder={'Enter Password'}
 										onChange={(e) => handleInput('password', e.target.value)}
 										required={true}
@@ -160,9 +179,20 @@ const Join: NextPage = () => {
 								{loginView && (
 									<div className={'remember-info'}>
 										<FormGroup>
-											<FormControlLabel control={<Checkbox defaultChecked size="small" />} label="Remember me" />
+											<FormControlLabel
+												control={
+													<Checkbox
+														size="small"
+														checked={rememberMe}
+														onChange={(e) => setRememberMe(e.target.checked)}
+													/>
+												}
+												label="Remember me"
+											/>
 										</FormGroup>
-										<a>Lost your password?</a>
+										<a onClick={handleForgotPassword} style={{ cursor: 'pointer' }}>
+											Lost your password?
+										</a>
 									</div>
 								)}
 
@@ -191,7 +221,7 @@ const Join: NextPage = () => {
 								<Box className={'social-auth'}>
 									<span className={'social-auth-title'}>{loginView ? 'Or login with' : 'Or sign up with'}</span>
 									<Stack className={'social-auth-buttons'}>
-										<Button className={'social-btn google'}>
+										<Button className={'social-btn google'} onClick={() => handleSocialLogin('Google')}>
 											<span className={'icon'}>
 												<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
 													<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -202,7 +232,7 @@ const Join: NextPage = () => {
 											</span>
 											Google
 										</Button>
-										<Button className={'social-btn kakao'}>
+										<Button className={'social-btn kakao'} onClick={() => handleSocialLogin('Kakao')}>
 											<span className={'icon'}>
 												<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
 													<path d="M12 3C6.477 3 2 6.477 2 10.8c0 2.7 1.61 5.07 4.05 6.48L5.1 21l4.35-2.88c.83.14 1.67.21 2.55.21 5.523 0 10-3.477 10-7.8S17.523 3 12 3z" fill="#3C1E1E"/>
@@ -210,7 +240,7 @@ const Join: NextPage = () => {
 											</span>
 											Kakao
 										</Button>
-										<Button className={'social-btn facebook'}>
+										<Button className={'social-btn facebook'} onClick={() => handleSocialLogin('Facebook')}>
 											<span className={'icon'}>
 												<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
 													<path d="M24 12.073C24 5.406 18.627 0 12 0S0 5.406 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047v-2.66c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.514c-1.491 0-1.956.93-1.956 1.887v2.264h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" fill="#fff"/>
@@ -218,7 +248,7 @@ const Join: NextPage = () => {
 											</span>
 											Facebook
 										</Button>
-										<Button className={'social-btn apple'}>
+										<Button className={'social-btn apple'} onClick={() => handleSocialLogin('Apple')}>
 											<span className={'icon'}>
 												<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
 													<path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.4c1.28.07 2.17.73 2.92.75 1.11-.22 2.18-.91 3.39-.82 1.44.12 2.53.69 3.23 1.76-2.97 1.78-2.27 5.74.42 6.85-.52 1.53-1.19 3.04-1.96 4.34zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" fill="#fff"/>

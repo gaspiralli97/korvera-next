@@ -307,6 +307,7 @@ const ProductDetail: NextPage = ({ initialRating, ...props }: any) => {
 				productImage: product?.productImages?.[0] ?? '',
 				qty: payload.quantity,
 				size: payload.selectedSize,
+				stockCount: hasStockLimit ? maxQty : undefined,
 			};
 			const current = cartVar();
 			const existing = current.findIndex((i) => i.productId === newItem.productId && i.size === newItem.size);

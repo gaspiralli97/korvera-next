@@ -429,12 +429,15 @@
 							border: 1px solid #e6e6e6;
 							border-radius: 6px;
 							background: #fff;
-							color: #7b7b7b;
-							font-family: $font;
-							font-size: 10px;
-							font-weight: 600;
-							letter-spacing: 0.5px;
-							text-transform: uppercase;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+
+							img {
+								height: 18px;
+								width: auto;
+								display: block;
+							}
 						}
 					}
 				}

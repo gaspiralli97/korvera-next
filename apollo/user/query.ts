@@ -178,6 +178,12 @@ export const GET_PRODUCT = gql`
 	}
 `;
 
+export const GET_PRODUCT_BRANDS = gql`
+	query GetProductBrands {
+		getProductBrands
+	}
+`;
+
 export const GET_PRODUCTS = gql`
 	query GetProducts($input: ProductsInquiry!) {
 		getProducts(input: $input) {
