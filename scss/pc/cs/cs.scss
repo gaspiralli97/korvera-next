@@ -159,6 +159,164 @@
           }
 
         }
+        .inquiry-wrap {
+          margin-top: 25px;
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+
+          .inquiry-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            .inquiry-title {
+              color: #000;
+              font-family: $font;
+              font-size: 24px;
+              font-weight: 700;
+            }
+            .inquiry-sub {
+              color: #757575;
+              font-family: $font;
+              font-size: 14px;
+              text-align: center;
+              .inquiry-email {
+                color: #EB6753;
+                font-weight: 600;
+              }
+            }
+          }
+
+          .inquiry-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .inquiry-row {
+              display: flex;
+              flex-direction: row;
+              gap: 20px;
+            }
+
+            .inquiry-field {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              gap: 6px;
+
+              .inquiry-label {
+                color: #333;
+                font-family: $font;
+                font-size: 13px;
+                font-weight: 600;
+              }
+
+              .inquiry-input {
+                height: 42px;
+                padding: 0 12px;
+                border: 1px solid #EEE;
+                border-radius: 6px;
+                font-family: $font;
+                font-size: 14px;
+                color: #333;
+                outline: none;
+                transition: border-color 0.2s;
+                &:focus {
+                  border-color: #EB6753;
+                }
+              }
+
+              .inquiry-select {
+                height: 42px;
+                font-family: $font;
+                font-size: 14px;
+                color: #333;
+                .MuiOutlinedInput-notchedOutline {
+                  border-color: #EEE;
+                  border-radius: 6px;
+                }
+                &.Mui-focused .MuiOutlinedInput-notchedOutline {
+                  border-color: #EB6753;
+                }
+              }
+
+              .inquiry-textarea {
+                padding: 12px;
+                border: 1px solid #EEE;
+                border-radius: 6px;
+                font-family: $font;
+                font-size: 14px;
+                color: #333;
+                resize: vertical;
+                outline: none;
+                transition: border-color 0.2s;
+                &:focus {
+                  border-color: #EB6753;
+                }
+              }
+            }
+
+            .inquiry-submit-row {
+              display: flex;
+              justify-content: flex-end;
+
+              .inquiry-submit-btn {
+                height: 46px;
+                padding: 0 40px;
+                background: #EB6753;
+                color: #FFF;
+                font-family: $font;
+                font-size: 14px;
+                font-weight: 700;
+                border-radius: 6px;
+                text-transform: none;
+                &:hover {
+                  background: #d45a47;
+                }
+                &:disabled {
+                  background: #BDBDBD;
+                }
+              }
+            }
+          }
+
+          .inquiry-info-row {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+
+            .inquiry-info-card {
+              flex: 1;
+              align-items: center;
+              padding: 24px 16px;
+              border: 1px solid #EEE;
+              border-radius: 10px;
+              gap: 8px;
+
+              .inquiry-info-icon {
+                font-size: 24px;
+              }
+
+              .inquiry-info-label {
+                color: #757575;
+                font-family: $font;
+                font-size: 12px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.6px;
+              }
+
+              .inquiry-info-value {
+                color: #000;
+                font-family: $font;
+                font-size: 14px;
+                font-weight: 600;
+              }
+            }
+          }
+        }
+
         .faq-content {
           margin-top: 25px;
           display: flex;
@@ -211,8 +369,7 @@
             .answer {
               margin-left: 80px;
               display: flex;
-              white-space: nowrap;
-              align-items: center;
+              align-items: flex-start;
               flex-direction: row;
               .badge {
                 color: #EB6753;

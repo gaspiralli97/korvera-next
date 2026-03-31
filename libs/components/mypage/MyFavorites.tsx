@@ -54,7 +54,6 @@ const MyFavorites: NextPage = () => {
 
 			await getFavoritesRefetch({ input: searchFavorites });
 		} catch (err: any) {
-			console.log('ERROR, likeProductHandler:', err.message);
 			await sweetMixinErrorAlert(err.message).then();
 		}
 	};
@@ -72,8 +71,8 @@ const MyFavorites: NextPage = () => {
 				</Stack>
 				<Stack className="favorites-list-box">
 					{myFavorites?.length ? (
-						myFavorites?.map((property: Product) => {
-							return <ProductCard product={property} likeProductHandler={likeProductHandler} myFavorites={true} />;
+						myFavorites?.map((product: Product) => {
+							return <ProductCard product={product} likeProductHandler={likeProductHandler} myFavorites={true} />;
 						})
 					) : (
 						<div className={'no-data'}>
@@ -95,7 +94,7 @@ const MyFavorites: NextPage = () => {
 						</Stack>
 						<Stack className="total-result">
 							<Typography>
-								Total {total} favorite propert{total > 1 ? 'ies' : 'y'}
+								Total {total} favorite product{total > 1 ? 's' : ''}
 							</Typography>
 						</Stack>
 					</Stack>

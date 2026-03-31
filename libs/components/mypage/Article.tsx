@@ -1,28 +1,36 @@
 import React from 'react';
 import { Stack, Typography, Box } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
+import { BoardArticle } from '../../types/board-article/board-article';
 
-const Article = () => {
+interface ArticleProps {
+	boardArticle: BoardArticle;
+}
+
+const Article = ({ boardArticle }: ArticleProps) => {
 	const device = useDeviceDetect();
 
 	if (device === 'mobile') {
-		return <div>PROPERTY CARD</div>;
+		return <div>ARTICLE CARD MOBILE</div>;
 	} else {
 		return (
 			<Stack className="card-config">
 				<Stack className="top">
-					<img src="/img/apartmentMain.png" alt="" />
 					<Box component={'div'} className={'date'}>
-						<Typography>July 28</Typography>
+						<Typography>
+							{boardArticle?.createdAt
+								? new Date(boardArticle.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+								: ''}
+						</Typography>
 					</Box>
 				</Stack>
 				<Stack className="bottom">
 					<Stack className="name-address">
 						<Stack className="name">
-							<Typography>Equestrian Family Home</Typography>
+							<Typography>{boardArticle?.articleTitle ?? ''}</Typography>
 						</Stack>
 						<Stack className="address">
-							<Typography>Shillymdong, Kwanak-ku, Seoul </Typography>
+							<Typography>{boardArticle?.articleCategory ?? ''}</Typography>
 						</Stack>
 					</Stack>
 				</Stack>

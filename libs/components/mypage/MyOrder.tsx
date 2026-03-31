@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stack, Box, Typography, Button, Divider, Radio, RadioGroup, FormControlLabel, Checkbox } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { useReactiveVar } from '@apollo/client';
 import { cartVar, saveCart, CartItem, userVar } from '../../../apollo/store';
 import { useRouter } from 'next/router';
+import { sweetMixinErrorAlert } from '../../sweetAlert';
 
 const MyOrder = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const cartItems = useReactiveVar(cartVar);
 	const user = useReactiveVar(userVar);
+
+	const COUNTRY_CONFIG: Record<string, { flag: string; company: string }> = {
+		USA:    { flag: '🇺🇸', company: 'FedEx' },
+		Korea:  { flag: '🇰🇷', company: 'CJ Logistics' },
+		Russia: { flag: '🇷🇺', company: 'CDEK' },
+		UZB:    { flag: '🇺🇿', company: 'Uzbekistan Post' },
+	};
+	const savedCountry = typeof window !== 'undefined' ? (localStorage.getItem('shippingCountry') ?? 'USA') : 'USA';
+	const countryConfig = COUNTRY_CONFIG[savedCountry] ?? COUNTRY_CONFIG['USA'];
 
 	// Shipping address
 	const [firstName, setFirstName] = useState<string>('');
@@ -38,13 +48,79 @@ const MyOrder = () => {
 	// Agree
 	const [agreeAll, setAgreeAll] = useState<boolean>(false);
 
+	// Load saved checkout info from localStorage, fallback to user profile
+	useEffect(() => {
+		if (!user?._id) return;
+		try {
+			const raw = localStorage.getItem(`korvera_checkout_${user._id}`);
+			if (raw) {
+				const saved = JSON.parse(raw);
+				if (saved.firstName) setFirstName(saved.firstName);
+				if (saved.lastName) setLastName(saved.lastName);
+				if (saved.address) setAddress(saved.address);
+				if (saved.apt) setApt(saved.apt);
+				if (saved.city) setCity(saved.city);
+				if (saved.stateVal) setStateVal(saved.stateVal);
+				if (saved.zip) setZip(saved.zip);
+				if (saved.mobile) setMobile(saved.mobile);
+				if (saved.email) setEmail(saved.email);
+				return;
+			}
+		} catch {}
+		// No saved data — fall back to user profile fields
+		if (user.memberPhone) setMobile(user.memberPhone);
+		if (user.memberAddress) setAddress(user.memberAddress);
+	}, [user?._id]);
+
+	// Persist checkout fields to localStorage whenever they change
+	useEffect(() => {
+		if (!user?._id) return;
+		const data = { firstName, lastName, address, apt, city, stateVal, zip, mobile, email };
+		localStorage.setItem(`korvera_checkout_${user._id}`, JSON.stringify(data));
+	}, [firstName, lastName, address, apt, city, stateVal, zip, mobile, email, user?._id]);
+
 	// Order summary
+	const pointsBalance = user?.memberPoints ?? 0;
 	const subtotal = cartItems.reduce((acc: number, item: CartItem) => acc + item.productPrice * item.qty, 0);
+	const pointsDiscount = Math.min(Number(points) || 0, subtotal);
 	const shipping = subtotal >= 50 ? 0 : 5.99;
-	const grandTotal = subtotal + shipping;
+	const grandTotal = subtotal + shipping - pointsDiscount;
 
 	/** HANDLERS **/
-	const placeOrderHandler = () => {
+	const handleCardNumber = (val: string) => {
+		const digits = val.replace(/\D/g, '').slice(0, 16);
+		const formatted = digits.replace(/(\d{4})(?=\d)/g, '$1 ');
+		setCardNumber(formatted);
+	};
+
+	const handleExpiry = (val: string) => {
+		const digits = val.replace(/\D/g, '').slice(0, 4);
+		const formatted = digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
+		setExpiry(formatted);
+	};
+
+	const handleCvv = (val: string) => {
+		setCvv(val.replace(/\D/g, '').slice(0, 3));
+	};
+
+	const placeOrderHandler = async () => {
+		if (cartItems.length === 0) { await sweetMixinErrorAlert('Your cart is empty.'); return; }
+		if (!firstName.trim()) { await sweetMixinErrorAlert('Please enter your first name.'); return; }
+		if (!lastName.trim()) { await sweetMixinErrorAlert('Please enter your last name.'); return; }
+		if (!address.trim()) { await sweetMixinErrorAlert('Please enter your address.'); return; }
+		if (!city.trim()) { await sweetMixinErrorAlert('Please enter your city.'); return; }
+		if (!stateVal.trim()) { await sweetMixinErrorAlert('Please enter your state / province.'); return; }
+		if (!zip.trim()) { await sweetMixinErrorAlert('Please enter your zip / postal code.'); return; }
+		if (!mobile.trim()) { await sweetMixinErrorAlert('Please enter your mobile number.'); return; }
+		if (!email.trim()) { await sweetMixinErrorAlert('Please enter your email.'); return; }
+		if (paymentMethod === 'card') {
+			const rawCard = cardNumber.replace(/\s/g, '');
+			if (rawCard.length !== 16) { await sweetMixinErrorAlert('Card number must be exactly 16 digits.'); return; }
+			const rawExpiry = expiry.replace('/', '');
+			if (rawExpiry.length !== 4) { await sweetMixinErrorAlert('Expiry must be 4 digits (MM/YY).'); return; }
+			if (cvv.length !== 3) { await sweetMixinErrorAlert('CVV must be exactly 3 digits.'); return; }
+		}
+
 		const orderId = `KRV-${Date.now()}`;
 		const today = new Date();
 		const delivery = new Date(today);
@@ -109,10 +185,10 @@ const MyOrder = () => {
 								<Stack className={'oo-section-card'}>
 									<Stack className={'oo-section-header'}>
 										<Stack className={'oo-section-header-left'}>
-											<span className={'oo-flag'}>🇺🇸</span>
+											<span className={'oo-flag'}>{countryConfig.flag}</span>
 											<Typography className={'oo-section-title'}>Shipping Address</Typography>
 										</Stack>
-										<Typography className={'oo-section-sub'}>Shipping Company: <strong>FedEx</strong></Typography>
+										<Typography className={'oo-section-sub'}>Shipping Company: <strong>{countryConfig.company}</strong></Typography>
 									</Stack>
 
 									<Stack className={'oo-form-row'}>
@@ -232,15 +308,21 @@ const MyOrder = () => {
 									<Typography className={'oo-section-title'}>Used Points</Typography>
 
 									<Stack className={'oo-points-row'}>
-										<Typography className={'oo-points-balance'}>0.00P</Typography>
+										<Typography className={'oo-points-balance'}>{pointsBalance.toFixed(2)}P</Typography>
 										<Stack className={'oo-points-input-row'}>
 											<input
 												className={'oo-input oo-points-input'}
 												placeholder={'0'}
+												type={'number'}
+												min={0}
+												max={pointsBalance}
 												value={points}
-												onChange={(e) => setPoints(e.target.value)}
+												onChange={(e) => {
+													const val = Math.min(Number(e.target.value) || 0, pointsBalance);
+													setPoints(String(val));
+												}}
 											/>
-											<Button className={'oo-use-all-btn'} disableRipple>Use All</Button>
+											<Button className={'oo-use-all-btn'} disableRipple onClick={() => setPoints(String(pointsBalance))}>Use All</Button>
 										</Stack>
 									</Stack>
 									<Typography className={'oo-points-note'}>1P = US$1</Typography>
@@ -290,22 +372,25 @@ const MyOrder = () => {
 												<Stack className={'oo-card-fields'}>
 													<input
 														className={'oo-input'}
-														placeholder={'Card Number'}
+														placeholder={'XXXX XXXX XXXX XXXX'}
 														value={cardNumber}
-														onChange={(e) => setCardNumber(e.target.value)}
+														maxLength={19}
+														onChange={(e) => handleCardNumber(e.target.value)}
 													/>
 													<Stack className={'oo-form-row'}>
 														<input
 															className={'oo-input'}
-															placeholder={'MM / YY'}
+															placeholder={'MM/YY'}
 															value={expiry}
-															onChange={(e) => setExpiry(e.target.value)}
+															maxLength={5}
+															onChange={(e) => handleExpiry(e.target.value)}
 														/>
 														<input
 															className={'oo-input'}
 															placeholder={'CVV'}
 															value={cvv}
-															onChange={(e) => setCvv(e.target.value)}
+															maxLength={3}
+															onChange={(e) => handleCvv(e.target.value)}
 														/>
 													</Stack>
 													<Stack className={'oo-checkbox-row'}>
@@ -358,7 +443,7 @@ const MyOrder = () => {
 									</Stack>
 									<Stack className={'oo-summary-row'}>
 										<Typography className={'oo-summary-label'}>Total Discount</Typography>
-										<Typography className={'oo-summary-value oo-discount'}>-$0.00</Typography>
+										<Typography className={'oo-summary-value oo-discount'}>-${pointsDiscount.toFixed(2)}</Typography>
 									</Stack>
 
 									<Divider sx={{ my: '10px', borderColor: '#eee' }} />
@@ -401,7 +486,7 @@ const MyOrder = () => {
 									<Button
 										className={`oo-place-order-btn ${!agreeAll ? 'oo-place-order-btn--disabled' : ''}`}
 										disableRipple
-										disabled={!agreeAll}
+										disabled={!agreeAll || cartItems.length === 0}
 										onClick={placeOrderHandler}
 									>
 										Place Order

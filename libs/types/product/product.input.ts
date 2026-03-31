@@ -63,6 +63,8 @@ interface PISearch {
 	pricesRange?: Range;
 	volumesRange?: Range;
 	text?: string;
+	brandList?: string[];
+	minRating?: number;
 }
 
 export interface ProductsInquiry {

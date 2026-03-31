@@ -1,6 +1,8 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
-import { useReactiveVar } from '@apollo/client';
+import { useReactiveVar, useMutation } from '@apollo/client';
 import { Stack, Box, Typography, Button, Divider, Menu, MenuItem } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
@@ -8,6 +10,8 @@ import { cartVar, saveCart, CartItem } from '../../../apollo/store';
 import { userVar } from '../../../apollo/store';
 import { REACT_APP_API_URL } from '../../config';
 import { sweetConfirmAlert, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
+import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
+import { Message } from '../../enums/common.enum';
 
 interface MyCartProps {}
 type ShippingCountry = 'UZB' | 'Russia' | 'Korea' | 'USA';
@@ -37,7 +41,18 @@ const MyCart: React.FC<MyCartProps> = () => {
 	const user = useReactiveVar(userVar);
 	const userId = user?._id ?? '';
 	const [mounted, setMounted] = useState(false);
+	const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
+	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
+
 	useEffect(() => { setMounted(true); }, []);
+
+	useEffect(() => {
+		if (!mounted || !userId) return;
+		try {
+			const raw = localStorage.getItem(`korvera_liked_${userId}`);
+			if (raw) setLikedIds(new Set(JSON.parse(raw)));
+		} catch {}
+	}, [mounted, userId]);
 	const [cartUIState, setCartUIState] = useState<CartUIState>(() => {
 		const saved = typeof window !== 'undefined' ? localStorage.getItem('shippingCountry') : null;
 		const country = (saved && (SHIPPING_COUNTRIES as string[]).includes(saved) ? saved : 'USA') as ShippingCountry;
@@ -57,7 +72,9 @@ const MyCart: React.FC<MyCartProps> = () => {
 		const updatedItems = cartVar().map((item: CartItem) => {
 			if (item.productId === productId && item.size === size) {
 				const nextQty = (item.qty ?? 1) + delta;
-				return { ...item, qty: nextQty < 1 ? 1 : nextQty };
+				const clamped = Math.max(1, nextQty);
+				const max = typeof item.stockCount === 'number' ? item.stockCount : Infinity;
+				return { ...item, qty: Math.min(clamped, max) };
 			}
 			return item;
 		});
@@ -84,6 +101,21 @@ const MyCart: React.FC<MyCartProps> = () => {
 		setCartUIState((prev) => ({ ...prev, shippingCountry: country }));
 		localStorage.setItem('shippingCountry', country);
 		handleCloseCountrySelector();
+	};
+
+	const handleLike = async (productId: string) => {
+		try {
+			if (!userId) throw new Error(Message.NOT_AUTHENTICATED);
+			await likeTargetProduct({ variables: { input: productId } });
+			setLikedIds((prev) => {
+				const next = new Set(prev);
+				next.has(productId) ? next.delete(productId) : next.add(productId);
+				localStorage.setItem(`korvera_liked_${userId}`, JSON.stringify([...next]));
+				return next;
+			});
+		} catch (err: any) {
+			await sweetMixinErrorAlert(err.message);
+		}
 	};
 
 	const handleRemoveAll = async () => {
@@ -190,8 +222,11 @@ const MyCart: React.FC<MyCartProps> = () => {
 													const oldPrice = getOptionalOldPrice(item);
 													return (
 														<Stack className={'cart-item'} key={`${item.productId}-${item.size}`}>
-															<Button className={'oy-heart-btn'}>
-																<Typography>♡</Typography>
+															<Button className={'oy-heart-btn'} onClick={() => handleLike(item.productId)}>
+																{likedIds.has(item.productId)
+																	? <FavoriteIcon sx={{ fontSize: 18, color: '#e75480' }} />
+																	: <FavoriteBorderIcon sx={{ fontSize: 18, color: '#aaa' }} />
+																}
 															</Button>
 
 															<Box component={'div'} className={'thumb-wrap'}>
@@ -211,7 +246,7 @@ const MyCart: React.FC<MyCartProps> = () => {
 																<Stack className={'oy-item-top'}>
 																	<Stack className={'oy-item-name-col'}>
 																		<Typography className={'oy-item-brand'}>
-																			{item.productBrand || 'OLIVE YOUNG'}
+																			{item.productBrand}
 																		</Typography>
 																		<Typography className={'item-title'}>{item.productTitle}</Typography>
 																	</Stack>
@@ -295,10 +330,11 @@ const MyCart: React.FC<MyCartProps> = () => {
 									</Button>
 
 									<Stack className={'oy-payments-row'}>
-										<Typography className={'oy-pay-icon'}>VISA</Typography>
-										<Typography className={'oy-pay-icon'}>Mastercard</Typography>
-										<Typography className={'oy-pay-icon'}>PayPal</Typography>
-										<Typography className={'oy-pay-icon'}>Apple Pay</Typography>
+										{['visa', 'mastercard', 'paypal', 'applepay', 'amex'].map((name) => (
+											<Box key={name} component={'div'} className={'oy-pay-icon'}>
+												<img src={`/img/icons/payment/${name}.svg`} alt={name} />
+											</Box>
+										))}
 									</Stack>
 								</Stack>
 							</Stack>

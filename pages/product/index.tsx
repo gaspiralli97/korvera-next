@@ -64,8 +64,7 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 	}, [router]);
 
 	useEffect(() => {
-		console.log('searchFilter', searchFilter);
-		// getProductsRefetch({input:searchFilter}).then(); agar bekenndan kerak bulsa
+		getProductsRefetch({ input: searchFilter }).then();
 	}, [searchFilter]);
 
 	/** HANDLERS **/
@@ -89,11 +88,9 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 				await likeTargetProduct({
 					variables:{input:id},
 				});
-				await getProductsRefetch({input:initialInput});
-				
-				await sweetTopSmallSuccessAlert('success',800);
-			} catch (err:any) {
-				console.log('ERROR, likeProductHandler', err.message);
+				await getProductsRefetch({ input: searchFilter });
+				await sweetTopSmallSuccessAlert('success', 800);
+			} catch (err: any) {
 				sweetMixinErrorAlert(err.message).then();
 			}
 		};

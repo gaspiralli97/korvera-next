@@ -5,6 +5,7 @@ import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { ProductCategory, SkinType, ProductSize, ProductSubCategory, ProductCertification } from '../../enums/product.enum';
 import { REACT_APP_API_URL } from '../../config';
 import { ProductInput } from '../../types/product/product.input';
+import { ProductUpdate } from '../../types/product/product.update';
 import axios from 'axios';
 import { getJwtToken } from '../../auth';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
@@ -154,10 +155,8 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 			const responseImages = response?.data?.data?.imagesUploader;
 			if (!Array.isArray(responseImages)) throw new Error('Image upload response is invalid');
 
-			console.log('+responseImages: ', responseImages);
 			setInsertProductData((prev) => ({ ...prev, productImages: responseImages }));
 		} catch (err: any) {
-			console.log('err: ', err.message);
 			await sweetMixinErrorAlert(err.message);
 		}
 	}
@@ -166,12 +165,12 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 		if (
 			insertProductData.productTitle === '' ||
 			!Number.isFinite(insertProductData.productPrice) ||
-			insertProductData.productPrice === 0 || // @ts-ignore
-			insertProductData.productCategory === '' || // @ts-ignore
+			insertProductData.productPrice === 0 ||
+			!insertProductData.productCategory ||
 			insertProductData.productBrand === '' ||
 			!Number.isFinite(insertProductData.productVolume) ||
-			insertProductData.productVolume === 0 || // @ts-ignore
-			insertProductData.productSize === '' ||
+			insertProductData.productVolume === 0 ||
+			!insertProductData.productSize ||
 			insertProductData.productDesc === '' ||
 			insertProductData.productImages.length === 0
 		) {
@@ -200,11 +199,13 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 
 	const updateProductHandler = useCallback(async () => {
 		try {
-			// @ts-ignore
-			insertProductData._id = getProductData?.getProduct?._id;
+			const updateInput: ProductUpdate = {
+				...insertProductData,
+				_id: getProductData?.getProduct?._id as string,
+			};
 			const result = await updateProduct({
 				variables: {
-					input: insertProductData,
+					input: updateInput,
 				},
 			});
 			await sweetMixinSuccessAlert('This product has been updated successfully.');
@@ -223,7 +224,6 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 		router.back();
 	}
 
-	console.log('+insertProductData', insertProductData);
 
 	if (device === 'mobile') {
 		return <div>ADD NEW PRODUCT MOBILE PAGE</div>;
@@ -286,8 +286,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 										defaultValue={insertProductData.productCategory || 'select'}
 										value={insertProductData.productCategory || 'select'}
 										onChange={({ target: { value } }) =>
-											// @ts-ignore
-											setInsertProductData({ ...insertProductData, productCategory: value, productSubCategory: undefined })
+											setInsertProductData({ ...insertProductData, productCategory: value as ProductCategory, productSubCategory: undefined })
 										}
 									>
 										<>
@@ -310,8 +309,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 										className={'select-description'}
 										value={insertProductData.productSubCategory || 'select'}
 										onChange={({ target: { value } }) =>
-											// @ts-ignore
-											setInsertProductData({ ...insertProductData, productSubCategory: value })
+											setInsertProductData({ ...insertProductData, productSubCategory: value as ProductSubCategory })
 										}
 									>
 										<option disabled={true} value={'select'}>Select</option>
@@ -332,8 +330,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 										defaultValue={insertProductData.productSize || 'select'}
 										value={insertProductData.productSize || 'select'}
 										onChange={({ target: { value } }) =>
-											// @ts-ignore
-											setInsertProductData({ ...insertProductData, productSize: value })
+											setInsertProductData({ ...insertProductData, productSize: value as ProductSize })
 										}
 									>
 										<>
