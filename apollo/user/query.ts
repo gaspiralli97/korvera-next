@@ -103,6 +103,7 @@ export const GET_PRODUCT = gql`
 		getProduct(productId: $input) {
 			_id
 			productCategory
+			productSubCategory
 			productStatus
 			productBrand
 			productTitle
@@ -183,6 +184,7 @@ export const GET_PRODUCTS = gql`
 			list {
 				_id
 				productCategory
+				productSubCategory
 				productStatus
 				productBrand
 				productTitle
@@ -244,6 +246,7 @@ export const SEARCH_PRODUCTS = gql`
 			list {
 				_id
 				productCategory
+				productSubCategory
 				productStatus
 				productBrand
 				productTitle
@@ -296,6 +299,7 @@ export const GET_SIMILAR_PRODUCTS = gql`
 			list {
 				_id
 				productCategory
+				productSubCategory
 				productStatus
 				productBrand
 				productTitle
@@ -338,6 +342,7 @@ export const GET_PRODUCT_RECOMMENDATIONS = gql`
 			list {
 				_id
 				productCategory
+				productSubCategory
 				productStatus
 				productBrand
 				productTitle
@@ -380,6 +385,7 @@ export const GET_SELLER_PRODUCTS = gql`
 			list {
 				_id
 				productCategory
+				productSubCategory
 				productStatus
 				productBrand
 				productTitle
@@ -413,6 +419,7 @@ export const GET_FAVORITES = gql`
 			list {
 				_id
 				productCategory
+				productSubCategory
 				productStatus
 				productBrand
 				productTitle
@@ -475,6 +482,7 @@ export const GET_VISITED = gql`
 			list {
 				_id
 				productCategory
+				productSubCategory
 				productStatus
 				productBrand
 				productTitle

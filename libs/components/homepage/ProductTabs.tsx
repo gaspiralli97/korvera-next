@@ -13,7 +13,6 @@ import { T } from '../../types/common';
 import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { Direction, Message } from '../../enums/common.enum';
-import { MOCK_PRODUCTS } from '../../data/mockProducts';
 
 const TABS = [
 	{ label: 'Trending', sort: 'productLikes' },
@@ -104,7 +103,7 @@ const ProductTabs = () => {
 							prevEl: '.swiper-pt-prev',
 						}}
 					>
-						{(products.length > 0 ? products : MOCK_PRODUCTS).map((product: Product) => (
+						{products.map((product: Product) => (
 							<SwiperSlide key={product._id} className={'pt-slide'}>
 								<ProductCard product={product} likeProductHandler={likeProductHandler} />
 							</SwiperSlide>

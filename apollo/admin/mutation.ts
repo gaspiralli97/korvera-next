@@ -42,6 +42,7 @@ export const UPDATE_PRODUCT_BY_ADMIN = gql`
 		updateProductByAdmin(input: $input) {
 			_id
 			productCategory
+			productSubCategory
 			productStatus
 			productBrand
 			productTitle
@@ -70,6 +71,7 @@ export const REMOVE_PRODUCT_BY_ADMIN = gql`
 		removeProductByAdmin(productId: $input) {
 			_id
 			productCategory
+			productSubCategory
 			productStatus
 			productBrand
 			productTitle

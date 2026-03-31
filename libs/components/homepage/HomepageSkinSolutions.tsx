@@ -5,55 +5,43 @@ import EastIcon from '@mui/icons-material/East';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import { Product } from '../../types/product/product';
-import { ProductsInquiry } from '../../types/product/product.input';
 import ProductCard from '../product/ProductCard';
-import { useMutation, useQuery } from '@apollo/client';
-import { GET_PRODUCTS } from '../../../apollo/user/query';
-import { T } from '../../types/common';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
+import { GET_PRODUCT_RECOMMENDATIONS } from '../../../apollo/user/query';
 import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
+import { T } from '../../types/common';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { Message } from '../../enums/common.enum';
-import { MOCK_PRODUCTS } from '../../data/mockProducts';
+import { userVar } from '../../../apollo/store';
 
-interface HomepageSkinSolutionsProps {
-	initialInput: ProductsInquiry;
-}
-
-const HomepageSkinSolutions = (props: HomepageSkinSolutionsProps) => {
-	const { initialInput } = props;
+const HomepageSkinSolutions = () => {
+	const user = useReactiveVar(userVar);
 	const [products, setProducts] = useState<Product[]>([]);
 
-	/** APOLLO REQUESTS **/
 	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
-	const {
-		refetch: getProductsRefetch,
-	} = useQuery(GET_PRODUCTS, {
-		fetchPolicy:'cache-and-network',
-		variables:{input:initialInput},
-		notifyOnNetworkStatusChange:true,
-		onCompleted:(data:T)=>{
-			setProducts(data?.getProducts?.list);
+
+	const { refetch } = useQuery(GET_PRODUCT_RECOMMENDATIONS, {
+		fetchPolicy: 'cache-and-network',
+		skip: !user?._id,
+		onCompleted: (data: T) => {
+			setProducts(data?.getProductRecommendations?.list ?? []);
 		},
 	});
 
-	/** HANDLERS **/
-	const likeProductHandler = async (user:T, id:string) => {
+	const likeProductHandler = async (user: T, id: string) => {
 		try {
-			if(!id) return;
-			if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-
-			await likeTargetProduct({ variables:{input:id} });
-			const result = await getProductsRefetch({input:initialInput});
-			setProducts(result.data?.getProducts?.list ?? []);
-
-			await sweetTopSmallSuccessAlert('success',800);
-		} catch (err:any) {
-			console.log('ERROR, likeProductHandler', err.message);
+			if (!id) return;
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			await likeTargetProduct({ variables: { input: id } });
+			const result = await refetch();
+			setProducts(result.data?.getProductRecommendations?.list ?? []);
+			await sweetTopSmallSuccessAlert('success', 800);
+		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();
 		}
 	};
 
-	if (!products) return null;
+	if (!user?._id || products.length === 0) return null;
 
 	return (
 		<Stack className={'hp-recommend'}>
@@ -61,7 +49,7 @@ const HomepageSkinSolutions = (props: HomepageSkinSolutionsProps) => {
 				<Stack className={'info-box'}>
 					<Box component={'div'} className={'left'}>
 						<span>Recommended for You</span>
-						<p>Picked based on what others love</p>
+						<p>Picked based on what you love</p>
 					</Box>
 					<Box component={'div'} className={'right'}>
 						<div className={'pagination-box'}>
@@ -85,7 +73,7 @@ const HomepageSkinSolutions = (props: HomepageSkinSolutionsProps) => {
 							el: '.swiper-recommend-pagination',
 						}}
 					>
-						{(products.length > 0 ? products : MOCK_PRODUCTS).map((product: Product) => (
+						{products.map((product: Product) => (
 							<SwiperSlide className={'top-property-slide'} key={product._id}>
 								<ProductCard product={product} likeProductHandler={likeProductHandler} />
 							</SwiperSlide>
@@ -95,16 +83,6 @@ const HomepageSkinSolutions = (props: HomepageSkinSolutionsProps) => {
 			</Stack>
 		</Stack>
 	);
-};
-
-HomepageSkinSolutions.defaultProps = {
-	initialInput: {
-		page: 1,
-		limit: 8,
-		sort: 'productRank',
-		direction: 'DESC',
-		search: {},
-	},
 };
 
 export default HomepageSkinSolutions;

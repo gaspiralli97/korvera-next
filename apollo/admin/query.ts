@@ -48,6 +48,7 @@ export const GET_ALL_PRODUCTS_BY_ADMIN = gql`
 			list {
 				_id
 				productCategory
+				productSubCategory
 				productStatus
 				productBrand
 				productTitle

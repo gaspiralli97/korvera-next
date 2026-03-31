@@ -1,3 +1,50 @@
+// ── Announcement Bar ──────────────────────────────────────────────────────────
+.announcement-bar {
+	width: 100%;
+	background: #181a20;
+	color: #fff;
+	height: 36px;
+	overflow: hidden;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+
+	.announcement-track {
+		display: flex;
+		align-items: center;
+		white-space: nowrap;
+		animation: marquee-scroll 32s linear infinite;
+
+		&:hover {
+			animation-play-state: paused;
+		}
+	}
+
+	.announcement-item {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 12px;
+		font-weight: 500;
+		letter-spacing: 0.3px;
+		padding: 0 40px;
+		color: #f0ece4;
+
+		svg {
+			color: #c9a96e;
+			flex-shrink: 0;
+		}
+	}
+
+	@keyframes marquee-scroll {
+		0%   { transform: translateX(0); }
+		100% { transform: translateX(-50%); }
+	}
+}
+
 .product-big-card-box {
 	position: relative;
 	margin-right: 8px;

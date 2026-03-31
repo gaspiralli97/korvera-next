@@ -17,7 +17,7 @@ const TuiEditor = () => {
 	const editorRef = useRef<Editor>(null),
 		token = getJwtToken(),
 		router = useRouter();
-	const [articleCategory, setArticleCategory] = useState<BoardArticleCategory>(BoardArticleCategory.FREE);
+	const [articleCategory, setArticleCategory] = useState<BoardArticleCategory>(BoardArticleCategory.SKINCARE_TIPS);
 
 	/** APOLLO REQUESTS **/
 	const [createboardArticle] = useMutation(CREATE_BOARD_ARTICLE);
@@ -130,12 +130,10 @@ const TuiEditor = () => {
 							displayEmpty
 							inputProps={{ 'aria-label': 'Without label' }}
 						>
-							<MenuItem value={BoardArticleCategory.FREE}>
-								<span>Free</span>
-							</MenuItem>
+							<MenuItem value={BoardArticleCategory.SKINCARE_TIPS}>Skincare Tips</MenuItem>
+							<MenuItem value={BoardArticleCategory.PRODUCT_REVIEWS}>Product Reviews</MenuItem>
+							<MenuItem value={BoardArticleCategory.BEAUTY_NEWS}>Beauty News</MenuItem>
 							<MenuItem value={BoardArticleCategory.HUMOR}>Humor</MenuItem>
-							<MenuItem value={BoardArticleCategory.NEWS}>News</MenuItem>
-							<MenuItem value={BoardArticleCategory.RECOMMEND}>Recommendation</MenuItem>
 						</Select>
 					</FormControl>
 				</Box>
