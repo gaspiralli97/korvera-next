@@ -18,7 +18,7 @@ const TopAgentCard = (props: TopAgentProps) => {
 		: '/img/profile/defaultUser.svg';
 
 	const handleClick = () => {
-		router.push({ pathname: '/agent/detail', query: { agentId: agent?._id } });
+		router.push({ pathname: '/seller/detail', query: { agentId: agent?._id } });
 	};
 
 	return (

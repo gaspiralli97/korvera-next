@@ -42,7 +42,7 @@ const getOrderStatusClass = (status: string) => {
 	switch (status) {
 		case 'PENDING': return 'warning';
 		case 'CONFIRMED': return 'success';
-		case 'DELIVERED': return 'up';
+		case 'DELIVERED': return 'delivered';
 		case 'CANCELLED': return 'error';
 		default: return 'success';
 	}
@@ -60,9 +60,9 @@ const AdminDashboard: NextPage = (props: any) => {
 
 		let cancelled = false;
 
-		import('chart.js').then(({ Chart, CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Filler, Tooltip, Legend }) => {
+		import('chart.js').then(({ Chart, CategoryScale, LinearScale, PointElement, LineElement, LineController, ArcElement, Filler, Tooltip, Legend }) => {
 			if (cancelled || !revenueCanvasRef.current) return;
-			Chart.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Filler, Tooltip, Legend);
+			Chart.register(CategoryScale, LinearScale, PointElement, LineElement, LineController, ArcElement, Filler, Tooltip, Legend);
 			if (revenueChartRef.current) revenueChartRef.current.destroy();
 
 			revenueChartRef.current = new Chart(revenueCanvasRef.current, {
@@ -122,9 +122,9 @@ const AdminDashboard: NextPage = (props: any) => {
 
 		let cancelled = false;
 
-		import('chart.js').then(({ Chart, CategoryScale, LinearScale, ArcElement, Tooltip, Legend }) => {
+		import('chart.js').then(({ Chart, CategoryScale, LinearScale, ArcElement, DoughnutController, Tooltip, Legend }) => {
 			if (cancelled || !categoryCanvasRef.current) return;
-			Chart.register(CategoryScale, LinearScale, ArcElement, Tooltip, Legend);
+			Chart.register(CategoryScale, LinearScale, ArcElement, DoughnutController, Tooltip, Legend);
 			if (categoryChartRef.current) categoryChartRef.current.destroy();
 
 			categoryChartRef.current = new Chart(categoryCanvasRef.current, {

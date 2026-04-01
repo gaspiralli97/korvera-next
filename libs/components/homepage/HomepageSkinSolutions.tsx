@@ -61,7 +61,7 @@ const HomepageSkinSolutions = () => {
 				</Stack>
 				<Stack className={'card-box'}>
 					<Swiper
-						className={'top-property-swiper'}
+						className={'top-product-swiper'}
 						slidesPerView={4}
 						spaceBetween={15}
 						modules={[Autoplay, Navigation, Pagination]}
@@ -74,7 +74,7 @@ const HomepageSkinSolutions = () => {
 						}}
 					>
 						{products.map((product: Product) => (
-							<SwiperSlide className={'top-property-slide'} key={product._id}>
+							<SwiperSlide className={'top-product-slide'} key={product._id}>
 								<ProductCard product={product} likeProductHandler={likeProductHandler} />
 							</SwiperSlide>
 						))}

@@ -4,7 +4,18 @@
 		width: 100%;
 		height: auto;
 
-		.card-config { @include product-card(); }
+		.card-config {
+			@include product-card();
+
+			.bottom .name-address .name-price-row {
+				justify-content: flex-start;
+
+				.name-link {
+					flex: 0 1 auto;
+					max-width: 70%;
+				}
+			}
+		}
 
 		.info-box {
 			width: 100%;

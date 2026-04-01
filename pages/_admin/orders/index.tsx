@@ -1,40 +1,63 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import withAdminLayout from '../../../libs/components/layout/LayoutAdmin';
 import { Box, Divider, InputAdornment, List, ListItem, OutlinedInput, Stack, TablePagination } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { TabContext } from '@mui/lab';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
-import { OrderList, MockOrder } from '../../../libs/components/admin/orders/OrderList';
-
-/** HARDCODED MOCK DATA **/
-const MOCK_ORDERS: MockOrder[] = [
-	{ id: 'ORD-2026001', customer: 'Sarah Kim', email: 'sarah.kim@mail.com', items: 3, products: 'Glow Serum, Lip Tint, Rose Toner', total: '$128.50', date: '27 Mar 2026', status: 'PENDING' },
-	{ id: 'ORD-2026002', customer: 'Emma Liu', email: 'emma.liu@mail.com', items: 1, products: 'Velvet Foundation', total: '$45.00', date: '27 Mar 2026', status: 'CONFIRMED' },
-	{ id: 'ORD-2026003', customer: 'Mia Romano', email: 'mia.romano@mail.com', items: 5, products: 'Night Cream, Eye Serum +3', total: '$289.90', date: '26 Mar 2026', status: 'DELIVERED' },
-	{ id: 'ORD-2026004', customer: 'Julia Stone', email: 'julia.stone@mail.com', items: 2, products: 'Blush Palette, Setting Spray', total: '$76.20', date: '26 Mar 2026', status: 'CONFIRMED' },
-	{ id: 'ORD-2026005', customer: 'Ana Bloom', email: 'ana.bloom@mail.com', items: 4, products: 'Perfume Set, Body Lotion +2', total: '$195.00', date: '25 Mar 2026', status: 'CANCELLED' },
-	{ id: 'ORD-2026006', customer: 'Chloe Park', email: 'chloe.park@mail.com', items: 2, products: 'Vitamin C Serum, SPF 50', total: '$92.40', date: '25 Mar 2026', status: 'SHIPPED' },
-	{ id: 'ORD-2026007', customer: 'Zoe Martin', email: 'zoe.martin@mail.com', items: 1, products: 'Brow Pomade', total: '$28.00', date: '24 Mar 2026', status: 'PENDING' },
-	{ id: 'ORD-2026008', customer: 'Lily Chen', email: 'lily.chen@mail.com', items: 6, products: 'Skincare Bundle x6', total: '$340.00', date: '24 Mar 2026', status: 'SHIPPED' },
-	{ id: 'ORD-2026009', customer: 'Nora Walsh', email: 'nora.walsh@mail.com', items: 2, products: 'Micellar Water, Face Mist', total: '$54.80', date: '23 Mar 2026', status: 'DELIVERED' },
-	{ id: 'ORD-2026010', customer: 'Isla Torres', email: 'isla.torres@mail.com', items: 3, products: 'Concealer, Primer, Brush Set', total: '$115.60', date: '23 Mar 2026', status: 'CONFIRMED' },
-];
+import { OrderList } from '../../../libs/components/admin/orders/OrderList';
+import { sweetErrorHandling } from '../../../libs/sweetAlert';
+import { useMutation, useQuery } from '@apollo/client';
+import { GET_ALL_ORDERS_BY_ADMIN } from '../../../apollo/admin/query';
+import { UPDATE_ORDER_BY_ADMIN } from '../../../apollo/admin/mutation';
+import { AllOrdersInquiry } from '../../../libs/types/order/order.input';
+import { Order } from '../../../libs/types/order/order';
+import { OrderStatus } from '../../../libs/enums/order.enum';
+import { T } from '../../../libs/types/common';
 
 const STATUS_TABS = ['ALL', 'PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
 
-const AdminOrders: NextPage = (props: any) => {
-	const [orders, setOrders] = useState<MockOrder[]>(MOCK_ORDERS);
+const AdminOrders: NextPage = ({ initialInquiry, ...props }: any) => {
+	const [ordersInquiry, setOrdersInquiry] = useState<AllOrdersInquiry>(initialInquiry);
+	const [orders, setOrders] = useState<Order[]>([]);
+	const [ordersTotal, setOrdersTotal] = useState<number>(0);
 	const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>({});
 	const [tabValue, setTabValue] = useState('ALL');
 	const [searchText, setSearchText] = useState('');
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
+
+	/** APOLLO REQUESTS **/
+	const [updateOrderByAdmin] = useMutation(UPDATE_ORDER_BY_ADMIN);
+
+	const {
+		loading,
+		data,
+		error,
+		refetch: refetchOrders,
+	} = useQuery(GET_ALL_ORDERS_BY_ADMIN, {
+		fetchPolicy: 'network-only',
+		variables: { input: ordersInquiry },
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: T) => {
+			setOrders(data?.getAllOrdersByAdmin?.list ?? []);
+			setOrdersTotal(data?.getAllOrdersByAdmin?.metaCounter[0]?.total ?? 0);
+		},
+	});
+
+	/** LIFECYCLES **/
+	useEffect(() => {
+		refetchOrders({ input: ordersInquiry }).then();
+	}, [ordersInquiry]);
 
 	/** HANDLERS **/
 	const tabChangeHandler = (newValue: string) => {
 		setTabValue(newValue);
-		setPage(0);
+		const newInquiry = { ...ordersInquiry, page: 1, search: { ...ordersInquiry.search } };
+		if (newValue !== 'ALL') {
+			newInquiry.search.orderStatus = newValue as OrderStatus;
+		} else {
+			delete newInquiry.search.orderStatus;
+		}
+		setOrdersInquiry(newInquiry);
 	};
 
 	const menuIconClickHandler = (e: any, id: string) => {
@@ -45,11 +68,15 @@ const AdminOrders: NextPage = (props: any) => {
 		setAnchorEl({});
 	};
 
-	const updateOrderStatusHandler = (id: string, status: string) => {
-		setOrders((prev) =>
-			prev.map((order) => (order.id === id ? { ...order, status } : order)),
-		);
-		menuIconCloseHandler();
+	const updateOrderStatusHandler = async (id: string, status: string) => {
+		try {
+			await updateOrderByAdmin({ variables: { input: { _id: id, orderStatus: status as OrderStatus } } });
+			menuIconCloseHandler();
+			await refetchOrders({ input: ordersInquiry });
+		} catch (err: any) {
+			menuIconCloseHandler();
+			sweetErrorHandling(err).then();
+		}
 	};
 
 	const textHandler = useCallback((value: string) => {
@@ -59,18 +86,6 @@ const AdminOrders: NextPage = (props: any) => {
 	const clearSearchHandler = () => {
 		setSearchText('');
 	};
-
-	/** FILTERED DATA **/
-	const filteredOrders = orders.filter((order) => {
-		const matchesTab = tabValue === 'ALL' || order.status === tabValue;
-		const matchesSearch =
-			!searchText ||
-			order.id.toLowerCase().includes(searchText.toLowerCase()) ||
-			order.customer.toLowerCase().includes(searchText.toLowerCase());
-		return matchesTab && matchesSearch;
-	});
-
-	const paginatedOrders = filteredOrders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
 	return (
 		<Box component={'div'} className={'content'}>
@@ -121,7 +136,7 @@ const AdminOrders: NextPage = (props: any) => {
 						</Box>
 
 						<OrderList
-							orders={paginatedOrders}
+							orders={orders}
 							anchorEl={anchorEl}
 							menuIconClickHandler={menuIconClickHandler}
 							menuIconCloseHandler={menuIconCloseHandler}
@@ -131,13 +146,12 @@ const AdminOrders: NextPage = (props: any) => {
 						<TablePagination
 							rowsPerPageOptions={[10, 20, 40, 60]}
 							component={'div'}
-							count={filteredOrders.length}
-							rowsPerPage={rowsPerPage}
-							page={page}
-							onPageChange={(_, newPage) => setPage(newPage)}
+							count={ordersTotal}
+							rowsPerPage={ordersInquiry.limit}
+							page={ordersInquiry.page - 1}
+							onPageChange={(_, newPage) => setOrdersInquiry({ ...ordersInquiry, page: newPage + 1 })}
 							onRowsPerPageChange={(e) => {
-								setRowsPerPage(parseInt(e.target.value, 10));
-								setPage(0);
+								setOrdersInquiry({ ...ordersInquiry, limit: parseInt(e.target.value, 10), page: 1 });
 							}}
 						/>
 					</TabContext>
@@ -145,6 +159,16 @@ const AdminOrders: NextPage = (props: any) => {
 			</Box>
 		</Box>
 	);
+};
+
+AdminOrders.defaultProps = {
+	initialInquiry: {
+		page: 1,
+		limit: 10,
+		sort: 'createdAt',
+		direction: 'DESC',
+		search: {},
+	},
 };
 
 export default withAdminLayout(AdminOrders);

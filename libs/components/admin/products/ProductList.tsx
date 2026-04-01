@@ -156,7 +156,7 @@ export const ProductPanelList = (props: ProductPanelListType) => {
 											)}
 
 											{product.productStatus === ProductStatus.SOLD_OUT && (
-												<Button className={'badge warning'}>{product.productStatus}</Button>
+												<Button className={'badge sold'}>{product.productStatus}</Button>
 											)}
 
 											{product.productStatus === ProductStatus.ACTIVE && (

@@ -30,7 +30,7 @@ const AgentCard = (props: AgentCardProps) => {
 		return (
 			<Stack className="brand-card">
 				{/* Top: cover background + avatar */}
-				<Link href={{ pathname: '/agent/detail', query: { agentId: agent?._id } }}>
+				<Link href={{ pathname: '/seller/detail', query: { agentId: agent?._id } }}>
 					<Box component={'div'} className={'brand-cover'}>
 						<Box component={'div'} className={'brand-avatar-wrap'}>
 							<img src={imagePath} alt={agent?.memberNick} className={'brand-avatar'} />
@@ -41,7 +41,7 @@ const AgentCard = (props: AgentCardProps) => {
 				{/* Body */}
 				<Stack className={'brand-body'}>
 					<Stack className={'brand-name-row'}>
-						<Link href={{ pathname: '/agent/detail', query: { agentId: agent?._id } }}>
+						<Link href={{ pathname: '/seller/detail', query: { agentId: agent?._id } }}>
 							<Typography className={'brand-name'}>{agent?.memberFullName ?? agent?.memberNick}</Typography>
 						</Link>
 						<Box component={'span'} className={'brand-badge'}>
@@ -79,7 +79,7 @@ const AgentCard = (props: AgentCardProps) => {
 							</IconButton>
 							<Typography className={'meta-count'}>{agent?.memberLikes}</Typography>
 						</Stack>
-						<Link href={{ pathname: '/agent/detail', query: { agentId: agent?._id } }}>
+						<Link href={{ pathname: '/seller/detail', query: { agentId: agent?._id } }}>
 							<Button variant="outlined" className={'view-btn'}>
 								View Brand
 							</Button>

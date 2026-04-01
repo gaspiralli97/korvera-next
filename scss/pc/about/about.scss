@@ -199,7 +199,7 @@ $ab-label:    #c9a96e;   // gold accent — Sephora-like warm gold
       position: relative;
       width: 100%;
       min-height: 680px;
-      background: linear-gradient(135deg, #0d0d0d 0%, #2a1a0e 50%, #1a0d0d 100%);
+      background: url('/img/banner/herobag.jpg') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -209,9 +209,7 @@ $ab-label:    #c9a96e;   // gold accent — Sephora-like warm gold
         content: '';
         position: absolute;
         inset: 0;
-        background:
-          radial-gradient(ellipse 70% 60% at 20% 50%, rgba($ab-label, 0.12) 0%, transparent 70%),
-          radial-gradient(ellipse 50% 50% at 80% 80%, rgba(180, 60, 60, 0.10) 0%, transparent 60%);
+        background: rgba(0, 0, 0, 0.45);
         pointer-events: none;
       }
     }
@@ -254,7 +252,7 @@ $ab-label:    #c9a96e;   // gold accent — Sephora-like warm gold
     .ab-hero-overlay {
       position: absolute;
       inset: 0;
-      background: url('/img/banner/header1.svg') center/cover no-repeat;
+      background: url('/img/korvera/spring.jpg') center/cover no-repeat;
       opacity: 0.04;
       pointer-events: none;
     }
@@ -729,7 +727,10 @@ $ab-label:    #c9a96e;   // gold accent — Sephora-like warm gold
     }
 
     .ab-partner-chip {
-      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
       border: 1px solid $ab-border;
       border-radius: 2px;
       font-size: 13px;
@@ -738,11 +739,20 @@ $ab-label:    #c9a96e;   // gold accent — Sephora-like warm gold
       letter-spacing: 0.5px;
       background: $ab-white;
       transition: background 0.2s, border-color 0.2s;
-      cursor: default;
+      cursor: pointer;
+      text-decoration: none;
 
       &:hover {
         background: $ab-cream;
         border-color: darken($ab-border, 10%);
+      }
+
+      .ab-partner-logo {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
       }
     }
 

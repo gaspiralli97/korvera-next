@@ -75,48 +75,33 @@ const Filter = (props: FilterType) => {
 	/** LIFECYCLES **/
 	useEffect(() => {
 		if (searchFilter?.search?.categoryList?.length == 0) {
-			delete searchFilter.search.categoryList;
-			router.push(`/product?input=${JSON.stringify({
-			...searchFilter,
-			search: {
-				...searchFilter.search,
-			},
-		})}`, `/product?input=${JSON.stringify({
-			...searchFilter,
-			search: {
-				...searchFilter.search,
-			},
-		})}`, { scroll: false }).then();
+			const cleanSearch = { ...searchFilter.search };
+			delete cleanSearch.categoryList;
+			router.push(
+				`/product?input=${JSON.stringify({ ...searchFilter, search: cleanSearch })}`,
+				`/product?input=${JSON.stringify({ ...searchFilter, search: cleanSearch })}`,
+				{ scroll: false },
+			).then();
 		}
 
 		if (searchFilter?.search?.skinTypeList?.length == 0) {
-			delete searchFilter.search.skinTypeList;
-			router.push(`/product?input=${JSON.stringify({
-			...searchFilter,
-			search: {
-				...searchFilter.search,
-			},
-		})}`, `/product?input=${JSON.stringify({
-			...searchFilter,
-			search: {
-				...searchFilter.search,
-			},
-		})}`, { scroll: false }).then();
+			const cleanSearch = { ...searchFilter.search };
+			delete cleanSearch.skinTypeList;
+			router.push(
+				`/product?input=${JSON.stringify({ ...searchFilter, search: cleanSearch })}`,
+				`/product?input=${JSON.stringify({ ...searchFilter, search: cleanSearch })}`,
+				{ scroll: false },
+			).then();
 		}
 
 		if (searchFilter?.search?.brandList?.length == 0) {
-			delete searchFilter.search.brandList;
-			router.push(`/product?input=${JSON.stringify({
-			...searchFilter,
-			search: {
-				...searchFilter.search,
-			},
-		})}`, `/product?input=${JSON.stringify({
-			...searchFilter,
-			search: {
-				...searchFilter.search,
-			},
-		})}`, { scroll: false }).then();
+			const cleanSearch = { ...searchFilter.search };
+			delete cleanSearch.brandList;
+			router.push(
+				`/product?input=${JSON.stringify({ ...searchFilter, search: cleanSearch })}`,
+				`/product?input=${JSON.stringify({ ...searchFilter, search: cleanSearch })}`,
+				{ scroll: false },
+			).then();
 		}
 	}, [searchFilter]);
 
@@ -125,7 +110,7 @@ const Filter = (props: FilterType) => {
 		async (e: any) => {
 			try {
 				const isChecked = e.target.checked;
-				const value = e.target.value;
+			const value = e.target.value;
 				if (isChecked) {
 					await router.push(
 						`/product?input=${JSON.stringify({
@@ -280,7 +265,7 @@ const Filter = (props: FilterType) => {
 
 	const productVolumeHandler = useCallback(
 		async (e: any, type: string) => {
-			const value = e.target.value;
+		const value = Number(e.target.value);
 
 			if (type == 'start') {
 				await router.push(
@@ -396,20 +381,22 @@ const Filter = (props: FilterType) => {
 							onChange={(e: any) => setSearchText(e.target.value)}
 							onKeyDown={(event: any) => {
 								if (event.key == 'Enter') {
-									setSearchFilter({
-										...searchFilter,
-										search: { ...searchFilter.search, text: searchText },
-									});
+									router.push(
+										`/product?input=${JSON.stringify({ ...searchFilter, search: { ...searchFilter.search, text: searchText } })}`,
+										`/product?input=${JSON.stringify({ ...searchFilter, search: { ...searchFilter.search, text: searchText } })}`,
+										{ scroll: false },
+									).then();
 								}
 							}}
 							endAdornment={
 								<CancelRoundedIcon
 									onClick={() => {
 										setSearchText('');
-										setSearchFilter({
-											...searchFilter,
-											search: { ...searchFilter.search, text: '' },
-										});
+										router.push(
+											`/product?input=${JSON.stringify({ ...searchFilter, search: { ...searchFilter.search, text: '' } })}`,
+											`/product?input=${JSON.stringify({ ...searchFilter, search: { ...searchFilter.search, text: '' } })}`,
+											{ scroll: false },
+										).then();
 									}}
 								/>
 							}

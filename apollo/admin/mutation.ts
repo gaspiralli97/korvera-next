@@ -315,3 +315,61 @@ export const REMOVE_COMMENT_BY_ADMIN = gql`
 		}
 	}
 `;
+
+/**************************
+ *         BRAND          *
+ *************************/
+
+export const CREATE_BRAND_BY_ADMIN = gql`
+	mutation CreateBrandByAdmin($input: BrandInput!) {
+		createBrandByAdmin(input: $input) {
+			_id
+			brandTitle
+			brandImage
+			brandStatus
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const UPDATE_BRAND_BY_ADMIN = gql`
+	mutation UpdateBrandByAdmin($input: BrandUpdate!) {
+		updateBrandByAdmin(input: $input) {
+			_id
+			brandTitle
+			brandImage
+			brandStatus
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const REMOVE_BRAND_BY_ADMIN = gql`
+	mutation RemoveBrandByAdmin($input: String!) {
+		removeBrandByAdmin(brandId: $input) {
+			_id
+			brandTitle
+			brandStatus
+		}
+	}
+`;
+
+/**************************
+ *         ORDER          *
+ *************************/
+
+export const UPDATE_ORDER_BY_ADMIN = gql`
+	mutation UpdateOrderByAdmin($input: OrderUpdate!) {
+		updateOrderByAdmin(input: $input) {
+			_id
+			orderStatus
+			totalAmount
+			createdAt
+			updatedAt
+		}
+	}
+`;

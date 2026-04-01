@@ -29,7 +29,7 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
-const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) => {
+const SellerDetail: NextPage = ({ initialInput, initialComment, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
@@ -104,6 +104,7 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 			setCommentTotal(data?.getComments?.metaCounter[0]?.total ?? 0);
 		},
 	});
+
 	/** LIFECYCLES **/
 	useEffect(() => {
 		if (router.query.agentId) setAgentId(router.query.agentId as string);
@@ -114,6 +115,7 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 			getProductsRefetch({ variables: { input: searchFilter } }).then();
 		}
 	}, [searchFilter]);
+
 	useEffect(() => {
 		if (commentInquiry.search.commentRefId) {
 			getCommentsRefetch({ variables: { input: commentInquiry } }).then();
@@ -163,7 +165,15 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 			await subscribe({ variables: { input: agentId } });
 			const cur = userVar();
 			userVar({ ...cur, memberFollowings: (cur?.memberFollowings || 0) + 1 });
-			await getMemberRefetch({ input: agentId });
+			setAgent((prev: any) =>
+				prev
+					? {
+							...prev,
+							memberFollowers: (prev.memberFollowers || 0) + 1,
+							meFollowed: [{ followingId: agentId, followerId: user._id, myFollowing: true }],
+					  }
+					: prev,
+			);
 			await sweetTopSmallSuccessAlert('success', 800);
 		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();
@@ -176,7 +186,15 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 			await unsubscribe({ variables: { input: agentId } });
 			const cur = userVar();
 			userVar({ ...cur, memberFollowings: Math.max(0, (cur?.memberFollowings || 0) - 1) });
-			await getMemberRefetch({ input: agentId });
+			setAgent((prev: any) =>
+				prev
+					? {
+							...prev,
+							memberFollowers: Math.max(0, (prev.memberFollowers || 0) - 1),
+							meFollowed: [{ followingId: agentId, followerId: user._id, myFollowing: false }],
+					  }
+					: prev,
+			);
 			await sweetTopSmallSuccessAlert('success', 800);
 		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();
@@ -201,7 +219,7 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 	};
 
 	if (device === 'mobile') {
-		return <div>AGENT DETAIL PAGE MOBILE</div>;
+		return <div>SELLER DETAIL PAGE MOBILE</div>;
 	} else {
 		return (
 			<Stack className={'agent-detail-page'}>
@@ -366,7 +384,7 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 	}
 };
 
-AgentDetail.defaultProps = {
+SellerDetail.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 9,
@@ -385,4 +403,4 @@ AgentDetail.defaultProps = {
 	},
 };
 
-export default withLayoutBasic(AgentDetail);
+export default withLayoutBasic(SellerDetail);

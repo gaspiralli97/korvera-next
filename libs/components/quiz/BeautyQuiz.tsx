@@ -175,10 +175,8 @@ const BeautyQuiz = () => {
 	};
 
 	const handleShopAll = () => {
-		const params = new URLSearchParams();
-		if (answers.category) params.set('category', answers.category);
-		if (answers.skinType) params.set('skinType', answers.skinType);
-		router.push(`/product?${params.toString()}`);
+		const inquiry = buildInquiry();
+		router.push(`/product?input=${encodeURIComponent(JSON.stringify(inquiry))}`);
 	};
 
 	// ── Profile chips for results ──

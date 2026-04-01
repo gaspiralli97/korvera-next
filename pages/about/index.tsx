@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { Stack, Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useQuery } from '@apollo/client';
+import { GET_SELLERS } from '../../apollo/user/query';
+import { REACT_APP_API_URL } from '../../libs/config';
+import { T } from '../../libs/types/common';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -14,6 +18,15 @@ export const getStaticProps = async ({ locale }: any) => ({
 
 const About: NextPage = () => {
 	const device = useDeviceDetect();
+	const [sellers, setSellers] = useState<any[]>([]);
+
+	useQuery(GET_SELLERS, {
+		fetchPolicy: 'cache-and-network',
+		variables: { input: { page: 1, limit: 10, sort: 'memberRank', direction: 'DESC', search: {} } },
+		onCompleted: (data: T) => {
+			setSellers(data?.getSellers?.list ?? []);
+		},
+	});
 
 	if (device === 'mobile') {
 		return <div>ABOUT PAGE MOBILE</div>;
@@ -37,7 +50,7 @@ const About: NextPage = () => {
 						<Link href="/product">
 							<button className={'ab-btn-primary'}>Shop Now</button>
 						</Link>
-						<Link href="/agent">
+						<Link href="/seller">
 							<button className={'ab-btn-ghost'}>Explore Brands</button>
 						</Link>
 					</div>
@@ -51,7 +64,7 @@ const About: NextPage = () => {
 			<section className={'ab-mission'}>
 				<div className={'ab-container'}>
 					<div className={'ab-mission-img'}>
-						<img src="/img/banner/header1.svg" alt="Our Mission" />
+						<img src="/img/korvera/spring.jpg" alt="Our Mission" />
 						<div className={'ab-mission-badge'}>
 							<span className={'ab-badge-num'}>2018</span>
 							<span className={'ab-badge-text'}>Founded</span>
@@ -251,8 +264,19 @@ const About: NextPage = () => {
 					<span className={'ab-label ab-label--center'}>Trusted Partners</span>
 					<h2 className={'ab-section-title ab-section-title--center'}>Brands We're Proud to Carry</h2>
 					<div className={'ab-partners-row'}>
-						{['La Mer', 'Fenty Beauty', 'Charlotte Tilbury', 'NARS', 'Drunk Elephant', 'Tatcha', 'Sunday Riley', 'Glow Recipe'].map((brand) => (
-							<div key={brand} className={'ab-partner-chip'}>{brand}</div>
+						{sellers.map((seller: any) => (
+							<Link key={seller._id} href={`/seller/detail?agentId=${seller._id}`}>
+								<div className={'ab-partner-chip'}>
+									{seller.memberImage && (
+										<img
+											src={`${REACT_APP_API_URL}/${seller.memberImage}`}
+											alt={seller.memberNick}
+											className={'ab-partner-logo'}
+										/>
+									)}
+									{seller.memberFullName ?? seller.memberNick}
+								</div>
+							</Link>
 						))}
 					</div>
 				</div>

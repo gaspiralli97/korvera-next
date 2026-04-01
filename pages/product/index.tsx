@@ -26,9 +26,13 @@ export const getStaticProps = async ({ locale }: any) => ({
 const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
-	const [searchFilter, setSearchFilter] = useState<ProductsInquiry>(
-		router?.query?.input ? JSON.parse(router?.query?.input as string) : initialInput,
-	);
+	const [searchFilter, setSearchFilter] = useState<ProductsInquiry>(() => {
+		try {
+			return router?.query?.input ? JSON.parse(router?.query?.input as string) : initialInput;
+		} catch {
+			return initialInput;
+		}
+	});
 	const [products, setProducts] = useState<Product[]>([]);
 	const [total, setTotal] = useState<number>(0);
 	const [currentPage, setCurrentPage] = useState<number>(1);
@@ -56,8 +60,12 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 	/** LIFECYCLES **/
 	useEffect(() => {
 		if (router.query.input) {
-			const inputObj = JSON.parse(router?.query?.input as string);
-			setSearchFilter(inputObj);
+			try {
+				const inputObj = JSON.parse(router?.query?.input as string);
+				setSearchFilter(inputObj);
+			} catch {
+				setSearchFilter(initialInput);
+			}
 		}
 
 		setCurrentPage(searchFilter.page === undefined ? 1 : searchFilter.page);

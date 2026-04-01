@@ -28,10 +28,10 @@ interface OrderRecord {
 }
 
 const STATUS_COLORS: Record<OrderStatus, { bg: string; color: string }> = {
-	Processing: { bg: '#fff3e0', color: '#e08020' },
-	Shipped:    { bg: '#e3f2fd', color: '#1565c0' },
-	Delivered:  { bg: '#e8f5e9', color: '#2e7d32' },
-	Cancelled:  { bg: '#fce4ec', color: '#c62828' },
+	Processing: { bg: 'rgba(26,84,185,0.1)',   color: '#1a54b9' },
+	Shipped:    { bg: 'rgba(0,131,143,0.1)',    color: '#00838f' },
+	Delivered:  { bg: 'rgba(46,125,50,0.1)',    color: '#2e7d32' },
+	Cancelled:  { bg: 'rgba(198,40,40,0.1)',    color: '#c62828' },
 };
 
 const STATIC_ORDERS: OrderRecord[] = [

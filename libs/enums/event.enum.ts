@@ -1,0 +1,13 @@
+export enum EventCategory {
+	SKINCARE = 'SKINCARE',
+	MAKEUP = 'MAKEUP',
+	HAIRCARE = 'HAIRCARE',
+	WELLNESS = 'WELLNESS',
+	FRAGRANCE = 'FRAGRANCE',
+	BODYCARE = 'BODYCARE',
+}
+
+export enum EventStatus {
+	ACTIVE = 'ACTIVE',
+	INACTIVE = 'INACTIVE',
+}

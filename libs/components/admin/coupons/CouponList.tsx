@@ -31,7 +31,7 @@ const getStatusClass = (status: string) => {
 	switch (status) {
 		case 'ACTIVE': return 'success';
 		case 'EXPIRED': return 'error';
-		case 'DISABLED': return 'block';
+		case 'DISABLED': return 'inactive';
 		default: return 'success';
 	}
 };

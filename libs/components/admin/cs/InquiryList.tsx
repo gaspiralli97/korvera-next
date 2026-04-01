@@ -50,7 +50,7 @@ const getStatusBadge = (status: string): string => {
 		case 'ANSWERED':
 			return 'badge success';
 		case 'CLOSED':
-			return 'badge delete';
+			return 'badge inactive';
 		default:
 			return 'badge warning';
 	}
