@@ -30,7 +30,7 @@ const PAYOUT_STATUSES = ['PENDING', 'PROCESSING', 'COMPLETED', 'REJECTED'];
 const getStatusClass = (status: string) => {
 	switch (status) {
 		case 'PENDING': return 'warning';
-		case 'PROCESSING': return 'up';
+		case 'PROCESSING': return 'processing';
 		case 'COMPLETED': return 'success';
 		case 'REJECTED': return 'error';
 		default: return 'warning';

@@ -52,8 +52,8 @@ export const NoticeList = (props: NoticeListProps) => {
 
 	const getStatusBadgeClass = (status: string): string => {
 		if (status === 'ACTIVE') return 'badge success';
-		if (status === 'INACTIVE') return 'badge warning';
-		return 'badge warning';
+		if (status === 'INACTIVE') return 'badge inactive';
+		return 'badge inactive';
 	};
 
 	return (

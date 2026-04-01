@@ -34,7 +34,6 @@ const ProductBigCard = (props: ProductBigCardProps) => {
 	const images: string[] = (product?.productImages ?? []).map((img) =>
 		img.startsWith('/') ? img : `${REACT_APP_API_URL}/${img}`,
 	);
-	if (images.length === 0) images.push('/img/banner/header1.svg');
 
 	const mainImage = images[activeIdx] ?? images[0];
 	const thumbs = images.slice(0, 4);

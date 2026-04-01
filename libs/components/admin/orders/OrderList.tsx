@@ -14,17 +14,7 @@ import {
 	Typography,
 } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-
-export interface MockOrder {
-	id: string;
-	customer: string;
-	email: string;
-	items: number;
-	products: string;
-	total: string;
-	date: string;
-	status: string;
-}
+import { Order } from '../../../libs/types/order/order';
 
 const ORDER_STATUSES = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
 
@@ -32,8 +22,8 @@ const getStatusClass = (status: string) => {
 	switch (status) {
 		case 'PENDING': return 'warning';
 		case 'CONFIRMED': return 'success';
-		case 'SHIPPED': return 'up';
-		case 'DELIVERED': return 'up';
+		case 'SHIPPED': return 'shipped';
+		case 'DELIVERED': return 'delivered';
 		case 'CANCELLED': return 'error';
 		default: return 'success';
 	}
@@ -56,7 +46,7 @@ const headCells: readonly HeadCell[] = [
 ];
 
 interface OrderListProps {
-	orders: MockOrder[];
+	orders: Order[];
 	anchorEl: any;
 	menuIconClickHandler: (e: any, id: string) => void;
 	menuIconCloseHandler: () => void;
@@ -89,110 +79,121 @@ export const OrderList = (props: OrderListProps) => {
 						)}
 
 						{orders.length !== 0 &&
-							orders.map((order: MockOrder) => (
-								<TableRow hover key={order.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-									<TableCell align="left">
-										<Typography
-											variant={'subtitle1'}
-											sx={{ fontWeight: 600, color: '#1A1A2E', fontSize: '13px' }}
-										>
-											{order.id}
-										</Typography>
-									</TableCell>
+							orders.map((order: Order) => {
+								const productSummary = order.orderItems
+									.map((item) => item.productTitle)
+									.join(', ');
+								const totalItems = order.orderItems.reduce((sum, item) => sum + item.quantity, 0);
 
-									<TableCell align="left" className={'name'}>
-										<Stack direction={'row'} alignItems={'center'} spacing={1.2}>
-											<Avatar
-												src={'/img/profile/defaultUser.svg'}
-												sx={{ width: 32, height: 32 }}
-											/>
-											<Stack>
-												<Typography
-													variant={'subtitle1'}
-													sx={{ fontWeight: 600, fontSize: '13px', color: '#1A1A2E' }}
-												>
-													{order.customer}
-												</Typography>
-												<Typography
-													variant={'body2'}
-													sx={{ color: '#8A8A9A', fontSize: '11px' }}
-												>
-													{order.email}
-												</Typography>
+								return (
+									<TableRow hover key={order._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+										<TableCell align="left">
+											<Typography
+												variant={'subtitle1'}
+												sx={{ fontWeight: 600, color: '#1A1A2E', fontSize: '13px' }}
+											>
+												{order._id}
+											</Typography>
+										</TableCell>
+
+										<TableCell align="left" className={'name'}>
+											<Stack direction={'row'} alignItems={'center'} spacing={1.2}>
+												<Avatar
+													src={order.memberData?.memberImage || '/img/profile/defaultUser.svg'}
+													sx={{ width: 32, height: 32 }}
+												/>
+												<Stack>
+													<Typography
+														variant={'subtitle1'}
+														sx={{ fontWeight: 600, fontSize: '13px', color: '#1A1A2E' }}
+													>
+														{order.memberData?.memberNick ?? '—'}
+													</Typography>
+													<Typography
+														variant={'body2'}
+														sx={{ color: '#8A8A9A', fontSize: '11px' }}
+													>
+														{order.memberData?.memberPhone ?? ''}
+													</Typography>
+												</Stack>
 											</Stack>
-										</Stack>
-									</TableCell>
+										</TableCell>
 
-									<TableCell align="left">
-										<Typography
-											variant={'subtitle1'}
-											sx={{ color: '#4A4A5A', fontSize: '12px' }}
-											noWrap
-										>
-											{order.products}
-										</Typography>
-									</TableCell>
+										<TableCell align="left">
+											<Typography
+												variant={'subtitle1'}
+												sx={{ color: '#4A4A5A', fontSize: '12px' }}
+												noWrap
+											>
+												{productSummary.length > 50 ? productSummary.substring(0, 50) + '...' : productSummary}
+											</Typography>
+										</TableCell>
 
-									<TableCell align="center">
-										<Typography variant={'subtitle1'} sx={{ color: '#4A4A5A', fontSize: '13px' }}>
-											{order.items}
-										</Typography>
-									</TableCell>
+										<TableCell align="center">
+											<Typography variant={'subtitle1'} sx={{ color: '#4A4A5A', fontSize: '13px' }}>
+												{totalItems}
+											</Typography>
+										</TableCell>
 
-									<TableCell align="center">
-										<Typography
-											variant={'subtitle1'}
-											sx={{ fontWeight: 700, color: '#1A1A2E', fontSize: '13px' }}
-										>
-											{order.total}
-										</Typography>
-									</TableCell>
+										<TableCell align="center">
+											<Typography
+												variant={'subtitle1'}
+												sx={{ fontWeight: 700, color: '#1A1A2E', fontSize: '13px' }}
+											>
+												${order.totalAmount.toLocaleString()}
+											</Typography>
+										</TableCell>
 
-									<TableCell align="center">
-										<Typography variant={'subtitle1'} sx={{ color: '#8A8A9A', fontSize: '12px' }}>
-											{order.date}
-										</Typography>
-									</TableCell>
+										<TableCell align="center">
+											<Typography variant={'subtitle1'} sx={{ color: '#8A8A9A', fontSize: '12px' }}>
+												{new Date(order.createdAt).toLocaleDateString('en-GB', {
+													day: '2-digit',
+													month: 'short',
+													year: 'numeric',
+												})}
+											</Typography>
+										</TableCell>
 
-									<TableCell align="center">
-										{order.status === 'DELIVERED' || order.status === 'CANCELLED' ? (
-											<Button className={`badge ${getStatusClass(order.status)}`} disabled>
-												{order.status}
-											</Button>
-										) : (
-											<>
-												<Button
-													onClick={(e: any) => menuIconClickHandler(e, order.id)}
-													className={`badge ${getStatusClass(order.status)}`}
-												>
-													{order.status}
+										<TableCell align="center">
+											{order.orderStatus === 'DELIVERED' || order.orderStatus === 'CANCELLED' ? (
+												<Button className={`badge ${getStatusClass(order.orderStatus)}`} disabled>
+													{order.orderStatus}
 												</Button>
+											) : (
+												<>
+													<Button
+														onClick={(e: any) => menuIconClickHandler(e, order._id)}
+														className={`badge ${getStatusClass(order.orderStatus)}`}
+													>
+														{order.orderStatus}
+													</Button>
 
-												<Menu
-													className={'menu-modal'}
-													MenuListProps={{ 'aria-labelledby': 'fade-button' }}
-													anchorEl={anchorEl[order.id]}
-													open={Boolean(anchorEl[order.id])}
-													onClose={menuIconCloseHandler}
-													TransitionComponent={Fade}
-													sx={{ p: 1 }}
-												>
-													{ORDER_STATUSES.filter((s) => s !== order.status).map((status) => (
-														<MenuItem
-															key={status}
-															onClick={() => updateOrderStatusHandler(order.id, status)}
-														>
-															<Typography variant={'subtitle1'} component={'span'}>
-																{status}
-															</Typography>
-														</MenuItem>
-													))}
-												</Menu>
-											</>
-										)}
-									</TableCell>
-								</TableRow>
-							))}
+													<Menu
+														className={'menu-modal'}
+														MenuListProps={{ 'aria-labelledby': 'fade-button' }}
+														anchorEl={anchorEl[order._id]}
+														open={Boolean(anchorEl[order._id])}
+														onClose={menuIconCloseHandler}
+														TransitionComponent={Fade}
+														sx={{ p: 1 }}
+													>
+														{ORDER_STATUSES.filter((s) => s !== order.orderStatus).map((status) => (
+															<MenuItem
+																key={status}
+																onClick={() => updateOrderStatusHandler(order._id, status)}
+															>
+																<Typography variant={'subtitle1'} component={'span'}>
+																	{status}
+																</Typography>
+															</MenuItem>
+														))}
+													</Menu>
+												</>
+											)}
+										</TableCell>
+									</TableRow>
+								);
+							})}
 					</TableBody>
 				</Table>
 			</TableContainer>

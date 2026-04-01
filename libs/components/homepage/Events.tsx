@@ -5,12 +5,12 @@ import { useQuery } from '@apollo/client';
 import { GET_EVENTS } from '../../../apollo/user/query';
 
 const CATEGORY_FALLBACK: Record<string, string> = {
-	SKINCARE: '/img/events/skincare.jpg',
-	MAKEUP: '/img/fiber/img2.jpg',
-	HAIRCARE: '/img/fiber/img4.jpg',
-	WELLNESS: '/img/fiber/img5.jpg',
-	FRAGRANCE: '/img/fiber/img3.jpg',
-	BODYCARE: '/img/fiber/img7.jpg',
+	SKINCARE: '/img/korvera/skincare.jpg',
+	MAKEUP: '/img/korvera/make-up.avif',
+	HAIRCARE: '/img/korvera/haircare.jpg',
+	WELLNESS: '/img/korvera/wellness.jpg',
+	FRAGRANCE: '/img/korvera/fragrance.jpg',
+	BODYCARE: '/img/korvera/bodycare.jpg',
 };
 
 const MOCK_EVENTS = [
@@ -19,34 +19,34 @@ const MOCK_EVENTS = [
 		eventTitle: 'Spring Glow Collection',
 		eventDescription: 'Brighten your skin this spring with our curated glow essentials',
 		eventCategory: 'SKINCARE',
-		eventImage: '/img/events/skincare.jpg',
+		eventImage: '/img/korvera/spring.jpg',
 	},
 	{
 		_id: 'mock-2',
-		eventTitle: 'K-Beauty Makeup Edit',
-		eventDescription: 'Discover the latest trends in Korean makeup — from glass skin to bold lips',
+		eventTitle: 'K-Beauty Edit',
+		eventDescription: 'Discover the latest trends in Korean beauty — from glass skin to bold lips',
 		eventCategory: 'MAKEUP',
-		eventImage: '/img/fiber/img2.jpg',
+		eventImage: '/img/korvera/k-beauty.jpg',
 	},
 	{
 		_id: 'mock-3',
-		eventTitle: 'Hair Repair Ritual',
-		eventDescription: 'Restore shine and strength with our top-rated haircare lineup',
-		eventCategory: 'HAIRCARE',
-		eventImage: '/img/fiber/img4.jpg',
+		eventTitle: 'Vegan Beauty',
+		eventDescription: 'Clean, cruelty-free formulas that are kind to your skin and the planet',
+		eventCategory: 'SKINCARE',
+		eventImage: '/img/korvera/vegan.jpg',
 	},
 	{
 		_id: 'mock-4',
-		eventTitle: 'Signature Scents',
-		eventDescription: 'Explore unique fragrances that define your personal style',
+		eventTitle: 'Limited Edition',
+		eventDescription: 'Exclusive drops from your favourite brands — before they sell out',
 		eventCategory: 'FRAGRANCE',
-		eventImage: '/img/fiber/img3.jpg',
+		eventImage: '/img/korvera/limited.jpg',
 	},
 ];
 
 const EventCard = ({ event }: { event: any }) => {
 	const device = useDeviceDetect();
-	const imageSrc = event.eventImage || CATEGORY_FALLBACK[event.eventCategory] || '/img/fiber/img1.jpg';
+	const imageSrc = event.eventImage || CATEGORY_FALLBACK[event.eventCategory] || '/img/korvera/skincare.jpg';
 
 	if (device === 'mobile') {
 		return <div>EVENT CARD</div>;

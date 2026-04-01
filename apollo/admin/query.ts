@@ -295,3 +295,60 @@ export const GET_COMMENTS = gql`
 		}
 	}
 `;
+
+/**************************
+ *         BRAND          *
+ *************************/
+
+export const GET_ALL_BRANDS_BY_ADMIN = gql`
+	query GetAllBrandsByAdmin($input: AllBrandsInquiry!) {
+		getAllBrandsByAdmin(input: $input) {
+			list {
+				_id
+				brandTitle
+				brandImage
+				brandStatus
+				memberId
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
+ *         ORDER          *
+ *************************/
+
+export const GET_ALL_ORDERS_BY_ADMIN = gql`
+	query GetAllOrdersByAdmin($input: AllOrdersInquiry!) {
+		getAllOrdersByAdmin(input: $input) {
+			list {
+				_id
+				orderItems {
+					productId
+					productTitle
+					productPrice
+					quantity
+				}
+				memberId
+				memberData {
+					_id
+					memberNick
+					memberPhone
+					memberImage
+				}
+				totalAmount
+				orderStatus
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;

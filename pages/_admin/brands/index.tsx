@@ -1,44 +1,83 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import withAdminLayout from '../../../libs/components/layout/LayoutAdmin';
-import { Box, Divider, InputAdornment, List, ListItem, OutlinedInput, Stack, TablePagination } from '@mui/material';
+import {
+	Box,
+	Button,
+	Collapse,
+	Divider,
+	InputAdornment,
+	List,
+	ListItem,
+	OutlinedInput,
+	Stack,
+	TablePagination,
+	TextField,
+} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { TabContext } from '@mui/lab';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
-import { BrandList, MockBrand } from '../../../libs/components/admin/brands/BrandList';
-import { sweetConfirmAlert, sweetErrorHandling } from '../../../libs/sweetAlert';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import { BrandList } from '../../../libs/components/admin/brands/BrandList';
+import { sweetConfirmAlert, sweetErrorHandling, sweetTopSuccessAlert } from '../../../libs/sweetAlert';
+import { useMutation, useQuery } from '@apollo/client';
+import { GET_ALL_BRANDS_BY_ADMIN } from '../../../apollo/admin/query';
+import { CREATE_BRAND_BY_ADMIN, REMOVE_BRAND_BY_ADMIN, UPDATE_BRAND_BY_ADMIN } from '../../../apollo/admin/mutation';
+import { AllBrandsInquiry, BrandInput } from '../../../libs/types/brand/brand.input';
+import { Brand } from '../../../libs/types/brand/brand';
+import { BrandStatus } from '../../../libs/enums/brand.enum';
+import { T } from '../../../libs/types/common';
 
-/** HARDCODED MOCK DATA **/
-const MOCK_BRANDS: MockBrand[] = [
-	{ id: 'BRD-001', brandName: 'Luna Beauty Studio', sellerNick: 'luna_beauty', sellerEmail: 'luna@lunabeauty.com', products: 89, revenue: '$12,450', joinDate: '10 Jan 2025', status: 'ACTIVE' },
-	{ id: 'BRD-002', brandName: 'Pure Glow Co.', sellerNick: 'pureglow', sellerEmail: 'hello@pureglow.com', products: 64, revenue: '$9,820', joinDate: '18 Feb 2025', status: 'ACTIVE' },
-	{ id: 'BRD-003', brandName: 'Velvet Cosmetics', sellerNick: 'velvet_co', sellerEmail: 'info@velvetco.com', products: 52, revenue: '$8,340', joinDate: '02 Mar 2025', status: 'ACTIVE' },
-	{ id: 'BRD-004', brandName: 'Rose & Pearl', sellerNick: 'rosepearl', sellerEmail: 'store@rosepearl.com', products: 41, revenue: '$6,790', joinDate: '22 Mar 2025', status: 'ACTIVE' },
-	{ id: 'BRD-005', brandName: 'Bloom Skincare', sellerNick: 'bloomskin', sellerEmail: 'bloom@skincare.com', products: 35, revenue: '$5,230', joinDate: '05 Apr 2025', status: 'ACTIVE' },
-	{ id: 'BRD-006', brandName: 'Aura Naturals', sellerNick: 'aura_nat', sellerEmail: 'aura@naturals.com', products: 0, revenue: '$0', joinDate: '25 Mar 2026', status: 'PENDING' },
-	{ id: 'BRD-007', brandName: 'Dew Drop Beauty', sellerNick: 'dewdrop', sellerEmail: 'dew@beauty.com', products: 0, revenue: '$0', joinDate: '26 Mar 2026', status: 'PENDING' },
-	{ id: 'BRD-008', brandName: 'Celestial Skin', sellerNick: 'celestialskin', sellerEmail: 'hi@celestialskin.com', products: 0, revenue: '$0', joinDate: '27 Mar 2026', status: 'PENDING' },
-	{ id: 'BRD-009', brandName: 'Matte & More', sellerNick: 'mattemore', sellerEmail: 'shop@mattemore.com', products: 12, revenue: '$1,200', joinDate: '11 Dec 2024', status: 'BLOCK' },
-	{ id: 'BRD-010', brandName: 'Gloss Empire', sellerNick: 'glossemp', sellerEmail: 'gloss@empire.com', products: 7, revenue: '$890', joinDate: '30 Nov 2024', status: 'BLOCK' },
-];
+const STATUS_TABS = ['ALL', 'ACTIVE', 'INACTIVE', 'PENDING'];
 
-const STATUS_TABS = ['ALL', 'ACTIVE', 'PENDING', 'BLOCK'];
-
-const AdminBrands: NextPage = (props: any) => {
-	const [brands, setBrands] = useState<MockBrand[]>(MOCK_BRANDS);
+const AdminBrands: NextPage = ({ initialInquiry, ...props }: any) => {
+	const [brandsInquiry, setBrandsInquiry] = useState<AllBrandsInquiry>(initialInquiry);
+	const [brands, setBrands] = useState<Brand[]>([]);
+	const [brandsTotal, setBrandsTotal] = useState<number>(0);
 	const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>({});
 	const [tabValue, setTabValue] = useState('ALL');
 	const [searchText, setSearchText] = useState('');
-	const [searchType, setSearchType] = useState('ALL');
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const [showForm, setShowForm] = useState(false);
+	const [formTitle, setFormTitle] = useState('');
+	const [formImage, setFormImage] = useState('');
+
+	/** APOLLO REQUESTS **/
+	const [createBrandByAdmin] = useMutation(CREATE_BRAND_BY_ADMIN);
+	const [updateBrandByAdmin] = useMutation(UPDATE_BRAND_BY_ADMIN);
+	const [removeBrandByAdmin] = useMutation(REMOVE_BRAND_BY_ADMIN);
+
+	const {
+		loading,
+		data,
+		error,
+		refetch: refetchBrands,
+	} = useQuery(GET_ALL_BRANDS_BY_ADMIN, {
+		fetchPolicy: 'network-only',
+		variables: { input: brandsInquiry },
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: T) => {
+			setBrands(data?.getAllBrandsByAdmin?.list ?? []);
+			setBrandsTotal(data?.getAllBrandsByAdmin?.metaCounter[0]?.total ?? 0);
+		},
+	});
+
+	/** LIFECYCLES **/
+	useEffect(() => {
+		refetchBrands({ input: brandsInquiry }).then();
+	}, [brandsInquiry]);
 
 	/** HANDLERS **/
 	const tabChangeHandler = (newValue: string) => {
 		setTabValue(newValue);
-		setPage(0);
+		const newInquiry = { ...brandsInquiry, page: 1, search: { ...brandsInquiry.search } };
+		if (newValue !== 'ALL') {
+			newInquiry.search.brandStatus = newValue as BrandStatus;
+		} else {
+			delete newInquiry.search.brandStatus;
+		}
+		setBrandsInquiry(newInquiry);
 	};
 
 	const menuIconClickHandler = (e: any, id: string) => {
@@ -51,9 +90,10 @@ const AdminBrands: NextPage = (props: any) => {
 
 	const approveHandler = async (id: string) => {
 		try {
-			const confirmed = await sweetConfirmAlert('Approve this seller brand?');
+			const confirmed = await sweetConfirmAlert('Approve this brand?');
 			if (confirmed) {
-				setBrands((prev) => prev.map((b) => (b.id === id ? { ...b, status: 'ACTIVE' } : b)));
+				await updateBrandByAdmin({ variables: { input: { _id: id, brandStatus: BrandStatus.ACTIVE } } });
+				await refetchBrands({ input: brandsInquiry });
 			}
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
@@ -62,18 +102,25 @@ const AdminBrands: NextPage = (props: any) => {
 
 	const rejectHandler = async (id: string) => {
 		try {
-			const confirmed = await sweetConfirmAlert('Reject and remove this brand application?');
+			const confirmed = await sweetConfirmAlert('Reject and remove this brand?');
 			if (confirmed) {
-				setBrands((prev) => prev.filter((b) => b.id !== id));
+				await removeBrandByAdmin({ variables: { input: id } });
+				await refetchBrands({ input: brandsInquiry });
 			}
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
 	};
 
-	const updateStatusHandler = (id: string, status: string) => {
-		setBrands((prev) => prev.map((b) => (b.id === id ? { ...b, status } : b)));
-		menuIconCloseHandler();
+	const updateStatusHandler = async (id: string, status: string) => {
+		try {
+			await updateBrandByAdmin({ variables: { input: { _id: id, brandStatus: status as BrandStatus } } });
+			menuIconCloseHandler();
+			await refetchBrands({ input: brandsInquiry });
+		} catch (err: any) {
+			menuIconCloseHandler();
+			sweetErrorHandling(err).then();
+		}
 	};
 
 	const textHandler = useCallback((value: string) => {
@@ -82,26 +129,97 @@ const AdminBrands: NextPage = (props: any) => {
 
 	const clearSearchHandler = () => {
 		setSearchText('');
+		const newInquiry = { ...brandsInquiry, page: 1, search: { ...brandsInquiry.search } };
+		delete newInquiry.search.text;
+		setBrandsInquiry(newInquiry);
 	};
 
-	/** FILTERED DATA **/
-	const filteredBrands = brands.filter((brand) => {
-		const matchesTab = tabValue === 'ALL' || brand.status === tabValue;
-		const matchesType = searchType === 'ALL' || brand.status === searchType;
-		const matchesSearch =
-			!searchText ||
-			brand.brandName.toLowerCase().includes(searchText.toLowerCase()) ||
-			brand.sellerNick.toLowerCase().includes(searchText.toLowerCase());
-		return matchesTab && matchesType && matchesSearch;
-	});
+	const handleSearchSubmit = () => {
+		const newInquiry = { ...brandsInquiry, page: 1, search: { ...brandsInquiry.search } };
+		if (searchText.trim()) {
+			newInquiry.search.text = searchText.trim();
+		} else {
+			delete newInquiry.search.text;
+		}
+		setBrandsInquiry(newInquiry);
+	};
 
-	const paginatedBrands = filteredBrands.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+	const handleSaveBrand = async () => {
+		if (!formTitle.trim()) return;
+		try {
+			const input: BrandInput = {
+				brandTitle: formTitle.trim(),
+				brandImage: formImage.trim() || undefined,
+			};
+			await createBrandByAdmin({ variables: { input } });
+			await refetchBrands({ input: brandsInquiry });
+			setFormTitle('');
+			setFormImage('');
+			setShowForm(false);
+			await sweetTopSuccessAlert('Brand created!');
+		} catch (err: any) {
+			sweetErrorHandling(err).then();
+		}
+	};
+
+	const pendingCount = brands.filter((b) => b.brandStatus === BrandStatus.PENDING).length;
 
 	return (
 		<Box component={'div'} className={'content'}>
-			<Typography variant={'h2'} className={'tit'} sx={{ mb: '24px' }}>
-				Brand &amp; Seller Management
-			</Typography>
+			<Box component={'div'} className={'title flex_space'}>
+				<Typography variant={'h2'} className={'tit'}>
+					Brand Management
+				</Typography>
+				<Button
+					variant={'contained'}
+					size={'medium'}
+					onClick={() => setShowForm((prev) => !prev)}
+					sx={{ background: '#2C1654', '&:hover': { background: '#3d1f7a' } }}
+				>
+					<AddRoundedIcon sx={{ mr: '8px' }} />
+					{showForm ? 'CANCEL' : 'ADD BRAND'}
+				</Button>
+			</Box>
+
+			<Collapse in={showForm}>
+				<Box component={'div'} className={'chart-card'} sx={{ mb: '24px' }}>
+					<Typography className={'chart-section-title'} sx={{ mb: '20px' }}>
+						Create New Brand
+					</Typography>
+					<Box component={'div'} className={'settings-form-grid'}>
+						<TextField
+							label={'Brand Name'}
+							value={formTitle}
+							onChange={(e) => setFormTitle(e.target.value)}
+							size={'small'}
+							fullWidth
+							placeholder={'e.g. The Ordinary'}
+						/>
+						<TextField
+							label={'Brand Image URL (optional)'}
+							value={formImage}
+							onChange={(e) => setFormImage(e.target.value)}
+							size={'small'}
+							fullWidth
+							placeholder={'https://example.com/brand-logo.jpg'}
+						/>
+					</Box>
+					<Stack direction={'row'} spacing={'12px'} sx={{ mt: '20px', justifyContent: 'flex-end' }}>
+						<Button variant={'outlined'} size={'medium'} onClick={() => setShowForm(false)}>
+							Cancel
+						</Button>
+						<Button
+							variant={'contained'}
+							size={'medium'}
+							onClick={handleSaveBrand}
+							disabled={!formTitle.trim()}
+							sx={{ background: '#2C1654', '&:hover': { background: '#3d1f7a' } }}
+						>
+							Save Brand
+						</Button>
+					</Stack>
+				</Box>
+			</Collapse>
 
 			<Box component={'div'} className={'table-wrap'}>
 				<Box component={'div'} sx={{ width: '100%', typography: 'body1' }}>
@@ -116,7 +234,7 @@ const AdminBrands: NextPage = (props: any) => {
 										className={tabValue === tab ? 'li on' : 'li'}
 									>
 										{tab === 'ALL' ? 'All' : tab.charAt(0) + tab.slice(1).toLowerCase()}
-										{tab === 'PENDING' && (
+										{tab === 'PENDING' && pendingCount > 0 && (
 											<Box
 												component={'span'}
 												sx={{
@@ -130,7 +248,7 @@ const AdminBrands: NextPage = (props: any) => {
 													fontFamily: 'Poppins',
 												}}
 											>
-												{brands.filter((b) => b.status === 'PENDING').length}
+												{pendingCount}
 											</Box>
 										)}
 									</ListItem>
@@ -141,9 +259,10 @@ const AdminBrands: NextPage = (props: any) => {
 								<OutlinedInput
 									value={searchText}
 									onChange={(e: any) => textHandler(e.target.value)}
+									onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
 									sx={{ width: '100%' }}
 									className={'search'}
-									placeholder={'Search by brand name or seller username'}
+									placeholder={'Search by brand name'}
 									endAdornment={
 										<>
 											{searchText && (
@@ -158,22 +277,12 @@ const AdminBrands: NextPage = (props: any) => {
 										</>
 									}
 								/>
-								<Select
-									sx={{ width: '160px', ml: '20px' }}
-									value={searchType}
-									onChange={(e: any) => setSearchType(e.target.value)}
-								>
-									<MenuItem value={'ALL'}>All Status</MenuItem>
-									<MenuItem value={'ACTIVE'}>Active</MenuItem>
-									<MenuItem value={'PENDING'}>Pending</MenuItem>
-									<MenuItem value={'BLOCK'}>Blocked</MenuItem>
-								</Select>
 							</Stack>
 							<Divider />
 						</Box>
 
 						<BrandList
-							brands={paginatedBrands}
+							brands={brands}
 							anchorEl={anchorEl}
 							menuIconClickHandler={menuIconClickHandler}
 							menuIconCloseHandler={menuIconCloseHandler}
@@ -185,13 +294,12 @@ const AdminBrands: NextPage = (props: any) => {
 						<TablePagination
 							rowsPerPageOptions={[10, 20, 40, 60]}
 							component={'div'}
-							count={filteredBrands.length}
-							rowsPerPage={rowsPerPage}
-							page={page}
-							onPageChange={(_, newPage) => setPage(newPage)}
+							count={brandsTotal}
+							rowsPerPage={brandsInquiry.limit}
+							page={brandsInquiry.page - 1}
+							onPageChange={(_, newPage) => setBrandsInquiry({ ...brandsInquiry, page: newPage + 1 })}
 							onRowsPerPageChange={(e) => {
-								setRowsPerPage(parseInt(e.target.value, 10));
-								setPage(0);
+								setBrandsInquiry({ ...brandsInquiry, limit: parseInt(e.target.value, 10), page: 1 });
 							}}
 						/>
 					</TabContext>
@@ -199,6 +307,16 @@ const AdminBrands: NextPage = (props: any) => {
 			</Box>
 		</Box>
 	);
+};
+
+AdminBrands.defaultProps = {
+	initialInquiry: {
+		page: 1,
+		limit: 10,
+		sort: 'createdAt',
+		direction: 'DESC',
+		search: {},
+	},
 };
 
 export default withAdminLayout(AdminBrands);

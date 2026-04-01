@@ -44,9 +44,9 @@ export const FaqArticlesPanelList = (props: FaqArticlesPanelListProps) => {
 
 	const getStatusBadgeClass = (status: string): string => {
 		if (status === 'ACTIVE') return 'badge success';
-		if (status === 'INACTIVE') return 'badge warning';
+		if (status === 'INACTIVE') return 'badge inactive';
 		if (status === 'DELETE') return 'badge delete';
-		return 'badge warning';
+		return 'badge inactive';
 	};
 
 	return (

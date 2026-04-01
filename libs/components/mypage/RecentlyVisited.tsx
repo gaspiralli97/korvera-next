@@ -38,7 +38,7 @@ const RecentlyVisited: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>KORVERA MY FAVORITES MOBILE</div>;
+		return <div>RECENTLY VISITED</div>;
 	} else {
 		return (
 			<div id="my-favorites-page">

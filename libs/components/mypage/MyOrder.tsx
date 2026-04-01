@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, Box, Typography, Button, Divider, Radio, RadioGroup, FormControlLabel, Checkbox } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { useReactiveVar } from '@apollo/client';
+import { useReactiveVar, useMutation } from '@apollo/client';
 import { cartVar, saveCart, CartItem, userVar } from '../../../apollo/store';
 import { useRouter } from 'next/router';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
+import { CREATE_ORDER } from '../../../apollo/user/mutation';
 
 const MyOrder = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const cartItems = useReactiveVar(cartVar);
 	const user = useReactiveVar(userVar);
+	const [createOrder] = useMutation(CREATE_ORDER);
 
 	const COUNTRY_CONFIG: Record<string, { flag: string; company: string }> = {
 		USA:    { flag: '🇺🇸', company: 'FedEx' },
@@ -18,8 +20,12 @@ const MyOrder = () => {
 		Russia: { flag: '🇷🇺', company: 'CDEK' },
 		UZB:    { flag: '🇺🇿', company: 'Uzbekistan Post' },
 	};
-	const savedCountry = typeof window !== 'undefined' ? (localStorage.getItem('shippingCountry') ?? 'USA') : 'USA';
-	const countryConfig = COUNTRY_CONFIG[savedCountry] ?? COUNTRY_CONFIG['USA'];
+	const [countryConfig, setCountryConfig] = useState(COUNTRY_CONFIG['USA']);
+
+	useEffect(() => {
+		const savedCountry = localStorage.getItem('shippingCountry') ?? 'USA';
+		setCountryConfig(COUNTRY_CONFIG[savedCountry] ?? COUNTRY_CONFIG['USA']);
+	}, []);
 
 	// Shipping address
 	const [firstName, setFirstName] = useState<string>('');
@@ -121,46 +127,44 @@ const MyOrder = () => {
 			if (cvv.length !== 3) { await sweetMixinErrorAlert('CVV must be exactly 3 digits.'); return; }
 		}
 
-		const orderId = `KRV-${Date.now()}`;
-		const today = new Date();
-		const delivery = new Date(today);
-		delivery.setDate(today.getDate() + 7);
-		const deliveryStr = delivery.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-		const createdAt = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-		const fullAddress = [address, apt, city, stateVal, zip].filter(Boolean).join(', ');
-
-		const lastOrder = {
-			orderId,
-			createdAt,
-			items: cartItems,
-			subtotal,
-			shipping,
-			grandTotal,
-			estimatedDelivery: deliveryStr,
-		};
-
-		const historyRecord = {
-			orderId,
-			createdAt,
-			status: 'Processing',
-			items: cartItems,
-			total: grandTotal,
-			address: fullAddress || 'N/A',
-		};
-
-		const historyKey = `korvera_orders_${user?._id ?? 'guest'}`;
-		let history: any[] = [];
 		try {
-			const raw = localStorage.getItem(historyKey);
-			if (raw) history = JSON.parse(raw);
-		} catch {}
-		history.unshift(historyRecord);
-		localStorage.setItem(historyKey, JSON.stringify(history));
+			const orderItems = cartItems.map((item: CartItem) => ({
+				productId: item.productId,
+				productTitle: item.productTitle,
+				productPrice: item.productPrice,
+				quantity: item.qty,
+			}));
 
-		localStorage.setItem('korvera_last_order', JSON.stringify(lastOrder));
-		cartVar([]);
-		saveCart([], user?._id ?? '');
-		router.push('/order/success');
+			const result = await createOrder({
+				variables: {
+					input: { orderItems, totalAmount: grandTotal },
+				},
+			});
+
+			const savedOrder = result?.data?.createOrder;
+			const today = new Date();
+			const delivery = new Date(today);
+			delivery.setDate(today.getDate() + 7);
+			const deliveryStr = delivery.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+			const createdAt = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+			const lastOrder = {
+				orderId: savedOrder?._id ?? `KRV-${Date.now()}`,
+				createdAt,
+				items: cartItems,
+				subtotal,
+				shipping,
+				grandTotal,
+				estimatedDelivery: deliveryStr,
+			};
+
+			localStorage.setItem('korvera_last_order', JSON.stringify(lastOrder));
+			cartVar([]);
+			saveCart([], user?._id ?? '');
+			router.push('/order/success');
+		} catch (err: any) {
+			await sweetMixinErrorAlert(err?.message ?? 'Failed to place order. Please try again.');
+		}
 	};
 
 	if (device === 'mobile') {

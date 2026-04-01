@@ -74,7 +74,7 @@ const TopAgents = (props: TopAgentsProps) => {
 							<Button
 								className={'see-all-btn'}
 								endIcon={<EastIcon />}
-								onClick={() => router.push('/agent')}
+								onClick={() => router.push('/seller')}
 							>
 								See All Brands
 							</Button>

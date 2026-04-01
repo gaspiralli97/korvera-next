@@ -137,6 +137,24 @@ interface MemberPanelListType {
 	updateMemberHandler: any;
 }
 
+const getMemberTypeClass = (type: string): string => {
+	switch (type) {
+		case 'ADMIN': return 'badge block';
+		case 'SELLER': return 'badge warning';
+		case 'CONSULTANT': return 'badge up';
+		default: return 'badge success';
+	}
+};
+
+const getMemberStatusClass = (status: string): string => {
+	switch (status) {
+		case 'ACTIVE': return 'badge success';
+		case 'BLOCK': return 'badge block';
+		case 'DELETE': return 'badge delete';
+		default: return 'badge success';
+	}
+};
+
 export const MemberPanelList = (props: MemberPanelListType) => {
 	const { members, anchorEl, menuIconClickHandler, menuIconCloseHandler, updateMemberHandler } = props;
 
@@ -181,7 +199,7 @@ export const MemberPanelList = (props: MemberPanelListType) => {
 										<TableCell align="left">{member.memberPhone}</TableCell>
 
 										<TableCell align="center">
-											<Button onClick={(e: any) => menuIconClickHandler(e, index)} className={'badge success'}>
+											<Button onClick={(e: any) => menuIconClickHandler(e, index)} className={getMemberTypeClass(member.memberType)}>
 												{member.memberType}
 											</Button>
 
@@ -214,7 +232,7 @@ export const MemberPanelList = (props: MemberPanelListType) => {
 										<TableCell align="center">{member.memberWarnings}</TableCell>
 										<TableCell align="center">{member.memberBlocks}</TableCell>
 										<TableCell align="center">
-											<Button onClick={(e: any) => menuIconClickHandler(e, member._id)} className={'badge success'}>
+											<Button onClick={(e: any) => menuIconClickHandler(e, member._id)} className={getMemberStatusClass(member.memberStatus)}>
 												{member.memberStatus}
 											</Button>
 

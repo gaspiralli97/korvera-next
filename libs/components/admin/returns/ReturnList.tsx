@@ -34,7 +34,7 @@ const getStatusClass = (status: string) => {
 		case 'PENDING': return 'warning';
 		case 'APPROVED': return 'success';
 		case 'REJECTED': return 'error';
-		case 'REFUNDED': return 'up';
+		case 'REFUNDED': return 'refunded';
 		default: return 'warning';
 	}
 };
@@ -140,7 +140,7 @@ export const ReturnList = (props: ReturnListProps) => {
 
 									<TableCell align="center">
 										{ret.status === 'REFUNDED' ? (
-											<Button className={'badge up'} disabled>{ret.status}</Button>
+											<Button className={'badge refunded'} disabled>{ret.status}</Button>
 										) : (
 											<>
 												<Button

@@ -29,7 +29,7 @@ const ProductCard = (props: ProductCardType) => {
 		? product.productImages[0].startsWith('/')
 			? product.productImages[0]
 			: `${REACT_APP_API_URL}/${product.productImages[0]}`
-		: '/img/banner/header1.svg';
+		: '';
 
 	if (device === 'mobile') {
 		return <div>PRODUCT CARD</div>;
@@ -110,7 +110,7 @@ const ProductCard = (props: ProductCardType) => {
 									{product?.meLiked && product?.meLiked[0]?.myFavorite ? (
 										<FavoriteIcon sx={{ color: '#e91e63' }} />
 									) : (
-										<FavoriteBorderIcon sx={{ color: '#9e9e9e' }} />
+										<FavoriteBorderIcon />
 									)}
 								</IconButton>
 								<Typography className="view-cnt">{product?.productLikes}</Typography>

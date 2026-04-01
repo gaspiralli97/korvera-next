@@ -274,7 +274,8 @@ const Top = () => {
 	const handleSearch = useCallback(
 		(e: React.KeyboardEvent<HTMLInputElement>) => {
 			if (e.key === 'Enter' && searchQuery.trim()) {
-				router.push({ pathname: '/product', query: { search: searchQuery.trim() } });
+				const input = { page: 1, limit: 9, sort: 'createdAt', direction: 'DESC', search: { text: searchQuery.trim() } };
+				router.push(`/product?input=${encodeURIComponent(JSON.stringify(input))}`);
 			}
 		},
 		[router, searchQuery],
@@ -317,9 +318,10 @@ const Top = () => {
 		},
 	}));
 
-	if (typeof window !== 'undefined') {
+	useEffect(() => {
 		window.addEventListener('scroll', changeNavbarColor);
-	}
+		return () => window.removeEventListener('scroll', changeNavbarColor);
+	}, []);
 
 	if (device == 'mobile') {
 		return (
@@ -330,7 +332,7 @@ const Top = () => {
 				<Link href={'/product'}>
 					<div>{t('Products')}</div>
 				</Link>
-				<Link href={'/agent'}>
+				<Link href={'/seller'}>
 					<div>{t('Agents')}</div>
 				</Link>
 				<Link href={'/community?articleCategory=FREE'}>
@@ -486,7 +488,7 @@ const Top = () => {
 									onMouseEnter={() => handleCatEnter(cat.value)}
 									onMouseLeave={handleCatLeave}
 								>
-									<Link href={`/product?productCategory=${cat.value}`}>
+									<Link href={`/product?input=${encodeURIComponent(JSON.stringify({ page: 1, limit: 9, sort: 'createdAt', direction: 'DESC', search: { categoryList: [cat.value] } }))}`}>
 										<span className={'cat-link'}>{cat.label}</span>
 									</Link>
 									<div
@@ -517,7 +519,7 @@ const Top = () => {
 																? p.productImages[0].startsWith('/')
 																	? p.productImages[0]
 																	: `${REACT_APP_API_URL}/${p.productImages[0]}`
-																: '/img/banner/header1.svg';
+																: '';
 															return (
 																<Link key={p._id} href={`/product/detail?id=${p._id}`} className={'mega-product-card'}>
 																	<img src={img} alt={p.productTitle} className={'mega-product-img'} />
@@ -536,7 +538,7 @@ const Top = () => {
 								onMouseEnter={() => handleCatEnter('brands')}
 								onMouseLeave={handleCatLeave}
 							>
-								<Link href={'/agent'}>
+								<Link href={'/seller'}>
 									<span className={'cat-link'}>Brands</span>
 								</Link>
 								<div
@@ -552,7 +554,7 @@ const Top = () => {
 													: `${REACT_APP_API_URL}/${seller.memberImage}`
 												: '/img/profile/defaultUser.svg';
 											return (
-												<Link key={seller._id} href={`/agent/detail?agentId=${seller._id}`}>
+												<Link key={seller._id} href={`/seller/detail?agentId=${seller._id}`}>
 													<div className={'brand-card'}>
 														<img src={avatar} alt={seller.memberNick} className={'brand-avatar'} />
 														<span className={'brand-name'}>{seller.memberNick}</span>

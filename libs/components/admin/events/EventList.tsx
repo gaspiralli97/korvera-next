@@ -13,19 +13,10 @@ import {
 import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-export interface MockEvent {
-	id: string;
-	title: string;
-	category: string;
-	description: string;
-	image?: string;
-	status: string;
-	createdAt: string;
-}
+import { Event } from '../../../libs/types/event/event';
 
 interface EventListProps {
-	events: MockEvent[];
+	events: Event[];
 	onStatusChange: (id: string, status: string) => void;
 	onDelete: (id: string) => void;
 }
@@ -51,8 +42,8 @@ const getCategoryBadgeClass = (category: string): string => {
 
 const getStatusBadgeClass = (status: string): string => {
 	if (status === 'ACTIVE') return 'badge success';
-	if (status === 'INACTIVE') return 'badge warning';
-	return 'badge warning';
+	if (status === 'INACTIVE') return 'badge inactive';
+	return 'badge inactive';
 };
 
 export const EventList = (props: EventListProps) => {
@@ -93,40 +84,48 @@ export const EventList = (props: EventListProps) => {
 						)}
 
 						{events.length !== 0 &&
-							events.map((event: MockEvent) => (
-								<TableRow hover key={event.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+							events.map((event: Event) => (
+								<TableRow hover key={event._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 									<TableCell align={'left'}>
 										<Typography variant={'body2'} sx={{ color: '#8A8A9A', fontSize: '12px' }}>
-											{event.id}
+											{event._id}
 										</Typography>
 									</TableCell>
 									<TableCell align={'left'}>
-										<span className={getCategoryBadgeClass(event.category)}>{event.category}</span>
+										<span className={getCategoryBadgeClass(event.eventCategory)}>{event.eventCategory}</span>
 									</TableCell>
-									<TableCell align={'left'}>{event.title}</TableCell>
+									<TableCell align={'left'}>{event.eventTitle}</TableCell>
 									<TableCell align={'left'}>
-										{event.description.length > 60 ? event.description.substring(0, 60) + '...' : event.description}
+										{event.eventDescription.length > 60
+											? event.eventDescription.substring(0, 60) + '...'
+											: event.eventDescription}
 									</TableCell>
 									<TableCell align={'left'}>
-										<span className={getStatusBadgeClass(event.status)}>{event.status}</span>
+										<span className={getStatusBadgeClass(event.eventStatus)}>{event.eventStatus}</span>
 									</TableCell>
-									<TableCell align={'left'}>{event.createdAt}</TableCell>
+									<TableCell align={'left'}>
+										{new Date(event.createdAt).toLocaleDateString('en-GB', {
+											day: '2-digit',
+											month: 'short',
+											year: 'numeric',
+										})}
+									</TableCell>
 									<TableCell align={'center'}>
-										<IconButton size={'small'} onClick={(e) => handleMenuOpen(e, event.id)}>
+										<IconButton size={'small'} onClick={(e) => handleMenuOpen(e, event._id)}>
 											<MoreVertIcon fontSize={'small'} />
 										</IconButton>
 										<Menu
 											className={'menu-modal'}
 											MenuListProps={{ 'aria-labelledby': 'event-action-button' }}
-											anchorEl={anchorEl[event.id] ?? null}
-											open={Boolean(anchorEl[event.id])}
-											onClose={() => handleMenuClose(event.id)}
+											anchorEl={anchorEl[event._id] ?? null}
+											open={Boolean(anchorEl[event._id])}
+											onClose={() => handleMenuClose(event._id)}
 											sx={{ p: 1 }}
 										>
 											<MenuItem
 												onClick={() => {
-													onStatusChange(event.id, 'ACTIVE');
-													handleMenuClose(event.id);
+													onStatusChange(event._id, 'ACTIVE');
+													handleMenuClose(event._id);
 												}}
 											>
 												<Typography variant={'subtitle1'} component={'span'} sx={{ color: '#2e7d32' }}>
@@ -135,8 +134,8 @@ export const EventList = (props: EventListProps) => {
 											</MenuItem>
 											<MenuItem
 												onClick={() => {
-													onStatusChange(event.id, 'INACTIVE');
-													handleMenuClose(event.id);
+													onStatusChange(event._id, 'INACTIVE');
+													handleMenuClose(event._id);
 												}}
 											>
 												<Typography variant={'subtitle1'} component={'span'} sx={{ color: '#ed6c02' }}>
@@ -145,8 +144,8 @@ export const EventList = (props: EventListProps) => {
 											</MenuItem>
 											<MenuItem
 												onClick={() => {
-													onDelete(event.id);
-													handleMenuClose(event.id);
+													onDelete(event._id);
+													handleMenuClose(event._id);
 												}}
 											>
 												<Typography variant={'subtitle1'} component={'span'} sx={{ color: '#d32f2f' }}>

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { NextPage } from 'next';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
@@ -101,87 +101,52 @@ const AdminLogin: NextPage = () => {
 			<Stack className={'container'}>
 				<Stack className={'main'}>
 					<Stack className={'left'}>
+						{/* @ts-ignore */}
 						<Box className={'logo'}>
 							<img src="/img/logo/logoText.svg" alt="" />
 							<span>Korvera Admin</span>
 						</Box>
+
 						<Box className={'info'}>
 							<span>{isSetupView ? 'setup admin' : 'login'}</span>
 							<p>{isSetupView ? 'Create the first admin account.' : 'Login with your admin account.'}</p>
 						</Box>
 
-						<Box className={'register'} sx={{ mt: '30px' }}>
-							<Stack sx={{ width: '430px', flexDirection: 'row', gap: '10px', mb: '20px' }}>
-								<Button
-									variant={isSetupView ? 'outlined' : 'contained'}
-									onClick={() => setIsSetupView(false)}
-									sx={{ flex: 1 }}
-								>
-									Login
-								</Button>
-								<Button
-									variant={isSetupView ? 'contained' : 'outlined'}
-									onClick={() => setIsSetupView(true)}
-									sx={{ flex: 1 }}
-								>
-									Setup Admin
-								</Button>
-							</Stack>
-
-							{!isSetupView ? (
-								<Box className={'input-wrap'} sx={{ mt: 0 }}>
-									<div className={'input-box'}>
-										<span>Nickname</span>
-										<input
-											type="text"
-											placeholder={'Enter Nickname'}
-											value={loginInput.memberNick}
-											onChange={(e) => loginInputHandler('memberNick', e.target.value)}
-											onKeyDown={(event) => {
-												if (event.key == 'Enter') doLogin();
-											}}
-										/>
-									</div>
-									<div className={'input-box'}>
-										<span>Password</span>
-										<input
-											type="password"
-											placeholder={'Enter Password'}
-											value={loginInput.memberPassword}
-											onChange={(e) => loginInputHandler('memberPassword', e.target.value)}
-											onKeyDown={(event) => {
-												if (event.key == 'Enter') doLogin();
-											}}
-										/>
-									</div>
-									<Button
-										variant="contained"
-										disabled={loginInput.memberNick === '' || loginInput.memberPassword === ''}
-										onClick={doLogin}
-									>
-										ADMIN LOGIN
-									</Button>
-								</Box>
-							) : (
-								<Box className={'input-wrap'} sx={{ mt: 0 }}>
-									<div className={'input-box'}>
-										<span>Nickname</span>
-										<input
-											type="text"
-											placeholder={'Enter Nickname'}
-											value={setupInput.memberNick}
-											onChange={(e) => setupInputHandler('memberNick', e.target.value)}
-										/>
-									</div>
-									<div className={'input-box'}>
-										<span>Password</span>
-										<input
-											type="password"
-											placeholder={'Enter Password'}
-											value={setupInput.memberPassword}
-											onChange={(e) => setupInputHandler('memberPassword', e.target.value)}
-										/>
-									</div>
+						<Box className={'input-wrap'}>
+							<div className={'input-box'}>
+								<span>Nickname</span>
+								<input
+									type="text"
+									placeholder={'Enter Nickname'}
+									value={isSetupView ? setupInput.memberNick : loginInput.memberNick}
+									onChange={(e) =>
+										isSetupView
+											? setupInputHandler('memberNick', e.target.value)
+											: loginInputHandler('memberNick', e.target.value)
+									}
+									onKeyDown={(e) => {
+										if (e.key === 'Enter' && !isSetupView) doLogin();
+									}}
+								/>
+							</div>
+							<div className={'input-box'}>
+								<span>Password</span>
+								<input
+									type="password"
+									placeholder={'Enter Password'}
+									value={isSetupView ? setupInput.memberPassword : loginInput.memberPassword}
+									onChange={(e) =>
+										isSetupView
+											? setupInputHandler('memberPassword', e.target.value)
+											: loginInputHandler('memberPassword', e.target.value)
+									}
+									onKeyDown={(e) => {
+										if (e.key === 'Enter' && !isSetupView) doLogin();
+									}}
+								/>
+							</div>
+							{isSetupView && (
+								<>
 									<div className={'input-box'}>
 										<span>Phone</span>
 										<input
@@ -200,19 +165,52 @@ const AdminLogin: NextPage = () => {
 											onChange={(e) => setupInputHandler('adminSecret', e.target.value)}
 										/>
 									</div>
-									<Button
-										variant="contained"
-										disabled={
-											setupInput.memberNick === '' ||
-											setupInput.memberPassword === '' ||
-											setupInput.memberPhone === '' ||
-											setupInput.adminSecret === ''
-										}
-										onClick={doSetupAdmin}
-									>
-										SETUP ADMIN
-									</Button>
-								</Box>
+								</>
+							)}
+						</Box>
+
+						<Box className={'register'}>
+							{!isSetupView ? (
+								<Button
+									className={'auth-submit-btn'}
+									variant="contained"
+									endIcon={<img src="/img/icons/rightup.svg" alt="" />}
+									disabled={loginInput.memberNick === '' || loginInput.memberPassword === ''}
+									onClick={doLogin}
+									sx={{ background: '#2C1654', '&:hover': { background: '#3d1f7a' } }}
+								>
+									ADMIN LOGIN
+								</Button>
+							) : (
+								<Button
+									className={'auth-submit-btn'}
+									variant="contained"
+									endIcon={<img src="/img/icons/rightup.svg" alt="" />}
+									disabled={
+										setupInput.memberNick === '' ||
+										setupInput.memberPassword === '' ||
+										setupInput.memberPhone === '' ||
+										setupInput.adminSecret === ''
+									}
+									onClick={doSetupAdmin}
+									sx={{ background: '#2C1654', '&:hover': { background: '#3d1f7a' } }}
+								>
+									SETUP ADMIN
+								</Button>
+							)}
+						</Box>
+
+						<Box className={'ask-info'}>
+							{!isSetupView ? (
+								<p>
+									First time setup?
+									<b onClick={() => setIsSetupView(true)}>SETUP ADMIN</b>
+								</p>
+							) : (
+								<p>
+									Have account?
+									<b onClick={() => setIsSetupView(false)}>LOGIN</b>
+								</p>
 							)}
 						</Box>
 					</Stack>

@@ -14,29 +14,17 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import { Brand } from '../../../libs/types/brand/brand';
 
-export interface MockBrand {
-	id: string;
-	brandName: string;
-	sellerNick: string;
-	sellerEmail: string;
-	products: number;
-	revenue: string;
-	joinDate: string;
-	status: string;
-}
-
-const BRAND_STATUSES = ['ACTIVE', 'BLOCK', 'DELETE'];
+const BRAND_STATUSES = ['ACTIVE', 'INACTIVE'];
 
 const getStatusClass = (status: string) => {
 	switch (status) {
 		case 'ACTIVE': return 'success';
+		case 'INACTIVE': return 'inactive';
 		case 'PENDING': return 'warning';
-		case 'BLOCK': return 'block';
-		case 'DELETE': return 'delete';
 		default: return 'success';
 	}
 };
@@ -49,16 +37,14 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
 	{ id: 'id', label: 'BRAND ID', align: 'left' },
-	{ id: 'brand', label: 'BRAND / SELLER', align: 'left' },
-	{ id: 'products', label: 'PRODUCTS', align: 'center' },
-	{ id: 'revenue', label: 'REVENUE', align: 'center' },
-	{ id: 'joined', label: 'JOINED', align: 'center' },
+	{ id: 'brand', label: 'BRAND NAME', align: 'left' },
 	{ id: 'status', label: 'STATUS', align: 'center' },
+	{ id: 'created', label: 'CREATED', align: 'center' },
 	{ id: 'actions', label: 'ACTIONS', align: 'center' },
 ];
 
 interface BrandListProps {
-	brands: MockBrand[];
+	brands: Brand[];
 	anchorEl: any;
 	menuIconClickHandler: (e: any, id: string) => void;
 	menuIconCloseHandler: () => void;
@@ -94,95 +80,69 @@ export const BrandList = (props: BrandListProps) => {
 					<TableBody>
 						{brands.length === 0 && (
 							<TableRow>
-								<TableCell align="center" colSpan={7}>
+								<TableCell align="center" colSpan={5}>
 									<span className={'no-data'}>No brands found</span>
 								</TableCell>
 							</TableRow>
 						)}
 
 						{brands.length !== 0 &&
-							brands.map((brand: MockBrand) => (
-								<TableRow hover key={brand.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+							brands.map((brand: Brand) => (
+								<TableRow hover key={brand._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 									<TableCell align="left">
 										<Typography
 											variant={'subtitle1'}
 											sx={{ fontWeight: 600, color: '#1A1A2E', fontSize: '13px' }}
 										>
-											{brand.id}
+											{brand._id}
 										</Typography>
 									</TableCell>
 
 									<TableCell align="left" className={'name'}>
 										<Stack direction={'row'} alignItems={'center'} spacing={1.5}>
-											<Avatar
-												src={'/img/profile/defaultUser.svg'}
-												sx={{ width: 36, height: 36 }}
-											/>
-											<Box component={'div'}>
-												<Typography
-													variant={'subtitle1'}
-													sx={{ fontWeight: 600, color: '#1A1A2E', fontSize: '13px', lineHeight: 1.3 }}
-												>
-													{brand.brandName}
-												</Typography>
-												<Typography
-													variant={'body2'}
-													sx={{ color: '#8A8A9A', fontSize: '11px' }}
-												>
-													@{brand.sellerNick} · {brand.sellerEmail}
-												</Typography>
-											</Box>
+											{brand.brandImage && (
+												<Box
+													component={'img'}
+													src={brand.brandImage}
+													sx={{ width: 36, height: 36, borderRadius: '8px', objectFit: 'cover' }}
+												/>
+											)}
+											<Typography
+												variant={'subtitle1'}
+												sx={{ fontWeight: 600, color: '#1A1A2E', fontSize: '13px' }}
+											>
+												{brand.brandTitle}
+											</Typography>
 										</Stack>
 									</TableCell>
 
 									<TableCell align="center">
-										<Typography variant={'subtitle1'} sx={{ color: '#4A4A5A', fontSize: '13px' }}>
-											{brand.products}
-										</Typography>
-									</TableCell>
-
-									<TableCell align="center">
-										<Typography
-											variant={'subtitle1'}
-											sx={{ fontWeight: 700, color: '#1A1A2E', fontSize: '13px' }}
-										>
-											{brand.revenue}
-										</Typography>
-									</TableCell>
-
-									<TableCell align="center">
-										<Typography variant={'subtitle1'} sx={{ color: '#8A8A9A', fontSize: '12px' }}>
-											{brand.joinDate}
-										</Typography>
-									</TableCell>
-
-									<TableCell align="center">
-										{brand.status === 'PENDING' ? (
+										{brand.brandStatus === 'PENDING' ? (
 											<Button className={'badge warning'} disabled>
 												PENDING
 											</Button>
 										) : (
 											<>
 												<Button
-													onClick={(e: any) => menuIconClickHandler(e, brand.id)}
-													className={`badge ${getStatusClass(brand.status)}`}
+													onClick={(e: any) => menuIconClickHandler(e, brand._id)}
+													className={`badge ${getStatusClass(brand.brandStatus)}`}
 												>
-													{brand.status}
+													{brand.brandStatus}
 												</Button>
 
 												<Menu
 													className={'menu-modal'}
 													MenuListProps={{ 'aria-labelledby': 'fade-button' }}
-													anchorEl={anchorEl[brand.id]}
-													open={Boolean(anchorEl[brand.id])}
+													anchorEl={anchorEl[brand._id]}
+													open={Boolean(anchorEl[brand._id])}
 													onClose={menuIconCloseHandler}
 													TransitionComponent={Fade}
 													sx={{ p: 1 }}
 												>
-													{BRAND_STATUSES.filter((s) => s !== brand.status).map((status) => (
+													{BRAND_STATUSES.filter((s) => s !== brand.brandStatus).map((status) => (
 														<MenuItem
 															key={status}
-															onClick={() => updateStatusHandler(brand.id, status)}
+															onClick={() => updateStatusHandler(brand._id, status)}
 														>
 															<Typography variant={'subtitle1'} component={'span'}>
 																{status}
@@ -195,11 +155,21 @@ export const BrandList = (props: BrandListProps) => {
 									</TableCell>
 
 									<TableCell align="center">
-										{brand.status === 'PENDING' ? (
+										<Typography variant={'subtitle1'} sx={{ color: '#8A8A9A', fontSize: '12px' }}>
+											{new Date(brand.createdAt).toLocaleDateString('en-GB', {
+												day: '2-digit',
+												month: 'short',
+												year: 'numeric',
+											})}
+										</Typography>
+									</TableCell>
+
+									<TableCell align="center">
+										{brand.brandStatus === 'PENDING' ? (
 											<Stack direction={'row'} spacing={1} justifyContent={'center'}>
 												<Button
 													size={'small'}
-													onClick={() => approveHandler(brand.id)}
+													onClick={() => approveHandler(brand._id)}
 													sx={{
 														minWidth: '32px',
 														height: '32px',
@@ -214,7 +184,7 @@ export const BrandList = (props: BrandListProps) => {
 												</Button>
 												<Button
 													size={'small'}
-													onClick={() => rejectHandler(brand.id)}
+													onClick={() => rejectHandler(brand._id)}
 													sx={{
 														minWidth: '32px',
 														height: '32px',

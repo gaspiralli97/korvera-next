@@ -4,12 +4,12 @@ import { Stack, Box, Typography } from '@mui/material';
 import { ProductCategory } from '../../enums/product.enum';
 
 const CATEGORIES = [
-	{ label: 'Skincare', value: ProductCategory.SKINCARE, image: '/img/events/skincare.jpg', desc: 'Cleanse, treat, protect' },
-	{ label: 'Makeup', value: ProductCategory.MAKEUP, image: '/img/fiber/img2.jpg', desc: 'Colour, refined' },
-	{ label: 'Haircare', value: ProductCategory.HAIRCARE, image: '/img/fiber/img3.jpg', desc: 'Nourish & restore' },
-	{ label: 'Bodycare', value: ProductCategory.BODYCARE, image: '/img/fiber/img4.jpg', desc: 'Head to toe rituals' },
-	{ label: 'Fragrance', value: ProductCategory.FRAGRANCE, image: '/img/fiber/img5.jpg', desc: 'Scent as identity' },
-	{ label: 'Wellness', value: ProductCategory.WELLNESS, image: '/img/fiber/img1.jpg', desc: 'Beauty from within' },
+	{ label: 'Skincare', value: ProductCategory.SKINCARE, image: '/img/korvera/skincare.jpg', desc: 'Cleanse, treat, protect' },
+	{ label: 'Makeup', value: ProductCategory.MAKEUP, image: '/img/korvera/make-up.avif', desc: 'Colour, refined' },
+	{ label: 'Haircare', value: ProductCategory.HAIRCARE, image: '/img/korvera/haircare.jpg', desc: 'Nourish & restore' },
+	{ label: 'Bodycare', value: ProductCategory.BODYCARE, image: '/img/korvera/bodycare.jpg', desc: 'Head to toe rituals' },
+	{ label: 'Fragrance', value: ProductCategory.FRAGRANCE, image: '/img/korvera/fragrance.jpg', desc: 'Scent as identity' },
+	{ label: 'Wellness', value: ProductCategory.WELLNESS, image: '/img/korvera/wellness.jpg', desc: 'Beauty from within' },
 ];
 
 const HomepageCategories = () => {
@@ -19,7 +19,7 @@ const HomepageCategories = () => {
 				<Typography className={'hp-section-eyebrow'}>Shop by Category</Typography>
 				<Box className={'hp-cat-grid'}>
 					{CATEGORIES.map((cat) => (
-						<Link key={cat.value} href={`/product?productCategory=${cat.value}`}>
+						<Link key={cat.value} href={`/product?input=${encodeURIComponent(JSON.stringify({ page: 1, limit: 9, sort: 'createdAt', direction: 'DESC', search: { categoryList: [cat.value] } }))}`}>
 							<Box className={'hp-cat-tile'}>
 								<Box className={'hp-cat-img'} style={{ backgroundImage: `url(${cat.image})` }} />
 								<Box className={'hp-cat-info'}>
