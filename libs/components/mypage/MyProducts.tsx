@@ -90,7 +90,53 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	}
 
 	if (device === 'mobile') {
-		return <div>MY PRODUCTS MOBILE</div>;
+		return (
+			<div className={'mob-mypage-section'}>
+				<Typography className={'mob-section-title'}>My Products</Typography>
+				<Stack className={'mob-tab-row'}>
+					<button
+						className={`mob-tab-btn ${searchFilter.search.productStatus === 'ACTIVE' ? 'active' : ''}`}
+						onClick={() => changeStatusHandler(ProductStatus.ACTIVE)}
+					>
+						On Sale
+					</button>
+					<button
+						className={`mob-tab-btn ${searchFilter.search.productStatus === 'SOLD_OUT' ? 'active' : ''}`}
+						onClick={() => changeStatusHandler(ProductStatus.SOLD_OUT)}
+					>
+						Sold Out
+					</button>
+				</Stack>
+				{sellerProducts?.length === 0 ? (
+					<div className={'mob-empty-state'}>
+						<img src="/img/icons/icoAlert.svg" alt="" />
+						<p>No products found</p>
+					</div>
+				) : (
+					<>
+						<div className={'mob-product-grid'}>
+							{sellerProducts.map((product: Product) => (
+								<ProductCard
+									key={product._id}
+									product={product}
+									deleteProductHandler={deleteProductHandler}
+									updateProductHandler={updateProductHandler}
+								/>
+							))}
+						</div>
+						<Stack className={'mob-pagination'}>
+							<Pagination
+								count={Math.ceil(total / searchFilter.limit)}
+								page={searchFilter.page}
+								shape="circular"
+								color="primary"
+								onChange={paginationHandler}
+							/>
+						</Stack>
+					</>
+				)}
+			</div>
+		);
 	} else {
 		return (
 			<div id="my-products-page">

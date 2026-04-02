@@ -1,8 +1,10 @@
 import React from 'react';
-import { Stack, Box } from '@mui/material';
+import { Stack, Box, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { useQuery } from '@apollo/client';
 import { GET_EVENTS } from '../../../apollo/user/query';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper';
 
 const CATEGORY_FALLBACK: Record<string, string> = {
 	SKINCARE: '/img/korvera/skincare.jpg',
@@ -49,7 +51,19 @@ const EventCard = ({ event }: { event: any }) => {
 	const imageSrc = event.eventImage || CATEGORY_FALLBACK[event.eventCategory] || '/img/korvera/skincare.jpg';
 
 	if (device === 'mobile') {
-		return <div>EVENT CARD</div>;
+		return (
+			<Stack
+				className={'mob-event-card'}
+				style={{ backgroundImage: `url(${imageSrc})` }}
+			>
+				<Box component={'div'} className={'mob-event-info'}>
+					<strong className={'mob-event-category'}>
+						{event.eventCategory.charAt(0) + event.eventCategory.slice(1).toLowerCase()}
+					</strong>
+					<span className={'mob-event-title'}>{event.eventTitle}</span>
+				</Box>
+			</Stack>
+		);
 	} else {
 		return (
 			<Stack
@@ -90,7 +104,25 @@ const Events = () => {
 	const events = data?.getEvents?.list?.length ? data.getEvents.list : MOCK_EVENTS;
 
 	if (device === 'mobile') {
-		return <div>EVENT CARD</div>;
+		return (
+			<Stack className={'mob-events'}>
+				<Stack className={'container'}>
+					<Typography className={'mob-section-title'}>Collections</Typography>
+					<Swiper
+						className={'mob-events-swiper'}
+						slidesPerView={1.2}
+						spaceBetween={12}
+						modules={[Autoplay]}
+					>
+						{events.map((event: any) => (
+							<SwiperSlide key={event._id} className={'mob-event-slide'}>
+								<EventCard event={event} />
+							</SwiperSlide>
+						))}
+					</Swiper>
+				</Stack>
+			</Stack>
+		);
 	} else {
 		return (
 			<Stack className={'events'}>

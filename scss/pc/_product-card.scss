@@ -53,6 +53,49 @@
 			line-height: normal;
 			img { height: 16px; }
 		}
+		.fire-badge {
+			position: absolute;
+			top: 30px;
+			left: 16px;
+			background: linear-gradient(135deg, #ff6b35, #f7931e);
+			color: #fff;
+			font-size: 10px;
+			font-weight: 800;
+			padding: 5px 10px;
+			border-radius: 20px;
+			letter-spacing: 1px;
+			white-space: nowrap;
+			pointer-events: none;
+			box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4);
+		}
+		.new-badge {
+			position: absolute;
+			top: 12px;
+			right: 12px;
+			background: #1b1b1b;
+			color: #fff;
+			font-size: 10px;
+			font-weight: 700;
+			padding: 5px 10px;
+			border-radius: 20px;
+			letter-spacing: 1.5px;
+			white-space: nowrap;
+			pointer-events: none;
+		}
+		.sale-badge {
+			position: absolute;
+			top: 12px;
+			right: 12px;
+			background: linear-gradient(135deg, #e91e63, #f06292);
+			color: #fff;
+			font-size: 11px;
+			font-weight: 700;
+			padding: 5px 10px;
+			border-radius: 20px;
+			letter-spacing: 0.2px;
+			white-space: nowrap;
+			pointer-events: none;
+		}
 		.quicklook-link {
 			text-decoration: none;
 			display: block;
@@ -121,6 +164,29 @@
 					flex-shrink: 0;
 				}
 			}
+
+			.price-sale-wrap {
+					flex-direction: column;
+					align-items: flex-end;
+					gap: 1px;
+					flex-shrink: 0;
+
+					.price-original {
+						font-size: 11px;
+						color: #aaa;
+						text-decoration: line-through;
+						line-height: 1;
+						font-family: $font;
+					}
+					.price-discounted {
+						font-size: 14px;
+						font-weight: 700;
+						color: #e91e63;
+						line-height: 1.2;
+						font-family: $font;
+						white-space: nowrap;
+					}
+				}
 
 			.address {
 				width: 100%;

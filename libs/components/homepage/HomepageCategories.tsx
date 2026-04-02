@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Stack, Box, Typography } from '@mui/material';
 import { ProductCategory } from '../../enums/product.enum';
+import useDeviceDetect from '../../hooks/useDeviceDetect';
 
 const CATEGORIES = [
 	{ label: 'Skincare', value: ProductCategory.SKINCARE, image: '/img/korvera/skincare.jpg', desc: 'Cleanse, treat, protect' },
@@ -13,6 +14,32 @@ const CATEGORIES = [
 ];
 
 const HomepageCategories = () => {
+	const device = useDeviceDetect();
+
+	if (device === 'mobile') {
+		return (
+			<Stack className={'mob-hp-categories'}>
+				<Typography className={'mob-section-title'}>Shop by Category</Typography>
+				<Box className={'mob-cat-scroll'}>
+					{CATEGORIES.map((cat) => (
+						<Link
+							key={cat.value}
+							href={`/product?input=${encodeURIComponent(JSON.stringify({ page: 1, limit: 9, sort: 'createdAt', direction: 'DESC', search: { categoryList: [cat.value] } }))}`}
+						>
+							<Box className={'mob-cat-item'}>
+								<Box
+									className={'mob-cat-circle'}
+									style={{ backgroundImage: `url(${cat.image})` }}
+								/>
+								<span className={'mob-cat-label'}>{cat.label}</span>
+							</Box>
+						</Link>
+					))}
+				</Box>
+			</Stack>
+		);
+	}
+
 	return (
 		<Stack className={'hp-categories'}>
 			<Stack className={'container'}>

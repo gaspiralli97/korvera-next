@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stack, Box } from '@mui/material';
+import { Stack, Box, Typography } from '@mui/material';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -13,8 +13,10 @@ import { T } from '../../types/common';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { Message } from '../../enums/common.enum';
 import { userVar } from '../../../apollo/store';
+import useDeviceDetect from '../../hooks/useDeviceDetect';
 
 const HomepageSkinSolutions = () => {
+	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
 	const [products, setProducts] = useState<Product[]>([]);
 
@@ -42,6 +44,30 @@ const HomepageSkinSolutions = () => {
 	};
 
 	if (!user?._id || products.length === 0) return null;
+
+	if (device === 'mobile') {
+		return (
+			<Stack className={'mob-skin-solutions'}>
+				<Stack className={'container'}>
+					<Typography className={'mob-section-title'}>Recommended for You</Typography>
+					<Box className={'mob-ss-swiper-wrap'}>
+						<Swiper
+							className={'mob-ss-swiper'}
+							slidesPerView={1.3}
+							spaceBetween={12}
+							modules={[Autoplay]}
+						>
+							{products.map((product: Product) => (
+								<SwiperSlide key={product._id} className={'mob-ss-slide'}>
+									<ProductCard product={product} likeProductHandler={likeProductHandler} />
+								</SwiperSlide>
+							))}
+						</Swiper>
+					</Box>
+				</Stack>
+			</Stack>
+		);
+	}
 
 	return (
 		<Stack className={'hp-recommend'}>

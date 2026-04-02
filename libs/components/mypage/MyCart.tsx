@@ -60,6 +60,10 @@ const MyCart: React.FC<MyCartProps> = () => {
 	});
 	const [countryAnchorEl, setCountryAnchorEl] = useState<null | HTMLElement>(null);
 	const total = cartItems.reduce((acc: number, item: CartItem) => acc + item.productPrice * (item.qty ?? 1), 0);
+	const savedAmount = cartItems.reduce((acc: number, item: CartItem) => {
+		const old = getOptionalOldPrice(item);
+		return old !== null ? acc + (old - item.productPrice) * (item.qty ?? 1) : acc;
+	}, 0);
 	const shipping = total >= 50 ? 0 : 5.99;
 	const grandTotal = total + shipping;
 	const displayTotal = total;
@@ -156,7 +160,115 @@ const MyCart: React.FC<MyCartProps> = () => {
 	if (!mounted) return null;
 
 	if (device === 'mobile') {
-		return <div>MY CART</div>;
+		return (
+			<Box component={'div'} id={'mob-cart-page'}>
+				<Stack className={'mob-cart-wrap'}>
+					<Stack className={'mob-cart-ship-progress'}>
+						<Typography className={'mob-cart-ship-text'}>
+							{displayShipping === 0 ? 'You unlocked free shipping 🎉' : `Add $${(50 - displayTotal).toFixed(2)} more for free shipping`}
+						</Typography>
+						<Box component={'div'} className={'mob-cart-progress-track'}>
+							<Box
+								component={'div'}
+								className={'mob-cart-progress-fill'}
+								sx={{ width: `${Math.min((displayTotal / 50) * 100, 100)}%` }}
+							/>
+						</Box>
+					</Stack>
+
+					{cartItems.length === 0 ? (
+						<Stack className={'mob-cart-empty'}>
+							<Typography className={'mob-cart-empty-title'}>Your cart is empty</Typography>
+							<Typography className={'mob-cart-empty-sub'}>Discover curated formulas for your routine.</Typography>
+							<Link href={'/product'}>
+								<Button className={'mob-cart-shop-btn'}>
+									<Typography>Shop Now</Typography>
+								</Button>
+							</Link>
+						</Stack>
+					) : (
+						<Stack className={'mob-cart-list'}>
+							<Stack className={'mob-cart-list-head'}>
+								<Typography className={'mob-cart-count'}>{cartItems.length} item(s)</Typography>
+								<Button className={'mob-cart-remove-all'} onClick={handleRemoveAll} disabled={cartUIState.isRemovingAll}>
+									<Typography>{cartUIState.isRemovingAll ? 'Removing...' : 'Remove all'}</Typography>
+								</Button>
+							</Stack>
+
+							{cartItems.map((item: CartItem) => {
+								const oldPrice = getOptionalOldPrice(item);
+								return (
+									<Stack className={'mob-cart-item'} key={`${item.productId}-${item.size}`}>
+										<Box component={'div'} className={'mob-cart-thumb'}>
+											<img
+												src={
+													item.productImage
+														? item.productImage.startsWith('/')
+															? item.productImage
+															: `${REACT_APP_API_URL}/${item.productImage}`
+														: '/img/product/bigImage.png'
+												}
+												alt={item.productTitle}
+											/>
+										</Box>
+										<Stack className={'mob-cart-item-info'}>
+											<Stack className={'mob-cart-item-top'}>
+												<Stack className={'mob-cart-item-name-col'}>
+													<Typography className={'mob-cart-item-brand'}>{item.productBrand}</Typography>
+													<Typography className={'mob-cart-item-title'}>{item.productTitle}</Typography>
+													<Typography className={'mob-cart-item-meta'}>Size: {item.size}</Typography>
+												</Stack>
+												<Stack className={'mob-cart-item-price-col'}>
+													{oldPrice !== null && (
+														<Typography className={'mob-cart-old-price'}>${oldPrice.toFixed(2)}</Typography>
+													)}
+													<Typography className={'mob-cart-price'}>${item.productPrice.toFixed(2)}</Typography>
+												</Stack>
+											</Stack>
+											<Stack className={'mob-cart-item-controls'}>
+												<Stack className={'mob-cart-qty'}>
+													<button className={'mob-cart-qty-btn'} onClick={() => updateQty(item.productId, item.size, -1)}>−</button>
+													<Typography className={'mob-cart-qty-val'}>{item.qty ?? 1}</Typography>
+													<button className={'mob-cart-qty-btn'} onClick={() => updateQty(item.productId, item.size, 1)}>+</button>
+												</Stack>
+												<Stack className={'mob-cart-item-actions'}>
+													<button className={'mob-cart-like-btn'} onClick={() => handleLike(item.productId)}>
+														{likedIds.has(item.productId)
+															? <FavoriteIcon sx={{ fontSize: 16, color: '#e75480' }} />
+															: <FavoriteBorderIcon sx={{ fontSize: 16, color: '#aaa' }} />}
+													</button>
+													<button className={'mob-cart-remove-btn'} onClick={() => removeItem(item.productId, item.size)}>
+														Remove
+													</button>
+												</Stack>
+											</Stack>
+										</Stack>
+									</Stack>
+								);
+							})}
+						</Stack>
+					)}
+				</Stack>
+
+				{cartItems.length > 0 && (
+					<Stack className={'mob-cart-checkout-bar'}>
+						{savedAmount > 0 && (
+							<Typography className={'mob-cart-saved'}>You saved ${savedAmount.toFixed(2)}</Typography>
+						)}
+						{displayShipping === 0 && (
+							<Typography className={'mob-cart-free-ship'}>Free shipping included ✓</Typography>
+						)}
+						<Stack className={'mob-cart-total-row'}>
+							<Typography className={'mob-cart-total-label'}>Estimated Total</Typography>
+							<Typography className={'mob-cart-total-val'}>${displayGrandTotal.toFixed(2)}</Typography>
+						</Stack>
+						<Button className={'mob-cart-checkout-btn'} onClick={handleCheckout}>
+							<Typography>Proceed to Checkout</Typography>
+						</Button>
+					</Stack>
+				)}
+			</Box>
+		);
 	} else {
 		return (
 			<Box component={'div'} id={'my-cart-page'}>
@@ -311,7 +423,9 @@ const MyCart: React.FC<MyCartProps> = () => {
 									</Stack>
 									<Stack className={'summary-row'}>
 										<Typography>Discount</Typography>
-										<Typography>-$0.00</Typography>
+										<Typography sx={{ color: savedAmount > 0 ? '#e91e63' : undefined }}>
+											{savedAmount > 0 ? `-$${savedAmount.toFixed(2)}` : '-$0.00'}
+										</Typography>
 									</Stack>
 									<Stack className={'summary-row'}>
 										<Typography>Shipping</Typography>

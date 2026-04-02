@@ -38,7 +38,34 @@ const RecentlyVisited: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>RECENTLY VISITED</div>;
+		return (
+			<div className={'mob-mypage-section'}>
+				<Typography className={'mob-section-title'}>Recently Visited</Typography>
+				{recentlyVisited?.length ? (
+					<>
+						<div className={'mob-product-grid'}>
+							{recentlyVisited.map((product: Product) => (
+								<ProductCard key={product._id} product={product} recentlyVisited={true} />
+							))}
+						</div>
+						<Stack className={'mob-pagination'}>
+							<Pagination
+								count={Math.ceil(total / searchVisited.limit)}
+								page={searchVisited.page}
+								shape="circular"
+								color="primary"
+								onChange={paginationHandler}
+							/>
+						</Stack>
+					</>
+				) : (
+					<div className={'mob-empty-state'}>
+						<img src="/img/icons/icoAlert.svg" alt="" />
+						<p>No recently visited products</p>
+					</div>
+				)}
+			</div>
+		);
 	} else {
 		return (
 			<div id="my-favorites-page">

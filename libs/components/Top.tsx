@@ -8,11 +8,13 @@ import Button from '@mui/material/Button';
 import { alpha, styled } from '@mui/material/styles';
 import Menu, { MenuProps } from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import { CaretDown } from 'phosphor-react';
 import useDeviceDetect from '../hooks/useDeviceDetect';
 import Link from 'next/link';
 import { useReactiveVar, useQuery } from '@apollo/client';
-import { userVar } from '../../apollo/store';
+import { userVar, cartVar } from '../../apollo/store';
 import { Logout } from '@mui/icons-material';
 import { REACT_APP_API_URL } from '../config';
 import { ProductCategory, ProductSubCategory } from '../enums/product.enum';
@@ -146,6 +148,7 @@ const MEGA_MENU_DATA: Record<string, { cols: SubCatItem[][]; tagline: string }> 
 const Top = () => {
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
+	const cartItems = useReactiveVar(cartVar);
 	const { t, i18n } = useTranslation('common');
 	const router = useRouter();
 	const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
@@ -325,22 +328,44 @@ const Top = () => {
 
 	if (device == 'mobile') {
 		return (
-			<Stack className={'top'}>
+			<Stack className={'mob-navbar'}>
 				<Link href={'/'}>
-					<div>{t('Home')}</div>
+					<img src="/img/logo/logoText.svg" alt="Korvera" className={'mob-logo'} />
 				</Link>
-				<Link href={'/product'}>
-					<div>{t('Products')}</div>
-				</Link>
-				<Link href={'/seller'}>
-					<div>{t('Agents')}</div>
-				</Link>
-				<Link href={'/community?articleCategory=FREE'}>
-					<div>{t('Community')}</div>
-				</Link>
-				<Link href={'/cs'}>
-					<div>{t('CS')}</div>
-				</Link>
+				<Box component={'div'} className={'mob-nav-actions'}>
+					<SearchIcon
+						className={'mob-nav-icon'}
+						onClick={() => {
+							const input = { page: 1, limit: 9, sort: 'createdAt', direction: 'DESC', search: {} };
+							router.push(`/product?input=${encodeURIComponent(JSON.stringify(input))}`);
+						}}
+					/>
+					<Box component={'div'} className={'mob-cart-wrap'}>
+						<Link href={'/cart'}>
+							<ShoppingBagOutlinedIcon className={'mob-nav-icon'} />
+							{cartItems.length > 0 && (
+								<span className={'mob-cart-badge'}>{cartItems.length}</span>
+							)}
+						</Link>
+					</Box>
+					{user?._id ? (
+						<Link href={'/mypage'}>
+							<img
+								src={
+									user?.memberImage
+										? `${REACT_APP_API_URL}/${user?.memberImage}`
+										: '/img/profile/defaultUser.svg'
+								}
+								alt=""
+								className={'mob-user-avatar'}
+							/>
+						</Link>
+					) : (
+						<Link href={'/account/join'}>
+							<PersonOutlineIcon className={'mob-nav-icon'} />
+						</Link>
+					)}
+				</Box>
 			</Stack>
 		);
 	} else {

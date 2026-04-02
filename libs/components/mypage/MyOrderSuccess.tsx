@@ -40,7 +40,74 @@ const MyOrderSuccess = () => {
 	}, []);
 
 	if (device === 'mobile') {
-		return <div>ORDER SUCCESS</div>;
+		return (
+			<Box component={'div'} id={'mob-order-success-page'}>
+				<Stack className={'mob-os-wrap'}>
+					<Stack className={'mob-os-header'}>
+						<CheckCircleOutlineIcon className={'mob-os-check-icon'} />
+						<Typography className={'mob-os-title'}>Order Placed!</Typography>
+						{order && <Typography className={'mob-os-order-num'}>Order #{order.orderId}</Typography>}
+						<Typography className={'mob-os-sub'}>We'll send you a confirmation shortly.</Typography>
+					</Stack>
+
+					{order && (
+						<>
+							<Stack className={'mob-os-card'}>
+								<Typography className={'mob-os-card-title'}>Order Summary</Typography>
+								{order.items.map((item, idx) => (
+									<Stack key={idx} className={'mob-os-item'}>
+										<Box component={'div'} className={'mob-os-thumb'}>
+											<img
+												src={item.productImage ? item.productImage.startsWith('/') ? item.productImage : `${REACT_APP_API_URL}/${item.productImage}` : '/img/product/bigImage.png'}
+												alt={item.productTitle}
+											/>
+										</Box>
+										<Stack className={'mob-os-item-info'}>
+											<Typography className={'mob-os-item-brand'}>{item.productBrand}</Typography>
+											<Typography className={'mob-os-item-title'}>{item.productTitle}</Typography>
+											<Typography className={'mob-os-item-meta'}>Size: {item.size} · Qty: {item.qty}</Typography>
+										</Stack>
+										<Typography className={'mob-os-item-price'}>${(item.productPrice * item.qty).toFixed(2)}</Typography>
+									</Stack>
+								))}
+								<Divider sx={{ my: '12px', borderColor: '#f0f0f0' }} />
+								<Stack className={'mob-os-total-row'}>
+									<Typography>Subtotal</Typography>
+									<Typography>${order.subtotal.toFixed(2)}</Typography>
+								</Stack>
+								<Stack className={'mob-os-total-row'}>
+									<Typography>Shipping</Typography>
+									<Typography>{order.shipping === 0 ? 'FREE' : `$${order.shipping.toFixed(2)}`}</Typography>
+								</Stack>
+								<Stack className={'mob-os-total-row mob-os-grand'}>
+									<Typography>Order Total</Typography>
+									<Typography>${order.grandTotal.toFixed(2)}</Typography>
+								</Stack>
+							</Stack>
+
+							<Stack className={'mob-os-delivery-card'}>
+								<Typography className={'mob-os-card-title'}>Estimated Delivery</Typography>
+								<Typography className={'mob-os-delivery-date'}>{order.estimatedDelivery}</Typography>
+								<Typography className={'mob-os-delivery-note'}>You'll receive a tracking number once your order ships.</Typography>
+							</Stack>
+						</>
+					)}
+
+					{!order && (
+						<Typography className={'mob-os-no-order'}>No order data found.</Typography>
+					)}
+
+					<Stack className={'mob-os-actions'}>
+						<Button className={'mob-os-orders-btn'} disableRipple onClick={() => router.push('/mypage?category=myOrders')}>
+							View Order History
+						</Button>
+						<Button className={'mob-os-shop-btn'} disableRipple onClick={() => router.push('/product')}>
+							Continue Shopping
+						</Button>
+					</Stack>
+				</Stack>
+			</Box>
+		);
 	} else {
 		return (
 			<Box component={'div'} id={'my-order-success-page'}>

@@ -45,7 +45,41 @@ const MyMenu = () => {
 	);
 
 	if (device === 'mobile') {
-		return <div>MY MENU MOBILE</div>;
+		return (
+			<Stack className={'mob-my-menu'}>
+				<Stack className={'mob-menu-header'}>
+					<img
+						src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
+						alt="avatar"
+						className={'mob-menu-avatar'}
+					/>
+					<Stack className={'mob-menu-user-info'}>
+						<Typography className={'mob-menu-username'}>{user?.memberNick ?? 'My Account'}</Typography>
+						<Typography className={'mob-menu-badge'}>
+							{isAdmin ? '👑 Admin' : isSeller ? '🛍️ Seller' : '✨ Member'}
+						</Typography>
+					</Stack>
+					<Typography className={'mob-menu-logout'} onClick={logoutHandler}>Logout</Typography>
+				</Stack>
+				<Stack className={'mob-menu-tabs'}>
+					{navLink('myProfile', 'Profile')}
+					{navLink('myOrders', 'Orders')}
+					{navLink('myFavorites', 'Wishlist')}
+					{navLink('recentlyVisited', 'Visited')}
+					{navLink('followers', 'Followers')}
+					{navLink('followings', 'Following')}
+					{(!isUser && (isSeller || isAdmin)) && navLink('myArticles', 'Articles')}
+					{(!isUser && (isSeller || isAdmin)) && navLink('writeArticle', 'Write')}
+					{isSeller && navLink('myProducts', 'My Products')}
+					{isSeller && navLink('addProduct', 'Add Product')}
+					{isAdmin && (
+						<a href="/_admin/users" target="_blank" rel="noreferrer">
+							<Typography className={'mob-menu-tab'}>Admin</Typography>
+						</a>
+					)}
+				</Stack>
+			</Stack>
+		);
 	}
 
 	return (

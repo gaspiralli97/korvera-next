@@ -15,7 +15,7 @@ import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { Product } from '../../libs/types/product/product';
 import moment from 'moment';
-import { formatterStr } from '../../libs/utils';
+import { formatterStr, getSaleInfo } from '../../libs/utils';
 import { REACT_APP_API_URL } from '../../libs/config';
 import { userVar, cartVar, saveCart, CartItem } from '../../apollo/store';
 import { Rating, RatingStats } from '../../libs/types/rating/rating';
@@ -91,14 +91,28 @@ const ProductDetail: NextPage = ({ initialRating, ...props }: any) => {
 		reviewText: '',
 	});
 	const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
-	const sizes = useMemo(
-		() => [
-			{ label: `${Math.round((product?.productVolume ?? 30) * 0.33)} mL`, price: Math.round((product?.productPrice ?? 0) * 0.55) },
-			{ label: `${product?.productVolume ?? 90} mL`, price: product?.productPrice ?? 0 },
-			{ label: `${Math.round((product?.productVolume ?? 90) * 2)} mL`, price: Math.round((product?.productPrice ?? 0) * 1.8) },
-		],
-		[product?.productVolume, product?.productPrice],
-	);
+	const sizes = useMemo(() => {
+		const base = product?.productPrice ?? 0;
+		const sale = getSaleInfo(base);
+		const factor = sale ? (1 - sale.discount / 100) : 1;
+		return [
+			{
+				label: `${Math.round((product?.productVolume ?? 30) * 0.33)} mL`,
+				price: Math.round(base * 0.55 * factor * 100) / 100,
+				originalPrice: sale ? Math.round(base * 0.55 * 100) / 100 : undefined,
+			},
+			{
+				label: `${product?.productVolume ?? 90} mL`,
+				price: sale ? sale.salePrice : base,
+				originalPrice: sale ? base : undefined,
+			},
+			{
+				label: `${Math.round((product?.productVolume ?? 90) * 2)} mL`,
+				price: Math.round(base * 1.8 * factor * 100) / 100,
+				originalPrice: sale ? Math.round(base * 1.8 * 100) / 100 : undefined,
+			},
+		];
+	}, [product?.productVolume, product?.productPrice]);
 	const safeActiveSize = Math.min(Math.max(activeSize, 0), Math.max(sizes.length - 1, 0));
 	const selectedSize = sizes[safeActiveSize] ?? { label: '0 mL', price: 0 };
 	const relatedCategoryList = product?.productCategory ? [product.productCategory] : [];
@@ -304,6 +318,7 @@ const ProductDetail: NextPage = ({ initialRating, ...props }: any) => {
 				productTitle: product?.productTitle ?? '',
 				productBrand: product?.productBrand ?? '',
 				productPrice: selectedSize.price,
+				oldPrice: selectedSize.originalPrice,
 				productImage: product?.productImages?.[0] ?? '',
 				qty: payload.quantity,
 				size: payload.selectedSize,
@@ -377,7 +392,236 @@ const ProductDetail: NextPage = ({ initialRating, ...props }: any) => {
 	}
 
 	if (device === 'mobile') {
-		return <div>PRODUCT DETAIL PAGE</div>;
+		return (
+			<div id={'mob-product-detail-page'}>
+				<Box className={'mob-pdp-gallery'}>
+					<Swiper
+						className={'mob-pdp-swiper'}
+						slidesPerView={1}
+						pagination={{ clickable: true }}
+						modules={[Pagination, Autoplay]}
+					>
+						{(product?.productImages ?? []).map((img: string, idx: number) => (
+							<SwiperSlide key={idx} className={'mob-pdp-slide'}>
+								<img
+									src={img.startsWith('/') ? img : `${REACT_APP_API_URL}/${img}`}
+									alt={`product-${idx}`}
+									className={'mob-pdp-img'}
+								/>
+							</SwiperSlide>
+						))}
+					</Swiper>
+				</Box>
+
+				<Stack className={'mob-pdp-info'}>
+					<Typography className={'mob-pdp-brand'}>{product?.productBrand}</Typography>
+					<Typography className={'mob-pdp-title'}>{product?.productTitle}</Typography>
+
+					<Stack className={'mob-pdp-rating-row'}>
+						<RatingStars rating={product?.productRating ?? 0} size={15} />
+						<Typography className={'mob-pdp-rating-score'}>{product?.productRating ?? 0}</Typography>
+						<Typography className={'mob-pdp-rating-count'} onClick={scrollToReviewsHandler} sx={{ cursor: 'pointer' }}>
+							{(product?.productRatingCount ?? 0)} reviews
+						</Typography>
+					</Stack>
+
+					<Typography className={'mob-pdp-price'}>${formatterStr(totalPrice)}</Typography>
+
+					{(product?.certifications ?? []).length > 0 && (
+						<Box className={'mob-pdp-certs'}>
+							{(product?.certifications ?? []).map((cert: string) => (
+								<span key={cert} className={'mob-pdp-cert-pill'}>{cert.replace(/_/g, ' ')}</span>
+							))}
+						</Box>
+					)}
+
+					<Box className={'mob-pdp-divider'} />
+
+					<Typography className={'mob-pdp-field-label'}>Size</Typography>
+					<Stack className={'mob-pdp-sizes'}>
+						{sizes.map((s, i) => (
+							<button
+								key={i}
+								className={`mob-pdp-size-btn${activeSize === i ? ' active' : ''}`}
+								onClick={() => setActiveSize(i)}
+							>
+								{s.label}
+							</button>
+						))}
+					</Stack>
+
+					<Stack className={'mob-pdp-cta'}>
+						<Stack className={'mob-pdp-qty'}>
+							<button className={'mob-pdp-qty-btn'} onClick={decreaseQtyHandler}>−</button>
+							<Typography className={'mob-pdp-qty-val'}>{effectiveQty}</Typography>
+							<button className={'mob-pdp-qty-btn'} onClick={increaseQtyHandler}>+</button>
+						</Stack>
+						<Button
+							className={'mob-pdp-add-btn'}
+							disableRipple
+							onClick={addToCartHandler}
+							disabled={isAddingToCart || outOfStock}
+						>
+							{outOfStock ? 'Out of Stock' : isAddingToCart ? 'Adding...' : 'Add to Basket'}
+						</Button>
+						<button
+							className={`mob-pdp-wish-btn${product?.meLiked?.[0]?.myFavorite ? ' active' : ''}`}
+							onClick={() => likeProductHandler(user, product?._id as string)}
+						>
+							{product?.meLiked?.[0]?.myFavorite
+								? <FavoriteIcon sx={{ fontSize: 22 }} />
+								: <FavoriteBorderIcon sx={{ fontSize: 22 }} />}
+						</button>
+					</Stack>
+
+					<Stack className={'mob-pdp-tabs-wrap'} ref={tabsRef as any}>
+						<Stack className={'mob-pdp-tab-nav'}>
+							{(['description', 'ingredients', 'reviews'] as const).map((tab) => (
+								<button
+									key={tab}
+									className={`mob-pdp-tab-btn${activeTab === tab ? ' active' : ''}`}
+									onClick={() => setActiveTab(tab)}
+								>
+									{tab.charAt(0).toUpperCase() + tab.slice(1)}
+									{tab === 'reviews' && (
+										<span className={'mob-pdp-tab-badge'}>{ratingTotal}</span>
+									)}
+								</button>
+							))}
+						</Stack>
+
+						{activeTab === 'description' && (
+							<Stack className={'mob-pdp-tab-panel'}>
+								<Typography className={'mob-pdp-section-title'}>About This Product</Typography>
+								<Typography className={'mob-pdp-desc'}>{product?.productDesc ?? 'No description available.'}</Typography>
+								<Stack className={'mob-pdp-table'}>
+									{[
+										{ label: 'Brand', val: product?.productBrand },
+										{ label: 'Category', val: product?.productCategory },
+										{ label: 'Volume', val: `${product?.productVolume ?? 0} mL` },
+										{ label: 'Skin Type', val: (product?.productSkinType ?? []).join(', ') },
+									].map(({ label, val }) => (
+										<Stack key={label} className={'mob-pdp-table-row'}>
+											<Typography className={'mob-pdp-table-label'}>{label}</Typography>
+											<Typography className={'mob-pdp-table-val'}>{val}</Typography>
+										</Stack>
+									))}
+								</Stack>
+							</Stack>
+						)}
+
+						{activeTab === 'ingredients' && (
+							<Stack className={'mob-pdp-tab-panel'}>
+								<Typography className={'mob-pdp-section-title'}>Key Ingredients</Typography>
+								{(product?.keyIngredients ?? []).map((ing: any) => (
+									<Stack key={ing.name} className={'mob-pdp-ing-item'}>
+										<Typography className={'mob-pdp-ing-name'}>{ing.name}</Typography>
+										<Typography className={'mob-pdp-ing-benefit'}>{ing.benefit}</Typography>
+									</Stack>
+								))}
+								<Typography className={'mob-pdp-section-title'} sx={{ mt: 2 }}>Full Ingredient List</Typography>
+								<Typography className={'mob-pdp-desc'}>
+									{Array.isArray(product?.ingredients) ? (product as any).ingredients.join(', ') : ((product as any)?.ingredients ?? 'Not available.')}
+								</Typography>
+							</Stack>
+						)}
+
+						{activeTab === 'reviews' && (
+							<Stack className={'mob-pdp-tab-panel'}>
+								<Stack className={'mob-pdp-avg'}>
+									<Typography className={'mob-pdp-avg-num'}>{(product?.productRating ?? 0).toFixed(1)}</Typography>
+									<RatingStars rating={product?.productRating ?? 0} size={20} />
+									<Typography className={'mob-pdp-avg-sub'}>{ratingTotal} Review{ratingTotal !== 1 ? 's' : ''}</Typography>
+								</Stack>
+
+								{productRatings.map((rating: Rating) => (
+									<Stack key={rating._id} className={'mob-pdp-review-card'}>
+										<Stack className={'mob-pdp-rv-header'}>
+											<img
+												src={rating?.memberData?.memberImage
+													? (rating.memberData.memberImage.startsWith('/') ? rating.memberData.memberImage : `${REACT_APP_API_URL}/${rating.memberData.memberImage}`)
+													: '/img/profile/defaultUser.svg'}
+												alt={rating?.memberData?.memberNick}
+												className={'mob-pdp-rv-avatar'}
+											/>
+											<Stack className={'mob-pdp-rv-info'}>
+												<Typography className={'mob-pdp-rv-name'}>{rating?.memberData?.memberNick}</Typography>
+												<RatingStars rating={rating.ratingScore} size={13} />
+											</Stack>
+											<Typography className={'mob-pdp-rv-date'}>{moment(rating?.createdAt).format('MMM D, YYYY')}</Typography>
+										</Stack>
+										<Typography className={'mob-pdp-rv-body'}>{rating?.reviewText}</Typography>
+									</Stack>
+								))}
+
+								{ratingTotal > ratingInquiry.limit && (
+									<Box component={'div'} className={'mob-pdp-rv-pagination'}>
+										<MuiPagination
+											page={ratingInquiry.page}
+											count={Math.ceil(ratingTotal / ratingInquiry.limit)}
+											onChange={ratingPaginationChangeHandler}
+											shape="circular"
+											color="primary"
+										/>
+									</Box>
+								)}
+
+								<Stack className={'mob-pdp-write-review'}>
+									<Typography className={'mob-pdp-section-title'}>Leave a Review</Typography>
+									<Stack className={'mob-pdp-star-selector'}>
+										{[1, 2, 3, 4, 5].map((star) => (
+											<span
+												key={star}
+												onClick={() => setInsertRatingData((prev) => ({ ...prev, ratingScore: star }))}
+											>
+												{star <= insertRatingData.ratingScore
+													? <StarIcon sx={{ fontSize: 28, color: '#C9A680', cursor: 'pointer' }} />
+													: <StarBorderIcon sx={{ fontSize: 28, color: '#C9A680', cursor: 'pointer' }} />}
+											</span>
+										))}
+									</Stack>
+									<textarea
+										className={'mob-pdp-textarea'}
+										onChange={({ target: { value } }: any) => setInsertRatingData((prev) => ({ ...prev, reviewText: value }))}
+										value={insertRatingData.reviewText ?? ''}
+										placeholder="Share your experience... (min 10 characters)"
+									/>
+									<Button
+										className={'mob-pdp-submit-btn'}
+										disabled={!insertRatingData.ratingScore || (insertRatingData.reviewText ?? '').trim().length < 10 || !user?._id}
+										onClick={createRatingHandler}
+									>
+										Submit Review
+									</Button>
+								</Stack>
+							</Stack>
+						)}
+					</Stack>
+
+					{relatedProducts.length > 0 && (
+						<Stack className={'mob-pdp-related'}>
+							<Typography className={'mob-pdp-section-title'}>You May Also Like</Typography>
+							<Box className={'mob-pdp-related-scroll'}>
+								{relatedProducts.map((item: Product) => (
+									<Link key={item._id} href={{ pathname: '/product/detail', query: { id: item._id } }}>
+										<Stack className={'mob-pdp-rec-card'}>
+											<img
+												src={item.productImages?.[0] ? (item.productImages[0].startsWith('/') ? item.productImages[0] : `${REACT_APP_API_URL}/${item.productImages[0]}`) : '/img/product/bigImage.png'}
+												alt={item.productTitle}
+												className={'mob-pdp-rec-img'}
+											/>
+											<Typography className={'mob-pdp-rec-brand'}>{item.productBrand}</Typography>
+											<Typography className={'mob-pdp-rec-name'}>{item.productTitle}</Typography>
+											<Typography className={'mob-pdp-rec-price'}>${item.productPrice}</Typography>
+										</Stack>
+									</Link>
+								))}
+							</Box>
+						</Stack>
+					)}
+				</Stack>
+			</div>
+		);
 	} else {
 		return (
 			<div id={'product-detail-ui-page'}>

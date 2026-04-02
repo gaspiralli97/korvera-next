@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useEffect, useMemo, useState } from 'react';
 import { NextPage } from 'next';
 import { Box, Button, Menu, MenuItem, Pagination, Stack, Typography } from '@mui/material';
 import ProductCard from '../../libs/components/product/ProductCard';
@@ -10,6 +10,7 @@ import { ProductsInquiry } from '../../libs/types/product/product.input';
 import { Product } from '../../libs/types/product/product';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../apollo/user/query';
@@ -39,6 +40,12 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const [sortingOpen, setSortingOpen] = useState(false);
 	const [filterSortName, setFilterSortName] = useState('New');
+	const [showMobileFilter, setShowMobileFilter] = useState<boolean>(false);
+
+	const maxProductLikes = useMemo(() => {
+		if (products.length === 0) return 0;
+		return Math.max(...products.map((p) => p.productLikes));
+	}, [products]);
 
 	/** APOLLO REQUESTS **/
     const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
@@ -132,7 +139,68 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 	};
 
 	if (device === 'mobile') {
-		return <h1>PRODUCTS MOBILE</h1>;
+		return (
+			<div id={'mob-product-list-page'}>
+				<Stack className={'mob-pl-topbar'}>
+					<Button
+						className={'mob-pl-filter-btn'}
+						onClick={() => setShowMobileFilter((prev) => !prev)}
+						startIcon={<FilterListIcon />}
+					>
+						Filters
+					</Button>
+					<div>
+						<Button
+							className={'mob-pl-sort-btn'}
+							onClick={sortingClickHandler}
+							endIcon={<KeyboardArrowDownRoundedIcon />}
+						>
+							{filterSortName}
+						</Button>
+						<Menu anchorEl={anchorEl} open={sortingOpen} onClose={sortingCloseHandler} sx={{ paddingTop: '5px' }}>
+							<MenuItem onClick={sortingHandler} id={'new'} disableRipple sx={{ boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px' }}>New</MenuItem>
+							<MenuItem onClick={sortingHandler} id={'lowest'} disableRipple sx={{ boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px' }}>Lowest Price</MenuItem>
+							<MenuItem onClick={sortingHandler} id={'highest'} disableRipple sx={{ boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px' }}>Highest Price</MenuItem>
+						</Menu>
+					</div>
+				</Stack>
+
+				{showMobileFilter && (
+					<Stack className={'mob-filter-wrap'}>
+						{/* @ts-ignore */}
+						<Filter searchFilter={searchFilter} setSearchFilter={setSearchFilter} initialInput={initialInput} />
+						<Button className={'mob-filter-apply-btn'} onClick={() => setShowMobileFilter(false)}>
+							Apply & Close
+						</Button>
+					</Stack>
+				)}
+
+				<Stack className={'mob-pl-grid'}>
+					{products.map((product: Product, index: number) => (
+						<ProductCard
+							product={product}
+							likeProductHandler={likeProductHandler}
+							key={product?._id}
+							isNew={(currentPage - 1) * searchFilter.limit + index < 20}
+							isTrending={maxProductLikes > 0 && product.productLikes === maxProductLikes}
+						/>
+					))}
+				</Stack>
+
+				{products.length !== 0 && (
+					<Stack className={'mob-pl-pagination'}>
+						<Pagination
+							page={currentPage}
+							count={Math.ceil(total / searchFilter.limit)}
+							onChange={handlePaginationChange}
+							shape="circular"
+							color="primary"
+						/>
+						<Typography>Total {total} product{total > 1 ? 's' : ''}</Typography>
+					</Stack>
+				)}
+			</div>
+		);
 	} else {
 		return (
 			<div id="product-list-page" style={{ position: 'relative' }}>
@@ -178,8 +246,14 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 						</Stack>
 						<Stack className="main-config" mb={'76px'}>
 							<Stack className={'list-config'}>
-								{products.map((product: Product) => (
-									<ProductCard product={product} likeProductHandler={likeProductHandler} key={product?._id} />
+								{products.map((product: Product, index: number) => (
+									<ProductCard
+										product={product}
+										likeProductHandler={likeProductHandler}
+										key={product?._id}
+										isNew={(currentPage - 1) * searchFilter.limit + index < 20}
+										isTrending={maxProductLikes > 0 && product.productLikes === maxProductLikes}
+									/>
 								))}
 							</Stack>
 							<Stack className="pagination-config">

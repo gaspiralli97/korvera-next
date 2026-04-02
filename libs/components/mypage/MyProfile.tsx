@@ -125,7 +125,57 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 	};
 
 	if (device === 'mobile') {
-		return <>MY PROFILE PAGE MOBILE</>;
+		return (
+			<div id={'mob-my-profile'}>
+				<Typography className={'mob-mp-title'}>Account Information</Typography>
+
+				<Stack className={'mob-mp-section'}>
+					<Typography className={'mob-mp-section-label'}>Profile Details</Typography>
+					<Stack className={'mob-mp-photo-row'}>
+						<img
+							src={updateData?.memberImage ? (updateData.memberImage.startsWith('/') ? updateData.memberImage : `${REACT_APP_API_URL}/${updateData?.memberImage}`) : '/img/profile/defaultUser.svg'}
+							alt="avatar"
+							className={'mob-mp-avatar'}
+						/>
+						<Stack className={'mob-mp-upload-wrap'}>
+							<input type="file" hidden id="mob-hidden-input" onChange={uploadImage} accept="image/jpg, image/jpeg, image/png" />
+							<label htmlFor="mob-hidden-input" className={'mob-mp-upload-btn'}>Upload Photo</label>
+							<span className={'mob-mp-upload-hint'}>JPG, JPEG, PNG · Max 5MB</span>
+						</Stack>
+					</Stack>
+
+					<Stack className={'mob-mp-field'}>
+						<label className={'mob-mp-label'}>Username</label>
+						<input type="text" className={'mob-mp-input'} placeholder="Your username" value={updateData.memberNick} onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberNick: value })} />
+					</Stack>
+					<Stack className={'mob-mp-field'}>
+						<label className={'mob-mp-label'}>Phone</label>
+						<input type="text" className={'mob-mp-input'} placeholder="Your phone number" value={updateData.memberPhone} onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })} />
+					</Stack>
+					<Stack className={'mob-mp-field'}>
+						<label className={'mob-mp-label'}>Delivery Address</label>
+						<input type="text" className={'mob-mp-input'} placeholder="Your delivery address" value={updateData.memberAddress} onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberAddress: value })} />
+					</Stack>
+					<button className={'mob-mp-save-btn'} onClick={updateMemberHandler} disabled={doDisabledCheck()}>Save Changes</button>
+				</Stack>
+
+				<Stack className={'mob-mp-section'}>
+					<Typography className={'mob-mp-section-label'}>Change Password</Typography>
+					<Stack className={'mob-mp-field'}>
+						<label className={'mob-mp-label'}>New Password</label>
+						<input type="password" className={'mob-mp-input'} placeholder="Min. 6 characters" value={newPassword} onChange={({ target: { value } }) => setNewPassword(value)} />
+					</Stack>
+					<Stack className={'mob-mp-field'}>
+						<label className={'mob-mp-label'}>Confirm Password</label>
+						<input type="password" className={'mob-mp-input'} placeholder="Repeat new password" value={confirmPassword} onChange={({ target: { value } }) => setConfirmPassword(value)} />
+						{confirmPassword && newPassword !== confirmPassword && (
+							<span className={'mob-mp-error'}>Passwords do not match</span>
+						)}
+					</Stack>
+					<button className={'mob-mp-save-btn'} onClick={updatePasswordHandler} disabled={doPasswordDisabledCheck()}>Update Password</button>
+				</Stack>
+			</div>
+		);
 	} else
 		return (
 			<div id="my-profile-page">

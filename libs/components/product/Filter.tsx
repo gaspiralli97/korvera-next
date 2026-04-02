@@ -11,6 +11,7 @@ import {
 	MenuItem,
 	Tooltip,
 	IconButton,
+	Box,
 } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { ProductCategory, SkinType } from '../../enums/product.enum';
@@ -364,8 +365,93 @@ const Filter = (props: FilterType) => {
 		}
 	};
 
+	const toggleMobileCategory = async (cat: string) => {
+		try {
+			const current = searchFilter?.search?.categoryList || [];
+			const next = current.includes(cat as ProductCategory)
+				? current.filter((c: string) => c !== cat)
+				: [...current, cat];
+			const newSearch = { ...searchFilter.search, categoryList: next };
+			if (next.length === 0) delete newSearch.categoryList;
+			await router.push(
+				`/product?input=${JSON.stringify({ ...searchFilter, search: newSearch })}`,
+				`/product?input=${JSON.stringify({ ...searchFilter, search: newSearch })}`,
+				{ scroll: false },
+			);
+		} catch (err: any) {
+			await sweetMixinErrorAlert(err.message);
+		}
+	};
+
 	if (device === 'mobile') {
-		return <div>PRODUCTS FILTER</div>;
+		return (
+			<Stack className={'mob-filter-content'}>
+				<Stack className={'mob-filter-row'}>
+					<Typography className={'mob-filter-label'}>Category</Typography>
+					<Box className={'mob-filter-chips'}>
+						{productCategory.map((cat: string) => (
+							<button
+								key={cat}
+								className={`mob-filter-chip${(searchFilter?.search?.categoryList || []).includes(cat as ProductCategory) ? ' active' : ''}`}
+								onClick={() => toggleMobileCategory(cat)}
+							>
+								{cat.charAt(0) + cat.slice(1).toLowerCase()}
+							</button>
+						))}
+					</Box>
+				</Stack>
+				<Stack className={'mob-filter-row'}>
+					<Typography className={'mob-filter-label'}>Skin Type</Typography>
+					<Box className={'mob-filter-chips'}>
+						{skinType.map((type: string) => (
+							<button
+								key={type}
+								className={`mob-filter-chip${(searchFilter?.search?.skinTypeList || []).includes(type as any) ? ' active' : ''}`}
+								onClick={async () => {
+									const current = searchFilter?.search?.skinTypeList || [];
+									const next = current.includes(type as any)
+										? current.filter((t: string) => t !== type)
+										: [...current, type];
+									const newSearch = { ...searchFilter.search, skinTypeList: next };
+									if (next.length === 0) delete newSearch.skinTypeList;
+									await router.push(
+										`/product?input=${JSON.stringify({ ...searchFilter, search: newSearch })}`,
+										`/product?input=${JSON.stringify({ ...searchFilter, search: newSearch })}`,
+										{ scroll: false },
+									);
+								}}
+							>
+								{type.charAt(0) + type.slice(1).toLowerCase()}
+							</button>
+						))}
+					</Box>
+				</Stack>
+				<Stack className={'mob-filter-row'}>
+					<Typography className={'mob-filter-label'}>Price</Typography>
+					<Stack className={'mob-filter-price-row'}>
+						<input
+							className={'mob-filter-price-input'}
+							type="number"
+							placeholder="$ min"
+							min={0}
+							value={searchFilter?.search?.pricesRange?.start ?? 0}
+							onChange={(e: any) => { if (e.target.value >= 0) productPriceHandler(e.target.value, 'start'); }}
+						/>
+						<span className={'mob-filter-range-sep'}>—</span>
+						<input
+							className={'mob-filter-price-input'}
+							type="number"
+							placeholder="$ max"
+							value={searchFilter?.search?.pricesRange?.end ?? 0}
+							onChange={(e: any) => { if (e.target.value >= 0) productPriceHandler(e.target.value, 'end'); }}
+						/>
+					</Stack>
+				</Stack>
+				<Button className={'mob-filter-reset'} onClick={refreshHandler}>
+					Reset All
+				</Button>
+			</Stack>
+		);
 	} else {
 		return (
 			<Stack className={'filter-main'}>

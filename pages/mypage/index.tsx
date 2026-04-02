@@ -113,7 +113,37 @@ const MyPage: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>MY PAGE</div>;
+		return (
+			<div id={'mob-mypage'}>
+				<MyMenu />
+				<Stack className={'mob-mypage-content'}>
+					{category === 'addProduct' && <AddNewProduct />}
+					{category === 'myProducts' && <MyProducts />}
+					{category === 'myFavorites' && <MyFavorites />}
+					{category === 'recentlyVisited' && <RecentlyVisited />}
+					{category === 'myArticles' && <MyArticles />}
+					{category === 'writeArticle' && <WriteArticle />}
+					{category === 'myOrders' && <MyOrders />}
+					{category === 'myProfile' && <MyProfile />}
+					{category === 'followers' && (
+						<MemberFollowers
+							subscribeHandler={subscribeHandler}
+							unsubscribeHandler={unsubscribeHandler}
+							likeMemberHandler={likeMemberHandler}
+							redirectToMemberPageHandler={redirectToMemberPageHandler}
+						/>
+					)}
+					{category === 'followings' && (
+						<MemberFollowings
+							subscribeHandler={subscribeHandler}
+							unsubscribeHandler={unsubscribeHandler}
+							likeMemberHandler={likeMemberHandler}
+							redirectToMemberPageHandler={redirectToMemberPageHandler}
+						/>
+					)}
+				</Stack>
+			</div>
+		);
 	} else {
 		return (
 			<div id="my-page" style={{ position: 'relative' }}>

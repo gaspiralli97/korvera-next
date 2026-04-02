@@ -1,0 +1,235 @@
+// ─── Spin Wheel Modal ────────────────────────────────────────────────────────
+
+.sw-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.55);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: sw-fade-in 0.3s ease forwards;
+}
+
+@keyframes sw-fade-in {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+
+.sw-modal {
+	position: relative;
+	background: #fff;
+	border-radius: 28px;
+	padding: 40px 36px 32px;
+	width: 440px;
+	max-width: 94vw;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+	box-shadow: 0 24px 64px rgba(233, 30, 99, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08);
+	animation: sw-pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes sw-pop-in {
+	from { opacity: 0; transform: scale(0.82) translateY(24px); }
+	to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+// ─── Close button ─────────────────────────────────────────────────────────────
+
+.sw-close {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	width: 34px;
+	height: 34px;
+	background: #f5f5f5;
+	border: none;
+	border-radius: 50%;
+	font-size: 14px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #777;
+	transition: background 0.2s, color 0.2s;
+
+	&:hover {
+		background: #ffe4ef;
+		color: #e91e63;
+	}
+}
+
+// ─── Header ───────────────────────────────────────────────────────────────────
+
+.sw-header {
+	text-align: center;
+
+	.sw-title {
+		display: block;
+		font-size: 20px;
+		font-weight: 700;
+		color: #1b1b1b;
+		letter-spacing: 0.3px;
+	}
+
+	.sw-subtitle {
+		margin: 6px 0 0;
+		font-size: 13px;
+		color: #999;
+		line-height: 1.5;
+	}
+}
+
+// ─── Wheel ────────────────────────────────────────────────────────────────────
+
+.sw-wheel-wrap {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
+}
+
+.sw-pointer {
+	width: 0;
+	height: 0;
+	border-left: 12px solid transparent;
+	border-right: 12px solid transparent;
+	border-top: 22px solid #e91e63;
+	margin-bottom: -4px;
+	z-index: 2;
+	filter: drop-shadow(0 3px 6px rgba(233, 30, 99, 0.45));
+}
+
+.sw-wheel-inner {
+	transform-origin: center center;
+	will-change: transform;
+	border-radius: 50%;
+	box-shadow: 0 6px 32px rgba(0, 0, 0, 0.18), 0 0 0 4px #fff, 0 0 0 6px #F8BBD0;
+}
+
+.sw-svg {
+	display: block;
+	width: 320px;
+	height: 320px;
+}
+
+// ─── Spin button ──────────────────────────────────────────────────────────────
+
+.sw-btn {
+	width: 100%;
+	padding: 15px;
+	background: linear-gradient(135deg, #e91e63 0%, #f06292 100%);
+	color: #fff;
+	border: none;
+	border-radius: 14px;
+	font-size: 15px;
+	font-weight: 700;
+	letter-spacing: 1.2px;
+	cursor: pointer;
+	transition: opacity 0.2s, transform 0.15s;
+
+	&:hover:not(:disabled) {
+		opacity: 0.88;
+		transform: translateY(-2px);
+	}
+
+	&--disabled,
+	&:disabled {
+		opacity: 0.55;
+		cursor: not-allowed;
+		transform: none;
+	}
+}
+
+.sw-note {
+	font-size: 11px;
+	color: #bbb;
+	margin: -8px 0 0;
+	text-align: center;
+}
+
+// ─── Result screen ────────────────────────────────────────────────────────────
+
+.sw-result {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	text-align: center;
+	padding: 8px 0 4px;
+	width: 100%;
+
+	.sw-result-emoji {
+		font-size: 60px;
+		line-height: 1;
+		animation: sw-bounce-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+	}
+
+	.sw-result-heading {
+		font-size: 24px;
+		font-weight: 700;
+		color: #1b1b1b;
+		margin: 0;
+	}
+
+	.sw-result-card {
+		width: 100%;
+		border-radius: 18px;
+		padding: 20px 24px;
+		border: 2px solid rgba(233, 30, 99, 0.2);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.sw-result-label {
+			font-size: 38px;
+			font-weight: 900;
+			color: #C2185B;
+			letter-spacing: -0.5px;
+		}
+	}
+
+	.sw-result-desc {
+		font-size: 14px;
+		color: #777;
+		max-width: 300px;
+		line-height: 1.6;
+		margin: 0;
+	}
+}
+
+@keyframes sw-bounce-in {
+	from { transform: scale(0.3); opacity: 0; }
+	to   { transform: scale(1);   opacity: 1; }
+}
+
+// ─── Mobile ───────────────────────────────────────────────────────────────────
+
+@media (max-width: 480px) {
+	.sw-modal {
+		padding: 32px 20px 24px;
+		border-radius: 22px;
+		gap: 16px;
+	}
+
+	.sw-svg {
+		width: 264px;
+		height: 264px;
+	}
+
+	.sw-header .sw-title {
+		font-size: 17px;
+	}
+
+	.sw-result .sw-result-card .sw-result-label {
+		font-size: 30px;
+	}
+
+	.sw-result .sw-result-heading {
+		font-size: 20px;
+	}
+}
