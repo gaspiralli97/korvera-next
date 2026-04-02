@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Stack, Box, Typography } from '@mui/material';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
@@ -13,6 +13,7 @@ import { T } from '../../types/common';
 import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { Direction, Message } from '../../enums/common.enum';
+import useDeviceDetect from '../../hooks/useDeviceDetect';
 
 const TABS = [
 	{ label: 'Trending', sort: 'productLikes' },
@@ -29,8 +30,14 @@ const getInput = (tabIndex: number): ProductsInquiry => ({
 });
 
 const ProductTabs = () => {
+	const device = useDeviceDetect();
 	const [activeTab, setActiveTab] = useState(0);
 	const [products, setProducts] = useState<Product[]>([]);
+
+	const maxProductLikes = useMemo(() => {
+		if (products.length === 0) return 0;
+		return Math.max(...products.map((p) => p.productLikes));
+	}, [products]);
 
 	/** APOLLO REQUESTS **/
 	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
@@ -67,6 +74,48 @@ const ProductTabs = () => {
 		setProducts([]);
 		getProductsRefetch({input:getInput(index)});
 	};
+
+	if (device === 'mobile') {
+		return (
+			<Stack className={'mob-product-tabs'}>
+				<Stack className={'container'}>
+					<Box component={'div'} className={'mob-pt-header'}>
+						<Typography className={'mob-section-title'}>Shop by Mood</Typography>
+					</Box>
+					<Box className={'mob-pt-tabs'}>
+						{TABS.map((tab, i) => (
+							<button
+								key={tab.label}
+								className={`mob-pt-tab${activeTab === i ? ' active' : ''}`}
+								onClick={() => handleTabChange(i)}
+							>
+								{tab.label}
+							</button>
+						))}
+					</Box>
+					<Box className={'mob-pt-swiper-wrap'}>
+						<Swiper
+							className={'mob-pt-swiper'}
+							slidesPerView={1.3}
+							spaceBetween={12}
+							modules={[Autoplay]}
+						>
+							{products.map((product: Product) => (
+								<SwiperSlide key={product._id} className={'mob-pt-slide'}>
+									<ProductCard
+										product={product}
+										likeProductHandler={likeProductHandler}
+										isNew={activeTab === 2}
+										isTrending={maxProductLikes > 0 && product.productLikes === maxProductLikes}
+									/>
+								</SwiperSlide>
+							))}
+						</Swiper>
+					</Box>
+				</Stack>
+			</Stack>
+		);
+	}
 
 	return (
 		<Stack className={'hp-product-tabs'}>
@@ -105,7 +154,12 @@ const ProductTabs = () => {
 					>
 						{products.map((product: Product) => (
 							<SwiperSlide key={product._id} className={'pt-slide'}>
-								<ProductCard product={product} likeProductHandler={likeProductHandler} />
+								<ProductCard
+								product={product}
+								likeProductHandler={likeProductHandler}
+								isNew={activeTab === 2}
+								isTrending={maxProductLikes > 0 && product.productLikes === maxProductLikes}
+							/>
 							</SwiperSlide>
 						))}
 					</Swiper>

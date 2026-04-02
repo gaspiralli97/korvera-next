@@ -6,13 +6,12 @@
 
 		.card-config {
 			@include product-card();
-
-			.bottom .name-address .name-price-row {
+			.name-price-row {
 				justify-content: flex-start;
-
+				gap: 8px;
 				.name-link {
-					flex: 0 1 auto;
-					max-width: 70%;
+					flex-grow: 0;
+					max-width: 65%;
 				}
 			}
 		}
@@ -770,7 +769,7 @@
 					justify-content: space-between;
 					.event-card {
 						position: relative;
-						width: 300px;
+						width: calc((100% - 48px) / 4);
 						height: 420px;
 						border-radius: 12px;
 						opacity: 0.9;

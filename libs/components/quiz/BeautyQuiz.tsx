@@ -12,6 +12,7 @@ import { SkinType, ProductCategory } from '../../enums/product.enum';
 import { T } from '../../types/common';
 import { Message } from '../../enums/common.enum';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
+import useDeviceDetect from '../../hooks/useDeviceDetect';
 import ProductCard from '../product/ProductCard';
 
 // ── Step definitions ──────────────────────────────────────────────────────────
@@ -100,6 +101,7 @@ const INITIAL_ANSWERS: QuizAnswers = {
 
 const BeautyQuiz = () => {
 	const router = useRouter();
+	const device = useDeviceDetect();
 	const [step, setStep] = useState(0);
 	const [answers, setAnswers] = useState<QuizAnswers>(INITIAL_ANSWERS);
 	const [showResults, setShowResults] = useState(false);
@@ -189,6 +191,47 @@ const BeautyQuiz = () => {
 
 	// ── Results view ──
 	if (showResults) {
+		if (device === 'mobile') {
+			return (
+				<div id={'mob-quiz-page'}>
+					<Stack className={'mob-quiz-results'}>
+						<Stack className={'mob-quiz-results-header'}>
+							<div className={'mob-results-emoji'}>✨</div>
+							<Typography className={'mob-results-title'}>Your Personalized Picks</Typography>
+							<Typography className={'mob-results-subtitle'}>Based on your answers</Typography>
+						</Stack>
+
+						<Stack className={'mob-profile-chips'}>
+							{profileChips.map((chip, i) => (
+								<span key={i} className={'mob-profile-chip'}>
+									<span>{chip.icon}</span>
+									{chip.label}
+								</span>
+							))}
+						</Stack>
+
+						<Typography className={'mob-results-section-title'}>Recommended for You</Typography>
+
+						{resultsLoading ? (
+							<div className={'mob-results-empty'}><p>Finding your matches...</p></div>
+						) : resultProducts.length === 0 ? (
+							<div className={'mob-results-empty'}><p>No exact matches found.</p></div>
+						) : (
+							<div className={'mob-results-grid'}>
+								{resultProducts.map((product: Product) => (
+									<ProductCard key={product._id} product={product} likeProductHandler={likeProductHandler} />
+								))}
+							</div>
+						)}
+
+						<Stack className={'mob-results-actions'}>
+							<Button className={'mob-quiz-retake-btn'} onClick={handleRetake}>Retake Quiz</Button>
+							<Button className={'mob-quiz-shop-btn'} onClick={handleShopAll}>Shop All {answers.category || 'Products'}</Button>
+						</Stack>
+					</Stack>
+				</div>
+			);
+		}
 		return (
 			<div id="quiz-page">
 				<Stack className="container">
@@ -243,6 +286,75 @@ const BeautyQuiz = () => {
 	}
 
 	// ── Quiz step view ──
+	if (device === 'mobile') {
+		return (
+			<div id={'mob-quiz-page'}>
+				<Stack className={'mob-quiz-progress'}>
+					<Typography className={'mob-quiz-step-label'}>Step {step + 1} of {totalSteps}</Typography>
+					<div className={'mob-quiz-progress-track'}>
+						<div className={'mob-quiz-progress-fill'} style={{ width: `${progressPct}%` }} />
+					</div>
+					<div className={'mob-quiz-step-dots'}>
+						{STEPS.map((_, i) => (
+							<div key={i} className={`mob-quiz-dot${i === step ? ' active' : i < step ? ' done' : ''}`} />
+						))}
+					</div>
+				</Stack>
+
+				<Stack className={'mob-quiz-card'} key={step}>
+					<Typography className={'mob-quiz-question'}>{current.question}</Typography>
+					<Typography className={'mob-quiz-subtitle'}>{current.subtitle}</Typography>
+
+					{current.budgetOptions ? (
+						<div className={'mob-budget-options'}>
+							{current.budgetOptions.map((opt) => (
+								<div
+									key={opt.value}
+									className={`mob-budget-chip${currentAnswer === opt.value ? ' selected' : ''}`}
+									onClick={() => selectOption(current.id, opt.value)}
+								>
+									<Typography className={'mob-chip-label'}>{opt.label}</Typography>
+								</div>
+							))}
+						</div>
+					) : (
+						<div className={'mob-options-grid'}>
+							{current.options.map((opt: Option) => (
+								<div
+									key={opt.value}
+									className={`mob-option-card${currentAnswer === opt.value ? ' selected' : ''}`}
+									onClick={() => selectOption(current.id, opt.value)}
+								>
+									<span className={'mob-option-emoji'}>{opt.emoji}</span>
+									<Typography className={'mob-option-label'}>{opt.label}</Typography>
+									{opt.desc && <Typography className={'mob-option-desc'}>{opt.desc}</Typography>}
+								</div>
+							))}
+						</div>
+					)}
+
+					<Stack className={'mob-quiz-nav'}>
+						{step > 0 ? (
+							<button className={'mob-quiz-back-btn'} onClick={handleBack}>
+								<ArrowBackIcon /> Back
+							</button>
+						) : (
+							<span />
+						)}
+						<button
+							className={'mob-quiz-next-btn'}
+							onClick={handleNext}
+							disabled={!currentAnswer}
+						>
+							{step < totalSteps - 1 ? 'Next' : 'See My Results'}
+							<ArrowForwardIcon />
+						</button>
+					</Stack>
+				</Stack>
+			</div>
+		);
+	}
+
 	return (
 		<div id="quiz-page">
 			<Stack className="container">

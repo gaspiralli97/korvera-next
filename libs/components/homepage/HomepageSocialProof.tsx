@@ -4,6 +4,7 @@ import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
+import useDeviceDetect from '../../hooks/useDeviceDetect';
 
 // ── Before & After data ──────────────────────────────────────────────────────
 const CASES = [
@@ -239,6 +240,52 @@ const ReviewCard = ({ r }: { r: typeof REVIEWS[0] }) => (
 
 // ── Combined Social Proof section ─────────────────────────────────────────────
 const HomepageSocialProof = () => {
+	const device = useDeviceDetect();
+
+	if (device === 'mobile') {
+		return (
+			<Stack className={'mob-social-proof'}>
+				<Stack className={'container'}>
+					<Typography className={'mob-section-title'}>Before & After</Typography>
+					<Box className={'mob-sp-swiper-wrap'}>
+						<Swiper
+							className={'mob-ba-swiper'}
+							slidesPerView={1.2}
+							spaceBetween={12}
+							modules={[Pagination]}
+						>
+							{CASES.map((item) => (
+								<SwiperSlide key={item.id} className={'mob-ba-slide'}>
+									<BeforeAfterCard item={item} />
+								</SwiperSlide>
+							))}
+						</Swiper>
+					</Box>
+				</Stack>
+
+				<Box className={'mob-sp-reviews'}>
+					<Stack className={'container'}>
+						<Typography className={'mob-section-title'}>Real Results</Typography>
+						<Box className={'mob-sp-swiper-wrap'}>
+							<Swiper
+								className={'mob-rv-swiper'}
+								slidesPerView={1.2}
+								spaceBetween={12}
+								modules={[Pagination]}
+							>
+								{REVIEWS.map((r) => (
+									<SwiperSlide key={r.id} className={'mob-rv-slide'}>
+										<ReviewCard r={r} />
+									</SwiperSlide>
+								))}
+							</Swiper>
+						</Box>
+					</Stack>
+				</Box>
+			</Stack>
+		);
+	}
+
 	return (
 		<Stack className={'hp-social-proof'}>
 

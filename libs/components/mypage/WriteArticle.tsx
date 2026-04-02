@@ -9,7 +9,15 @@ const WriteArticle: NextPage = () => {
 	const device = useDeviceDetect();
 
 	if (device === 'mobile') {
-		return <>ARTICLE PAGE MOBILE</>;
+		return (
+			<div className={'mob-mypage-section'}>
+				<Typography className={'mob-section-title'}>Write Article</Typography>
+				<div className={'mob-write-article-note'}>
+					<p>For the best writing experience, please use a desktop browser.</p>
+				</div>
+				<TuiEditor />
+			</div>
+		);
 	} else
 		return (
 			<div id="write-article-page">

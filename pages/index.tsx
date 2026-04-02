@@ -26,7 +26,12 @@ const Home: NextPage = () => {
 			<Stack className={'home-page'}>
 				<HomepageCategories />
 				<ProductTabs />
+				<HomepageQuizBanner />
 				<HomepageSocialProof />
+				<TopAgents />
+				<Events />
+				<HomepageSkinSolutions />
+				<HomepageCleanBeauty />
 			</Stack>
 		);
 	} else {

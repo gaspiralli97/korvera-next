@@ -168,7 +168,180 @@ const MyOrder = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>ORDER PAGE</div>;
+		return (
+			<Box component={'div'} id={'mob-order-page'}>
+				<Stack className={'mob-order-wrap'}>
+					<Typography className={'mob-order-title'}>Place Order</Typography>
+
+					<Stack className={'mob-order-section'}>
+						<Stack className={'mob-order-section-head'}>
+							<span>{countryConfig.flag}</span>
+							<Typography className={'mob-order-section-title'}>Shipping Address</Typography>
+						</Stack>
+						<Typography className={'mob-order-ship-company'}>via {countryConfig.company}</Typography>
+
+						<Stack className={'mob-order-row'}>
+							<Stack className={'mob-order-input-wrap'}>
+								<label className={'mob-order-label'}>First Name</label>
+								<input className={'mob-order-input'} placeholder={'First Name'} value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+							</Stack>
+							<Stack className={'mob-order-input-wrap'}>
+								<label className={'mob-order-label'}>Last Name</label>
+								<input className={'mob-order-input'} placeholder={'Last Name'} value={lastName} onChange={(e) => setLastName(e.target.value)} />
+							</Stack>
+						</Stack>
+
+						<Stack className={'mob-order-input-wrap'}>
+							<label className={'mob-order-label'}>Address</label>
+							<input className={'mob-order-input'} placeholder={'Street address'} value={address} onChange={(e) => setAddress(e.target.value)} />
+						</Stack>
+
+						<Stack className={'mob-order-input-wrap'}>
+							<label className={'mob-order-label'}>Apt / Suite (optional)</label>
+							<input className={'mob-order-input'} placeholder={'Apt, suite, unit...'} value={apt} onChange={(e) => setApt(e.target.value)} />
+						</Stack>
+
+						<Stack className={'mob-order-input-wrap'}>
+							<label className={'mob-order-label'}>City</label>
+							<input className={'mob-order-input'} placeholder={'City'} value={city} onChange={(e) => setCity(e.target.value)} />
+						</Stack>
+
+						<Stack className={'mob-order-row'}>
+							<Stack className={'mob-order-input-wrap'}>
+								<label className={'mob-order-label'}>State / Province</label>
+								<input className={'mob-order-input'} placeholder={'State'} value={stateVal} onChange={(e) => setStateVal(e.target.value)} />
+							</Stack>
+							<Stack className={'mob-order-input-wrap'}>
+								<label className={'mob-order-label'}>Zip</label>
+								<input className={'mob-order-input'} placeholder={'Zip'} value={zip} onChange={(e) => setZip(e.target.value)} />
+							</Stack>
+						</Stack>
+					</Stack>
+
+					<Stack className={'mob-order-section'}>
+						<Typography className={'mob-order-section-title'}>Contact</Typography>
+						<Stack className={'mob-order-input-wrap'}>
+							<label className={'mob-order-label'}>Mobile Number</label>
+							<input className={'mob-order-input'} placeholder={'+1 (___) ___-____'} value={mobile} onChange={(e) => setMobile(e.target.value)} />
+						</Stack>
+						<Stack className={'mob-order-input-wrap'}>
+							<label className={'mob-order-label'}>Email</label>
+							<input className={'mob-order-input'} placeholder={'email@example.com'} value={email} onChange={(e) => setEmail(e.target.value)} />
+						</Stack>
+					</Stack>
+
+					<Stack className={'mob-order-section'}>
+						<Typography className={'mob-order-section-title'}>Points</Typography>
+						<Typography className={'mob-order-points-balance'}>{pointsBalance.toFixed(2)}P available</Typography>
+						<Stack className={'mob-order-points-row'}>
+							<input
+								className={'mob-order-input'}
+								placeholder={'0'}
+								type={'number'}
+								min={0}
+								max={pointsBalance}
+								value={points}
+								onChange={(e) => {
+									const val = Math.min(Number(e.target.value) || 0, pointsBalance);
+									setPoints(String(val));
+								}}
+							/>
+							<Button className={'mob-order-use-all'} disableRipple onClick={() => setPoints(String(pointsBalance))}>Use All</Button>
+						</Stack>
+						<Typography className={'mob-order-points-note'}>1P = US$1</Typography>
+					</Stack>
+
+					<Stack className={'mob-order-section'}>
+						<Typography className={'mob-order-section-title'}>Payment Method</Typography>
+						<RadioGroup value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+							<Stack className={`mob-pay-option${paymentMethod === 'paypal' ? ' active' : ''}`}>
+								<FormControlLabel
+									value={'paypal'}
+									control={<Radio size={'small'} />}
+									label={
+										<Stack className={'mob-pay-label-row'}>
+											<Typography className={'mob-pay-name'}>PayPal</Typography>
+											<img src={'/img/icons/payment/paypal.svg'} alt={'PayPal'} className={'mob-pay-icon-img'} />
+										</Stack>
+									}
+								/>
+							</Stack>
+							<Stack className={`mob-pay-option${paymentMethod === 'card' ? ' active' : ''}`}>
+								<FormControlLabel
+									value={'card'}
+									control={<Radio size={'small'} />}
+									label={
+										<Stack className={'mob-pay-label-row'}>
+											<Typography className={'mob-pay-name'}>Credit / Debit Card</Typography>
+											<Stack className={'mob-pay-icons-row'}>
+												<img src={'/img/icons/payment/visa.svg'} alt={'VISA'} className={'mob-pay-icon-img'} />
+												<img src={'/img/icons/payment/mastercard.svg'} alt={'Mastercard'} className={'mob-pay-icon-img'} />
+											</Stack>
+										</Stack>
+									}
+								/>
+								{paymentMethod === 'card' && (
+									<Stack className={'mob-card-fields'}>
+										<input className={'mob-order-input'} placeholder={'XXXX XXXX XXXX XXXX'} value={cardNumber} maxLength={19} onChange={(e) => handleCardNumber(e.target.value)} />
+										<Stack className={'mob-order-row'}>
+											<input className={'mob-order-input'} placeholder={'MM/YY'} value={expiry} maxLength={5} onChange={(e) => handleExpiry(e.target.value)} />
+											<input className={'mob-order-input'} placeholder={'CVV'} value={cvv} maxLength={3} onChange={(e) => handleCvv(e.target.value)} />
+										</Stack>
+									</Stack>
+								)}
+							</Stack>
+							<Stack className={`mob-pay-option${paymentMethod === 'unionpay' ? ' active' : ''}`}>
+								<FormControlLabel
+									value={'unionpay'}
+									control={<Radio size={'small'} />}
+									label={<Typography className={'mob-pay-name'}>UnionPay</Typography>}
+								/>
+							</Stack>
+						</RadioGroup>
+					</Stack>
+
+					<Stack className={'mob-order-section'}>
+						<Typography className={'mob-order-section-title'}>Order Summary</Typography>
+						<Stack className={'mob-order-summary-row'}>
+							<Typography>Subtotal</Typography>
+							<Typography>${subtotal.toFixed(2)}</Typography>
+						</Stack>
+						<Stack className={'mob-order-summary-row'}>
+							<Typography>Points Discount</Typography>
+							<Typography sx={{ color: pointsDiscount > 0 ? '#e91e63' : undefined }}>-${pointsDiscount.toFixed(2)}</Typography>
+						</Stack>
+						<Stack className={'mob-order-summary-row'}>
+							<Typography>Shipping</Typography>
+							<Typography>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</Typography>
+						</Stack>
+						<Divider sx={{ my: '8px', borderColor: '#eee' }} />
+						<Stack className={'mob-order-summary-row mob-order-total-row'}>
+							<Typography>Order Total</Typography>
+							<Typography>${grandTotal.toFixed(2)}</Typography>
+						</Stack>
+					</Stack>
+
+					<Stack className={'mob-order-agree'}>
+						<Checkbox className={'mob-order-checkbox'} checked={agreeAll} onChange={(e) => setAgreeAll(e.target.checked)} size={'small'} />
+						<Typography className={'mob-order-agree-label'}>I agree to Terms of Service &amp; Privacy Policy</Typography>
+					</Stack>
+
+					<Box component={'div'} sx={{ height: '80px' }} />
+				</Stack>
+
+				<Stack className={'mob-order-bottom-bar'}>
+					<Typography className={'mob-order-bottom-total'}>${grandTotal.toFixed(2)}</Typography>
+					<Button
+						className={`mob-order-place-btn${!agreeAll ? ' mob-order-place-btn--disabled' : ''}`}
+						disableRipple
+						disabled={!agreeAll || cartItems.length === 0}
+						onClick={placeOrderHandler}
+					>
+						Place Order
+					</Button>
+				</Stack>
+			</Box>
+		);
 	} else {
 		return (
 			<Box component={'div'} id={'my-order-page'}>

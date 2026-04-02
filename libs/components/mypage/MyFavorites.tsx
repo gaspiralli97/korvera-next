@@ -59,7 +59,34 @@ const MyFavorites: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>KORVERA MY FAVORITES MOBILE</div>;
+		return (
+			<div className={'mob-mypage-section'}>
+				<Typography className={'mob-section-title'}>My Wishlist</Typography>
+				{myFavorites?.length ? (
+					<>
+						<div className={'mob-product-grid'}>
+							{myFavorites.map((product: Product) => (
+								<ProductCard key={product._id} product={product} likeProductHandler={likeProductHandler} myFavorites={true} />
+							))}
+						</div>
+						<Stack className={'mob-pagination'}>
+							<Pagination
+								count={Math.ceil(total / searchFavorites.limit)}
+								page={searchFavorites.page}
+								shape="circular"
+								color="primary"
+								onChange={paginationHandler}
+							/>
+						</Stack>
+					</>
+				) : (
+					<div className={'mob-empty-state'}>
+						<img src="/img/icons/icoAlert.svg" alt="" />
+						<p>No favorites yet</p>
+					</div>
+				)}
+			</div>
+		);
 	} else {
 		return (
 			<div id="my-favorites-page">

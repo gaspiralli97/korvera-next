@@ -973,8 +973,7 @@ body::-webkit-scrollbar {
 						width: auto;
 						height: auto;
 						display: flex;
-						margin: 10px 0 0 10px;
-					.card-config { @include product-card(300px); }
+					.card-config { @include product-card(100%); }
 					}
 				}
 			}
@@ -1011,12 +1010,11 @@ body::-webkit-scrollbar {
 				width: auto;
 				height: auto;
 				display: flex;
-				margin: 10px 0 0 10px;
 			}
 		}
 		.ba-card {
 			position: relative;
-			width: 300px;
+			width: 100%;
 			height: 375px;
 			display: flex;
 			flex-direction: column;
@@ -1169,12 +1167,11 @@ body::-webkit-scrollbar {
 					width: auto;
 					height: auto;
 					display: flex;
-					margin: 10px 0 0 10px;
 				}
 			}
 			.rv-card {
 				position: relative;
-				width: 300px;
+				width: 100%;
 				height: 375px;
 				display: flex;
 				flex-direction: column;
@@ -1487,8 +1484,7 @@ body::-webkit-scrollbar {
 					width: auto;
 					height: auto;
 					display: flex;
-					margin: 10px 0 0 10px;
-				.card-config { @include product-card(300px); }
+				.card-config { @include product-card(100%); }
 				}
 			}
 			.hp-pt-empty {

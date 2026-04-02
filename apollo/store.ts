@@ -6,7 +6,8 @@ export interface CartItem {
 	productId: string;
 	productTitle: string;
 	productBrand: string;
-	productPrice: number;
+	productPrice: number;   // final (discounted) price
+	oldPrice?: number;      // original price — defined only when product is on sale
 	productImage: string;
 	qty: number;
 	size: string;

@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
+import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { useQuery, useMutation } from '@apollo/client';
 import { SEARCH_PRODUCTS } from '../../../apollo/user/query';
 import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
@@ -26,6 +27,7 @@ const TABS: { label: string; value: ProductCertification; emoji: string }[] = [
 ];
 
 const HomepageCleanBeauty = () => {
+	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
 	const [activeTab, setActiveTab] = useState(0);
 	const [products, setProducts] = useState<Product[]>([]);
@@ -81,6 +83,42 @@ const HomepageCleanBeauty = () => {
 	};
 
 	if (products.length === 0) return null;
+
+	if (device === 'mobile') {
+		return (
+			<Stack className={'mob-clean-beauty'}>
+				<Stack className={'container'}>
+					<Typography className={'mob-section-title'}>Clean Beauty</Typography>
+					<Box className={'mob-cb-tabs'}>
+						{TABS.map((tab, i) => (
+							<button
+								key={tab.value}
+								className={`mob-cb-tab${activeTab === i ? ' active' : ''}`}
+								onClick={() => handleTabChange(i)}
+							>
+								<span>{tab.emoji}</span>
+								{tab.label}
+							</button>
+						))}
+					</Box>
+					<Box className={'mob-cb-swiper-wrap'}>
+						<Swiper
+							className={'mob-cb-swiper'}
+							slidesPerView={1.3}
+							spaceBetween={12}
+							modules={[Autoplay]}
+						>
+							{products.map((product: Product) => (
+								<SwiperSlide key={product._id} className={'mob-cb-slide'}>
+									<ProductCard product={product} likeProductHandler={likeProductHandler} />
+								</SwiperSlide>
+							))}
+						</Swiper>
+					</Box>
+				</Stack>
+			</Stack>
+		);
+	}
 
 	return (
 		<Stack className={'hp-clean-beauty'}>

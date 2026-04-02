@@ -143,7 +143,78 @@ const MyOrders = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>MY ORDERS</div>;
+		return (
+			<div className={'mob-mypage-section'}>
+				<Typography className={'mob-section-title'}>Order History</Typography>
+				{orders.length === 0 ? (
+					<div className={'mob-empty-state'}>
+						<img src="/img/icons/icoAlert.svg" alt="" />
+						<p>No orders yet</p>
+					</div>
+				) : (
+					<Stack className={'mob-orders-list'}>
+						{orders.map((order) => {
+							const statusStyle = STATUS_COLORS[order.status] ?? STATUS_COLORS['Processing'];
+							const isExpanded = expandedId === order.orderId;
+							return (
+								<Stack key={order.orderId} className={'mob-order-card'}>
+									<Stack className={'mob-order-header'} onClick={() => toggleExpand(order.orderId)}>
+										<Stack className={'mob-order-header-left'}>
+											<Typography className={'mob-order-id'}>#{order.orderId}</Typography>
+											<Typography className={'mob-order-date'}>{order.createdAt}</Typography>
+										</Stack>
+										<Stack className={'mob-order-header-right'}>
+											<Box
+												component={'div'}
+												className={'mob-status-badge'}
+												sx={{ background: statusStyle.bg, color: statusStyle.color }}
+											>
+												{order.status}
+											</Box>
+											<Typography className={'mob-order-total'}>${order.total.toFixed(2)}</Typography>
+											<Box component={'div'} className={'mob-expand-icon'}>
+												{isExpanded ? <ExpandLessIcon fontSize={'small'} /> : <ExpandMoreIcon fontSize={'small'} />}
+											</Box>
+										</Stack>
+									</Stack>
+									<Typography className={'mob-order-address'}>📦 {order.address}</Typography>
+									<Typography className={'mob-order-items-count'}>
+										{order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+									</Typography>
+									{getOrderActions(order.status, order.orderId, isSeller)}
+									{isExpanded && (
+										<Stack className={'mob-items-list'}>
+											{order.items.map((item, idx) => (
+												<Stack key={idx} className={'mob-order-item'}>
+													<Box component={'div'} className={'mob-order-item-thumb'}>
+														<img
+															src={
+																item.productImage
+																	? item.productImage.startsWith('/')
+																		? item.productImage
+																		: `${REACT_APP_API_URL}/${item.productImage}`
+																	: '/img/product/bigImage.png'
+															}
+															alt={item.productTitle}
+														/>
+													</Box>
+													<Stack className={'mob-order-item-info'}>
+														<Typography className={'mob-order-item-brand'}>{item.productBrand}</Typography>
+														<Typography className={'mob-order-item-title'}>{item.productTitle}</Typography>
+														<Typography className={'mob-order-item-meta'}>Size: {item.size} · Qty: {item.qty}</Typography>
+													</Stack>
+													<Typography className={'mob-order-item-price'}>${(item.productPrice * item.qty).toFixed(2)}</Typography>
+												</Stack>
+											))}
+										</Stack>
+									)}
+								</Stack>
+							);
+						})}
+					</Stack>
+				)}
+			</div>
+		);
 	} else {
 		return (
 			<Stack className={'mo-orders-wrap'}>
