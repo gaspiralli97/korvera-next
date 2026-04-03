@@ -14,7 +14,7 @@
 				.right-box {
 					width: 315px;
 					.main-title {
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 30px;
 						font-style: normal;
@@ -24,7 +24,7 @@
 						text-transform: capitalize;
 					}
 					.sub-title {
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 14px;
 						font-style: normal;
@@ -67,9 +67,9 @@
 						display: flex;
 						justify-content: center;
 						align-items: center;
-						border-bottom: 2px solid #eb6753;
+						border-bottom: 2px solid #98AA9D;
 						cursor: pointer;
-						color: #eb6753;
+						color: #98AA9D;
 						font-family: $font;
 						font-size: 16px;
 						font-style: normal;
@@ -86,7 +86,7 @@
 				border-radius: 0px 0px 12px 12px;
 				border: 1px solid rgba(196, 196, 196, 0.79);
 				border-top: none;
-				background: #F5F2EC;
+				background: #F2EFE2;
 				box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
 				.listing-title-box {
 					width: 100%;
@@ -95,9 +95,9 @@
 					gap: 90px;
 					padding: 18px 15px 18px 33px;
 					border-radius: 12px;
-					background: #F5F2EC;
+					background: #F2EFE2;
 					.title-text {
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 15px;
 						font-style: normal;
@@ -134,7 +134,7 @@
 						padding: 5px 0px;
 						.name {
 							margin-bottom: 8px;
-							color: #181a20;
+							color: #2D3536;
 							font-family: $font;
 							font-size: 13px;
 							font-style: normal;
@@ -143,7 +143,7 @@
 						}
 						.address {
 							margin-bottom: 13px;
-							color: #717171;
+							color: #716B69;
 							font-family: $font;
 							font-size: 11px;
 							font-style: normal;
@@ -151,7 +151,7 @@
 							line-height: normal;
 						}
 						.price {
-							color: #181a20;
+							color: #2D3536;
 							font-family: $font;
 							font-size: 15px;
 							font-style: normal;
@@ -166,7 +166,7 @@
 						justify-content: center;
 						margin-right: 55px;
 						.date {
-							color: #181a20;
+							color: #2D3536;
 							font-family: $font;
 							font-size: 12px;
 							font-style: normal;
@@ -203,7 +203,7 @@
 						justify-content: center;
 						margin-right: 75px;
 						.views {
-							color: #181a20;
+							color: #2D3536;
 							font-family: $font;
 							font-size: 12px;
 							font-style: normal;
@@ -222,10 +222,10 @@
 							height: 40px;
 							border-radius: 4px;
 							:hover {
-								background: #F5F2EC;
+								background: #F2EFE2;
 							}
 							.buttons {
-								color: #181a20;
+								color: #2D3536;
 							}
 						}
 					}
@@ -238,7 +238,7 @@
 					margin-top: 30px;
 					.total-result {
 						p {
-							color: #181a20;
+							color: #2D3536;
 							text-align: center;
 							font-family: $font;
 							font-size: 14px;

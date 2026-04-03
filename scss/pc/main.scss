@@ -43,7 +43,7 @@ body {
 	-ms-overflow-style: none; /* for Internet Explorer, Edge */
 	scrollbar-width: none; /* for Firefox */
 	overflow-y: scroll;
-	background-color: #F5F2EC;
+	background-color: #F2EFE2;
 }
 
 body::-webkit-scrollbar {
@@ -61,7 +61,7 @@ body::-webkit-scrollbar {
 			// Layer 1: Top Bar
 			.navbar-top {
 				height: 48px;
-				background: #2C2C2C;
+				background: #2D3536;
 				display: flex;
 				flex-direction: row;
 				align-items: center;
@@ -87,7 +87,7 @@ body::-webkit-scrollbar {
 				position: relative;
 				overflow: visible;
 				height: 76px;
-				background: #F5F2EC;
+				background: #F2EFE2;
 				display: flex;
 				flex-direction: row;
 				align-items: center;
@@ -142,7 +142,7 @@ body::-webkit-scrollbar {
 								border-radius: 50%;
 								object-fit: cover;
 								cursor: pointer;
-								border: 2px solid #C9A96E;
+								border: 2px solid #E9A692;
 								&:hover {
 									border-color: #75162D;
 								}
@@ -176,7 +176,7 @@ body::-webkit-scrollbar {
 
 					// Shared text link style (both left and right)
 					.nav-text-link {
-						color: #1B1B1B;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 13px;
 						font-weight: 400;
@@ -208,7 +208,7 @@ body::-webkit-scrollbar {
 							justify-content: flex-start;
 							gap: 80px;
 							z-index: 100;
-							background: #F5F2EC;
+							background: #F2EFE2;
 							border-top: 1px solid rgba(27, 27, 27, 0.08);
 							border-bottom: 1px solid rgba(27, 27, 27, 0.08);
 							box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
@@ -220,7 +220,7 @@ body::-webkit-scrollbar {
 								gap: 16px;
 
 								.cs-heading {
-									color: #1B1B1B;
+									color: #2D3536;
 									font-family: $font;
 									font-size: 14px;
 									font-weight: 600;
@@ -243,9 +243,9 @@ body::-webkit-scrollbar {
 								.cs-chat-btn {
 									margin-top: 4px;
 									padding: 12px 32px;
-									border: 1px solid #2C2C2C;
+									border: 1px solid #2D3536;
 									background: transparent;
-									color: #2C2C2C;
+									color: #2D3536;
 									font-family: $font;
 									font-size: 13px;
 									font-weight: 500;
@@ -253,8 +253,8 @@ body::-webkit-scrollbar {
 									transition: background 0.2s ease, color 0.2s ease;
 
 									&:hover {
-										background: #2C2C2C;
-										color: #F5F2EC;
+										background: #2D3536;
+										color: #F2EFE2;
 									}
 								}
 							}
@@ -275,7 +275,7 @@ body::-webkit-scrollbar {
 						gap: 6px;
 						padding: 5px 12px;
 						border-radius: 20px;
-						background: #2C2C2C;
+						background: #2D3536;
 						cursor: pointer;
 						transition: background 0.2s ease;
 
@@ -286,7 +286,7 @@ body::-webkit-scrollbar {
 						}
 
 						span {
-							color: #F5F2EC;
+							color: #F2EFE2;
 							font-family: $font;
 							font-size: 12px;
 							font-weight: 500;
@@ -306,7 +306,7 @@ body::-webkit-scrollbar {
 				position: relative;
 				overflow: visible;
 				height: 44px;
-				background: #F5F2EC;
+				background: #F2EFE2;
 				display: flex;
 				flex-direction: row;
 				align-items: center;
@@ -325,7 +325,7 @@ body::-webkit-scrollbar {
 						gap: 32px;
 
 						.cat-link {
-							color: #1B1B1B;
+							color: #2D3536;
 							font-family: $font;
 							font-size: 13px;
 							font-weight: 500;
@@ -363,7 +363,7 @@ body::-webkit-scrollbar {
 					top: 100%;
 					left: 0;
 					width: 100%;
-					background: #F5F2EC;
+					background: #F2EFE2;
 					border-top: 1px solid rgba(27, 27, 27, 0.08);
 					border-bottom: 1px solid rgba(27, 27, 27, 0.08);
 					z-index: 100;
@@ -400,7 +400,7 @@ body::-webkit-scrollbar {
 							padding-right: 40px;
 
 							.cat-mega-item {
-								color: #1B1B1B;
+								color: #2D3536;
 								font-family: $font;
 								font-size: 13px;
 								font-weight: 400;
@@ -476,7 +476,7 @@ body::-webkit-scrollbar {
 
 								.mega-product-title {
 									flex: 1;
-									color: #1B1B1B;
+									color: #2D3536;
 									font-family: $font;
 									font-size: 12px;
 									font-weight: 500;
@@ -521,7 +521,7 @@ body::-webkit-scrollbar {
 							border: none;
 							outline: none;
 							background: none;
-							color: #1B1B1B;
+							color: #2D3536;
 							font-family: $font;
 							font-size: 13px;
 							width: 100px;
@@ -558,7 +558,7 @@ body::-webkit-scrollbar {
 				transition: all 0.2s;
 
 				&:hover {
-					border-color: #181a20;
+					border-color: #2D3536;
 					box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 					transform: translateY(-3px);
 				}
@@ -572,7 +572,7 @@ body::-webkit-scrollbar {
 				}
 
 				.brand-name {
-					color: #181a20;
+					color: #2D3536;
 					font-family: $font;
 					font-size: 13px;
 					font-weight: 700;
@@ -691,7 +691,7 @@ body::-webkit-scrollbar {
 		margin-bottom: 10px;
 	}
 	.hp-section-title {
-		color: #1B1B1B;
+		color: #2D3536;
 		font-family: $font;
 		font-size: 32px;
 		font-weight: 400;
@@ -702,8 +702,8 @@ body::-webkit-scrollbar {
 	.hp-outline-btn {
 		padding: 12px 32px;
 		background: transparent;
-		border: 1px solid #2C2C2C;
-		color: #1B1B1B;
+		border: 1px solid #2D3536;
+		color: #2D3536;
 		font-family: $font;
 		font-size: 12px;
 		font-weight: 500;
@@ -711,13 +711,13 @@ body::-webkit-scrollbar {
 		text-transform: uppercase;
 		cursor: pointer;
 		transition: background 0.2s, color 0.2s;
-		&:hover { background: #2C2C2C; color: #F5F2EC; }
+		&:hover { background: #2D3536; color: #F2EFE2; }
 	}
 	.hp-solid-btn {
 		padding: 12px 32px;
-		background: #2C2C2C;
+		background: #2D3536;
 		border: none;
-		color: #F5F2EC;
+		color: #F2EFE2;
 		font-family: $font;
 		font-size: 12px;
 		font-weight: 500;
@@ -726,13 +726,13 @@ body::-webkit-scrollbar {
 		cursor: pointer;
 		transition: opacity 0.2s;
 		&:hover { opacity: 0.8; }
-		&--dark { background: #2C2C2C; }
+		&--dark { background: #2D3536; }
 	}
 
 	// ── Categories ────────────────────────────────────────────────────────
 	.hp-categories {
 		padding: 72px 0;
-		background: #F5F2EC;
+		background: #F2EFE2;
 		.container {
 			flex-direction: column;
 		}
@@ -763,7 +763,7 @@ body::-webkit-scrollbar {
 			gap: 4px;
 		}
 		.hp-cat-label {
-			color: #1B1B1B;
+			color: #2D3536;
 			font-family: $font;
 			font-size: 13px;
 			font-weight: 500;
@@ -780,7 +780,7 @@ body::-webkit-scrollbar {
 	// ── Brands ────────────────────────────────────────────────────────
 	.hp-brands {
 		padding: 72px 0;
-		background: #F5F2EC;
+		background: #F2EFE2;
 
 		.container { flex-direction: column; }
 
@@ -894,7 +894,7 @@ body::-webkit-scrollbar {
 				width: 22px;
 				height: 22px;
 				cursor: pointer;
-				color: #181a20;
+				color: #2D3536;
 				transition: opacity 0.2s;
 				&:hover { opacity: 0.5; }
 			}
@@ -922,13 +922,13 @@ body::-webkit-scrollbar {
 				transition: all 0.2s;
 
 				&:hover {
-					border-color: #181a20;
-					color: #181a20;
+					border-color: #2D3536;
+					color: #2D3536;
 				}
 
 				&.active {
-					background: #181a20;
-					border-color: #181a20;
+					background: #2D3536;
+					border-color: #2D3536;
 					color: #ffffff;
 				}
 			}
@@ -943,7 +943,7 @@ body::-webkit-scrollbar {
 	.hp-recommend {
 		padding: 108px 0 76px;
 		width: 100%;
-		background: #F5F2EC;
+		background: #F2EFE2;
 		.container {
 			flex-direction: column;
 			.card-box {
@@ -985,7 +985,7 @@ body::-webkit-scrollbar {
 	.hp-social-proof {
 		padding: 108px 0 76px;
 		width: 100%;
-		background: #F5F2EC;
+		background: #F2EFE2;
 		.container {
 			flex-direction: column;
 			.card-box {
@@ -1047,7 +1047,7 @@ body::-webkit-scrollbar {
 			font-weight: 600;
 			letter-spacing: 1.5px;
 			text-transform: uppercase;
-			color: #F5F2EC;
+			color: #F2EFE2;
 			padding: 4px 8px;
 			background: rgba(0,0,0,0.3);
 			&--before { left: 12px; }
@@ -1068,7 +1068,7 @@ body::-webkit-scrollbar {
 		.ba-handle-line {
 			position: absolute;
 			inset: 0;
-			background: #F5F2EC;
+			background: #F2EFE2;
 			width: 2px;
 		}
 		.ba-handle-knob {
@@ -1077,13 +1077,13 @@ body::-webkit-scrollbar {
 			width: 36px;
 			height: 36px;
 			border-radius: 50%;
-			background: #F5F2EC;
+			background: #F2EFE2;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			gap: 2px;
 			font-size: 12px;
-			color: #2C2C2C;
+			color: #2D3536;
 			box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 		}
 		.ba-info {
@@ -1094,13 +1094,13 @@ body::-webkit-scrollbar {
 			border-radius: 0 0 12px 12px;
 			border: 1px solid rgba(196,196,196,0.71);
 			border-top: none;
-			background: #F5F2EC;
+			background: #F2EFE2;
 			box-shadow: 0 1px 4px 0 rgba(24,26,32,0.07);
 			flex: 1;
 		}
 		.ba-product {
 			overflow: hidden;
-			color: #181a20;
+			color: #2D3536;
 			text-overflow: ellipsis;
 			white-space: nowrap;
 			font-family: $font;
@@ -1113,7 +1113,7 @@ body::-webkit-scrollbar {
 		.ba-result {
 			margin-top: 5px;
 			overflow: hidden;
-			color: #717171;
+			color: #716B69;
 			font-family: $font;
 			font-size: 13px;
 			font-weight: 400;
@@ -1144,7 +1144,7 @@ body::-webkit-scrollbar {
 		.hp-sp-reviews {
 			margin-top: 80px;
 			padding: 108px 0 76px;
-			background: #F5F2EC;
+			background: #F2EFE2;
 			.container { flex-direction: column; }
 			.card-box {
 				position: relative;
@@ -1196,7 +1196,7 @@ body::-webkit-scrollbar {
 				height: 64px;
 				border-radius: 50%;
 				background: rgba(255,255,255,0.25);
-				color: #F5F2EC;
+				color: #F2EFE2;
 				font-family: $font;
 				font-size: 26px;
 				font-weight: 600;
@@ -1208,7 +1208,7 @@ body::-webkit-scrollbar {
 				display: flex;
 				gap: 3px;
 				.star { color: rgba(255,255,255,0.35); font-size: 15px; }
-				.star.filled { color: #F5F2EC; }
+				.star.filled { color: #F2EFE2; }
 			}
 			.rv-skin-type {
 				color: rgba(255,255,255,0.7);
@@ -1225,13 +1225,13 @@ body::-webkit-scrollbar {
 				border-radius: 0 0 12px 12px;
 				border: 1px solid rgba(196,196,196,0.71);
 				border-top: none;
-				background: #F5F2EC;
+				background: #F2EFE2;
 				box-shadow: 0 1px 4px 0 rgba(24,26,32,0.07);
 				flex: 1;
 			}
 			.rv-name {
 				overflow: hidden;
-				color: #181a20;
+				color: #2D3536;
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				font-family: $font;
@@ -1243,7 +1243,7 @@ body::-webkit-scrollbar {
 			.rv-text {
 				margin-top: 5px;
 				overflow: hidden;
-				color: #717171;
+				color: #716B69;
 				font-family: $font;
 				font-size: 12px;
 				font-weight: 400;
@@ -1264,7 +1264,7 @@ body::-webkit-scrollbar {
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
-				color: #181a20;
+				color: #2D3536;
 				font-family: $font;
 				font-size: 11px;
 				font-weight: 500;
@@ -1281,7 +1281,7 @@ body::-webkit-scrollbar {
 	// ── AI Beauty ─────────────────────────────────────────────────────────
 	.hp-ai-beauty {
 		padding: 80px 0;
-		background: #F5F2EC;
+		background: #F2EFE2;
 		.container { flex-direction: column; }
 		.hp-ai-inner {
 			display: flex;
@@ -1332,19 +1332,19 @@ body::-webkit-scrollbar {
 			padding: 14px 18px;
 			background: transparent;
 			border: 1px solid rgba(27,27,27,0.15);
-			color: #1B1B1B;
+			color: #2D3536;
 			font-family: $font;
 			font-size: 13px;
 			cursor: pointer;
 			transition: border-color 0.2s, background 0.2s;
-			&:hover { border-color: #2C2C2C; background: rgba(44,44,44,0.04); }
+			&:hover { border-color: #2D3536; background: rgba(44,44,44,0.04); }
 		}
 	}
 
 	// ── Reviews ───────────────────────────────────────────────────────────
 	.hp-reviews {
 		padding: 80px 0;
-		background: #F5F2EC;
+		background: #F2EFE2;
 		.container { flex-direction: column; }
 		.hp-reviews-header { margin-bottom: 48px; }
 		.hp-reviews-grid {
@@ -1364,7 +1364,7 @@ body::-webkit-scrollbar {
 			display: flex;
 			gap: 2px;
 			.star { color: rgba(27,27,27,0.15); font-size: 14px; }
-			.star.filled { color: #C9A96E; }
+			.star.filled { color: #E9A692; }
 		}
 		.hp-review-text {
 			color: rgba(27,27,27,0.65);
@@ -1404,7 +1404,7 @@ body::-webkit-scrollbar {
 			height: 36px;
 			border-radius: 50%;
 			background: rgba(27,27,27,0.08);
-			color: #2C2C2C;
+			color: #2D3536;
 			font-family: $font;
 			font-size: 14px;
 			font-weight: 500;
@@ -1414,7 +1414,7 @@ body::-webkit-scrollbar {
 			flex-shrink: 0;
 		}
 		.hp-review-name {
-			color: #1B1B1B;
+			color: #2D3536;
 			font-family: $font;
 			font-size: 13px;
 			font-weight: 500;
@@ -1431,7 +1431,7 @@ body::-webkit-scrollbar {
 	// ── Product Tabs ─────────────────────────────────────────────────────
 	.hp-product-tabs {
 		padding: 80px 0 96px;
-		background: #F5F2EC;
+		background: #F2EFE2;
 		.container { flex-direction: column; }
 		.hp-pt-header { margin-bottom: 0; }
 		.hp-pt-tabs {
@@ -1447,17 +1447,17 @@ body::-webkit-scrollbar {
 				font-family: $font;
 				font-size: 14px;
 				font-weight: 500;
-				color: #717171;
+				color: #716B69;
 				cursor: pointer;
 				transition: all 0.2s;
 				&.active {
-					background: #2C2C2C;
-					border-color: #2C2C2C;
-					color: #F5F2EC;
+					background: #2D3536;
+					border-color: #2D3536;
+					color: #F2EFE2;
 				}
 				&:hover:not(.active) {
-					border-color: #2C2C2C;
-					color: #2C2C2C;
+					border-color: #2D3536;
+					color: #2D3536;
 				}
 			}
 			.hp-pt-nav {
@@ -1469,7 +1469,7 @@ body::-webkit-scrollbar {
 					cursor: pointer;
 					width: 22px;
 					height: 22px;
-					color: #2C2C2C;
+					color: #2D3536;
 					transition: opacity 0.2s;
 					&:hover { opacity: 0.5; }
 				}
@@ -1492,7 +1492,7 @@ body::-webkit-scrollbar {
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				color: #717171;
+				color: #716B69;
 				font-family: $font;
 				font-size: 14px;
 			}
@@ -1514,7 +1514,7 @@ body::-webkit-scrollbar {
 		.hp-sp-reviews {
 			margin-top: 80px;
 			padding: 80px 0;
-			background: #F5F2EC;
+			background: #F2EFE2;
 			.container { flex-direction: column; }
 			.hp-reviews-header { margin-bottom: 48px; }
 		}
@@ -1592,12 +1592,12 @@ body::-webkit-scrollbar {
 						box-sizing: border-box;
 						cursor: pointer;
 						&.on {
-							background: #F5F2EC;
+							background: #F2EFE2;
 							border: 1px solid #000;
-							color: #181a20;
+							color: #2D3536;
 						}
 						span {
-							color: #181a20;
+							color: #2D3536;
 							font-family: $font;
 							font-size: 14px;
 							font-style: normal;
@@ -1663,14 +1663,14 @@ body::-webkit-scrollbar {
 					gap: 40px;
 					visibility: hidden;
 					border-radius: 12px;
-					background: #F5F2EC;
+					background: #F2EFE2;
 					box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 					box-sizing: border-box;
 					z-index: 2;
 					&.on {
 						visibility: visible;
 						transition: 0.2s ease-out;
-						background: #F5F2EC;
+						background: #F2EFE2;
 					}
 					div {
 						width: 295px;
@@ -1685,7 +1685,7 @@ body::-webkit-scrollbar {
 						}
 						span {
 							margin-left: 22px;
-							color: #181a20;
+							color: #2D3536;
 							font-family: $font;
 							font-size: 20px;
 							font-style: normal;
@@ -1712,14 +1712,14 @@ body::-webkit-scrollbar {
 					justify-content: space-between;
 					visibility: hidden;
 					border-radius: 12px;
-					background: #F5F2EC;
+					background: #F2EFE2;
 					box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 					box-sizing: border-box;
 					z-index: 1;
 					&.on {
 						visibility: visible;
 						transition: 0.2s ease-out;
-						background: #F5F2EC;
+						background: #F2EFE2;
 					}
 					div {
 						position: relative;
@@ -1760,21 +1760,21 @@ body::-webkit-scrollbar {
 					align-items: center;
 					visibility: hidden;
 					border-radius: 12px;
-					background: #F5F2EC;
+					background: #F2EFE2;
 					box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 					box-sizing: border-box;
 					z-index: 1;
 					&.on {
 						visibility: visible;
 						transition: 0.2s ease-out;
-						background: #F5F2EC;
+						background: #F2EFE2;
 					}
 					span {
 						display: flex;
 						align-items: center;
 						padding: 10px 30px;
 						border: 1px solid #fffdfd;
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 20px;
 						font-style: normal;
@@ -1848,7 +1848,7 @@ body::-webkit-scrollbar {
 					display: flex;
 					flex-direction: column;
 					strong {
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 15px;
 						font-style: normal;
@@ -1857,7 +1857,7 @@ body::-webkit-scrollbar {
 					}
 					span {
 						margin-top: 4px;
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 13px;
 						font-style: normal;
@@ -1876,7 +1876,7 @@ body::-webkit-scrollbar {
 		}
 		p {
 			margin-top: 10px;
-			color: #181a20;
+			color: #2D3536;
 			font-family: $font;
 			font-size: 14px;
 			font-style: normal;
@@ -1892,7 +1892,7 @@ body::-webkit-scrollbar {
 			border-bottom: 1px solid #ddd;
 			.reply-text {
 				padding-bottom: 10px;
-				color: #181a20;
+				color: #2D3536;
 				font-family: $font;
 				font-size: 14px;
 				font-style: normal;
@@ -1915,14 +1915,14 @@ body::-webkit-scrollbar {
 			justify-content: center;
 			border-radius: 50%;
 			height: 50px;
-			background: #F5F2EC;
+			background: #F2EFE2;
 			box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.2);
 			transition: transform 0.3s;
 			z-index: 999;
 			&:hover {
 				cursor: pointer;
 				transform: scale(1.1);
-				background-color: #F5F2EC;
+				background-color: #F2EFE2;
 			}
 		}
 		.chat-frame {
@@ -2042,7 +2042,7 @@ body::-webkit-scrollbar {
 		height: auto;
 		display: flex;
 		flex-direction: row;
-		background: #2C2C2C;
+		background: #2D3536;
 
 		.footer-container {
 			width: 1300px;
@@ -2058,7 +2058,7 @@ body::-webkit-scrollbar {
 				border-bottom: 1px solid rgba(245, 242, 236, 0.12);
 
 				strong {
-					color: #F5F2EC;
+					color: #F2EFE2;
 					font-family: $font;
 					font-size: 15px;
 					font-weight: 600;
@@ -2082,7 +2082,7 @@ body::-webkit-scrollbar {
 						border: none;
 						outline: none;
 						background: none;
-						color: #F5F2EC;
+						color: #F2EFE2;
 						font-family: $font;
 						font-size: 14px;
 
@@ -2093,8 +2093,8 @@ body::-webkit-scrollbar {
 
 					span {
 						padding: 9px 18px;
-						background: #F5F2EC;
-						color: #2C2C2C;
+						background: #F2EFE2;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 12px;
 						font-weight: 600;
@@ -2106,8 +2106,8 @@ body::-webkit-scrollbar {
 						transition: background 0.2s ease, color 0.2s ease;
 
 						&:hover {
-							background: #C9A96E;
-							color: #2C2C2C;
+							background: #98AA9D;
+							color: #2D3536;
 						}
 					}
 				}
@@ -2149,7 +2149,7 @@ body::-webkit-scrollbar {
 						.footer-value,
 						p {
 							margin: 0;
-							color: #F5F2EC;
+							color: #F2EFE2;
 							font-family: $font;
 							font-size: 14px;
 							font-weight: 500;
@@ -2168,7 +2168,7 @@ body::-webkit-scrollbar {
 							transition: color 0.2s ease;
 
 							&:hover {
-								color: #C9A96E;
+								color: #E9A692;
 							}
 						}
 					}
@@ -2179,7 +2179,7 @@ body::-webkit-scrollbar {
 					flex-direction: column;
 
 					.footer-col-title {
-						color: #F5F2EC;
+						color: #F2EFE2;
 						font-family: $font;
 						font-size: 11px;
 						font-weight: 700;
@@ -2200,7 +2200,7 @@ body::-webkit-scrollbar {
 						transition: color 0.2s ease;
 
 						&:hover {
-							color: #C9A96E;
+							color: #E9A692;
 						}
 					}
 				}
@@ -2249,7 +2249,7 @@ body::-webkit-scrollbar {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: #F5F2EC;
+		background: #F2EFE2;
 		cursor: pointer;
 	}
 	.top {
@@ -2258,7 +2258,7 @@ body::-webkit-scrollbar {
 		display: flex;
 		flex-direction: column;
 		span {
-			color: #181a20;
+			color: #2D3536;
 			font-family: $font;
 			font-size: 15px;
 			font-style: normal;
@@ -2282,7 +2282,7 @@ body::-webkit-scrollbar {
 				margin-left: 10px;
 				width: 100%;
 				height: 25px;
-				color: #717171;
+				color: #716B69;
 				font-family: $font;
 				font-size: 14px;
 				font-style: normal;
@@ -2317,7 +2317,7 @@ body::-webkit-scrollbar {
 				flex-direction: column;
 				span {
 					margin-bottom: 10px;
-					color: #181a20;
+					color: #2D3536;
 					font-family: $font;
 					font-size: 14px;
 					font-style: normal;
@@ -2344,7 +2344,7 @@ body::-webkit-scrollbar {
 						align-items: center;
 						justify-content: center;
 						border: 1px solid #ddd;
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 13px;
 						font-style: normal;
@@ -2358,7 +2358,7 @@ body::-webkit-scrollbar {
 							border-radius: 0px 12px 12px 0px;
 						}
 						&.active {
-							border: 2px solid #181a20;
+							border: 2px solid #2D3536;
 						}
 					}
 					select {
@@ -2367,7 +2367,7 @@ body::-webkit-scrollbar {
 						height: 46px;
 						border-radius: 8px;
 						border: 1px solid #ddd;
-						color: #717171;
+						color: #716B69;
 						font-family: $font;
 						font-size: 14px;
 						font-style: normal;
@@ -2379,17 +2379,17 @@ body::-webkit-scrollbar {
 						position: absolute;
 						width: 15px;
 						height: 8px;
-						color: #ddd;
+						color: #E5E1DA;
 						right: 12px;
 						top: 21px;
 					}
 					.minus-line {
 						width: 11px;
 						height: 1px;
-						background: #181a20;
+						background: #2D3536;
 					}
 					em {
-						color: #717171;
+						color: #716B69;
 
 						font-family: $font;
 						font-size: 14px;
@@ -2418,7 +2418,7 @@ body::-webkit-scrollbar {
 				cursor: pointer;
 			}
 			span {
-				color: #181a20;
+				color: #2D3536;
 				font-family: $font;
 				font-size: 14px;
 				font-style: normal;

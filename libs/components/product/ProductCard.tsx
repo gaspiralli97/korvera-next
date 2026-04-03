@@ -135,14 +135,6 @@ const ProductCard = (props: ProductCardType) => {
 							>
 								<Typography className={'product-title'}>{product.productTitle}</Typography>
 							</Link>
-							{saleInfo ? (
-								<Stack className="price-sale-wrap">
-									<Typography className="price-original">${formatterStr(product?.productPrice)}</Typography>
-									<Typography className="price-discounted">${formatterStr(saleInfo.salePrice)}</Typography>
-								</Stack>
-							) : (
-								<Typography className={'product-price'}>${formatterStr(product?.productPrice)}</Typography>
-							)}
 						</Stack>
 						<Stack className="address">
 							<Typography>
@@ -157,6 +149,14 @@ const ProductCard = (props: ProductCardType) => {
 						<Stack className="option">
 							<Typography>{product.productVolume} ml</Typography>
 						</Stack>
+						{saleInfo ? (
+							<Stack className="price-sale-wrap">
+								<Typography className="price-original">${formatterStr(product?.productPrice)}</Typography>
+								<Typography className="price-discounted">${formatterStr(saleInfo.salePrice)}</Typography>
+							</Stack>
+						) : (
+							<Typography className={'product-price'}>${formatterStr(product?.productPrice)}</Typography>
+						)}
 					</Stack>
 					<Stack className="divider"></Stack>
 					<Stack className="type-buttons">

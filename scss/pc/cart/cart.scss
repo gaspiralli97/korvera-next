@@ -8,7 +8,7 @@
 		font-family: $font;
 		font-size: 28px;
 		font-weight: 600;
-		color: #181a20;
+		color: #2D3536;
 		margin-bottom: 40px;
 	}
 
@@ -23,18 +23,18 @@
 			font-family: $font;
 			font-size: 22px;
 			font-weight: 600;
-			color: #181a20;
+			color: #2D3536;
 		}
 
 		.cart-empty-sub {
 			font-family: $font;
 			font-size: 14px;
-			color: #717171;
+			color: #716B69;
 		}
 
 		.cart-shop-btn {
 			margin-top: 8px;
-			background: #2C2C2C;
+			background: #2D3536;
 			color: #fff;
 			font-family: $font;
 			font-size: 14px;
@@ -44,7 +44,7 @@
 			text-transform: none;
 
 			&:hover {
-				background: #444;
+				background: #2D3536;
 			}
 		}
 	}
@@ -67,7 +67,7 @@
 		align-items: flex-start;
 		gap: 20px;
 		padding: 20px;
-		background: #F5F2EC;
+		background: #F2EFE2;
 		border-radius: 12px;
 
 		.cart-item-img {
@@ -85,7 +85,7 @@
 			.cart-item-brand {
 				font-family: $font;
 				font-size: 12px;
-				color: #717171;
+				color: #716B69;
 				text-transform: uppercase;
 				letter-spacing: 0.5px;
 			}
@@ -94,13 +94,13 @@
 				font-family: $font;
 				font-size: 15px;
 				font-weight: 600;
-				color: #181a20;
+				color: #2D3536;
 			}
 
 			.cart-item-size {
 				font-family: $font;
 				font-size: 13px;
-				color: #717171;
+				color: #716B69;
 			}
 
 			.cart-item-actions {
@@ -115,7 +115,7 @@
 			font-family: $font;
 			font-size: 16px;
 			font-weight: 600;
-			color: #181a20;
+			color: #2D3536;
 			white-space: nowrap;
 		}
 	}
@@ -132,14 +132,14 @@
 
 		button {
 			font-size: 18px;
-			color: #181a20;
+			color: #2D3536;
 			cursor: pointer;
 			background: none;
 			border: none;
 			line-height: 1;
 
 			&:hover {
-				color: #C9A680;
+				color: #E9A692;
 			}
 		}
 
@@ -155,7 +155,7 @@
 	.cart-remove-btn {
 		font-family: $font;
 		font-size: 13px;
-		color: #717171;
+		color: #716B69;
 		background: none;
 		border: none;
 		cursor: pointer;
@@ -170,7 +170,7 @@
 	.cart-summary {
 		width: 340px;
 		flex-shrink: 0;
-		background: #F5F2EC;
+		background: #F2EFE2;
 		border-radius: 12px;
 		padding: 28px 24px;
 
@@ -178,7 +178,7 @@
 			font-family: $font;
 			font-size: 18px;
 			font-weight: 600;
-			color: #181a20;
+			color: #2D3536;
 		}
 
 		.cart-summary-row {
@@ -190,20 +190,20 @@
 			p {
 				font-family: $font;
 				font-size: 14px;
-				color: #717171;
+				color: #716B69;
 			}
 
 			&.cart-summary-total p {
 				font-size: 16px;
 				font-weight: 600;
-				color: #181a20;
+				color: #2D3536;
 			}
 		}
 
 		.cart-checkout-btn {
 			width: 100%;
 			margin-top: 24px;
-			background: #2C2C2C;
+			background: #2D3536;
 			color: #fff;
 			font-family: $font;
 			font-size: 15px;
@@ -213,7 +213,7 @@
 			text-transform: none;
 
 			&:hover {
-				background: #444;
+				background: #2D3536;
 			}
 		}
 
@@ -222,13 +222,13 @@
 			text-align: center;
 			font-family: $font;
 			font-size: 13px;
-			color: #717171;
+			color: #716B69;
 			text-decoration: underline;
 			cursor: pointer;
 			width: 100%;
 
 			&:hover {
-				color: #181a20;
+				color: #2D3536;
 			}
 		}
 	}

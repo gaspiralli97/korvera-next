@@ -7,7 +7,7 @@
 	height: 413px;
 	margin-bottom: 7px;
 	border-radius: 12px;
-	background: #F5F2EC;
+	background: #FFFFFF;
 	box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
 	overflow: hidden;
 	transition: transform 0.22s ease, box-shadow 0.22s ease;
@@ -42,7 +42,7 @@
 			align-items: center;
 			border-radius: 6px;
 			padding: 6px 20px;
-			background: #eb6753;
+			background: #98AA9D;
 			color: #fff;
 			text-align: center;
 			text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -72,7 +72,7 @@
 			position: absolute;
 			top: 12px;
 			right: 12px;
-			background: #1b1b1b;
+			background: #2D3536;
 			color: #fff;
 			font-size: 10px;
 			font-weight: 700;
@@ -86,7 +86,7 @@
 			position: absolute;
 			top: 12px;
 			right: 12px;
-			background: linear-gradient(135deg, #e91e63, #f06292);
+			background: linear-gradient(135deg, #E9A692, #f06292);
 			color: #fff;
 			font-size: 11px;
 			font-weight: 700;
@@ -123,6 +123,8 @@
 		height: 173px;
 		padding: 16px 16px 8px 16px;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 
 		.name-address {
 			width: 100%;
@@ -130,21 +132,15 @@
 			margin-bottom: 10px;
 
 			.name-price-row {
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				justify-content: space-between;
 				width: 100%;
-				gap: 8px;
 
 				.name-link {
-					flex: 1;
-					min-width: 0;
-					overflow: hidden;
+					display: block;
 					text-decoration: none;
+					overflow: hidden;
 				}
 				.product-title {
-					color: #181a20;
+					color: #2D3536;
 					font-family: $font;
 					font-size: 14px;
 					font-weight: 600;
@@ -152,47 +148,14 @@
 					white-space: nowrap;
 					overflow: hidden;
 					text-overflow: ellipsis;
-					max-width: 100%;
-				}
-				.product-price {
-					color: #181a20;
-					font-family: $font;
-					font-size: 14px;
-					font-weight: 700;
-					line-height: normal;
-					white-space: nowrap;
-					flex-shrink: 0;
 				}
 			}
-
-			.price-sale-wrap {
-					flex-direction: column;
-					align-items: flex-end;
-					gap: 1px;
-					flex-shrink: 0;
-
-					.price-original {
-						font-size: 11px;
-						color: #aaa;
-						text-decoration: line-through;
-						line-height: 1;
-						font-family: $font;
-					}
-					.price-discounted {
-						font-size: 14px;
-						font-weight: 700;
-						color: #e91e63;
-						line-height: 1.2;
-						font-family: $font;
-						white-space: nowrap;
-					}
-				}
 
 			.address {
 				width: 100%;
 				overflow: hidden;
 				p {
-					color: #717171;
+					color: #716B69;
 					font-family: $font;
 					font-size: 13px;
 					font-style: normal;
@@ -207,16 +170,18 @@
 
 		.options {
 			flex-direction: row;
+			align-items: center;
+			justify-content: flex-start;
 			width: 100%;
 			height: 20px;
-			gap: 20px;
+			gap: 8px;
 			margin-bottom: 6px;
 			.option {
 				flex-direction: row;
 				gap: 5px;
 				align-items: center;
 				p {
-					color: #181a20;
+					color: #2D3536;
 					font-family: $font;
 					font-size: 13px;
 					font-style: normal;
@@ -224,12 +189,44 @@
 					line-height: normal;
 				}
 			}
+			.product-price {
+				color: #2D3536;
+				font-family: $font;
+				font-size: 14px;
+				font-weight: 700;
+				line-height: normal;
+				white-space: nowrap;
+				flex-shrink: 0;
+				margin-left: 120px;
+			}
+			.price-sale-wrap {
+				flex-direction: column;
+				align-items: flex-end;
+				gap: 1px;
+				flex-shrink: 0;
+				margin-left: 120px;
+				.price-original {
+					font-size: 11px;
+					color: #aaa;
+					text-decoration: line-through;
+					line-height: 1;
+					font-family: $font;
+				}
+				.price-discounted {
+					font-size: 14px;
+					font-weight: 700;
+					color: #E9A692;
+					line-height: 1.2;
+					font-family: $font;
+					white-space: nowrap;
+				}
+			}
 		}
 
 		.divider {
 			width: 100%;
 			height: 1px;
-			background: #ddd;
+			background: #E5E1DA;
 			margin-bottom: 10px;
 		}
 
@@ -245,7 +242,7 @@
 				align-items: center;
 				gap: 7px;
 				p {
-					color: #181a20;
+					color: #2D3536;
 					font-family: $font;
 					font-style: normal;
 					line-height: normal;

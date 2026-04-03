@@ -11,7 +11,7 @@
 		// ── Seller Banner ──
 		.seller-banner {
 			width: 100%;
-			background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+			background: #6B7556;
 			padding: 120px 0 50px;
 
 			.container {
@@ -142,6 +142,27 @@
 			}
 		}
 
+		.follow-btn {
+			background: #F2EFE2 !important;
+			color: #2D3536 !important;
+			border-radius: 8px;
+			font-family: 'Poppins', sans-serif;
+			font-size: 13px;
+			font-weight: 600;
+			text-transform: none;
+			padding: 8px 20px;
+			box-shadow: none !important;
+		}
+		.unfollow-btn {
+			border-color: #F2EFE2 !important;
+			color: #F2EFE2 !important;
+			border-radius: 8px;
+			font-size: 13px;
+			font-weight: 600;
+			text-transform: none;
+			padding: 8px 20px;
+		}
+
 		// ── Main Container ──
 		.container {
 			max-width: 1260px;
@@ -161,7 +182,7 @@
 					margin-bottom: 24px;
 
 					.section-title {
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 22px;
 						font-weight: 700;
@@ -232,7 +253,7 @@
 					margin-bottom: 8px;
 
 					span {
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 26px;
 						font-weight: 700;
@@ -271,7 +292,7 @@
 
 						span {
 							margin-left: 8px;
-							color: #181a20;
+							color: #2D3536;
 							font-family: $font;
 							font-size: 16px;
 							font-weight: 600;
@@ -308,7 +329,7 @@
 									justify-content: center;
 
 									strong {
-										color: #181a20;
+										color: #2D3536;
 										font-family: $font;
 										font-size: 14px;
 										font-weight: 600;
@@ -358,7 +379,7 @@
 					padding: 28px 32px;
 
 					.main-title {
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 17px;
 						font-weight: 700;
@@ -413,7 +434,7 @@
 							align-items: center;
 							gap: 8px;
 							border-radius: 10px;
-							background: #181a20;
+							background: #2D3536;
 							border: none;
 							cursor: pointer;
 							transition: background 0.2s;
