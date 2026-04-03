@@ -6,14 +6,6 @@
 
 		.card-config {
 			@include product-card();
-			.name-price-row {
-				justify-content: flex-start;
-				gap: 8px;
-				.name-link {
-					flex-grow: 0;
-					max-width: 65%;
-				}
-			}
 		}
 
 		.info-box {
@@ -25,7 +17,7 @@
 				display: flex;
 				flex-direction: column;
 				span {
-					color: #181a20;
+					color: #2D3536;
 					font-family: $font;
 					font-size: 34px;
 					font-style: normal;
@@ -38,7 +30,7 @@
 					}
 				}
 				p {
-					color: #181a20;
+					color: #2D3536;
 					font-family: $font;
 					font-size: 14px;
 					font-style: normal;
@@ -83,7 +75,7 @@
 					cursor: pointer;
 					align-items: center;
 					span {
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 15px;
 						font-style: normal;
@@ -114,9 +106,9 @@
 							margin-right: 20px;
 						}
 						&.active {
-							border: 1px solid #181a20;
-							background: #F5F2EC;
-							color: #181a20;
+							border: 1px solid #2D3536;
+							background: #F2EFE2;
+							color: #2D3536;
 							font-family: $font;
 							font-size: 14px;
 							font-style: normal;
@@ -183,8 +175,8 @@
 								left: 12px;
 								bottom: 12px;
 								border-radius: 6px;
-								background: #F5F2EC;
-								color: #181a20;
+								background: #F2EFE2;
+								color: #2D3536;
 								font-family: $font;
 								font-size: 15px;
 								font-style: normal;
@@ -200,11 +192,11 @@
 							border-radius: 0px 0px 12px 12px;
 							border: 1px solid rgba(196, 196, 196, 0.71);
 							border-top: none;
-							background: #F5F2EC;
+							background: #F2EFE2;
 							box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
 							.title {
 								overflow: hidden;
-								color: #181a20;
+								color: #2D3536;
 								text-overflow: ellipsis;
 								white-space: nowrap;
 								font-family: $font;
@@ -218,7 +210,7 @@
 							.desc {
 								margin-top: 5px;
 								overflow: hidden;
-								color: #717171;
+								color: #716B69;
 								font-family: $font;
 								font-size: 13px;
 								font-style: normal;
@@ -241,7 +233,7 @@
 										height: 17px;
 									}
 									span {
-										color: #181a20;
+										color: #2D3536;
 										font-family: $font;
 										font-size: 13px;
 										font-style: normal;
@@ -256,7 +248,7 @@
 								justify-content: space-between;
 								align-items: center;
 								p {
-									color: #181a20;
+									color: #2D3536;
 									font-family: $font;
 									font-size: 13px;
 									font-style: normal;
@@ -276,7 +268,7 @@
 									gap: 7px;
 									align-items: center;
 									.view-cnt {
-										color: #717171;
+										color: #716B69;
 										font-family: $font;
 										font-size: 13px;
 										font-style: normal;
@@ -297,7 +289,7 @@
 			height: 816px;
 			display: flex;
 			flex-direction: row;
-			background: #F5F2EC;
+			background: #F2EFE2;
 			.container {
 				flex-direction: column;
 				align-items: center;
@@ -346,7 +338,7 @@
 								display: flex;
 								align-items: center;
 								border-radius: 6px;
-								background: #eb6753;
+								background: #98AA9D;
 								img {
 									width: 14px;
 									height: 14px;
@@ -368,8 +360,8 @@
 								left: 20px;
 								bottom: 20px;
 								border-radius: 6px;
-								background: #F5F2EC;
-								color: #181a20;
+								background: #F2EFE2;
+								color: #2D3536;
 								font-family: $font;
 								font-size: 15px;
 								font-style: normal;
@@ -385,11 +377,11 @@
 							border-radius: 0px 0px 12px 12px;
 							border: 1px solid rgba(196, 196, 196, 0.71);
 							border-top: none;
-							background: #F5F2EC;
+							background: #F2EFE2;
 							box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
 							.title {
 								overflow: hidden;
-								color: #181a20;
+								color: #2D3536;
 								text-overflow: ellipsis;
 								white-space: nowrap;
 								font-family: $font;
@@ -403,7 +395,7 @@
 							.desc {
 								margin-top: 5px;
 								overflow: hidden;
-								color: #717171;
+								color: #716B69;
 								font-family: $font;
 								font-size: 13px;
 								font-style: normal;
@@ -426,7 +418,7 @@
 										height: 17px;
 									}
 									span {
-										color: #181a20;
+										color: #2D3536;
 										font-family: $font;
 										font-size: 13px;
 										font-style: normal;
@@ -441,7 +433,7 @@
 								justify-content: space-between;
 								align-items: center;
 								p {
-									color: #181a20;
+									color: #2D3536;
 									font-family: $font;
 									font-size: 13px;
 									font-style: normal;
@@ -461,7 +453,7 @@
 									gap: 7px;
 									align-items: center;
 									.view-cnt {
-										color: #717171;
+										color: #716B69;
 										font-family: $font;
 										font-size: 13px;
 										font-style: normal;
@@ -549,8 +541,8 @@
 								left: 12px;
 								bottom: 12px;
 								border-radius: 6px;
-								background: #F5F2EC;
-								color: #181a20;
+								background: #F2EFE2;
+								color: #2D3536;
 								font-family: $font;
 								font-size: 15px;
 								font-style: normal;
@@ -566,11 +558,11 @@
 							border-radius: 0px 0px 12px 12px;
 							border: 1px solid rgba(196, 196, 196, 0.71);
 							border-top: none;
-							background: #F5F2EC;
+							background: #F2EFE2;
 							box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
 							.title {
 								overflow: hidden;
-								color: #181a20;
+								color: #2D3536;
 								text-overflow: ellipsis;
 								white-space: nowrap;
 								font-family: $font;
@@ -584,7 +576,7 @@
 							.desc {
 								margin-top: 5px;
 								overflow: hidden;
-								color: #717171;
+								color: #716B69;
 								font-family: $font;
 								font-size: 13px;
 								font-style: normal;
@@ -607,7 +599,7 @@
 										height: 17px;
 									}
 									span {
-										color: #181a20;
+										color: #2D3536;
 										font-family: $font;
 										font-size: 13px;
 										font-style: normal;
@@ -622,7 +614,7 @@
 								justify-content: space-between;
 								align-items: center;
 								p {
-									color: #181a20;
+									color: #2D3536;
 									font-family: $font;
 									font-size: 13px;
 									font-style: normal;
@@ -642,7 +634,7 @@
 									gap: 7px;
 									align-items: center;
 									.view-cnt {
-										color: #717171;
+										color: #716B69;
 										font-family: $font;
 										font-size: 13px;
 										font-style: normal;
@@ -664,7 +656,7 @@
 			height: 722px;
 			display: flex;
 			flex-direction: row;
-			background: #F5F2EC;
+			background: #F2EFE2;
 			.container {
 				position: relative;
 				flex-direction: column;
@@ -683,7 +675,7 @@
 						align-items: center;
 						justify-content: center;
 						border-radius: 50%;
-						background: #F5F2EC;
+						background: #F2EFE2;
 						filter: drop-shadow(0px 10px 35px rgba(5, 16, 54, 0.1));
 						cursor: pointer;
 						svg {
@@ -724,7 +716,7 @@
 							}
 							strong {
 								margin-top: 20px;
-								color: #181a20;
+								color: #2D3536;
 								text-align: center;
 								font-family: $font;
 								font-size: 15px;
@@ -735,7 +727,7 @@
 								cursor: pointer;
 							}
 							span {
-								color: #181a20;
+								color: #2D3536;
 								text-align: center;
 								font-family: $font;
 								font-size: 15px;
@@ -755,7 +747,7 @@
 			height: 810px;
 			display: flex;
 			flex-direction: row;
-			background: #F5F2EC;
+			background: #F2EFE2;
 			.container {
 				flex-direction: column;
 				align-items: center;
@@ -791,7 +783,7 @@
 							left: 10px;
 							right: 10px;
 							strong {
-								color: #F5F2EC;
+								color: #F2EFE2;
 								font-family: $font;
 								font-size: 25px;
 								font-style: normal;
@@ -1044,7 +1036,7 @@
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: #c9a96e;
+    color: #E9A692;
     margin-bottom: 6px;
   }
 

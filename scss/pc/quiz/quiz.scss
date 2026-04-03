@@ -1,7 +1,7 @@
 #pc-wrap {
 	#quiz-page {
 		min-height: 100vh;
-		background: #f5f2ec;
+		background: #F2EFE2;
 		padding: 120px 0 80px;
 
 		.container {
@@ -37,7 +37,7 @@
 
 				.progress-fill {
 					height: 100%;
-					background: #181a20;
+					background: #2D3536;
 					border-radius: 2px;
 					transition: width 0.4s ease;
 				}
@@ -56,7 +56,7 @@
 					transition: background 0.3s;
 
 					&.active {
-						background: #181a20;
+						background: #2D3536;
 					}
 
 					&.done {
@@ -75,7 +75,7 @@
 			animation: fadeSlideIn 0.3s ease;
 
 			.quiz-question {
-				color: #181a20;
+				color: #2D3536;
 				font-family: $font;
 				font-size: 26px;
 				font-weight: 700;
@@ -123,15 +123,15 @@
 				text-align: center;
 
 				&:hover {
-					border-color: #181a20;
+					border-color: #2D3536;
 					background: #f0ece4;
 					transform: translateY(-2px);
 					box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 				}
 
 				&.selected {
-					border-color: #181a20;
-					background: #181a20;
+					border-color: #2D3536;
+					background: #2D3536;
 
 					.option-emoji {
 						filter: grayscale(0);
@@ -152,7 +152,7 @@
 				}
 
 				.option-label {
-					color: #181a20;
+					color: #2D3536;
 					font-family: $font;
 					font-size: 15px;
 					font-weight: 600;
@@ -185,7 +185,7 @@
 					transition: all 0.2s;
 
 					.chip-label {
-						color: #181a20;
+						color: #2D3536;
 						font-family: $font;
 						font-size: 15px;
 						font-weight: 600;
@@ -193,8 +193,8 @@
 
 					&:hover,
 					&.selected {
-						border-color: #181a20;
-						background: #181a20;
+						border-color: #2D3536;
+						background: #2D3536;
 
 						.chip-label {
 							color: #ffffff;
@@ -226,7 +226,7 @@
 					transition: color 0.2s;
 
 					&:hover {
-						color: #181a20;
+						color: #2D3536;
 					}
 
 					svg {
@@ -238,7 +238,7 @@
 					display: flex;
 					align-items: center;
 					gap: 8px;
-					background: #181a20;
+					background: #2D3536;
 					color: #ffffff;
 					font-family: $font;
 					font-size: 15px;
@@ -283,7 +283,7 @@
 				}
 
 				.results-title {
-					color: #181a20;
+					color: #2D3536;
 					font-family: $font;
 					font-size: 28px;
 					font-weight: 700;
@@ -312,7 +312,7 @@
 					gap: 6px;
 					padding: 8px 16px;
 					border-radius: 50px;
-					background: #181a20;
+					background: #2D3536;
 					color: #ffffff;
 					font-family: $font;
 					font-size: 13px;
@@ -325,7 +325,7 @@
 			}
 
 			.results-section-title {
-				color: #181a20;
+				color: #2D3536;
 				font-family: $font;
 				font-size: 20px;
 				font-weight: 700;
@@ -365,10 +365,10 @@
 
 				.retake-btn {
 					padding: 14px 32px;
-					border: 2px solid #181a20;
+					border: 2px solid #2D3536;
 					border-radius: 10px;
 					background: transparent;
-					color: #181a20;
+					color: #2D3536;
 					font-family: $font;
 					font-size: 15px;
 					font-weight: 600;
@@ -385,7 +385,7 @@
 					padding: 14px 32px;
 					border: none;
 					border-radius: 10px;
-					background: #181a20;
+					background: #2D3536;
 					color: #ffffff;
 					font-family: $font;
 					font-size: 15px;
@@ -405,7 +405,7 @@
 	// ── Homepage Quiz Banner ──
 	.hp-quiz-banner {
 		width: 100%;
-		background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+		background: #6B7556;
 		padding: 64px 0;
 
 		.container {
@@ -464,7 +464,7 @@
 				align-items: center;
 				gap: 8px;
 				background: #ffffff;
-				color: #181a20;
+				color: #2D3536;
 				font-family: $font;
 				font-size: 15px;
 				font-weight: 700;

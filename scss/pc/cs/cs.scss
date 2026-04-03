@@ -60,7 +60,7 @@
             letter-spacing: 0.42px;
             &.active {
               border: 1px solid #725CE8;
-              background: #EB6753;
+              background: #98AA9D;
               color: #FFF;
             }
           }
@@ -119,8 +119,8 @@
                 div {
                   padding: 6px 9px;
                   border-radius: 12px;
-                  border: 1px solid #EB6753;
-                  color: #EB6753;
+                  border: 1px solid #98AA9D;
+                  color: #98AA9D;
                   font-family: $font;
                   font-size: 12px;
                   font-style: normal;
@@ -182,7 +182,7 @@
               font-size: 14px;
               text-align: center;
               .inquiry-email {
-                color: #EB6753;
+                color: #98AA9D;
                 font-weight: 600;
               }
             }
@@ -223,7 +223,7 @@
                 outline: none;
                 transition: border-color 0.2s;
                 &:focus {
-                  border-color: #EB6753;
+                  border-color: #98AA9D;
                 }
               }
 
@@ -237,7 +237,7 @@
                   border-radius: 6px;
                 }
                 &.Mui-focused .MuiOutlinedInput-notchedOutline {
-                  border-color: #EB6753;
+                  border-color: #98AA9D;
                 }
               }
 
@@ -252,7 +252,7 @@
                 outline: none;
                 transition: border-color 0.2s;
                 &:focus {
-                  border-color: #EB6753;
+                  border-color: #98AA9D;
                 }
               }
             }
@@ -264,7 +264,7 @@
               .inquiry-submit-btn {
                 height: 46px;
                 padding: 0 40px;
-                background: #EB6753;
+                background: #98AA9D;
                 color: #FFF;
                 font-family: $font;
                 font-size: 14px;
@@ -341,8 +341,8 @@
               letter-spacing: -0.225px;
               cursor: pointer;
               &.active {
-                border-bottom: 1px solid #EB6753;
-                color: #EB6753;
+                border-bottom: 1px solid #98AA9D;
+                color: #98AA9D;
               }
             }
           }
@@ -350,7 +350,7 @@
             margin-top: 50px;
             .MuiAccordionDetails-root {
               padding: 30px 20px;
-              background: #F5F2EC;
+              background: #F2EFE2;
             }
             .badge {
               margin: 0 24px;
@@ -372,8 +372,8 @@
               align-items: flex-start;
               flex-direction: row;
               .badge {
-                color: #EB6753;
-                border: 1px solid #EB6753;
+                color: #98AA9D;
+                border: 1px solid #98AA9D;
               }
             }
           }

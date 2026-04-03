@@ -27,7 +27,7 @@ const categories = [
 	{ label: 'Makeup', value: ProductCategory.MAKEUP },
 	{ label: 'Haircare', value: ProductCategory.HAIRCARE },
 	{ label: 'Bodycare', value: ProductCategory.BODYCARE },
-	{ label: 'Fragrance', value: ProductCategory.FRAGRANCE },
+	{ label: 'Fragnance', value: ProductCategory.FRAGRANCE },
 	{ label: 'Wellness', value: ProductCategory.WELLNESS },
 ];
 

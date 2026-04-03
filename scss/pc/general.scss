@@ -1,7 +1,7 @@
 // ── Announcement Bar ──────────────────────────────────────────────────────────
 .announcement-bar {
 	width: 100%;
-	background: #181a20;
+	background: #2D3536;
 	color: #fff;
 	height: 36px;
 	overflow: hidden;
@@ -34,7 +34,7 @@
 		color: #f0ece4;
 
 		svg {
-			color: #c9a96e;
+			color: #E9A692;
 			flex-shrink: 0;
 		}
 	}
@@ -88,7 +88,7 @@
 		}
 
 		&.active {
-			border-color: #181a20;
+			border-color: #2D3536;
 		}
 	}
 
@@ -138,7 +138,7 @@
 			display: flex;
 			align-items: center;
 			border-radius: 6px;
-			background: #eb6753;
+			background: #98AA9D;
 			img {
 				width: 14px;
 				height: 14px;
@@ -160,8 +160,8 @@
 			left: 20px;
 			bottom: 20px;
 			border-radius: 6px;
-			background: #F5F2EC;
-			color: #181a20;
+			background: #F2EFE2;
+			color: #2D3536;
 			font-family: $font;
 			font-size: 15px;
 			font-style: normal;
@@ -177,10 +177,10 @@
 		border-radius: 0px 0px 12px 12px;
 		border: 1px solid #ddd;
 		border-top: none;
-		background: #F5F2EC;
+		background: #F2EFE2;
 		.title {
 			overflow: hidden;
-			color: #181a20;
+			color: #2D3536;
 			text-overflow: ellipsis;
 			white-space: nowrap;
 			font-family: $font;
@@ -194,7 +194,7 @@
 		.desc {
 			margin-top: 5px;
 			overflow: hidden;
-			color: #717171;
+			color: #716B69;
 			font-family: $font;
 			font-size: 13px;
 			font-style: normal;
@@ -217,7 +217,7 @@
 					height: 17px;
 				}
 				span {
-					color: #181a20;
+					color: #2D3536;
 					font-family: $font;
 					font-size: 13px;
 					font-style: normal;
@@ -239,7 +239,7 @@
 				justify-content: space-between;
 			}
 			p {
-				color: #181a20;
+				color: #2D3536;
 				font-family: $font;
 				font-size: 13px;
 				font-style: normal;
@@ -292,7 +292,7 @@
 			top: 12px;
 			left: 12px;
 			border-radius: 6px;
-			background: #eb6753;
+			background: #98AA9D;
 			color: #fff;
 			font-family: $font;
 			font-size: 12px;
@@ -311,7 +311,7 @@
 			display: flex;
 			flex-direction: column;
 			strong {
-				color: #181a20;
+				color: #2D3536;
 				font-family: $font;
 				font-size: 15px;
 				font-style: normal;
@@ -320,7 +320,7 @@
 				cursor: pointer;
 			}
 			span {
-				color: #181a20;
+				color: #2D3536;
 				font-family: $font;
 				font-size: 15px;
 				font-style: normal;

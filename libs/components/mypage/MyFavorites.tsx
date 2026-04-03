@@ -46,13 +46,9 @@ const MyFavorites: NextPage = () => {
 			if (!id) return;
 			if (!user?._id) throw new Error(Messages.error2);
 
-			await likeTargetProduct({
-				variables: {
-					input: id,
-				},
-			});
-
-			await getFavoritesRefetch({ input: searchFavorites });
+			await likeTargetProduct({ variables: { input: id } });
+			const result = await getFavoritesRefetch({ input: searchFavorites });
+			setMyFavorites(result.data?.getFavorites?.list ?? []);
 		} catch (err: any) {
 			await sweetMixinErrorAlert(err.message).then();
 		}

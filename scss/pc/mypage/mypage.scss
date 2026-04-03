@@ -1,6 +1,6 @@
 #pc-wrap {
 	#my-page {
-		background: #F5F2EC;
+		background: #F2EFE2;
 		.container {
 			.my-page {
 				position: relative;
@@ -42,7 +42,7 @@
 
 						// Header block
 						.menu-header {
-							background: #2b2b2b;
+							background: #6B7556;
 							padding: 0;
 							display: flex;
 							flex-direction: column;
@@ -107,7 +107,7 @@
 							}
 
 							.menu-section-title {
-								color: #181a20;
+								color: #2D3536;
 								font-family: $font;
 								font-size: 13px;
 								font-weight: 700;
@@ -128,7 +128,7 @@
 								line-height: 1.4;
 
 								&:hover {
-									color: #181a20;
+									color: #2D3536;
 									background: #faf9f7;
 								}
 
@@ -142,7 +142,7 @@
 									display: inline-block;
 									margin-left: 6px;
 									padding: 1px 6px;
-									background: #e91e63;
+									background: #98AA9D;
 									color: #fff;
 									font-family: $font;
 									font-size: 10px;
@@ -204,7 +204,7 @@
 							}
 							.total-result {
 								p {
-									color: #181a20;
+									color: #2D3536;
 									text-align: center;
 									font-family: $font;
 									font-size: 24px;

@@ -1,7 +1,7 @@
 @import '/scss/variables.scss';
 
 body {
-  background-color: #F5F2EC;
+  background-color: #F2EFE2;
 }
 
 #mobile-wrap {
@@ -24,7 +24,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0 16px;
-    background: #F5F2EC;
+    background: #F2EFE2;
     box-shadow: 0 1px 8px rgba(24, 26, 32, 0.08);
     z-index: 1000;
     box-sizing: border-box;
@@ -43,7 +43,7 @@ body {
       .mob-nav-icon {
         width: 24px;
         height: 24px;
-        color: #1B1B1B;
+        color: #2D3536;
         cursor: pointer;
       }
 
@@ -64,7 +64,7 @@ body {
           width: 16px;
           height: 16px;
           border-radius: 50%;
-          background: #e91e63;
+          background: #98AA9D;
           color: #fff;
           font-size: 10px;
           font-weight: 700;
@@ -89,7 +89,7 @@ body {
     font-family: $font;
     font-size: 20px;
     font-weight: 600;
-    color: #181a20;
+    color: #2D3536;
     margin-bottom: 14px;
   }
 
@@ -128,7 +128,7 @@ body {
           font-family: $font;
           font-size: 11px;
           font-weight: 500;
-          color: #181a20;
+          color: #2D3536;
           text-align: center;
           white-space: nowrap;
         }
@@ -144,7 +144,7 @@ body {
     flex-direction: column;
     border-radius: 12px;
     overflow: hidden;
-    background: #F5F2EC;
+    background: #F2EFE2;
     box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
 
     .mob-card-img {
@@ -178,14 +178,14 @@ body {
         &.mob-badge-sale {
           top: 10px;
           right: 10px;
-          background: linear-gradient(135deg, #e91e63, #f06292);
+          background: linear-gradient(135deg, #E9A692, #f06292);
           color: #fff;
         }
 
         &.mob-badge-new {
           top: 10px;
           right: 10px;
-          background: #1b1b1b;
+          background: #2D3536;
           color: #fff;
         }
       }
@@ -199,7 +199,7 @@ body {
       border-radius: 0 0 12px 12px;
       border: 1px solid rgba(196, 196, 196, 0.71);
       border-top: none;
-      background: #F5F2EC;
+      background: #F2EFE2;
       box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
 
       .mob-card-title-link { text-decoration: none; }
@@ -207,7 +207,7 @@ body {
       .mob-card-title {
         display: block;
         overflow: hidden;
-        color: #181a20;
+        color: #2D3536;
         text-overflow: ellipsis;
         white-space: nowrap;
         font-family: $font;
@@ -220,7 +220,7 @@ body {
       .mob-card-desc {
         margin-top: 4px;
         overflow: hidden;
-        color: #717171;
+        color: #716B69;
         font-family: $font;
         font-size: 13px;
         font-weight: 400;
@@ -237,7 +237,7 @@ body {
         align-items: center;
 
         .mob-card-price {
-          color: #181a20;
+          color: #2D3536;
           font-family: $font;
           font-size: 15px;
           font-weight: 600;
@@ -260,7 +260,7 @@ body {
             font-family: $font;
             font-size: 15px;
             font-weight: 700;
-            color: #e91e63;
+            color: #E9A692;
           }
         }
 
@@ -271,7 +271,7 @@ body {
           gap: 2px;
 
           .mob-card-likes {
-            color: #717171;
+            color: #716B69;
             font-family: $font;
             font-size: 13px;
             font-weight: 400;
@@ -287,7 +287,7 @@ body {
     flex-direction: row;
     justify-content: center;
     span {
-      color: #181a20;
+      color: #2D3536;
       font-family: $font;
       font-size: 34px;
       font-style: normal;
@@ -335,7 +335,7 @@ body {
           font-family: $font;
           font-size: 13px;
           font-weight: 500;
-          color: #717171;
+          color: #716B69;
           cursor: pointer;
           transition: all 0.2s ease;
 
@@ -412,8 +412,8 @@ body {
                   left: 12px;
                   bottom: 12px;
                   border-radius: 6px;
-                  background: #F5F2EC;
-                  color: #181a20;
+                  background: #F2EFE2;
+                  color: #2D3536;
                   font-family: $font;
                   font-size: 15px;
                   font-style: normal;
@@ -429,11 +429,11 @@ body {
                 border-radius: 0px 0px 12px 12px;
                 border: 1px solid rgba(196, 196, 196, 0.71);
                 border-top: none;
-                background: #F5F2EC;
+                background: #F2EFE2;
                 box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
                 .title {
                   overflow: hidden;
-                  color: #181a20;
+                  color: #2D3536;
                   text-overflow: ellipsis;
                   white-space: nowrap;
                   font-family: $font;
@@ -447,7 +447,7 @@ body {
                 .desc {
                   margin-top: 5px;
                   overflow: hidden;
-                  color: #717171;
+                  color: #716B69;
                   font-family: $font;
                   font-size: 13px;
                   font-style: normal;
@@ -470,7 +470,7 @@ body {
                       height: 17px;
                     }
                     span {
-                      color: #181a20;
+                      color: #2D3536;
                       font-family: $font;
                       font-size: 13px;
                       font-style: normal;
@@ -485,7 +485,7 @@ body {
                   justify-content: space-between;
                   align-items: center;
                   p {
-                    color: #181a20;
+                    color: #2D3536;
                     font-family: $font;
                     font-size: 13px;
                     font-style: normal;
@@ -505,7 +505,7 @@ body {
                     gap: 7px;
                     align-items: center;
                     .view-cnt {
-                      color: #717171;
+                      color: #716B69;
                       font-family: $font;
                       font-size: 13px;
                       font-style: normal;
@@ -538,8 +538,8 @@ body {
               left: 12px;
               bottom: 12px;
               border-radius: 6px;
-              background: #F5F2EC;
-              color: #181a20;
+              background: #F2EFE2;
+              color: #2D3536;
               font-family: $font;
               font-size: 15px;
               font-style: normal;
@@ -555,11 +555,11 @@ body {
             border-radius: 0px 0px 12px 12px;
             border: 1px solid rgba(196, 196, 196, 0.71);
             border-top: none;
-            background: #F5F2EC;
+            background: #F2EFE2;
             box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
             .title {
               overflow: hidden;
-              color: #181a20;
+              color: #2D3536;
               text-overflow: ellipsis;
               white-space: nowrap;
               font-family: $font;
@@ -573,7 +573,7 @@ body {
             .desc {
               margin-top: 5px;
               overflow: hidden;
-              color: #717171;
+              color: #716B69;
               font-family: $font;
               font-size: 13px;
               font-style: normal;
@@ -596,7 +596,7 @@ body {
                   height: 17px;
                 }
                 span {
-                  color: #181a20;
+                  color: #2D3536;
                   font-family: $font;
                   font-size: 13px;
                   font-style: normal;
@@ -611,7 +611,7 @@ body {
               justify-content: space-between;
               align-items: center;
               p {
-                color: #181a20;
+                color: #2D3536;
                 font-family: $font;
                 font-size: 13px;
                 font-style: normal;
@@ -631,7 +631,7 @@ body {
                 gap: 7px;
                 align-items: center;
                 .view-cnt {
-                  color: #717171;
+                  color: #716B69;
                   font-family: $font;
                   font-size: 13px;
                   font-style: normal;
@@ -694,7 +694,7 @@ body {
     height: auto;
     display: flex;
     flex-direction: row;
-    background: #F5F2EC;
+    background: #F2EFE2;
     .container {
       width: 100%;
       flex-direction: column;
@@ -738,7 +738,7 @@ body {
               display: flex;
               align-items: center;
               border-radius: 6px;
-              background: #eb6753;
+              background: #98AA9D;
               img {
                 width: 14px;
                 height: 14px;
@@ -760,8 +760,8 @@ body {
               left: 20px;
               bottom: 20px;
               border-radius: 6px;
-              background: #F5F2EC;
-              color: #181a20;
+              background: #F2EFE2;
+              color: #2D3536;
               font-family: $font;
               font-size: 15px;
               font-style: normal;
@@ -777,11 +777,11 @@ body {
             border-radius: 0px 0px 12px 12px;
             border: 1px solid rgba(196, 196, 196, 0.71);
             border-top: none;
-            background: #F5F2EC;
+            background: #F2EFE2;
             box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
             .title {
               overflow: hidden;
-              color: #181a20;
+              color: #2D3536;
               text-overflow: ellipsis;
               white-space: nowrap;
               font-family: $font;
@@ -795,7 +795,7 @@ body {
             .desc {
               margin-top: 5px;
               overflow: hidden;
-              color: #717171;
+              color: #716B69;
               font-family: $font;
               font-size: 13px;
               font-style: normal;
@@ -818,7 +818,7 @@ body {
                   height: 17px;
                 }
                 span {
-                  color: #181a20;
+                  color: #2D3536;
                   font-family: $font;
                   font-size: 13px;
                   font-style: normal;
@@ -833,7 +833,7 @@ body {
               justify-content: space-between;
               align-items: center;
               p {
-                color: #181a20;
+                color: #2D3536;
                 font-family: $font;
                 font-size: 13px;
                 font-style: normal;
@@ -853,7 +853,7 @@ body {
                 gap: 7px;
                 align-items: center;
                 .view-cnt {
-                  color: #717171;
+                  color: #716B69;
                   font-family: $font;
                   font-size: 13px;
                   font-style: normal;
@@ -938,8 +938,8 @@ body {
                   left: 12px;
                   bottom: 12px;
                   border-radius: 6px;
-                  background: #F5F2EC;
-                  color: #181a20;
+                  background: #F2EFE2;
+                  color: #2D3536;
                   font-family: $font;
                   font-size: 15px;
                   font-style: normal;
@@ -955,11 +955,11 @@ body {
                 border-radius: 0px 0px 12px 12px;
                 border: 1px solid rgba(196, 196, 196, 0.71);
                 border-top: none;
-                background: #F5F2EC;
+                background: #F2EFE2;
                 box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
                 .title {
                   overflow: hidden;
-                  color: #181a20;
+                  color: #2D3536;
                   text-overflow: ellipsis;
                   white-space: nowrap;
                   font-family: $font;
@@ -973,7 +973,7 @@ body {
                 .desc {
                   margin-top: 5px;
                   overflow: hidden;
-                  color: #717171;
+                  color: #716B69;
                   font-family: $font;
                   font-size: 13px;
                   font-style: normal;
@@ -996,7 +996,7 @@ body {
                       height: 17px;
                     }
                     span {
-                      color: #181a20;
+                      color: #2D3536;
                       font-family: $font;
                       font-size: 13px;
                       font-style: normal;
@@ -1011,7 +1011,7 @@ body {
                   justify-content: space-between;
                   align-items: center;
                   p {
-                    color: #181a20;
+                    color: #2D3536;
                     font-family: $font;
                     font-size: 13px;
                     font-style: normal;
@@ -1031,7 +1031,7 @@ body {
                     gap: 7px;
                     align-items: center;
                     .view-cnt {
-                      color: #717171;
+                      color: #716B69;
                       font-family: $font;
                       font-size: 13px;
                       font-style: normal;
@@ -1067,7 +1067,7 @@ body {
       font-family: $font;
       font-size: 11px;
       font-weight: 600;
-      color: #C9A96E;
+      color: #E9A692;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
@@ -1076,7 +1076,7 @@ body {
       font-family: $font;
       font-size: 22px;
       font-weight: 700;
-      color: #F5F2EC;
+      color: #F2EFE2;
       line-height: 1.3;
     }
 
@@ -1109,7 +1109,7 @@ body {
           font-family: $font;
           font-size: 12px;
           font-weight: 500;
-          color: #F5F2EC;
+          color: #F2EFE2;
         }
       }
     }
@@ -1118,7 +1118,7 @@ body {
       align-self: flex-start;
       padding: 10px 20px !important;
       border-radius: 24px !important;
-      background: #C9A96E !important;
+      background: #98AA9D !important;
       color: #2C1654 !important;
       font-family: $font !important;
       font-size: 13px !important;
@@ -1176,7 +1176,7 @@ body {
         font-family: $font;
         font-size: 11px;
         font-weight: 600;
-        color: #C9A96E;
+        color: #E9A692;
         text-transform: uppercase;
         letter-spacing: 0.8px;
       }
@@ -1254,7 +1254,7 @@ body {
         font-family: $font;
         font-size: 12px;
         font-weight: 500;
-        color: #717171;
+        color: #716B69;
         cursor: pointer;
         transition: all 0.2s ease;
 
@@ -1338,7 +1338,7 @@ body {
           font-family: $font;
           font-size: 14px;
           font-weight: 600;
-          color: #181a20;
+          color: #2D3536;
           text-align: center;
         }
 
@@ -1346,7 +1346,7 @@ body {
           font-family: $font;
           font-size: 12px;
           font-weight: 400;
-          color: #717171;
+          color: #716B69;
           text-align: center;
           margin-top: 4px;
         }
@@ -1361,7 +1361,7 @@ body {
     height: auto;
     display: flex;
     flex-direction: row;
-    background: #F5F2EC;
+    background: #F2EFE2;
     .container {
       position: relative;
       width: 100%;
@@ -1397,7 +1397,7 @@ body {
               }
               strong {
                 margin-top: 10px;
-                color: #181a20;
+                color: #2D3536;
                 text-align: center;
                 font-family: $font;
                 font-size: 24px;
@@ -1408,7 +1408,7 @@ body {
                 cursor: pointer;
               }
               span {
-                color: #181a20;
+                color: #2D3536;
                 text-align: center;
                 font-family: $font;
                 font-size: 15px;
@@ -1440,7 +1440,7 @@ body {
         font-family: $font;
         font-size: 13px;
         font-weight: 600;
-        color: #181a20;
+        color: #2D3536;
         text-transform: uppercase;
         letter-spacing: 0.8px;
       }
@@ -1459,7 +1459,7 @@ body {
           font-family: $font;
           font-size: 12px;
           font-weight: 500;
-          color: #717171;
+          color: #716B69;
           cursor: pointer;
           transition: all 0.2s ease;
 
@@ -1486,7 +1486,7 @@ body {
           background: #fff;
           font-family: $font;
           font-size: 13px;
-          color: #181a20;
+          color: #2D3536;
           outline: none;
           &:focus { border-color: #2C1654; }
         }
@@ -1506,7 +1506,7 @@ body {
       font-family: $font !important;
       font-size: 13px !important;
       font-weight: 500 !important;
-      color: #717171 !important;
+      color: #716B69 !important;
       text-transform: none !important;
     }
   }
@@ -1521,7 +1521,7 @@ body {
       top: 60px;
       z-index: 100;
       padding: 10px 16px;
-      background: #F5F2EC;
+      background: #F2EFE2;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -1534,7 +1534,7 @@ body {
         font-family: $font !important;
         font-size: 13px !important;
         font-weight: 500 !important;
-        color: #181a20 !important;
+        color: #2D3536 !important;
         text-transform: none !important;
         padding: 6px 14px !important;
         border-radius: 20px !important;
@@ -1583,7 +1583,7 @@ body {
       p, span {
         font-family: $font;
         font-size: 13px;
-        color: #717171;
+        color: #716B69;
       }
     }
   }
@@ -1592,7 +1592,7 @@ body {
   #mob-product-detail-page {
     padding-bottom: 100px;
     width: 100%;
-    background: #F5F2EC;
+    background: #F2EFE2;
 
     .mob-pdp-gallery {
       width: 100%;
@@ -1628,7 +1628,7 @@ body {
         font-family: $font;
         font-size: 12px;
         font-weight: 600;
-        color: #717171;
+        color: #716B69;
         text-transform: uppercase;
         letter-spacing: 1px;
       }
@@ -1637,7 +1637,7 @@ body {
         font-family: $font;
         font-size: 20px;
         font-weight: 700;
-        color: #181a20;
+        color: #2D3536;
         line-height: 1.3;
       }
 
@@ -1651,13 +1651,13 @@ body {
           font-family: $font;
           font-size: 13px;
           font-weight: 600;
-          color: #181a20;
+          color: #2D3536;
         }
 
         .mob-pdp-rating-count {
           font-family: $font;
           font-size: 13px;
-          color: #717171;
+          color: #716B69;
           text-decoration: underline;
         }
       }
@@ -1666,7 +1666,7 @@ body {
         font-family: $font;
         font-size: 24px;
         font-weight: 700;
-        color: #181a20;
+        color: #2D3536;
       }
 
       .mob-pdp-certs {
@@ -1696,7 +1696,7 @@ body {
         font-family: $font;
         font-size: 13px;
         font-weight: 600;
-        color: #181a20;
+        color: #2D3536;
       }
 
       .mob-pdp-sizes {
@@ -1712,7 +1712,7 @@ body {
           font-family: $font;
           font-size: 13px;
           font-weight: 500;
-          color: #181a20;
+          color: #2D3536;
           cursor: pointer;
           transition: all 0.2s ease;
 
@@ -1745,7 +1745,7 @@ body {
             background: transparent;
             font-size: 18px;
             font-weight: 400;
-            color: #181a20;
+            color: #2D3536;
             cursor: pointer;
           }
 
@@ -1755,7 +1755,7 @@ body {
             font-family: $font;
             font-size: 15px;
             font-weight: 600;
-            color: #181a20;
+            color: #2D3536;
           }
         }
 
@@ -1764,7 +1764,7 @@ body {
           height: 44px;
           border-radius: 22px !important;
           background: #2C1654 !important;
-          color: #F5F2EC !important;
+          color: #F2EFE2 !important;
           font-family: $font !important;
           font-size: 14px !important;
           font-weight: 600 !important;
@@ -1809,7 +1809,7 @@ body {
             font-family: $font;
             font-size: 13px;
             font-weight: 500;
-            color: #717171;
+            color: #716B69;
             cursor: pointer;
             border-bottom: 2px solid transparent;
             display: flex;
@@ -1844,14 +1844,14 @@ body {
             font-family: $font;
             font-size: 15px;
             font-weight: 700;
-            color: #181a20;
+            color: #2D3536;
           }
 
           .mob-pdp-desc {
             font-family: $font;
             font-size: 14px;
             font-weight: 400;
-            color: #717171;
+            color: #716B69;
             line-height: 1.6;
           }
 
@@ -1876,7 +1876,7 @@ body {
                 font-family: $font;
                 font-size: 13px;
                 font-weight: 600;
-                color: #181a20;
+                color: #2D3536;
               }
 
               .mob-pdp-table-val {
@@ -1884,7 +1884,7 @@ body {
                 font-family: $font;
                 font-size: 13px;
                 font-weight: 400;
-                color: #717171;
+                color: #716B69;
                 text-align: right;
               }
             }
@@ -1902,14 +1902,14 @@ body {
               font-family: $font;
               font-size: 14px;
               font-weight: 600;
-              color: #181a20;
+              color: #2D3536;
             }
 
             .mob-pdp-ing-benefit {
               font-family: $font;
               font-size: 13px;
               font-weight: 400;
-              color: #717171;
+              color: #716B69;
             }
           }
 
@@ -1924,13 +1924,13 @@ body {
               font-family: $font;
               font-size: 36px;
               font-weight: 700;
-              color: #181a20;
+              color: #2D3536;
             }
 
             .mob-pdp-avg-sub {
               font-family: $font;
               font-size: 13px;
-              color: #717171;
+              color: #716B69;
             }
           }
 
@@ -1966,7 +1966,7 @@ body {
                   font-family: $font;
                   font-size: 13px;
                   font-weight: 600;
-                  color: #181a20;
+                  color: #2D3536;
                 }
               }
 
@@ -1982,7 +1982,7 @@ body {
               font-family: $font;
               font-size: 13px;
               font-weight: 400;
-              color: #717171;
+              color: #716B69;
               line-height: 1.5;
             }
           }
@@ -2016,7 +2016,7 @@ body {
               border: 1px solid rgba(24, 26, 32, 0.18);
               font-family: $font;
               font-size: 14px;
-              color: #181a20;
+              color: #2D3536;
               resize: vertical;
               outline: none;
               box-sizing: border-box;
@@ -2047,7 +2047,7 @@ body {
           font-family: $font;
           font-size: 15px;
           font-weight: 700;
-          color: #181a20;
+          color: #2D3536;
           margin-bottom: 12px;
         }
 
@@ -2083,7 +2083,7 @@ body {
               font-family: $font;
               font-size: 11px;
               font-weight: 600;
-              color: #717171;
+              color: #716B69;
               text-transform: uppercase;
             }
 
@@ -2091,7 +2091,7 @@ body {
               font-family: $font;
               font-size: 12px;
               font-weight: 500;
-              color: #181a20;
+              color: #2D3536;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
@@ -2101,7 +2101,7 @@ body {
               font-family: $font;
               font-size: 13px;
               font-weight: 700;
-              color: #181a20;
+              color: #2D3536;
             }
           }
         }
@@ -2113,7 +2113,7 @@ body {
   #mob-cart-page {
     padding-bottom: 160px;
     width: 100%;
-    background: #F5F2EC;
+    background: #F2EFE2;
 
     .mob-cart-wrap {
       display: flex;
@@ -2134,7 +2134,7 @@ body {
         font-family: $font;
         font-size: 13px;
         font-weight: 500;
-        color: #181a20;
+        color: #2D3536;
       }
 
       .mob-cart-progress-track {
@@ -2164,13 +2164,13 @@ body {
         font-family: $font;
         font-size: 18px;
         font-weight: 600;
-        color: #181a20;
+        color: #2D3536;
       }
 
       .mob-cart-empty-sub {
         font-family: $font;
         font-size: 14px;
-        color: #717171;
+        color: #716B69;
         text-align: center;
       }
 
@@ -2203,7 +2203,7 @@ body {
           font-family: $font;
           font-size: 14px;
           font-weight: 600;
-          color: #181a20;
+          color: #2D3536;
         }
 
         .mob-cart-remove-all {
@@ -2229,7 +2229,7 @@ body {
           height: 80px;
           border-radius: 8px;
           overflow: hidden;
-          background: #F5F2EC;
+          background: #F2EFE2;
 
           img {
             width: 100%;
@@ -2265,7 +2265,7 @@ body {
                 font-family: $font;
                 font-size: 11px;
                 font-weight: 600;
-                color: #717171;
+                color: #716B69;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
               }
@@ -2274,7 +2274,7 @@ body {
                 font-family: $font;
                 font-size: 13px;
                 font-weight: 600;
-                color: #181a20;
+                color: #2D3536;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -2283,7 +2283,7 @@ body {
               .mob-cart-item-meta {
                 font-family: $font;
                 font-size: 12px;
-                color: #717171;
+                color: #716B69;
               }
             }
 
@@ -2305,7 +2305,7 @@ body {
                 font-family: $font;
                 font-size: 14px;
                 font-weight: 700;
-                color: #181a20;
+                color: #2D3536;
               }
             }
           }
@@ -2330,7 +2330,7 @@ body {
                 border: none;
                 background: transparent;
                 font-size: 16px;
-                color: #181a20;
+                color: #2D3536;
                 cursor: pointer;
                 display: flex;
                 align-items: center;
@@ -2343,7 +2343,7 @@ body {
                 font-family: $font;
                 font-size: 13px;
                 font-weight: 600;
-                color: #181a20;
+                color: #2D3536;
               }
             }
 
@@ -2367,7 +2367,7 @@ body {
                 border: none;
                 font-family: $font;
                 font-size: 12px;
-                color: #717171;
+                color: #716B69;
                 cursor: pointer;
                 text-decoration: underline;
               }
@@ -2395,7 +2395,7 @@ body {
         font-family: $font;
         font-size: 12px;
         font-weight: 500;
-        color: #e91e63;
+        color: #E9A692;
         text-align: center;
       }
 
@@ -2417,14 +2417,14 @@ body {
           font-family: $font;
           font-size: 14px;
           font-weight: 500;
-          color: #717171;
+          color: #716B69;
         }
 
         .mob-cart-total-val {
           font-family: $font;
           font-size: 18px;
           font-weight: 700;
-          color: #181a20;
+          color: #2D3536;
         }
       }
 
@@ -2433,7 +2433,7 @@ body {
         height: 48px;
         border-radius: 24px !important;
         background: #2C1654 !important;
-        color: #F5F2EC !important;
+        color: #F2EFE2 !important;
         font-family: $font !important;
         font-size: 15px !important;
         font-weight: 700 !important;
@@ -2448,7 +2448,7 @@ body {
     height: auto;
     display: flex;
     flex-direction: row;
-    background: #2C2C2C;
+    background: #2D3536;
 
     .footer-container {
       padding: 0 20px;
@@ -2485,7 +2485,7 @@ body {
           .footer-value,
           p {
             margin: 0;
-            color: #F5F2EC;
+            color: #F2EFE2;
             font-family: $font;
             font-size: 14px;
             font-weight: 500;
@@ -2503,7 +2503,7 @@ body {
             font-size: 22px;
             cursor: pointer;
             &:hover {
-              color: #C9A96E;
+              color: #E9A692;
             }
           }
         }
@@ -2523,7 +2523,7 @@ body {
           flex: 1;
 
           .footer-col-title {
-            color: #F5F2EC;
+            color: #F2EFE2;
             font-family: $font;
             font-size: 11px;
             font-weight: 700;
@@ -2542,7 +2542,7 @@ body {
             margin-top: 10px;
             cursor: pointer;
             &:hover {
-              color: #C9A96E;
+              color: #E9A692;
             }
           }
         }
@@ -2580,7 +2580,7 @@ body {
       font-family: $font;
       font-size: 20px;
       font-weight: 700;
-      color: #1B1B1B;
+      color: #2D3536;
       margin-bottom: 20px;
     }
 
@@ -2603,7 +2603,7 @@ body {
       font-family: $font;
       font-size: 15px;
       font-weight: 700;
-      color: #1B1B1B;
+      color: #2D3536;
     }
 
     .mob-order-ship-company {
@@ -2638,11 +2638,11 @@ body {
       height: 44px;
       border-radius: 8px;
       border: 1px solid #E0DDD8;
-      background: #F5F2EC;
+      background: #F2EFE2;
       padding: 0 12px;
       font-family: $font;
       font-size: 14px;
-      color: #1B1B1B;
+      color: #2D3536;
       outline: none;
       &:focus {
         border-color: #2C1654;
@@ -2700,7 +2700,7 @@ body {
     .mob-pay-name {
       font-family: $font;
       font-size: 14px;
-      color: #1B1B1B;
+      color: #2D3536;
     }
 
     .mob-pay-icons-row {
@@ -2733,7 +2733,7 @@ body {
       p {
         font-size: 15px;
         font-weight: 700;
-        color: #1B1B1B;
+        color: #2D3536;
       }
     }
 
@@ -2771,7 +2771,7 @@ body {
       font-family: $font;
       font-size: 18px;
       font-weight: 700;
-      color: #1B1B1B;
+      color: #2D3536;
     }
 
     .mob-order-place-btn {
@@ -2779,7 +2779,7 @@ body {
       height: 48px;
       border-radius: 12px;
       background: #2C1654;
-      color: #F5F2EC;
+      color: #F2EFE2;
       font-family: $font;
       font-size: 15px;
       font-weight: 700;
@@ -2817,7 +2817,7 @@ body {
       font-family: $font;
       font-size: 22px;
       font-weight: 700;
-      color: #1B1B1B;
+      color: #2D3536;
     }
 
     .mob-os-order-num {
@@ -2846,7 +2846,7 @@ body {
       font-family: $font;
       font-size: 15px;
       font-weight: 700;
-      color: #1B1B1B;
+      color: #2D3536;
     }
 
     .mob-os-item {
@@ -2885,7 +2885,7 @@ body {
       font-family: $font;
       font-size: 13px;
       font-weight: 600;
-      color: #1B1B1B;
+      color: #2D3536;
     }
 
     .mob-os-item-meta {
@@ -2898,7 +2898,7 @@ body {
       font-family: $font;
       font-size: 14px;
       font-weight: 700;
-      color: #1B1B1B;
+      color: #2D3536;
       flex-shrink: 0;
     }
 
@@ -2916,7 +2916,7 @@ body {
       p {
         font-size: 15px;
         font-weight: 700;
-        color: #1B1B1B;
+        color: #2D3536;
       }
     }
 
@@ -2950,7 +2950,7 @@ body {
       height: 48px;
       border-radius: 12px;
       background: #2C1654;
-      color: #F5F2EC;
+      color: #F2EFE2;
       font-family: $font;
       font-size: 15px;
       font-weight: 700;
@@ -3029,7 +3029,7 @@ body {
       font-family: $font;
       font-size: 18px;
       font-weight: 700;
-      color: #1B1B1B;
+      color: #2D3536;
       line-height: 1.3;
     }
 
@@ -3071,7 +3071,7 @@ body {
       font-family: $font;
       font-size: 13px;
       font-weight: 600;
-      color: #1B1B1B;
+      color: #2D3536;
     }
 
     .mob-option-desc {
@@ -3105,7 +3105,7 @@ body {
       font-family: $font;
       font-size: 14px;
       font-weight: 600;
-      color: #1B1B1B;
+      color: #2D3536;
     }
 
     .mob-quiz-nav {
@@ -3136,7 +3136,7 @@ body {
       padding: 0 24px;
       border-radius: 12px;
       background: #2C1654;
-      color: #F5F2EC;
+      color: #F2EFE2;
       font-family: $font;
       font-size: 15px;
       font-weight: 700;
@@ -3167,7 +3167,7 @@ body {
       font-family: $font;
       font-size: 22px;
       font-weight: 700;
-      color: #1B1B1B;
+      color: #2D3536;
     }
 
     .mob-results-subtitle {
@@ -3200,7 +3200,7 @@ body {
       font-family: $font;
       font-size: 16px;
       font-weight: 700;
-      color: #1B1B1B;
+      color: #2D3536;
     }
 
     .mob-results-grid {
@@ -3239,7 +3239,7 @@ body {
       height: 48px;
       border-radius: 12px;
       background: #2C1654;
-      color: #F5F2EC;
+      color: #F2EFE2;
       font-family: $font;
       font-size: 15px;
       font-weight: 700;
@@ -3253,7 +3253,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background: #F5F2EC;
+    background: #F2EFE2;
   }
 
   .mob-mypage-content {
@@ -3369,7 +3369,7 @@ body {
     font-family: $font;
     font-size: 18px;
     font-weight: 700;
-    color: #1B1B1B !important;
+    color: #2D3536 !important;
   }
 
   .mob-mp-section {
@@ -3451,7 +3451,7 @@ body {
     padding: 0 12px;
     font-family: $font;
     font-size: 14px;
-    color: #1B1B1B;
+    color: #2D3536;
     background: #faf9fc;
     box-sizing: border-box;
     outline: none;
@@ -3465,7 +3465,7 @@ body {
   .mob-mp-error {
     font-family: $font;
     font-size: 12px;
-    color: #e91e63;
+    color: #E9A692;
   }
 
   .mob-mp-save-btn {
@@ -3499,7 +3499,7 @@ body {
     font-family: $font;
     font-size: 18px;
     font-weight: 700;
-    color: #1B1B1B !important;
+    color: #2D3536 !important;
   }
 
   // ── Product Grid (Favorites / Recently Visited / My Products) ──
@@ -3621,7 +3621,7 @@ body {
     font-family: $font;
     font-size: 14px;
     font-weight: 700;
-    color: #1B1B1B !important;
+    color: #2D3536 !important;
   }
 
   .mob-expand-icon {
@@ -3690,7 +3690,7 @@ body {
     font-family: $font;
     font-size: 12px;
     font-weight: 500;
-    color: #1B1B1B !important;
+    color: #2D3536 !important;
     line-height: 1.3;
   }
 
@@ -3704,7 +3704,7 @@ body {
     font-family: $font;
     font-size: 13px;
     font-weight: 700;
-    color: #1B1B1B !important;
+    color: #2D3536 !important;
     flex-shrink: 0;
   }
 

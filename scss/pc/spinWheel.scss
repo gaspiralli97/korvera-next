@@ -59,7 +59,7 @@
 
 	&:hover {
 		background: #ffe4ef;
-		color: #e91e63;
+		color: #E9A692;
 	}
 }
 
@@ -72,7 +72,7 @@
 		display: block;
 		font-size: 20px;
 		font-weight: 700;
-		color: #1b1b1b;
+		color: #2D3536;
 		letter-spacing: 0.3px;
 	}
 
@@ -98,7 +98,7 @@
 	height: 0;
 	border-left: 12px solid transparent;
 	border-right: 12px solid transparent;
-	border-top: 22px solid #e91e63;
+	border-top: 22px solid #E9A692;
 	margin-bottom: -4px;
 	z-index: 2;
 	filter: drop-shadow(0 3px 6px rgba(233, 30, 99, 0.45));
@@ -122,7 +122,7 @@
 .sw-btn {
 	width: 100%;
 	padding: 15px;
-	background: linear-gradient(135deg, #e91e63 0%, #f06292 100%);
+	background: linear-gradient(135deg, #E9A692 0%, #f06292 100%);
 	color: #fff;
 	border: none;
 	border-radius: 14px;
@@ -172,7 +172,7 @@
 	.sw-result-heading {
 		font-size: 24px;
 		font-weight: 700;
-		color: #1b1b1b;
+		color: #2D3536;
 		margin: 0;
 	}
 

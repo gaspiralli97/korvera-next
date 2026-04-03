@@ -95,20 +95,19 @@ const ProductList: NextPage = ({ initialInput, ...props }: any) => {
 		setCurrentPage(value);
 	};
 
-	const likeProductHandler =async (user:T, id:string) =>{
-			try {
-				if(!id) return;
-				if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-	
-				await likeTargetProduct({
-					variables:{input:id},
-				});
-				await getProductsRefetch({ input: searchFilter });
-				await sweetTopSmallSuccessAlert('success', 800);
-			} catch (err: any) {
-				sweetMixinErrorAlert(err.message).then();
-			}
-		};
+	const likeProductHandler = async (user: T, id: string) => {
+		try {
+			if (!id) return;
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+
+			await likeTargetProduct({ variables: { input: id } });
+			const result = await getProductsRefetch({ input: searchFilter });
+			setProducts(result.data?.getProducts?.list ?? []);
+			await sweetTopSmallSuccessAlert('success', 800);
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+		}
+	};
 
 	const sortingClickHandler = (e: MouseEvent<HTMLElement>) => {
 		setAnchorEl(e.currentTarget);
@@ -297,7 +296,7 @@ ProductList.defaultProps = {
 				end: 500,
 			},
 			pricesRange: {
-				start: 0,
+				start: 5,
 				end: 2000000,
 			},
 		},

@@ -266,90 +266,33 @@ const Filter = (props: FilterType) => {
 
 	const productVolumeHandler = useCallback(
 		async (e: any, type: string) => {
-		const value = Number(e.target.value);
-
-			if (type == 'start') {
-				await router.push(
-					`/product?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							volumesRange: { ...searchFilter.search.volumesRange, start: value },
-						},
-					})}`,
-					`/product?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							volumesRange: { ...searchFilter.search.volumesRange, start: value },
-						},
-					})}`,
-					{ scroll: false },
-				);
-			} else {
-				await router.push(
-					`/product?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							volumesRange: { ...searchFilter.search.volumesRange, end: value },
-						},
-					})}`,
-					`/product?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							volumesRange: { ...searchFilter.search.volumesRange, end: value },
-						},
-					})}`,
-					{ scroll: false },
-				);
-			}
+			const value = Number(e.target.value);
+			const currentRange = searchFilter.search.volumesRange ?? initialInput.search.volumesRange;
+			const newRange = type === 'start'
+				? { start: value, end: currentRange.end ?? initialInput.search.volumesRange.end }
+				: { start: currentRange.start ?? initialInput.search.volumesRange.start, end: value };
+			await router.push(
+				`/product?input=${JSON.stringify({ ...searchFilter, search: { ...searchFilter.search, volumesRange: newRange } })}`,
+				`/product?input=${JSON.stringify({ ...searchFilter, search: { ...searchFilter.search, volumesRange: newRange } })}`,
+				{ scroll: false },
+			);
 		},
-		[searchFilter],
+		[searchFilter, initialInput],
 	);
 
 	const productPriceHandler = useCallback(
 		async (value: number, type: string) => {
-			if (type == 'start') {
-				await router.push(
-					`/product?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, start: Number(value) },
-						},
-					})}`,
-					`/product?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, start: Number(value) },
-						},
-					})}`,
-					{ scroll: false },
-				);
-			} else {
-				await router.push(
-					`/product?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, end: Number(value) },
-						},
-					})}`,
-					`/product?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, end: Number(value) },
-						},
-					})}`,
-					{ scroll: false },
-				);
-			}
+			const currentRange = searchFilter.search.pricesRange ?? initialInput.search.pricesRange;
+			const newRange = type === 'start'
+				? { start: Number(value), end: currentRange.end ?? initialInput.search.pricesRange.end }
+				: { start: currentRange.start ?? initialInput.search.pricesRange.start, end: Number(value) };
+			await router.push(
+				`/product?input=${JSON.stringify({ ...searchFilter, search: { ...searchFilter.search, pricesRange: newRange } })}`,
+				`/product?input=${JSON.stringify({ ...searchFilter, search: { ...searchFilter.search, pricesRange: newRange } })}`,
+				{ scroll: false },
+			);
 		},
-		[searchFilter],
+		[searchFilter, initialInput],
 	);
 
 	const refreshHandler = async () => {
