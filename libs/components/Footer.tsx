@@ -6,6 +6,7 @@ import useDeviceDetect from '../hooks/useDeviceDetect';
 import { Stack, Box } from '@mui/material';
 import moment from 'moment';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
 const productLink = (category: string) =>
 	`/product?input=${JSON.stringify({
@@ -18,31 +19,32 @@ const productLink = (category: string) =>
 
 const Footer = () => {
 	const device = useDeviceDetect();
+	const { t } = useTranslation('common');
 
 	const popularSearchLinks = [
-		{ label: 'Skincare Products', href: productLink('SKINCARE') },
-		{ label: 'Makeup Essentials', href: productLink('MAKEUP') },
-		{ label: 'Hair & Body Care', href: productLink('HAIRCARE') },
-		{ label: 'Fragrances', href: productLink('FRAGRANCE') },
+		{ tKey: 'footer.skincareProducts', href: productLink('SKINCARE') },
+		{ tKey: 'footer.makeupEssentials', href: productLink('MAKEUP') },
+		{ tKey: 'footer.hairBodyCare', href: productLink('HAIRCARE') },
+		{ tKey: 'footer.fragrances', href: productLink('FRAGRANCE') },
 	];
 
 	const quickLinks = [
-		{ label: 'About Us', href: '/about' },
-		{ label: 'Terms of Use', href: '/cs' },
-		{ label: 'Privacy Policy', href: '/cs' },
-		{ label: 'Pricing Plans', href: '/cs' },
-		{ label: 'Our Services', href: '/cs' },
-		{ label: 'Contact Support', href: '/cs' },
-		{ label: 'FAQs', href: '/cs' },
+		{ tKey: 'footer.aboutUs', href: '/about' },
+		{ tKey: 'footer.termsOfUse', href: '/cs' },
+		{ tKey: 'footer.privacyPolicy', href: '/cs' },
+		{ tKey: 'footer.pricingPlans', href: '/cs' },
+		{ tKey: 'footer.ourServices', href: '/cs' },
+		{ tKey: 'footer.contactSupport', href: '/cs' },
+		{ tKey: 'footer.faqs', href: '/cs' },
 	];
 
 	const categoryLinks = [
-		{ label: 'Skincare', href: productLink('SKINCARE') },
-		{ label: 'Makeup', href: productLink('MAKEUP') },
-		{ label: 'Haircare', href: productLink('HAIRCARE') },
-		{ label: 'Bodycare', href: productLink('BODYCARE') },
-		{ label: 'Fragrance', href: productLink('FRAGRANCE') },
-		{ label: 'Wellness', href: productLink('WELLNESS') },
+		{ tKey: 'footer.skincare', href: productLink('SKINCARE') },
+		{ tKey: 'footer.makeup', href: productLink('MAKEUP') },
+		{ tKey: 'footer.haircare', href: productLink('HAIRCARE') },
+		{ tKey: 'footer.bodycare', href: productLink('BODYCARE') },
+		{ tKey: 'footer.fragrance', href: productLink('FRAGRANCE') },
+		{ tKey: 'footer.wellness', href: productLink('WELLNESS') },
 	];
 
 	if (device == 'mobile') {
@@ -51,16 +53,16 @@ const Footer = () => {
 				<Stack className={'footer-brand'}>
 					<img src="/img/logo/logoWhite.svg" alt="Korvera" className={'footer-logo'} />
 					<Box component={'div'} className={'footer-contact'}>
-						<span className={'footer-label'}>free customer support</span>
+						<span className={'footer-label'}>{t('footer.support')}</span>
 						<a href="mailto:support@korvera.uz" className={'footer-value'}>support@korvera.uz</a>
 					</Box>
 					<Box component={'div'} className={'footer-contact'}>
-						<span className={'footer-label'}>live chat available</span>
-						<p className={'footer-value'}>Mon – Fri, 9AM – 6PM</p>
-						<span className={'footer-label'}>We're here to help</span>
+						<span className={'footer-label'}>{t('footer.liveChat')}</span>
+						<p className={'footer-value'}>{t('footer.chatHours')}</p>
+						<span className={'footer-label'}>{t('footer.hereToHelp')}</span>
 					</Box>
 					<Box component={'div'} className={'footer-contact'}>
-						<p className={'footer-label'}>follow us on social media</p>
+						<p className={'footer-label'}>{t('footer.followUs')}</p>
 						<div className={'footer-social-icons'}>
 							<FacebookOutlinedIcon />
 							<TelegramIcon />
@@ -71,26 +73,26 @@ const Footer = () => {
 				</Stack>
 				<Stack className={'footer-links'}>
 					<Box component={'div'} className={'footer-col'}>
-						<strong className={'footer-col-title'}>Popular Search</strong>
+						<strong className={'footer-col-title'}>{t('footer.popularSearch')}</strong>
 						{popularSearchLinks.map((item) => (
-							<Link key={item.label} href={item.href}><span>{item.label}</span></Link>
+							<Link key={item.tKey} href={item.href}><span>{t(item.tKey)}</span></Link>
 						))}
 					</Box>
 					<Box component={'div'} className={'footer-col'}>
-						<strong className={'footer-col-title'}>Quick Links</strong>
+						<strong className={'footer-col-title'}>{t('footer.quickLinks')}</strong>
 						{quickLinks.map((item) => (
-							<Link key={item.label} href={item.href}><span>{item.label}</span></Link>
+							<Link key={item.tKey} href={item.href}><span>{t(item.tKey)}</span></Link>
 						))}
 					</Box>
 					<Box component={'div'} className={'footer-col'}>
-						<strong className={'footer-col-title'}>Categories</strong>
+						<strong className={'footer-col-title'}>{t('footer.categories')}</strong>
 						{categoryLinks.map((item) => (
-							<Link key={item.label} href={item.href}><span>{item.label}</span></Link>
+							<Link key={item.tKey} href={item.href}><span>{t(item.tKey)}</span></Link>
 						))}
 					</Box>
 				</Stack>
 				<Stack className={'footer-bottom'}>
-					<span>© Korvera Beauty — All rights reserved. {moment().year()}</span>
+					<span>{t('footer.copyright')} {moment().year()}</span>
 				</Stack>
 			</Stack>
 		);
@@ -98,26 +100,26 @@ const Footer = () => {
 		return (
 			<Stack className={'footer-container'}>
 				<Stack className={'footer-newsletter'}>
-					<strong>Stay updated with beauty trends</strong>
+					<strong>{t('footer.stayUpdated')}</strong>
 					<div className={'footer-newsletter-form'}>
-						<input type="text" placeholder={'Your email address'} />
-						<span>Subscribe</span>
+						<input type="text" placeholder={t('footer.emailPlaceholder')} />
+						<span>{t('footer.subscribe')}</span>
 					</div>
 				</Stack>
 				<Stack className={'footer-main'}>
 					<Box component={'div'} className={'footer-brand'}>
 						<img src="/img/logo/logoWhite.svg" alt="Korvera" className={'footer-logo'} />
 						<Box component={'div'} className={'footer-contact'}>
-							<span className={'footer-label'}>free customer support</span>
+							<span className={'footer-label'}>{t('footer.support')}</span>
 							<a href="mailto:support@korvera.uz" className={'footer-value'}>support@korvera.uz</a>
 						</Box>
 						<Box component={'div'} className={'footer-contact'}>
-							<span className={'footer-label'}>live chat available</span>
-							<p className={'footer-value'}>Mon – Fri, 9AM – 6PM</p>
-							<span className={'footer-label'}>We're here to help</span>
+							<span className={'footer-label'}>{t('footer.liveChat')}</span>
+							<p className={'footer-value'}>{t('footer.chatHours')}</p>
+							<span className={'footer-label'}>{t('footer.hereToHelp')}</span>
 						</Box>
 						<Box component={'div'} className={'footer-contact'}>
-							<p className={'footer-label'}>follow us on social media</p>
+							<p className={'footer-label'}>{t('footer.followUs')}</p>
 							<div className={'footer-social-icons'}>
 								<FacebookOutlinedIcon />
 								<TelegramIcon />
@@ -127,27 +129,27 @@ const Footer = () => {
 						</Box>
 					</Box>
 					<Box component={'div'} className={'footer-col'}>
-						<strong className={'footer-col-title'}>Popular Search</strong>
+						<strong className={'footer-col-title'}>{t('footer.popularSearch')}</strong>
 						{popularSearchLinks.map((item) => (
-							<Link key={item.label} href={item.href}><span>{item.label}</span></Link>
+							<Link key={item.tKey} href={item.href}><span>{t(item.tKey)}</span></Link>
 						))}
 					</Box>
 					<Box component={'div'} className={'footer-col'}>
-						<strong className={'footer-col-title'}>Quick Links</strong>
+						<strong className={'footer-col-title'}>{t('footer.quickLinks')}</strong>
 						{quickLinks.map((item) => (
-							<Link key={item.label} href={item.href}><span>{item.label}</span></Link>
+							<Link key={item.tKey} href={item.href}><span>{t(item.tKey)}</span></Link>
 						))}
 					</Box>
 					<Box component={'div'} className={'footer-col'}>
-						<strong className={'footer-col-title'}>Categories</strong>
+						<strong className={'footer-col-title'}>{t('footer.categories')}</strong>
 						{categoryLinks.map((item) => (
-							<Link key={item.label} href={item.href}><span>{item.label}</span></Link>
+							<Link key={item.tKey} href={item.href}><span>{t(item.tKey)}</span></Link>
 						))}
 					</Box>
 				</Stack>
 				<Stack className={'footer-bottom'}>
-					<span>© Korvera Beauty — All rights reserved. {moment().year()}</span>
-					<span>Privacy · Terms · Sitemap</span>
+					<span>{t('footer.copyright')} {moment().year()}</span>
+					<span>{t('footer.privacyTerms')}</span>
 				</Stack>
 			</Stack>
 		);
