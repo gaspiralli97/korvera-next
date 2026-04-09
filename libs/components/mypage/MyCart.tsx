@@ -108,13 +108,15 @@ const MyCart: React.FC<MyCartProps> = () => {
 	};
 
 	const handleLike = async (productId: string) => {
+		productId = String(productId ?? '');
 		try {
 			if (!userId) throw new Error(Message.NOT_AUTHENTICATED);
+			if (!productId) return;
 			await likeTargetProduct({ variables: { input: productId } });
 			setLikedIds((prev) => {
 				const next = new Set(prev);
 				next.has(productId) ? next.delete(productId) : next.add(productId);
-				localStorage.setItem(`korvera_liked_${userId}`, JSON.stringify([...next]));
+				localStorage.setItem(`korvera_liked_${String(userId)}`, JSON.stringify([...next]));
 				return next;
 			});
 		} catch (err: any) {

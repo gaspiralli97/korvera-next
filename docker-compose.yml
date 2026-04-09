@@ -1,0 +1,33 @@
+version: "3.3"
+
+services:
+  korvera-next:
+    container_name: korvera-next
+    restart: always
+    image: node:20.10.0
+    ports:
+      - 4000:3000
+
+    environment:
+      - PORT=3000
+      - REACT_APP_API_URL=http://localhost:4001
+      - REACT_APP_API_GRAPHQL_URL=http://localhost:4001/graphql
+      - REACT_APP_API_WS=ws://localhost:4001
+    volumes:
+      - ./:/usr/src/korvera-next
+    working_dir: /usr/src/korvera-next
+    networks:
+      - client-network
+    #for production
+    command: sh -c "yarn && yarn run build && yarn run start"
+  
+
+
+networks:
+  client-network:
+    driver: bridge
+
+
+#korvera-next: locolhost:4000 <=> container:3000
+#korvera-api: locolhost:4001 <=> container:3007
+#korvera-batch: locolhost:4002 <=> container:3008
