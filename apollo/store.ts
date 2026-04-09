@@ -1,6 +1,7 @@
 import { makeVar } from '@apollo/client';
 
 import { CustomJwtPayload } from '../libs/types/customJwtPayload';
+import { Member } from '../libs/types/member/member';
 
 export interface CartItem {
 	productId: string;
@@ -62,6 +63,9 @@ export const userVar = makeVar<CustomJwtPayload>({
 
 //@ts-ignore
 export const socketVar = makeVar<WebSocket>();
+
+// Online bo'lgan authenticated userlar ro'yxati
+export const onlineUsersVar = makeVar<Member[]>([]);
 
 // Reactive Variable hosil qilindi
 // ReactQuery + cache

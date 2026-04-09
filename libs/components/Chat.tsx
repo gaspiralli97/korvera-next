@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import ScrollableFeed from 'react-scrollable-feed';
 import { RippleBadge } from '../../scss/MaterialTheme/styled';
 import { useReactiveVar } from '@apollo/client';
-import { socketVar, userVar } from '../../apollo/store';
+import { onlineUsersVar, socketVar, userVar } from '../../apollo/store';
 import { Member } from '../types/member/member';
 import { Messages, REACT_APP_API_URL } from '../config';
 import { sweetErrorAlert } from '../sweetAlert';
@@ -79,7 +79,10 @@ const Chat = () => {
 				case 'message':		// yangi sms yozilganda
 					const newMessage: MessagePayload = data;
 					messagesList.push(newMessage);
-					setMessagesList([...messagesList]) // yangi referencedagi smslani ketma-ketligi xosil buladi
+					setMessagesList([...messagesList]); // yangi referencedagi smslani ketma-ketligi xosil buladi
+					break;
+				case 'onlineUsers':  // Online userlar ro'yxati yangilanganda
+					onlineUsersVar(data.members ?? []);
 					break;
 			}
 		};

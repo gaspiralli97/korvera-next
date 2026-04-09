@@ -23,124 +23,124 @@ import { Product } from '../types/product/product';
 import { Member } from '../types/member/member';
 
 const categories = [
-	{ label: 'Skincare', value: ProductCategory.SKINCARE },
-	{ label: 'Makeup', value: ProductCategory.MAKEUP },
-	{ label: 'Haircare', value: ProductCategory.HAIRCARE },
-	{ label: 'Bodycare', value: ProductCategory.BODYCARE },
-	{ label: 'Fragnance', value: ProductCategory.FRAGRANCE },
-	{ label: 'Wellness', value: ProductCategory.WELLNESS },
+	{ tKey: 'cat.skincare', value: ProductCategory.SKINCARE },
+	{ tKey: 'cat.makeup', value: ProductCategory.MAKEUP },
+	{ tKey: 'cat.haircare', value: ProductCategory.HAIRCARE },
+	{ tKey: 'cat.bodycare', value: ProductCategory.BODYCARE },
+	{ tKey: 'cat.fragrance', value: ProductCategory.FRAGRANCE },
+	{ tKey: 'cat.wellness', value: ProductCategory.WELLNESS },
 ];
 
-interface SubCatItem { label: string; value: ProductSubCategory }
+interface SubCatItem { tKey: string; value: ProductSubCategory }
 
-const MEGA_MENU_DATA: Record<string, { cols: SubCatItem[][]; tagline: string }> = {
+const MEGA_MENU_DATA: Record<string, { cols: SubCatItem[][]; taglineKey: string }> = {
 	[ProductCategory.SKINCARE]: {
 		cols: [
 			[
-				{ label: 'Cleansers', value: ProductSubCategory.CLEANSERS },
-				{ label: 'Toners', value: ProductSubCategory.TONERS },
-				{ label: 'Serums', value: ProductSubCategory.SERUMS },
+				{ tKey: 'sub.cleansers', value: ProductSubCategory.CLEANSERS },
+				{ tKey: 'sub.toners', value: ProductSubCategory.TONERS },
+				{ tKey: 'sub.serums', value: ProductSubCategory.SERUMS },
 			],
 			[
-				{ label: 'Moisturisers', value: ProductSubCategory.MOISTURISERS },
-				{ label: 'Sunscreen', value: ProductSubCategory.SUNSCREEN },
-				{ label: 'Eye Care', value: ProductSubCategory.EYE_CARE },
+				{ tKey: 'sub.moisturisers', value: ProductSubCategory.MOISTURISERS },
+				{ tKey: 'sub.sunscreen', value: ProductSubCategory.SUNSCREEN },
+				{ tKey: 'sub.eyeCare', value: ProductSubCategory.EYE_CARE },
 			],
 			[
-				{ label: 'Face Masks', value: ProductSubCategory.FACE_MASKS },
-				{ label: 'Acne Treatments', value: ProductSubCategory.ACNE_TREATMENTS },
+				{ tKey: 'sub.faceMasks', value: ProductSubCategory.FACE_MASKS },
+				{ tKey: 'sub.acneTreatments', value: ProductSubCategory.ACNE_TREATMENTS },
 			],
 		],
-		tagline: 'Rituals for radiant skin',
+		taglineKey: 'cat.skincareTagline',
 	},
 	[ProductCategory.MAKEUP]: {
 		cols: [
 			[
-				{ label: 'Foundation', value: ProductSubCategory.FOUNDATION },
-				{ label: 'Concealer', value: ProductSubCategory.CONCEALER },
-				{ label: 'Primer', value: ProductSubCategory.PRIMER },
+				{ tKey: 'sub.foundation', value: ProductSubCategory.FOUNDATION },
+				{ tKey: 'sub.concealer', value: ProductSubCategory.CONCEALER },
+				{ tKey: 'sub.primer', value: ProductSubCategory.PRIMER },
 			],
 			[
-				{ label: 'Powder', value: ProductSubCategory.POWDER },
-				{ label: 'Blush & Bronzer', value: ProductSubCategory.BLUSH_BRONZER },
-				{ label: 'Lip Makeup', value: ProductSubCategory.LIP_MAKEUP },
+				{ tKey: 'sub.powder', value: ProductSubCategory.POWDER },
+				{ tKey: 'sub.blushBronzer', value: ProductSubCategory.BLUSH_BRONZER },
+				{ tKey: 'sub.lipMakeup', value: ProductSubCategory.LIP_MAKEUP },
 			],
 			[
-				{ label: 'Eye Makeup', value: ProductSubCategory.EYE_MAKEUP },
-				{ label: 'Brows', value: ProductSubCategory.BROWS },
-				{ label: 'Setting Products', value: ProductSubCategory.SETTING_PRODUCTS },
+				{ tKey: 'sub.eyeMakeup', value: ProductSubCategory.EYE_MAKEUP },
+				{ tKey: 'sub.brows', value: ProductSubCategory.BROWS },
+				{ tKey: 'sub.settingProducts', value: ProductSubCategory.SETTING_PRODUCTS },
 			],
 		],
-		tagline: 'Colour, refined',
+		taglineKey: 'cat.makeupTagline',
 	},
 	[ProductCategory.HAIRCARE]: {
 		cols: [
 			[
-				{ label: 'Shampoo', value: ProductSubCategory.SHAMPOO },
-				{ label: 'Conditioner', value: ProductSubCategory.CONDITIONER },
+				{ tKey: 'sub.shampoo', value: ProductSubCategory.SHAMPOO },
+				{ tKey: 'sub.conditioner', value: ProductSubCategory.CONDITIONER },
 			],
 			[
-				{ label: 'Hair Treatments', value: ProductSubCategory.HAIR_TREATMENTS },
-				{ label: 'Scalp Care', value: ProductSubCategory.SCALP_CARE },
+				{ tKey: 'sub.hairTreatments', value: ProductSubCategory.HAIR_TREATMENTS },
+				{ tKey: 'sub.scalpCare', value: ProductSubCategory.SCALP_CARE },
 			],
 			[
-				{ label: 'Hair Oils & Serums', value: ProductSubCategory.HAIR_OILS_SERUMS },
-				{ label: 'Styling', value: ProductSubCategory.STYLING },
+				{ tKey: 'sub.hairOilsSerums', value: ProductSubCategory.HAIR_OILS_SERUMS },
+				{ tKey: 'sub.styling', value: ProductSubCategory.STYLING },
 			],
 		],
-		tagline: 'Hair in its best form',
+		taglineKey: 'cat.haircareTagline',
 	},
 	[ProductCategory.BODYCARE]: {
 		cols: [
 			[
-				{ label: 'Body Wash', value: ProductSubCategory.BODY_WASH },
-				{ label: 'Body Lotion', value: ProductSubCategory.BODY_LOTION },
-				{ label: 'Body Cream & Butter', value: ProductSubCategory.BODY_CREAM_BUTTER },
+				{ tKey: 'sub.bodyWash', value: ProductSubCategory.BODY_WASH },
+				{ tKey: 'sub.bodyLotion', value: ProductSubCategory.BODY_LOTION },
+				{ tKey: 'sub.bodyCreamButter', value: ProductSubCategory.BODY_CREAM_BUTTER },
 			],
 			[
-				{ label: 'Body Scrubs', value: ProductSubCategory.BODY_SCRUBS },
-				{ label: 'Hand Care', value: ProductSubCategory.HAND_CARE },
-				{ label: 'Foot Care', value: ProductSubCategory.FOOT_CARE },
+				{ tKey: 'sub.bodyScrubs', value: ProductSubCategory.BODY_SCRUBS },
+				{ tKey: 'sub.handCare', value: ProductSubCategory.HAND_CARE },
+				{ tKey: 'sub.footCare', value: ProductSubCategory.FOOT_CARE },
 			],
 			[
-				{ label: 'Deodorant', value: ProductSubCategory.DEODORANT },
-				{ label: 'Body Sunscreen', value: ProductSubCategory.BODY_SUNSCREEN },
+				{ tKey: 'sub.deodorant', value: ProductSubCategory.DEODORANT },
+				{ tKey: 'sub.bodySunscreen', value: ProductSubCategory.BODY_SUNSCREEN },
 			],
 		],
-		tagline: 'Care from head to toe',
+		taglineKey: 'cat.bodycareTagline',
 	},
 	[ProductCategory.FRAGRANCE]: {
 		cols: [
 			[
-				{ label: 'Perfume', value: ProductSubCategory.PERFUME },
-				{ label: 'Men', value: ProductSubCategory.MEN },
+				{ tKey: 'sub.perfume', value: ProductSubCategory.PERFUME },
+				{ tKey: 'sub.men', value: ProductSubCategory.MEN },
 			],
 			[
-				{ label: 'Women', value: ProductSubCategory.WOMEN },
-				{ label: 'Body Mist', value: ProductSubCategory.BODY_MIST },
+				{ tKey: 'sub.women', value: ProductSubCategory.WOMEN },
+				{ tKey: 'sub.bodyMist', value: ProductSubCategory.BODY_MIST },
 			],
 			[
-				{ label: 'Home Fragrance', value: ProductSubCategory.HOME_FRAGRANCE },
+				{ tKey: 'sub.homeFragrance', value: ProductSubCategory.HOME_FRAGRANCE },
 			],
 		],
-		tagline: 'Scent as identity',
+		taglineKey: 'cat.fragranceTagline',
 	},
 	[ProductCategory.WELLNESS]: {
 		cols: [
 			[
-				{ label: 'Collagen', value: ProductSubCategory.COLLAGEN },
-				{ label: 'Vitamins', value: ProductSubCategory.VITAMINS },
+				{ tKey: 'sub.collagen', value: ProductSubCategory.COLLAGEN },
+				{ tKey: 'sub.vitamins', value: ProductSubCategory.VITAMINS },
 			],
 			[
-				{ label: 'Gut Health', value: ProductSubCategory.GUT_HEALTH },
-				{ label: 'Immunity', value: ProductSubCategory.IMMUNITY },
+				{ tKey: 'sub.gutHealth', value: ProductSubCategory.GUT_HEALTH },
+				{ tKey: 'sub.immunity', value: ProductSubCategory.IMMUNITY },
 			],
 			[
-				{ label: 'Sleep & Stress Support', value: ProductSubCategory.SLEEP_STRESS_SUPPORT },
-				{ label: 'Tools', value: ProductSubCategory.TOOLS },
+				{ tKey: 'sub.sleepStressSupport', value: ProductSubCategory.SLEEP_STRESS_SUPPORT },
+				{ tKey: 'sub.tools', value: ProductSubCategory.TOOLS },
 			],
 		],
-		tagline: 'Beauty from within',
+		taglineKey: 'cat.wellnessTagline',
 	},
 };
 
@@ -391,29 +391,29 @@ const Top = () => {
 									<circle cx="13" cy="10.5" r="1" fill="#C9A96E"/>
 									<path d="M5 6.5h10a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H7l-2.5 2V7.5a1 1 0 0 1 1-1z" stroke="#F5F2EC" strokeWidth="0.8" fill="none"/>
 								</svg>
-								<span>AI Beauty</span>
+								<span>{t('nav.aiBeauty')}</span>
 							</Box>
-							<Link href={'/'}><span className={'nav-text-link'}>Home</span></Link>
-					<Link href={'/community?articleCategory=FREE'}><span className={'nav-text-link'}>Community</span></Link>
+							<Link href={'/'}><span className={'nav-text-link'}>{t('nav.home')}</span></Link>
+					<Link href={'/community?articleCategory=FREE'}><span className={'nav-text-link'}>{t('nav.community')}</span></Link>
 							<Box component={'div'} className={'cs-dropdown-wrap'}
 								onMouseEnter={handleCsEnter}
 								onMouseLeave={handleCsLeave}
 							>
-								<Link href={'/cs'}><span className={'nav-text-link'}>Customer service</span></Link>
+								<Link href={'/cs'}><span className={'nav-text-link'}>{t('nav.customerService')}</span></Link>
 								<Box component={'div'} className={`cs-dropdown-card${csOpen ? ' is-open' : ''}`}
 									onMouseEnter={handleCsEnter}
 									onMouseLeave={handleCsLeave}
 								>
 									<Box component={'div'} className={'cs-col'}>
-										<span className={'cs-heading'}>How can we help?</span>
-										<Link href={'/cs?tab=faq'}><span className={'cs-item'}>FAQs</span></Link>
-										<Link href={'/cs?tab=faq'}><span className={'cs-item'}>Track your order</span></Link>
-										<Link href={'/cs?tab=faq'}><span className={'cs-item'}>Shipping &amp; Returns</span></Link>
+										<span className={'cs-heading'}>{t('nav.csHelp')}</span>
+										<Link href={'/cs?tab=faq'}><span className={'cs-item'}>{t('nav.csFaq')}</span></Link>
+										<Link href={'/cs?tab=faq'}><span className={'cs-item'}>{t('nav.csTrackOrder')}</span></Link>
+										<Link href={'/cs?tab=faq'}><span className={'cs-item'}>{t('nav.csShipping')}</span></Link>
 									</Box>
 									<Box component={'div'} className={'cs-col'}>
-										<span className={'cs-heading'}>Contact us</span>
+										<span className={'cs-heading'}>{t('nav.csContact')}</span>
 										<Link href={'/cs'}>
-											<button className={'cs-chat-btn'}>Chat with Us</button>
+											<button className={'cs-chat-btn'}>{t('nav.csChat')}</button>
 										</Link>
 									</Box>
 								</Box>
@@ -489,16 +489,16 @@ const Top = () => {
 								</>
 							) : (
 								<Link href={'/account/join'}>
-									<span className={'nav-text-link'}>Sign in</span>
+									<span className={'nav-text-link'}>{t('nav.signIn')}</span>
 								</Link>
 							)}
 
 							<Link href={'/mypage'}>
-								<span className={'nav-text-link'}>Wishlist</span>
+								<span className={'nav-text-link'}>{t('nav.wishlist')}</span>
 							</Link>
 
 							<Link href={'/cart'}>
-							<span className={'nav-text-link'}>My cart</span>
+							<span className={'nav-text-link'}>{t('nav.myCart')}</span>
 						</Link>
 						</Box>
 					</Stack>
@@ -514,7 +514,7 @@ const Top = () => {
 									onMouseLeave={handleCatLeave}
 								>
 									<Link href={`/product?input=${encodeURIComponent(JSON.stringify({ page: 1, limit: 9, sort: 'createdAt', direction: 'DESC', search: { categoryList: [cat.value] } }))}`}>
-										<span className={'cat-link'}>{cat.label}</span>
+										<span className={'cat-link'}>{t(cat.tKey)}</span>
 									</Link>
 									<div
 										className={`cat-mega-panel${activeCategory === cat.value ? ' is-active' : ''}`}
@@ -528,7 +528,7 @@ const Top = () => {
 														const href = `/product?input=${encodeURIComponent(JSON.stringify({ page: 1, limit: 9, sort: 'createdAt', direction: 'DESC', search: { categoryList: [cat.value], subCategoryList: [item.value] } }))}`;
 														return (
 															<Link key={item.value} href={href}>
-																<span className={'cat-mega-item'}>{item.label}</span>
+																<span className={'cat-mega-item'}>{t(item.tKey)}</span>
 															</Link>
 														);
 													})}
@@ -536,7 +536,7 @@ const Top = () => {
 											))}
 										</div>
 										<div className={'cat-mega-featured'}>
-											<span className={'cat-mega-tagline'}>{MEGA_MENU_DATA[cat.value]?.tagline ?? ''}</span>
+											<span className={'cat-mega-tagline'}>{t(MEGA_MENU_DATA[cat.value]?.taglineKey ?? '')}</span>
 											<div className={'cat-mega-products'}>
 												{featuredProducts.length > 0
 													? featuredProducts.map((p: Product) => {
@@ -564,7 +564,7 @@ const Top = () => {
 								onMouseLeave={handleCatLeave}
 							>
 								<Link href={'/seller'}>
-									<span className={'cat-link'}>Brands</span>
+									<span className={'cat-link'}>{t('nav.brands')}</span>
 								</Link>
 								<div
 									className={`cat-mega-panel cat-mega-panel--brands${activeCategory === 'brands' ? ' is-active' : ''}`}
@@ -596,7 +596,7 @@ const Top = () => {
 							<SearchIcon className={'cat-search-icon'} />
 							<input
 								type="text"
-								placeholder={'Search...'}
+								placeholder={t('nav.search')}
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
 								onKeyDown={handleSearch}
