@@ -10,6 +10,9 @@ services:
 
     environment:
       - PORT=3000
+      - REACT_APP_API_URL=http://localhost:4001
+      - REACT_APP_API_GRAPHQL_URL=http://localhost:4001/graphql
+      - REACT_APP_API_WS=ws://localhost:4001
     volumes:
       - ./:/usr/src/korvera-next
     working_dir: /usr/src/korvera-next
