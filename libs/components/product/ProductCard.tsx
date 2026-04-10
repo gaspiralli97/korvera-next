@@ -63,7 +63,7 @@ const ProductCard = (props: ProductCardType) => {
 							<span className={'mob-card-price'}>${product.productPrice}</span>
 						)}
 						<Box className={'mob-card-actions'}>
-							<IconButton onClick={() => likeProductHandler && likeProductHandler(user, product?._id)} size={'small'}>
+							<IconButton onClick={() => likeProductHandler && likeProductHandler(user, String(product?._id ?? ''))} size={'small'}>
 								{product?.meLiked && product?.meLiked[0]?.myFavorite ? (
 									<FavoriteIcon sx={{ color: '#e91e63', fontSize: 18 }} />
 								) : (
@@ -171,7 +171,7 @@ const ProductCard = (props: ProductCardType) => {
 									<RemoveRedEyeIcon />
 								</IconButton>
 								<Typography className="view-cnt">{product?.productViews}</Typography>
-								<IconButton onClick={() => likeProductHandler(user, product?._id)}>
+								<IconButton onClick={() => likeProductHandler(user, String(product?._id ?? ''))}>
 									{product?.meLiked && product?.meLiked[0]?.myFavorite ? (
 										<FavoriteIcon sx={{ color: '#e91e63' }} />
 									) : (

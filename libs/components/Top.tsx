@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter, withRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { getJwtToken, logOut, updateUserInfo } from '../auth';
-import { Stack, Box } from '@mui/material';
+import { Stack, Box, Drawer, List, ListItem, ListItemButton, ListItemText, Divider } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import { alpha, styled } from '@mui/material/styles';
@@ -10,6 +10,8 @@ import Menu, { MenuProps } from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import { CaretDown } from 'phosphor-react';
 import useDeviceDetect from '../hooks/useDeviceDetect';
 import Link from 'next/link';
@@ -186,6 +188,7 @@ const Top = () => {
 	const sellers: Member[] = sellersData?.getSellers?.list ?? [];
 	const [csOpen, setCsOpen] = useState(false);
 	const csTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const [drawerOpen, setDrawerOpen] = useState(false);
 
 	const handleCsEnter = () => {
 		if (csTimeout.current) clearTimeout(csTimeout.current);
@@ -327,46 +330,143 @@ const Top = () => {
 	}, []);
 
 	if (device == 'mobile') {
+		const navLinks = [
+			{ label: 'Home', href: '/' },
+			{ label: 'Skincare', href: '/product?input=%7B%22page%22%3A1%2C%22limit%22%3A9%2C%22sort%22%3A%22createdAt%22%2C%22direction%22%3A%22DESC%22%2C%22search%22%3A%7B%22categoryList%22%3A%5B%22SKINCARE%22%5D%7D%7D' },
+			{ label: 'Makeup', href: '/product?input=%7B%22page%22%3A1%2C%22limit%22%3A9%2C%22sort%22%3A%22createdAt%22%2C%22direction%22%3A%22DESC%22%2C%22search%22%3A%7B%22categoryList%22%3A%5B%22MAKEUP%22%5D%7D%7D' },
+			{ label: 'Haircare', href: '/product?input=%7B%22page%22%3A1%2C%22limit%22%3A9%2C%22sort%22%3A%22createdAt%22%2C%22direction%22%3A%22DESC%22%2C%22search%22%3A%7B%22categoryList%22%3A%5B%22HAIRCARE%22%5D%7D%7D' },
+			{ label: 'Bodycare', href: '/product?input=%7B%22page%22%3A1%2C%22limit%22%3A9%2C%22sort%22%3A%22createdAt%22%2C%22direction%22%3A%22DESC%22%2C%22search%22%3A%7B%22categoryList%22%3A%5B%22BODYCARE%22%5D%7D%7D' },
+			{ label: 'Fragrance', href: '/product?input=%7B%22page%22%3A1%2C%22limit%22%3A9%2C%22sort%22%3A%22createdAt%22%2C%22direction%22%3A%22DESC%22%2C%22search%22%3A%7B%22categoryList%22%3A%5B%22FRAGRANCE%22%5D%7D%7D' },
+			{ label: 'Wellness', href: '/product?input=%7B%22page%22%3A1%2C%22limit%22%3A9%2C%22sort%22%3A%22createdAt%22%2C%22direction%22%3A%22DESC%22%2C%22search%22%3A%7B%22categoryList%22%3A%5B%22WELLNESS%22%5D%7D%7D' },
+			{ label: 'Community', href: '/community' },
+			{ label: 'Customer Service', href: '/cs' },
+		];
+
 		return (
-			<Stack className={'mob-navbar'}>
-				<Link href={'/'}>
-					<img src="/img/logo/logoText.svg" alt="Korvera" className={'mob-logo'} />
-				</Link>
-				<Box component={'div'} className={'mob-nav-actions'}>
-					<SearchIcon
-						className={'mob-nav-icon'}
-						onClick={() => {
-							const input = { page: 1, limit: 9, sort: 'createdAt', direction: 'DESC', search: {} };
-							router.push(`/product?input=${encodeURIComponent(JSON.stringify(input))}`);
-						}}
-					/>
-					<Box component={'div'} className={'mob-cart-wrap'}>
-						<Link href={'/cart'}>
-							<ShoppingBagOutlinedIcon className={'mob-nav-icon'} />
-							{cartItems.length > 0 && (
-								<span className={'mob-cart-badge'}>{cartItems.length}</span>
-							)}
-						</Link>
+			<>
+				<Stack className={'mob-navbar'}>
+					<Box component={'div'} className={'mob-nav-left'}>
+						<MenuIcon className={'mob-nav-icon'} onClick={() => setDrawerOpen(true)} />
 					</Box>
-					{user?._id ? (
-						<Link href={'/mypage'}>
-							<img
-								src={
-									user?.memberImage
-										? `${REACT_APP_API_URL}/${user?.memberImage}`
-										: '/img/profile/defaultUser.svg'
-								}
-								alt=""
-								className={'mob-user-avatar'}
-							/>
-						</Link>
-					) : (
-						<Link href={'/account/join'}>
-							<PersonOutlineIcon className={'mob-nav-icon'} />
-						</Link>
-					)}
-				</Box>
-			</Stack>
+					<Link href={'/'}>
+						<img src="/img/logo/logoText.svg" alt="Korvera" className={'mob-logo'} />
+					</Link>
+					<Box component={'div'} className={'mob-nav-actions'}>
+						<SearchIcon
+							className={'mob-nav-icon'}
+							onClick={() => {
+								const input = { page: 1, limit: 9, sort: 'createdAt', direction: 'DESC', search: {} };
+								router.push(`/product?input=${encodeURIComponent(JSON.stringify(input))}`);
+							}}
+						/>
+						<Box component={'div'} className={'mob-cart-wrap'}>
+							<Link href={'/cart'}>
+								<ShoppingBagOutlinedIcon className={'mob-nav-icon'} />
+								{cartItems.length > 0 && (
+									<span className={'mob-cart-badge'}>{cartItems.length}</span>
+								)}
+							</Link>
+						</Box>
+						{user?._id ? (
+							<Link href={'/mypage'}>
+								<img
+									src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
+									alt=""
+									className={'mob-user-avatar'}
+								/>
+							</Link>
+						) : (
+							<Link href={'/account/join'}>
+								<PersonOutlineIcon className={'mob-nav-icon'} />
+							</Link>
+						)}
+					</Box>
+				</Stack>
+
+				<Drawer anchor={'left'} open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+					<Box className={'mob-drawer'} component={'div'}>
+						<Stack className={'mob-drawer-header'}>
+							<img src="/img/logo/logoText.svg" alt="Korvera" className={'mob-drawer-logo'} />
+							<CloseIcon className={'mob-drawer-close'} onClick={() => setDrawerOpen(false)} />
+						</Stack>
+						<Divider />
+						<List className={'mob-drawer-list'}>
+							{navLinks.map((link) => (
+								<ListItem key={link.label} disablePadding>
+									<ListItemButton
+										className={`mob-drawer-item${router.pathname === '/' && link.href === '/' ? ' active' : ''}`}
+										onClick={() => {
+											router.push(link.href);
+											setDrawerOpen(false);
+										}}
+									>
+										<ListItemText primary={link.label} />
+									</ListItemButton>
+								</ListItem>
+							))}
+						</List>
+						<Divider />
+						{/* Language selector */}
+						<Box component={'div'} className={'mob-drawer-lang'}>
+							<span className={'mob-drawer-lang-label'}>Language</span>
+							<Box component={'div'} className={'mob-drawer-lang-options'}>
+								{[
+									{ id: 'en', src: '/img/flag/langen.png', label: 'EN' },
+									{ id: 'kr', src: '/img/flag/langkr.png', label: 'KR' },
+									{ id: 'ru', src: '/img/flag/langru.png', label: 'RU' },
+								].map((l) => (
+									<button
+										key={l.id}
+										className={`mob-drawer-lang-btn${lang === l.id ? ' active' : ''}`}
+										onClick={() => {
+											localStorage.setItem('locale', l.id);
+											router.push(router.asPath, router.asPath, { locale: l.id });
+											setLang(l.id);
+											setDrawerOpen(false);
+										}}
+									>
+										<img src={l.src} alt={l.id} className={'mob-drawer-lang-flag'} />
+										{l.label}
+									</button>
+								))}
+							</Box>
+						</Box>
+						<Divider />
+						{user?._id ? (
+							<Box component={'div'} className={'mob-drawer-footer'}>
+								<Stack className={'mob-drawer-user'}>
+									<img
+										src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
+										alt=""
+										className={'mob-drawer-avatar'}
+									/>
+									<Stack>
+										<span className={'mob-drawer-nick'}>{user?.memberNick}</span>
+										<span className={'mob-drawer-type'}>{user?.memberType}</span>
+									</Stack>
+								</Stack>
+								<Button
+									className={'mob-drawer-logout-btn'}
+									startIcon={<Logout sx={{ fontSize: 16 }} />}
+									onClick={() => { logOut(); setDrawerOpen(false); }}
+								>
+									Logout
+								</Button>
+							</Box>
+						) : (
+							<Box component={'div'} className={'mob-drawer-footer'}>
+								<Button
+									variant={'contained'}
+									className={'mob-drawer-login-btn'}
+									onClick={() => { router.push('/account/join'); setDrawerOpen(false); }}
+								>
+									Sign In / Register
+								</Button>
+							</Box>
+						)}
+					</Box>
+				</Drawer>
+			</>
 		);
 	} else {
 		return (
@@ -451,7 +551,7 @@ const Top = () => {
 										English
 									</MenuItem>
 									<MenuItem disableRipple onClick={langChoice} id="kr">
-										<img className="img-flag" src={'/img/flag/langkr.png'} onClick={langChoice} id="uz" alt={'koreanFlag'} />
+										<img className="img-flag" src={'/img/flag/langkr.png'} onClick={langChoice} id="kr" alt={'koreanFlag'} />
 										Korean
 									</MenuItem>
 									<MenuItem disableRipple onClick={langChoice} id="ru">

@@ -29,6 +29,11 @@ body {
     z-index: 1000;
     box-sizing: border-box;
 
+    .mob-nav-left {
+      display: flex;
+      align-items: center;
+    }
+
     .mob-logo {
       height: 22px;
       width: auto;
@@ -81,6 +86,176 @@ body {
         height: 28px;
         border-radius: 50%;
         object-fit: cover;
+      }
+    }
+  }
+
+  // ── Mobile Drawer ──
+  .mob-drawer {
+    width: 280px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #F2EFE2;
+
+    .mob-drawer-header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+
+      .mob-drawer-logo {
+        height: 22px;
+        width: auto;
+      }
+
+      .mob-drawer-close {
+        color: #2D3536;
+        cursor: pointer;
+        font-size: 22px;
+      }
+    }
+
+    .mob-drawer-list {
+      flex: 1;
+      padding: 8px 0;
+
+      .MuiListItemButton-root {
+        padding: 12px 20px;
+        font-family: $font;
+        font-size: 15px;
+        font-weight: 500;
+        color: #2D3536;
+
+        &.active {
+          color: #2C1654;
+          font-weight: 700;
+          background: rgba(44, 22, 84, 0.06);
+        }
+
+        &:hover {
+          background: rgba(44, 22, 84, 0.04);
+        }
+
+        .MuiListItemText-primary {
+          font-family: $font;
+          font-size: 14px;
+          font-weight: 500;
+          color: inherit;
+        }
+      }
+    }
+
+    .mob-drawer-lang {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .mob-drawer-lang-label {
+        font-family: $font;
+        font-size: 11px;
+        font-weight: 700;
+        color: #aaa;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+
+      .mob-drawer-lang-options {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+
+        .mob-drawer-lang-btn {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 6px;
+          padding: 7px 12px;
+          border-radius: 8px;
+          border: 1px solid rgba(24, 26, 32, 0.15);
+          background: transparent;
+          font-family: $font;
+          font-size: 12px;
+          font-weight: 600;
+          color: #2D3536;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &.active {
+            background: #2C1654;
+            border-color: #2C1654;
+            color: #fff;
+          }
+
+          .mob-drawer-lang-flag {
+            width: 18px;
+            height: 12px;
+            object-fit: cover;
+            border-radius: 2px;
+          }
+        }
+      }
+    }
+
+    .mob-drawer-footer {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .mob-drawer-user {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+
+        .mob-drawer-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid rgba(44, 22, 84, 0.15);
+        }
+
+        .mob-drawer-nick {
+          font-family: $font;
+          font-size: 14px;
+          font-weight: 700;
+          color: #2D3536;
+          display: block;
+        }
+
+        .mob-drawer-type {
+          font-family: $font;
+          font-size: 11px;
+          color: #2C1654;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          display: block;
+        }
+      }
+
+      .mob-drawer-logout-btn {
+        font-family: $font;
+        font-size: 13px;
+        font-weight: 600;
+        color: #716B69 !important;
+        text-transform: none;
+        justify-content: flex-start;
+        padding: 0;
+      }
+
+      .mob-drawer-login-btn {
+        font-family: $font;
+        font-size: 14px;
+        font-weight: 700;
+        background: #2C1654 !important;
+        color: #fff !important;
+        border-radius: 10px;
+        text-transform: none;
+        padding: 12px;
       }
     }
   }
@@ -667,11 +842,10 @@ body {
       .mob-ba-swiper,
       .mob-rv-swiper {
         width: 100%;
-        height: 390px;
+        height: auto;
 
         .mob-ba-slide,
         .mob-rv-slide {
-          width: 98%;
           height: auto;
           display: flex;
         }
@@ -1187,6 +1361,19 @@ body {
         font-weight: 600;
         color: #fff;
         line-height: normal;
+      }
+
+      .mob-event-desc {
+        font-family: $font;
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.4;
+        margin-top: 4px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
     }
   }
@@ -3713,6 +3900,882 @@ body {
     flex-direction: row;
     gap: 8px;
     flex-wrap: wrap;
+  }
+
+  // ── Mypage Product Card ──
+  .mob-mypage-product-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
+    cursor: pointer;
+
+    .mob-mypage-product-img-wrap {
+      flex-shrink: 0;
+      width: 72px;
+      height: 72px;
+      border-radius: 8px;
+      overflow: hidden;
+
+      .mob-mypage-product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+    }
+
+    .mob-mypage-product-info {
+      flex: 1;
+      gap: 3px;
+
+      .mob-mypage-product-title {
+        font-family: $font;
+        font-size: 14px;
+        font-weight: 600;
+        color: #2D3536;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .mob-mypage-product-brand {
+        font-family: $font;
+        font-size: 12px;
+        color: #aaa;
+      }
+
+      .mob-mypage-product-bottom {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 4px;
+
+        .mob-mypage-product-price {
+          font-family: $font;
+          font-size: 14px;
+          font-weight: 700;
+          color: #2C1654;
+        }
+
+        .mob-mypage-product-meta {
+          flex-direction: row;
+          align-items: center;
+          gap: 8px;
+
+          .mob-mypage-product-status {
+            font-family: $font;
+            font-size: 10px;
+            font-weight: 600;
+            color: #3554d1;
+            background: #E5F0FD;
+            padding: 2px 8px;
+            border-radius: 20px;
+          }
+
+          .mob-mypage-product-views {
+            font-family: $font;
+            font-size: 11px;
+            color: #aaa;
+          }
+        }
+      }
+
+      .mob-mypage-product-actions {
+        flex-direction: row;
+        gap: 4px;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  // ── Member Products ──
+  .mob-member-products {
+    gap: 12px;
+  }
+
+  // ── Member Articles ──
+  .mob-member-articles {
+    gap: 12px;
+
+    .mob-member-articles-title {
+      font-family: $font;
+      font-size: 17px;
+      font-weight: 700;
+      color: #2D3536;
+    }
+  }
+
+  // ── Member Followers & Followings ──
+  .mob-follows-wrap {
+    gap: 12px;
+
+    .mob-follows-title {
+      font-family: $font;
+      font-size: 17px;
+      font-weight: 700;
+      color: #2D3536;
+    }
+
+    .mob-follows-empty {
+      align-items: center;
+      gap: 8px;
+      padding: 32px 0;
+
+      img { width: 32px; opacity: 0.4; }
+
+      p, .MuiTypography-root {
+        font-family: $font;
+        font-size: 14px;
+        color: #aaa;
+      }
+    }
+
+    .mob-follows-card {
+      padding: 12px 14px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
+      gap: 10px;
+
+      .mob-follows-user {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+
+        .mob-follows-avatar {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 1px solid rgba(24, 26, 32, 0.1);
+          flex-shrink: 0;
+        }
+
+        .mob-follows-user-info {
+          flex: 1;
+          gap: 2px;
+
+          .mob-follows-nick {
+            font-family: $font;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2D3536;
+          }
+
+          .mob-follows-stats {
+            font-family: $font;
+            font-size: 11px;
+            color: #aaa;
+          }
+        }
+      }
+
+      .mob-follows-actions {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        .mob-follows-like {
+          flex-direction: row;
+          align-items: center;
+          gap: 4px;
+
+          .mob-follows-like-count {
+            font-family: $font;
+            font-size: 12px;
+            color: #aaa;
+          }
+        }
+
+        .mob-follows-follow-btn {
+          font-family: $font;
+          font-size: 12px;
+          font-weight: 700;
+          background: #2C1654 !important;
+          color: #fff !important;
+          border-radius: 8px;
+          padding: 5px 14px;
+          text-transform: none;
+        }
+
+        .mob-follows-unfollow-btn {
+          font-family: $font;
+          font-size: 12px;
+          font-weight: 600;
+          color: #2C1654;
+          border-color: #2C1654;
+          border-radius: 8px;
+          padding: 5px 12px;
+          text-transform: none;
+        }
+      }
+    }
+
+    .mob-follows-pagination {
+      align-items: center;
+      gap: 8px;
+      padding-top: 4px;
+
+      .mob-follows-total {
+        font-family: $font;
+        font-size: 12px;
+        color: #aaa;
+      }
+    }
+  }
+
+  // ── Member Menu ──
+  .mob-member-menu {
+    gap: 0;
+    margin-bottom: 16px;
+
+    .mob-member-profile {
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 14px;
+      background: #fff;
+      border-radius: 10px 10px 0 0;
+
+      .mob-member-avatar-wrap {
+        flex-shrink: 0;
+
+        .mob-member-avatar {
+          width: 56px;
+          height: 56px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid rgba(44, 22, 84, 0.15);
+        }
+      }
+
+      .mob-member-info {
+        flex: 1;
+        gap: 2px;
+
+        .mob-member-nick {
+          font-family: $font;
+          font-size: 15px;
+          font-weight: 700;
+          color: #2D3536;
+        }
+
+        .mob-member-type {
+          font-family: $font;
+          font-size: 11px;
+          font-weight: 600;
+          color: #2C1654;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .mob-member-phone {
+          font-family: $font;
+          font-size: 12px;
+          color: #aaa;
+        }
+      }
+
+      .mob-member-follow-box {
+        flex-shrink: 0;
+
+        .mob-follow-btn {
+          font-family: $font;
+          font-size: 12px;
+          font-weight: 700;
+          background: #2C1654 !important;
+          color: #fff !important;
+          border-radius: 8px;
+          padding: 6px 16px;
+          text-transform: none;
+        }
+
+        .mob-unfollow-btn {
+          font-family: $font;
+          font-size: 12px;
+          font-weight: 600;
+          color: #2C1654;
+          border-color: #2C1654;
+          border-radius: 8px;
+          padding: 6px 14px;
+          text-transform: none;
+        }
+      }
+    }
+
+    .mob-member-nav {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      scrollbar-width: none;
+      &::-webkit-scrollbar { display: none; }
+      background: #fff;
+      border-top: 1px solid rgba(24, 26, 32, 0.08);
+      border-radius: 0 0 10px 10px;
+
+      .mob-member-nav-tab {
+        flex: 1;
+        min-width: max-content;
+        padding: 12px 14px;
+        font-family: $font;
+        font-size: 12px;
+        font-weight: 500;
+        color: #716B69;
+        text-decoration: none;
+        text-align: center;
+        border-bottom: 2px solid transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        transition: all 0.2s ease;
+
+        &.active {
+          color: #2C1654;
+          border-bottom-color: #2C1654;
+          font-weight: 700;
+        }
+
+        .mob-member-nav-count {
+          font-family: $font;
+          font-size: 13px;
+          font-weight: 700;
+          color: inherit;
+        }
+      }
+    }
+  }
+
+  // ── Inquiry ──
+  .mob-inquiry-wrap {
+    padding: 20px 0;
+    gap: 24px;
+
+    .mob-inquiry-header {
+      gap: 6px;
+
+      .mob-inquiry-title {
+        font-family: $font;
+        font-size: 20px;
+        font-weight: 700;
+        color: #2D3536;
+      }
+
+      .mob-inquiry-sub {
+        font-family: $font;
+        font-size: 13px;
+        color: #716B69;
+        line-height: 1.5;
+
+        .mob-inquiry-email {
+          color: #2C1654;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .mob-inquiry-form {
+      gap: 14px;
+
+      .mob-inquiry-field {
+        gap: 6px;
+
+        .mob-inquiry-label {
+          font-family: $font;
+          font-size: 13px;
+          font-weight: 600;
+          color: #2D3536;
+        }
+
+        .mob-inquiry-input {
+          width: 100%;
+          padding: 11px 14px;
+          border: 1px solid rgba(24, 26, 32, 0.18);
+          border-radius: 8px;
+          background: #fff;
+          font-family: $font;
+          font-size: 14px;
+          color: #2D3536;
+          outline: none;
+          box-sizing: border-box;
+
+          &::placeholder { color: #aaa; }
+          &:focus { border-color: #2C1654; }
+        }
+
+        .mob-inquiry-select {
+          width: 100%;
+          background: #fff;
+          border-radius: 8px;
+          font-family: $font;
+          font-size: 14px;
+        }
+
+        .mob-inquiry-textarea {
+          width: 100%;
+          padding: 11px 14px;
+          border: 1px solid rgba(24, 26, 32, 0.18);
+          border-radius: 8px;
+          background: #fff;
+          font-family: $font;
+          font-size: 14px;
+          color: #2D3536;
+          outline: none;
+          resize: none;
+          box-sizing: border-box;
+          line-height: 1.5;
+
+          &::placeholder { color: #aaa; }
+          &:focus { border-color: #2C1654; }
+        }
+      }
+
+      .mob-inquiry-submit-btn {
+        width: 100%;
+        padding: 14px;
+        background: #2C1654 !important;
+        color: #fff !important;
+        font-family: $font;
+        font-size: 15px;
+        font-weight: 700;
+        border-radius: 10px;
+        text-transform: none;
+
+        &:disabled {
+          opacity: 0.6;
+        }
+      }
+    }
+
+    .mob-inquiry-info-row {
+      flex-direction: row;
+      gap: 10px;
+
+      .mob-inquiry-info-card {
+        flex: 1;
+        align-items: center;
+        gap: 4px;
+        padding: 12px 8px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
+
+        .mob-inquiry-info-icon {
+          font-size: 18px;
+        }
+
+        .mob-inquiry-info-label {
+          font-family: $font;
+          font-size: 11px;
+          font-weight: 600;
+          color: #2D3536;
+          text-align: center;
+        }
+
+        .mob-inquiry-info-value {
+          font-family: $font;
+          font-size: 10px;
+          color: #aaa;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  // ── FAQ ──
+  .mob-faq-content {
+    padding: 20px 0;
+    gap: 16px;
+
+    .mob-faq-tabs {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      &::-webkit-scrollbar { display: none; }
+
+      .mob-faq-tab {
+        flex-shrink: 0;
+        padding: 7px 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(24, 26, 32, 0.15);
+        background: transparent;
+        font-family: $font;
+        font-size: 12px;
+        font-weight: 500;
+        color: #2D3536;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &.active {
+          background: #2C1654;
+          border-color: #2C1654;
+          color: #fff;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .mob-faq-list {
+      gap: 0;
+
+      .mob-faq-q-badge {
+        font-family: $font;
+        font-size: 14px;
+        font-weight: 700;
+        color: #2C1654;
+        flex-shrink: 0;
+        margin-right: 8px;
+      }
+
+      .mob-faq-question {
+        font-family: $font;
+        font-size: 13px;
+        font-weight: 500;
+        color: #2D3536;
+        line-height: 1.4;
+      }
+
+      .mob-faq-answer {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 8px;
+
+        .mob-faq-a-badge {
+          font-family: $font;
+          font-size: 14px;
+          font-weight: 700;
+          color: #6b3fa0;
+          flex-shrink: 0;
+        }
+
+        .mob-faq-answer-text {
+          font-family: $font;
+          font-size: 13px;
+          color: #555;
+          line-height: 1.5;
+        }
+      }
+    }
+  }
+
+  // ── Notice ──
+  .mob-notice-content {
+    padding: 20px 0;
+    gap: 16px;
+
+    .mob-notice-heading {
+      font-family: $font;
+      font-size: 18px;
+      font-weight: 700;
+      color: #2D3536;
+    }
+
+    .mob-notice-list {
+      gap: 10px;
+
+      .mob-notice-item {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
+
+        &.event {
+          border-left: 3px solid #2C1654;
+        }
+
+        .mob-notice-left {
+          flex-shrink: 0;
+          width: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .mob-notice-no {
+            font-family: $font;
+            font-size: 13px;
+            font-weight: 600;
+            color: #aaa;
+          }
+
+          .mob-notice-badge {
+            font-family: $font;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            background: #2C1654;
+            padding: 2px 6px;
+            border-radius: 20px;
+          }
+        }
+
+        .mob-notice-body {
+          flex: 1;
+          gap: 4px;
+
+          .mob-notice-title {
+            font-family: $font;
+            font-size: 13px;
+            font-weight: 500;
+            color: #2D3536;
+            line-height: 1.4;
+          }
+
+          .mob-notice-date {
+            font-family: $font;
+            font-size: 11px;
+            color: #aaa;
+          }
+        }
+      }
+    }
+  }
+
+  // ── Agent Card ──
+  .mob-agent-card {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
+
+    .mob-agent-cover {
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(135deg, #2C1654 0%, #6b3fa0 100%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 0;
+
+      .mob-agent-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        margin-bottom: -28px;
+      }
+    }
+
+    .mob-agent-body {
+      padding: 36px 14px 14px;
+      gap: 10px;
+
+      .mob-agent-name-row {
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+
+        .mob-agent-name {
+          font-family: $font;
+          font-size: 14px;
+          font-weight: 700;
+          color: #2D3536;
+          text-decoration: none;
+        }
+
+        .mob-agent-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 2px;
+          background: rgba(44, 22, 84, 0.08);
+          color: #2C1654;
+          font-family: $font;
+          font-size: 10px;
+          font-weight: 600;
+          padding: 2px 6px;
+          border-radius: 20px;
+        }
+      }
+
+      .mob-agent-stats {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+
+        .mob-agent-stat {
+          align-items: center;
+          gap: 1px;
+
+          .mob-agent-stat-value {
+            font-family: $font;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2D3536;
+          }
+
+          .mob-agent-stat-label {
+            font-family: $font;
+            font-size: 11px;
+            color: #aaa;
+          }
+        }
+
+        .mob-agent-stat-divider {
+          width: 1px;
+          height: 24px;
+          background: rgba(24, 26, 32, 0.1);
+        }
+      }
+
+      .mob-agent-actions {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        .mob-agent-meta {
+          flex-direction: row;
+          align-items: center;
+          gap: 3px;
+
+          .mob-agent-meta-count {
+            font-family: $font;
+            font-size: 12px;
+            color: #aaa;
+            margin-right: 4px;
+          }
+        }
+
+        .mob-agent-view-btn {
+          font-family: $font;
+          font-size: 12px;
+          font-weight: 600;
+          color: #2C1654;
+          border-color: #2C1654;
+          border-radius: 8px;
+          padding: 4px 14px;
+          text-transform: none;
+        }
+      }
+    }
+  }
+
+  // ── Community Card ──
+  .mob-community-card {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
+    cursor: pointer;
+
+    .mob-cc-image-box {
+      width: 100%;
+      height: 160px;
+      overflow: hidden;
+
+      .mob-cc-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+    }
+
+    .mob-cc-body {
+      padding: 12px 14px;
+      gap: 4px;
+
+      .mob-cc-author {
+        font-family: $font;
+        font-size: 12px;
+        font-weight: 500;
+        color: #2C1654;
+        cursor: pointer;
+      }
+
+      .mob-cc-title {
+        font-family: $font;
+        font-size: 14px;
+        font-weight: 600;
+        color: #2D3536;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .mob-cc-actions {
+        flex-direction: row;
+        align-items: center;
+        gap: 4px;
+        margin-top: 6px;
+
+        .mob-cc-count {
+          font-family: $font;
+          font-size: 12px;
+          color: #aaa;
+          margin-right: 6px;
+        }
+      }
+    }
+  }
+
+  // ── Article Card (mypage) ──
+  .mob-article-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
+
+    .mob-article-date {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      background: rgba(44, 22, 84, 0.08);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .mob-article-day {
+        font-family: $font;
+        font-size: 11px;
+        font-weight: 700;
+        color: #2C1654;
+        text-align: center;
+        line-height: 1.3;
+      }
+    }
+
+    .mob-article-info {
+      flex: 1;
+      gap: 3px;
+
+      .mob-article-title {
+        font-family: $font;
+        font-size: 14px;
+        font-weight: 600;
+        color: #2D3536;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .mob-article-category {
+        font-family: $font;
+        font-size: 12px;
+        color: #aaa;
+      }
+    }
   }
 
   // ── Articles ──

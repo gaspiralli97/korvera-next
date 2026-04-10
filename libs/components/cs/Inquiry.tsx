@@ -57,7 +57,97 @@ const Inquiry = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>Inquiry MOBILE</div>;
+		return (
+			<Stack className={'mob-inquiry-wrap'}>
+				<Stack className={'mob-inquiry-header'}>
+					<Typography className={'mob-inquiry-title'}>Contact Us</Typography>
+					<Typography className={'mob-inquiry-sub'}>
+						Our support team will respond within 24 hours.{' '}
+						<span className={'mob-inquiry-email'}>support@korvera.uz</span>
+					</Typography>
+				</Stack>
+
+				<Stack className={'mob-inquiry-form'}>
+					<Stack className={'mob-inquiry-field'}>
+						<label className={'mob-inquiry-label'}>Name</label>
+						<input
+							className={'mob-inquiry-input'}
+							placeholder={'Your name'}
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+						/>
+					</Stack>
+
+					<Stack className={'mob-inquiry-field'}>
+						<label className={'mob-inquiry-label'}>Email</label>
+						<input
+							className={'mob-inquiry-input'}
+							placeholder={'your@email.com'}
+							type={'email'}
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+						/>
+					</Stack>
+
+					<Stack className={'mob-inquiry-field'}>
+						<label className={'mob-inquiry-label'}>Category</label>
+						<Select
+							value={category}
+							onChange={(e) => setCategory(e.target.value)}
+							className={'mob-inquiry-select'}
+							size={'small'}
+						>
+							{CATEGORIES.map((cat) => (
+								<MenuItem key={cat} value={cat}>{cat}</MenuItem>
+							))}
+						</Select>
+					</Stack>
+
+					<Stack className={'mob-inquiry-field'}>
+						<label className={'mob-inquiry-label'}>Subject</label>
+						<input
+							className={'mob-inquiry-input'}
+							placeholder={'Brief description of your inquiry'}
+							value={subject}
+							onChange={(e) => setSubject(e.target.value)}
+						/>
+					</Stack>
+
+					<Stack className={'mob-inquiry-field'}>
+						<label className={'mob-inquiry-label'}>Message</label>
+						<textarea
+							className={'mob-inquiry-textarea'}
+							placeholder={'Describe your inquiry in detail... (min 10 characters)'}
+							value={message}
+							rows={5}
+							onChange={(e) => setMessage(e.target.value)}
+						/>
+					</Stack>
+
+					<Button
+						className={'mob-inquiry-submit-btn'}
+						onClick={handleSubmit}
+						disabled={submitting}
+					>
+						{submitting ? 'Submitting...' : 'Submit Inquiry'}
+					</Button>
+				</Stack>
+
+				<Stack className={'mob-inquiry-info-row'}>
+					{[
+						{ icon: '📧', label: 'Email', value: 'support@korvera.uz' },
+						{ icon: '🕐', label: 'Response Time', value: 'Within 24 hours' },
+						{ icon: '📞', label: 'Phone', value: '+82-10-0000-0000' },
+					].map(({ icon, label, value }) => (
+						<Stack key={label} className={'mob-inquiry-info-card'}>
+							<span className={'mob-inquiry-info-icon'}>{icon}</span>
+							<Typography className={'mob-inquiry-info-label'}>{label}</Typography>
+							<Typography className={'mob-inquiry-info-value'}>{value}</Typography>
+						</Stack>
+					))}
+				</Stack>
+			</Stack>
+		);
 	} else {
 		return (
 			<Stack className={'inquiry-wrap'}>

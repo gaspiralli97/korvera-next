@@ -61,6 +61,9 @@ const EventCard = ({ event }: { event: any }) => {
 						{event.eventCategory.charAt(0) + event.eventCategory.slice(1).toLowerCase()}
 					</strong>
 					<span className={'mob-event-title'}>{event.eventTitle}</span>
+					{event.eventDescription && (
+						<span className={'mob-event-desc'}>{event.eventDescription}</span>
+					)}
 				</Box>
 			</Stack>
 		);
