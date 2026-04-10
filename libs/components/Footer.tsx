@@ -9,13 +9,13 @@ import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 
 const productLink = (category: string) =>
-	`/product?input=${JSON.stringify({
+	`/product?input=${encodeURIComponent(JSON.stringify({
 		page: 1,
 		limit: 9,
 		sort: 'createdAt',
 		direction: 'DESC',
 		search: { categoryList: [category], pricesRange: { start: 5, end: 2000000 }, volumesRange: { start: 0, end: 500 } },
-	})}`;
+	}))}`;
 
 const Footer = () => {
 	const device = useDeviceDetect();

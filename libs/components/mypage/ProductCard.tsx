@@ -50,7 +50,38 @@ export const ProductCard = (props: ProductCardProps) => {
 	};
 
 	if (device === 'mobile') {
-		return <div>MOBILE PRODUCT CARD</div>;
+		return (
+			<Stack className={'mob-mypage-product-card'} onClick={() => pushProductDetail(product?._id)}>
+				<Box component={'div'} className={'mob-mypage-product-img-wrap'}>
+					<img
+						src={`${process.env.REACT_APP_API_URL}/${product.productImages[0]}`}
+						alt={product.productTitle}
+						className={'mob-mypage-product-img'}
+					/>
+				</Box>
+				<Stack className={'mob-mypage-product-info'}>
+					<Typography className={'mob-mypage-product-title'}>{product.productTitle}</Typography>
+					<Typography className={'mob-mypage-product-brand'}>{product.productBrand} · {product.productCategory}</Typography>
+					<Stack className={'mob-mypage-product-bottom'}>
+						<Typography className={'mob-mypage-product-price'}>${formatterStr(product?.productPrice)}</Typography>
+						<Stack className={'mob-mypage-product-meta'}>
+							<span className={'mob-mypage-product-status'}>{product.productStatus}</span>
+							<Typography className={'mob-mypage-product-views'}>{product.productViews.toLocaleString()} views</Typography>
+						</Stack>
+					</Stack>
+					{!memberPage && product.productStatus === ProductStatus.ACTIVE && (
+						<Stack className={'mob-mypage-product-actions'}>
+							<IconButton size={'small'} onClick={(e) => { e.stopPropagation(); pushEditProduct(product._id); }}>
+								<ModeIcon sx={{ fontSize: 18 }} />
+							</IconButton>
+							<IconButton size={'small'} onClick={(e) => { e.stopPropagation(); deleteProductHandler(product._id); }}>
+								<DeleteIcon sx={{ fontSize: 18, color: '#e91e63' }} />
+							</IconButton>
+						</Stack>
+					)}
+				</Stack>
+			</Stack>
+		);
 	} else
 		return (
 			<Stack className="product-card-box">

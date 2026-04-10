@@ -11,7 +11,19 @@ const Article = ({ boardArticle }: ArticleProps) => {
 	const device = useDeviceDetect();
 
 	if (device === 'mobile') {
-		return <div>ARTICLE CARD MOBILE</div>;
+		return (
+			<Stack className={'mob-article-card'}>
+				<Box className={'mob-article-date'}>
+					<Typography className={'mob-article-day'}>
+						{boardArticle?.createdAt ? new Date(boardArticle.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''}
+					</Typography>
+				</Box>
+				<Stack className={'mob-article-info'}>
+					<Typography className={'mob-article-title'}>{boardArticle?.articleTitle ?? ''}</Typography>
+					<Typography className={'mob-article-category'}>{boardArticle?.articleCategory ?? ''}</Typography>
+				</Stack>
+			</Stack>
+		);
 	} else {
 		return (
 			<Stack className="card-config">

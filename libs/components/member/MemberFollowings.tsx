@@ -43,7 +43,7 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
 			setMemberFollowings(data?.getMemberFollowings?.list);
-			setTotal(data?.getMemberFollowings7.metaCounter[0]?.total);
+			setTotal(data?.getMemberFollowings?.metaCounter[0]?.total);
 		},
 	});
 
@@ -65,7 +65,93 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 	};
 
 	if (device === 'mobile') {
-		return <div>KORVERA FOLLOWS MOBILE</div>;
+		return (
+			<Stack className={'mob-follows-wrap'}>
+				<Typography className={'mob-follows-title'}>Followings</Typography>
+
+				{memberFollowings?.length === 0 && (
+					<Stack className={'mob-follows-empty'}>
+						<img src="/img/icons/icoAlert.svg" alt="" />
+						<Typography>No Followings yet!</Typography>
+					</Stack>
+				)}
+
+				{memberFollowings.map((follower: Following) => {
+					const imagePath: string = follower?.followingData?.memberImage
+						? `${REACT_APP_API_URL}/${follower?.followingData?.memberImage}`
+						: '/img/profile/defaultUser.svg';
+					return (
+						<Stack className={'mob-follows-card'} key={follower._id}>
+							<Stack
+								className={'mob-follows-user'}
+								onClick={() => redirectToMemberPageHandler(follower?.followingData?._id)}
+							>
+								<img src={imagePath} alt="" className={'mob-follows-avatar'} />
+								<Stack className={'mob-follows-user-info'}>
+									<Typography className={'mob-follows-nick'}>{follower?.followingData?.memberNick}</Typography>
+									<Typography className={'mob-follows-stats'}>
+										{follower?.followingData?.memberFollowers} followers · {follower?.followingData?.memberFollowings} following
+									</Typography>
+								</Stack>
+							</Stack>
+
+							<Stack className={'mob-follows-actions'}>
+								<Stack className={'mob-follows-like'}>
+									{follower?.meLiked && follower?.meLiked[0]?.myFavorite ? (
+										<FavoriteIcon
+											sx={{ fontSize: 18, color: '#e91e63', cursor: 'pointer' }}
+											onClick={() => likeMemberHandler(follower?.followingData?._id, getMemberFollowingsRefetch, followInquiry)}
+										/>
+									) : (
+										<FavoriteBorderIcon
+											sx={{ fontSize: 18, color: '#aaa', cursor: 'pointer' }}
+											onClick={() => likeMemberHandler(follower?.followingData?._id, getMemberFollowingsRefetch, followInquiry)}
+										/>
+									)}
+									<Typography className={'mob-follows-like-count'}>{follower?.followingData?.memberLikes}</Typography>
+								</Stack>
+
+								{user?._id !== follower?.followingId && (
+									<Box component={'div'}>
+										{follower.meFollowed && follower.meFollowed[0]?.myFollowing ? (
+											<Button
+												variant={'outlined'}
+												className={'mob-follows-unfollow-btn'}
+												onClick={() => unsubscribeHandler(follower?.followingData?._id, getMemberFollowingsRefetch, followInquiry)}
+											>
+												Unfollow
+											</Button>
+										) : (
+											<Button
+												variant={'contained'}
+												className={'mob-follows-follow-btn'}
+												onClick={() => subscribeHandler(follower?.followingData?._id, getMemberFollowingsRefetch, followInquiry)}
+											>
+												Follow
+											</Button>
+										)}
+									</Box>
+								)}
+							</Stack>
+						</Stack>
+					);
+				})}
+
+				{memberFollowings.length !== 0 && (
+					<Stack className={'mob-follows-pagination'}>
+						<Pagination
+							page={followInquiry.page}
+							count={Math.ceil(total / followInquiry.limit)}
+							onChange={paginationHandler}
+							shape={'circular'}
+							color={'primary'}
+							size={'small'}
+						/>
+						<Typography className={'mob-follows-total'}>{total} followings</Typography>
+					</Stack>
+				)}
+			</Stack>
+		);
 	} else {
 		return (
 			<div id="member-follows-page">

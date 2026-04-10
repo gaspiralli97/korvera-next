@@ -39,7 +39,28 @@ const Notice = () => {
 	];
 
 	if (device === 'mobile') {
-		return <div>NOTICE MOBILE</div>;
+		return (
+			<Stack className={'mob-notice-content'}>
+				<span className={'mob-notice-heading'}>Notice</span>
+				<Stack className={'mob-notice-list'}>
+					{data.map((ele: any) => (
+						<Stack className={`mob-notice-item${ele?.event ? ' event' : ''}`} key={ele.title}>
+							<Box className={'mob-notice-left'}>
+								{ele?.event ? (
+									<span className={'mob-notice-badge'}>Event</span>
+								) : (
+									<span className={'mob-notice-no'}>{ele.no}</span>
+								)}
+							</Box>
+							<Stack className={'mob-notice-body'}>
+								<span className={'mob-notice-title'}>{ele.title}</span>
+								<span className={'mob-notice-date'}>{ele.date}</span>
+							</Stack>
+						</Stack>
+					))}
+				</Stack>
+			</Stack>
+		);
 	} else {
 		return (
 			<Stack className={'notice-content'}>

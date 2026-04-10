@@ -45,7 +45,43 @@ const CommunityCard = (props: CommunityCardProps) => {
 	};
 
 	if (device === 'mobile') {
-		return <div>COMMUNITY CARD MOBILE</div>;
+		return (
+			<Stack className={'mob-community-card'} onClick={(e: any) => chooseArticleHandler(e, boardArticle)}>
+				<Box className={'mob-cc-image-box'}>
+					<img src={imagePath} alt={boardArticle?.articleTitle} className={'mob-cc-img'} />
+				</Box>
+				<Stack className={'mob-cc-body'}>
+					<Typography
+						className={'mob-cc-author'}
+						onClick={(e: any) => {
+							e.stopPropagation();
+							goMemberPage(boardArticle?.memberData?._id as string);
+						}}
+					>
+						{boardArticle?.memberData?.memberNick}
+					</Typography>
+					<Typography className={'mob-cc-title'}>{boardArticle?.articleTitle}</Typography>
+					<Stack className={'mob-cc-actions'}>
+						<RemoveRedEyeIcon sx={{ fontSize: 15, color: '#aaa' }} />
+						<Typography className={'mob-cc-count'}>{boardArticle?.articleViews}</Typography>
+						<IconButton
+							size={'small'}
+							onClick={(e: any) => {
+								e.stopPropagation();
+								likeArticleHandler(e, user, String(boardArticle?._id ?? ''));
+							}}
+						>
+							{boardArticle?.meLiked && boardArticle?.meLiked[0]?.myFavorite ? (
+								<FavoriteIcon sx={{ fontSize: 15, color: '#e91e63' }} />
+							) : (
+								<FavoriteBorderIcon sx={{ fontSize: 15, color: '#aaa' }} />
+							)}
+						</IconButton>
+						<Typography className={'mob-cc-count'}>{boardArticle?.articleLikes}</Typography>
+					</Stack>
+				</Stack>
+			</Stack>
+		);
 	} else {
 		return (
 			<Stack

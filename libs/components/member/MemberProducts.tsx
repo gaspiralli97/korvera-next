@@ -50,7 +50,36 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	};
 
 	if (device === 'mobile') {
-		return <div>KORVERA PROPERTIES MOBILE</div>;
+		return (
+			<Stack className={'mob-member-products'}>
+				<Typography className={'mob-member-articles-title'}>Products</Typography>
+
+				{agentProperties?.length === 0 && (
+					<Stack className={'mob-follows-empty'}>
+						<img src="/img/icons/icoAlert.svg" alt="" />
+						<Typography>No Products found!</Typography>
+					</Stack>
+				)}
+
+				{agentProperties?.map((property: Product) => (
+					<ProductCard product={property} memberPage={true} key={property?._id} />
+				))}
+
+				{agentProperties.length !== 0 && (
+					<Stack className={'mob-follows-pagination'}>
+						<Pagination
+							count={Math.ceil(total / searchFilter.limit)}
+							page={searchFilter.page}
+							shape={'circular'}
+							color={'primary'}
+							size={'small'}
+							onChange={paginationHandler}
+						/>
+						<Typography className={'mob-follows-total'}>{total} products</Typography>
+					</Stack>
+				)}
+			</Stack>
+		);
 	} else {
 		return (
 			<div id="member-properties-page">

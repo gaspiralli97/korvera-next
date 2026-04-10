@@ -486,7 +486,51 @@ const Faq = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>FAQ MOBILE</div>;
+		const categories = [
+			{ key: 'products', label: 'Products' },
+			{ key: 'payment', label: 'Payment' },
+			{ key: 'skincare', label: 'Skincare Tips' },
+			{ key: 'sellers', label: 'For Sellers' },
+			{ key: 'membership', label: 'Membership' },
+			{ key: 'community', label: 'Community' },
+			{ key: 'other', label: 'Other' },
+		];
+		return (
+			<Stack className={'mob-faq-content'}>
+				<Box className={'mob-faq-tabs'} component={'div'}>
+					{categories.map((cat) => (
+						<button
+							key={cat.key}
+							className={`mob-faq-tab${category === cat.key ? ' active' : ''}`}
+							onClick={() => changeCategoryHandler(cat.key)}
+						>
+							{cat.label}
+						</button>
+					))}
+				</Box>
+				<Stack className={'mob-faq-list'}>
+					{data[category] &&
+						data[category].map((ele: any) => (
+							<Accordion
+								key={ele?.id}
+								expanded={expanded === ele?.id}
+								onChange={handleChange(ele?.id)}
+							>
+								<AccordionSummary id={`${ele?.id}-header`} aria-controls={`${ele?.id}-content`}>
+									<Typography className={'mob-faq-q-badge'}>Q</Typography>
+									<Typography className={'mob-faq-question'}>{ele?.subject}</Typography>
+								</AccordionSummary>
+								<AccordionDetails>
+									<Stack className={'mob-faq-answer'}>
+										<Typography className={'mob-faq-a-badge'}>A</Typography>
+										<Typography className={'mob-faq-answer-text'}>{ele?.content}</Typography>
+									</Stack>
+								</AccordionDetails>
+							</Accordion>
+						))}
+				</Stack>
+			</Stack>
+		);
 	} else {
 		return (
 			<Stack className={'faq-content'}>

@@ -45,7 +45,87 @@ const MemberMenu = (props: MemberMenuProps) => {
 
 
 	if (device === 'mobile') {
-		return <div>MEMBER MENU MOBILE</div>;
+		return (
+			<Stack className={'mob-member-menu'}>
+				{/* Profile */}
+				<Stack className={'mob-member-profile'}>
+					<Box className={'mob-member-avatar-wrap'}>
+						<img
+							src={member?.memberImage ? `${REACT_APP_API_URL}/${member?.memberImage}` : '/img/profile/defaultUser.svg'}
+							alt={'member-photo'}
+							className={'mob-member-avatar'}
+						/>
+					</Box>
+					<Stack className={'mob-member-info'}>
+						<Typography className={'mob-member-nick'}>{member?.memberNick}</Typography>
+						<Typography className={'mob-member-type'}>{member?.memberType}</Typography>
+						{member?.memberPhone && (
+							<Typography className={'mob-member-phone'}>{member?.memberPhone}</Typography>
+						)}
+					</Stack>
+
+					{targetMemberId && !isOwnProfile && (
+						<Box className={'mob-member-follow-box'}>
+							{member?.meFollowed && member?.meFollowed[0]?.myFollowing ? (
+								<Button
+									variant={'outlined'}
+									className={'mob-unfollow-btn'}
+									onClick={() => unsubscribeHandler(targetMemberId, getMemberRefetch, memberId)}
+								>
+									Unfollow
+								</Button>
+							) : (
+								<Button
+									variant={'contained'}
+									className={'mob-follow-btn'}
+									onClick={() => subscribeHandler(targetMemberId, getMemberRefetch, memberId)}
+								>
+									Follow
+								</Button>
+							)}
+						</Box>
+					)}
+				</Stack>
+
+				{/* Navigation tabs */}
+				<Box className={'mob-member-nav'} component={'div'}>
+					{member?.memberType === 'SELLER' && (
+						<Link
+							href={{ pathname: '/member', query: { ...router.query, category: 'products' } }}
+							scroll={false}
+							className={`mob-member-nav-tab${category === 'products' ? ' active' : ''}`}
+						>
+							Products
+							<span className={'mob-member-nav-count'}>{member?.memberProducts}</span>
+						</Link>
+					)}
+					<Link
+						href={{ pathname: '/member', query: { ...router.query, category: 'followers' } }}
+						scroll={false}
+						className={`mob-member-nav-tab${category === 'followers' ? ' active' : ''}`}
+					>
+						Followers
+						<span className={'mob-member-nav-count'}>{member?.memberFollowers}</span>
+					</Link>
+					<Link
+						href={{ pathname: '/member', query: { ...router.query, category: 'followings' } }}
+						scroll={false}
+						className={`mob-member-nav-tab${category === 'followings' ? ' active' : ''}`}
+					>
+						Followings
+						<span className={'mob-member-nav-count'}>{member?.memberFollowings}</span>
+					</Link>
+					<Link
+						href={{ pathname: '/member', query: { ...router.query, category: 'articles' } }}
+						scroll={false}
+						className={`mob-member-nav-tab${category === 'articles' ? ' active' : ''}`}
+					>
+						Articles
+						<span className={'mob-member-nav-count'}>{member?.memberArticles}</span>
+					</Link>
+				</Box>
+			</Stack>
+		);
 	} else {
 		return (
 			<Stack width={'100%'} padding={'30px 24px'}>
