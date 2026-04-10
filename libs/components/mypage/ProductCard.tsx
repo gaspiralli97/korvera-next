@@ -1,4 +1,4 @@
-import { Menu, MenuItem, Stack, Typography } from '@mui/material';
+import { Box, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import IconButton from '@mui/material/IconButton';
