@@ -88,13 +88,7 @@ const ProductCard = (props: ProductCardType) => {
 					>
 						<img src={imagePath} alt="" />
 					</Link>
-					{product && product?.productRank > topProductRank && (
-						<Box component={'div'} className={'top-badge'}>
-							<img src="/img/icons/electricity.svg" alt="" />
-							<Typography>TOP</Typography>
-						</Box>
-					)}
-					{isTrending && (
+						{isTrending && (
 						<Box component={'div'} className={'fire-badge'}>
 							🔥 HOT
 						</Box>
