@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useState } from 'react';
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 import { useReactiveVar, useMutation } from '@apollo/client';
 import { Stack, Box, Typography, Button, Divider, Menu, MenuItem } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -6,12 +6,11 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { cartVar, saveCart, CartItem } from '../../../apollo/store';
+import { cartVar, saveCart, CartItem, likedProductIdsVar, saveLiked, switchUserLiked } from '../../../apollo/store';
 import { userVar } from '../../../apollo/store';
 import { REACT_APP_API_URL } from '../../config';
 import { sweetConfirmAlert, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
-import { Message } from '../../enums/common.enum';
 
 interface MyCartProps {}
 type ShippingCountry = 'UZB' | 'Russia' | 'Korea' | 'USA';
@@ -41,17 +40,15 @@ const MyCart: React.FC<MyCartProps> = () => {
 	const user = useReactiveVar(userVar);
 	const userId = user?._id ?? '';
 	const [mounted, setMounted] = useState(false);
-	const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
+	const likedIds = useReactiveVar(likedProductIdsVar);
+	const likingRef = useRef<Set<string>>(new Set());
 	const [likeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
 
 	useEffect(() => { setMounted(true); }, []);
 
 	useEffect(() => {
 		if (!mounted || !userId) return;
-		try {
-			const raw = localStorage.getItem(`korvera_liked_${userId}`);
-			if (raw) setLikedIds(new Set(JSON.parse(raw)));
-		} catch {}
+		switchUserLiked(String(userId));
 	}, [mounted, userId]);
 	const [cartUIState, setCartUIState] = useState<CartUIState>(() => {
 		const saved = typeof window !== 'undefined' ? localStorage.getItem('shippingCountry') : null;
@@ -109,18 +106,23 @@ const MyCart: React.FC<MyCartProps> = () => {
 
 	const handleLike = async (productId: string) => {
 		productId = String(productId ?? '');
+		if (!productId || !userId || likingRef.current.has(productId)) return;
+		likingRef.current.add(productId);
+
+		const current = likedProductIdsVar();
+		const next = new Set(current);
+		next.has(productId) ? next.delete(productId) : next.add(productId);
+		likedProductIdsVar(next);
+		saveLiked(next, String(userId));
+
 		try {
-			if (!userId) throw new Error(Message.NOT_AUTHENTICATED);
-			if (!productId) return;
 			await likeTargetProduct({ variables: { input: productId } });
-			setLikedIds((prev) => {
-				const next = new Set(prev);
-				next.has(productId) ? next.delete(productId) : next.add(productId);
-				localStorage.setItem(`korvera_liked_${String(userId)}`, JSON.stringify([...next]));
-				return next;
-			});
 		} catch (err: any) {
+			likedProductIdsVar(current);
+			saveLiked(current, String(userId));
 			await sweetMixinErrorAlert(err.message);
+		} finally {
+			likingRef.current.delete(productId);
 		}
 	};
 

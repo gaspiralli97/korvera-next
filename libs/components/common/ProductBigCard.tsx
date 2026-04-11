@@ -107,12 +107,6 @@ const ProductBigCard = (props: ProductBigCardProps) => {
 						/>
 					)}
 
-					{product && product?.productRank >= topProductRank && (
-						<div className={'status'}>
-							<img src="/img/icons/electricity.svg" alt="" />
-							<span>top</span>
-						</div>
-					)}
 					<div className={'price'}>${formatterStr(product?.productPrice)}</div>
 				</Box>
 			</Stack>

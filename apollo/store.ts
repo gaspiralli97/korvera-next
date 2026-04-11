@@ -17,6 +17,29 @@ export interface CartItem {
 
 const cartKey = (userId: string) => (userId ? `korvera_cart_${userId}` : 'korvera_cart_guest');
 
+const likedKey = (userId: string) => (userId ? `korvera_liked_${userId}` : 'korvera_liked_guest');
+
+const loadLiked = (userId = ''): Set<string> => {
+	if (typeof window === 'undefined') return new Set();
+	try {
+		const raw = localStorage.getItem(likedKey(userId));
+		return raw ? new Set(JSON.parse(raw)) : new Set();
+	} catch {
+		return new Set();
+	}
+};
+
+export const saveLiked = (ids: Set<string>, userId = '') => {
+	if (typeof window === 'undefined') return;
+	localStorage.setItem(likedKey(userId), JSON.stringify([...ids]));
+};
+
+export const likedProductIdsVar = makeVar<Set<string>>(loadLiked());
+
+export const switchUserLiked = (userId: string) => {
+	likedProductIdsVar(loadLiked(userId));
+};
+
 const loadCart = (userId = ''): CartItem[] => {
 	if (typeof window === 'undefined') return [];
 	try {

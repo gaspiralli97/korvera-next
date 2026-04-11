@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import { Stack, Box, Typography } from '@mui/material';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
@@ -14,6 +14,7 @@ import { LIKE_TARGET_PRODUCT } from '../../../apollo/user/mutation';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { Direction, Message } from '../../enums/common.enum';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
+import { likedProductIdsVar, saveLiked } from '../../../apollo/store';
 
 const TABS = [
 	{ label: 'Trending', sort: 'productLikes' },
@@ -33,6 +34,7 @@ const ProductTabs = () => {
 	const device = useDeviceDetect();
 	const [activeTab, setActiveTab] = useState(0);
 	const [products, setProducts] = useState<Product[]>([]);
+	const likingRef = useRef<Set<string>>(new Set());
 
 	const maxProductLikes = useMemo(() => {
 		if (products.length === 0) return 0;
@@ -53,19 +55,56 @@ const ProductTabs = () => {
 	});
 
 	/** HANDLERS **/
-	const likeProductHandler = async (user:T, id:string) => {
+	const likeProductHandler = async (user: T, id: string) => {
+		if (!id || !user._id) {
+			if (!user._id) sweetMixinErrorAlert(Message.NOT_AUTHENTICATED).then();
+			return;
+		}
+		if (likingRef.current.has(id)) return;
+		likingRef.current.add(id);
+
+		const currentLiked = likedProductIdsVar();
+		const isCurrentlyLiked = currentLiked.has(id);
+		const optimisticLiked = new Set(currentLiked);
+		isCurrentlyLiked ? optimisticLiked.delete(id) : optimisticLiked.add(id);
+		likedProductIdsVar(optimisticLiked);
+
+		setProducts((prev) =>
+			prev.map((p) =>
+				String(p._id) === id
+					? {
+							...p,
+							productLikes: Math.max(0, (p.productLikes ?? 0) + (isCurrentlyLiked ? -1 : 1)),
+							meLiked: [{ memberId: String(user._id), likeRefId: id, myFavorite: !isCurrentlyLiked }],
+					  }
+					: p,
+			),
+		);
+
 		try {
-			if(!id) return;
-			if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			await likeTargetProduct({ variables: { input: id } });
+			const result = await getProductsRefetch({ input: getInput(activeTab) });
+			const list: Product[] = result.data?.getProducts?.list ?? [];
+			setProducts(list);
 
-			await likeTargetProduct({ variables:{input:id} });
-			const result = await getProductsRefetch({input:getInput(activeTab)});
-			setProducts(result.data?.getProducts?.list ?? []);
-
-			await sweetTopSmallSuccessAlert('success',800);
-		} catch (err:any) {
-			console.log('ERROR, likeProductHandler', err.message);
+			const liked = likedProductIdsVar();
+			const synced = new Set(liked);
+			const isNowLiked = list.find((p) => String(p._id) === id)?.meLiked?.[0]?.myFavorite ?? false;
+			isNowLiked ? synced.add(id) : synced.delete(id);
+			likedProductIdsVar(synced);
+			saveLiked(synced, String(user._id));
+		} catch (err: any) {
+			likedProductIdsVar(currentLiked);
+			setProducts((prev) =>
+				prev.map((p) =>
+					String(p._id) === id
+						? { ...p, productLikes: Math.max(0, (p.productLikes ?? 0) + (isCurrentlyLiked ? 1 : -1)), meLiked: [{ memberId: String(user._id), likeRefId: id, myFavorite: isCurrentlyLiked }] }
+						: p,
+				),
+			);
 			sweetMixinErrorAlert(err.message).then();
+		} finally {
+			likingRef.current.delete(id);
 		}
 	};
 
