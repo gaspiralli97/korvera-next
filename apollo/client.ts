@@ -80,7 +80,7 @@ function createIsomorphicLink() {
 
 		// @ts-ignore
 		const link = new createUploadLink({
-			uri: process.env.NEXT_PUBLIC_API_GRAPHQL_URL,
+			uri: process.env.REACT_APP_API_GRAPHQL_URL,
 		});
 
 		/* WEBSOCKET SUBSCRIPTION LINK */
