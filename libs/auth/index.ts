@@ -16,7 +16,7 @@ export function getJwtToken(): any {
 }
 
 export function setJwtToken(token: string) {
-	localStorage.setItem('accessToken', token);
+	try { localStorage.setItem('accessToken', token); } catch {}
 }
 
 export const logIn = async (nick: string, password: string): Promise<void> => {
@@ -125,7 +125,7 @@ const requestSignUpJwtToken = async ({
 
 export const updateStorage = ({ jwtToken }: { jwtToken: any }) => {
 	setJwtToken(jwtToken);
-	window.localStorage.setItem('login', Date.now().toString());
+	try { window.localStorage.setItem('login', Date.now().toString()); } catch {}
 };
 
 export const updateUserInfo = (jwtToken: any) => {
@@ -168,8 +168,8 @@ export const logOut = () => {
 };
 
 const deleteStorage = () => {
-	localStorage.removeItem('accessToken');
-	window.localStorage.setItem('logout', Date.now().toString());
+	try { localStorage.removeItem('accessToken'); } catch {}
+	try { window.localStorage.setItem('logout', Date.now().toString()); } catch {}
 };
 
 const deleteUserInfo = () => {
