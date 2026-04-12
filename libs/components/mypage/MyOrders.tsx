@@ -61,9 +61,7 @@ const MyOrders = () => {
 		const key = `korvera_orders_${user?._id ?? 'guest'}`;
 		const updated = orders.map((o) => o.orderId === orderId ? { ...o, status: 'Cancelled' as OrderStatus } : o);
 		setOrders(updated);
-		const staticIds = new Set(STATIC_ORDERS.map((o) => o.orderId));
-		const toSave = updated.filter((o) => !staticIds.has(o.orderId));
-		localStorage.setItem(key, JSON.stringify(toSave));
+		localStorage.setItem(key, JSON.stringify(updated));
 	};
 
 	const getOrderActions = (status: OrderStatus, orderId: string, isSellerRole: boolean) => {
@@ -71,15 +69,15 @@ const MyOrders = () => {
 			if (status === 'Processing') {
 				return (
 					<Stack className={'mo-actions'} direction={'row'} gap={1}>
-						<Button variant={'contained'} size={'small'}>Confirm Order</Button>
-						<Button variant={'outlined'} size={'small'} onClick={() => cancelOrder(orderId)}>Cancel Order</Button>
+						<Button className={'mo-action-btn'} size={'small'}>Confirm Order</Button>
+						<Button className={'mo-cancel-btn'} size={'small'} onClick={() => cancelOrder(orderId)}>Cancel Order</Button>
 					</Stack>
 				);
 			}
 			if (status === 'Shipped') {
 				return (
 					<Stack className={'mo-actions'} direction={'row'} gap={1}>
-						<Button variant={'contained'} size={'small'}>Mark as Delivered</Button>
+						<Button className={'mo-action-btn'} size={'small'}>Mark as Delivered</Button>
 					</Stack>
 				);
 			}
@@ -96,21 +94,21 @@ const MyOrders = () => {
 		if (status === 'Processing') {
 			return (
 				<Stack className={'mo-actions'} direction={'row'} gap={1}>
-					<Button variant={'outlined'} size={'small'} onClick={() => cancelOrder(orderId)}>Cancel Order</Button>
+					<Button className={'mo-cancel-btn'} size={'small'} onClick={() => cancelOrder(orderId)}>Cancel Order</Button>
 				</Stack>
 			);
 		}
 		if (status === 'Shipped') {
 			return (
 				<Stack className={'mo-actions'} direction={'row'} gap={1}>
-					<Button variant={'contained'} size={'small'}>Track Shipment</Button>
+					<Button className={'mo-action-btn'} size={'small'}>Track Shipment</Button>
 				</Stack>
 			);
 		}
 		if (status === 'Delivered') {
 			return (
 				<Stack className={'mo-actions'} direction={'row'} gap={1}>
-					<Button variant={'contained'} size={'small'}>Write Review</Button>
+					<Button className={'mo-action-btn'} size={'small'}>Write Review</Button>
 				</Stack>
 			);
 		}

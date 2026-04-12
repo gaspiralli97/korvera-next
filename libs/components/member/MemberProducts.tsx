@@ -15,28 +15,28 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	const router = useRouter();
 	const { memberId } = router.query;
 	const [searchFilter, setSearchFilter] = useState<ProductsInquiry>({ ...initialInput });
-	const [agentProperties, setAgentProperties] = useState<Product[]>([]);
+	const [agentProducts, setAgentProducts] = useState<Product[]>([]);
 	const [total, setTotal] = useState<number>(0);
 
 	/** APOLLO REQUESTS **/
 	const {
-		loading: getPropertiesLoading,
-		data: getPropertiesData,
-		error: getPropertiesError,
-		refetch: getPropertiesRefetch,
+		loading: getProductsLoading,
+		data: getProductsData,
+		error: getProductsError,
+		refetch: getProductsRefetch,
 	} = useQuery(GET_PRODUCTS, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		skip: !searchFilter?.search?.memberId,
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: any) => {
-			setAgentProperties(data?.getProducts?.list);
+			setAgentProducts(data?.getProducts?.list);
 			setTotal(data?.getProducts?.metaCounter[0]?.total ?? 0)
 		},
 	});
 	/** LIFECYCLES **/
 	useEffect(() => {
-		getPropertiesRefetch().then()
+		getProductsRefetch().then()
 	}, [searchFilter]);
 
 	useEffect(() => {
@@ -54,18 +54,18 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 			<Stack className={'mob-member-products'}>
 				<Typography className={'mob-member-articles-title'}>Products</Typography>
 
-				{agentProperties?.length === 0 && (
+				{agentProducts?.length === 0 && (
 					<Stack className={'mob-follows-empty'}>
 						<img src="/img/icons/icoAlert.svg" alt="" />
 						<Typography>No Products found!</Typography>
 					</Stack>
 				)}
 
-				{agentProperties?.map((property: Product) => (
-					<ProductCard product={property} memberPage={true} key={property?._id} />
+				{agentProducts?.map((product: Product) => (
+					<ProductCard product={product} memberPage={true} key={product?._id} />
 				))}
 
-				{agentProperties.length !== 0 && (
+				{agentProducts.length !== 0 && (
 					<Stack className={'mob-follows-pagination'}>
 						<Pagination
 							count={Math.ceil(total / searchFilter.limit)}
@@ -82,15 +82,15 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 		);
 	} else {
 		return (
-			<div id="member-properties-page">
+			<div id="member-products-page">
 				<Stack className="main-title-box">
 					<Stack className="right-box">
-						<Typography className="main-title">Properties</Typography>
+						<Typography className="main-title">Products</Typography>
 					</Stack>
 				</Stack>
-				<Stack className="properties-list-box">
+				<Stack className="products-list-box">
 					<Stack className="list-box">
-						{agentProperties?.length > 0 && (
+						{agentProducts?.length > 0 && (
 							<Stack className="listing-title-box">
 								<Typography className="title-text">Listing title</Typography>
 								<Typography className="title-text">Date Published</Typography>
@@ -98,17 +98,17 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 								<Typography className="title-text">View</Typography>
 							</Stack>
 						)}
-						{agentProperties?.length === 0 && (
+						{agentProducts?.length === 0 && (
 							<div className={'no-data'}>
 								<img src="/img/icons/icoAlert.svg" alt="" />
-								<p>No Property found!</p>
+								<p>No Product found!</p>
 							</div>
 						)}
-						{agentProperties?.map((property: Product) => {
-							return <ProductCard product={property} memberPage={true} key={property?._id} />;
+						{agentProducts?.map((product: Product) => {
+							return <ProductCard product={product} memberPage={true} key={product?._id} />;
 						})}
 
-						{agentProperties.length !== 0 && (
+						{agentProducts.length !== 0 && (
 							<Stack className="pagination-config">
 								<Stack className="pagination-box">
 									<Pagination
@@ -120,7 +120,7 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 									/>
 								</Stack>
 								<Stack className="total-result">
-									<Typography>{total} property available</Typography>
+									<Typography>{total} product available</Typography>
 								</Stack>
 							</Stack>
 						)}
