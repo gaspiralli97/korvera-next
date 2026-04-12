@@ -16,9 +16,8 @@ const nextConfig = {
 				pathname: '/**',
 			},
 			{
-				protocol: 'http',
-				hostname: '93.127.198.150',
-				port: '3007',
+				protocol: 'https',
+				hostname: 'korvera.kr',
 				pathname: '/**',
 			},
 		],
