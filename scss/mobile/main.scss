@@ -861,6 +861,131 @@ body {
       }
     }
 
+    // ba-card styles for mobile (PC styles are scoped to .hp-social-proof)
+    .ba-card {
+      position: relative;
+      width: 100%;
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+    }
+    .ba-slider {
+      position: relative;
+      width: 100%;
+      height: 175px;
+      overflow: hidden;
+      cursor: col-resize;
+      user-select: none;
+      border-radius: 12px 12px 0 0;
+    }
+    .ba-img {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+    }
+    .ba-label {
+      position: absolute;
+      bottom: 12px;
+      font-family: $font;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #F2EFE2;
+      padding: 4px 8px;
+      background: rgba(0,0,0,0.3);
+      &--before { left: 12px; }
+      &--after { right: 12px; }
+    }
+    .ba-handle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      cursor: col-resize;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .ba-handle-line {
+      position: absolute;
+      inset: 0;
+      background: #F2EFE2;
+      width: 2px;
+    }
+    .ba-handle-knob {
+      position: relative;
+      z-index: 2;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #F2EFE2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      font-size: 11px;
+      color: #2D3536;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .ba-info {
+      padding: 14px 16px 12px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      border-radius: 0 0 12px 12px;
+      border: 1px solid rgba(196,196,196,0.71);
+      border-top: none;
+      background: #F2EFE2;
+      box-shadow: 0 1px 4px 0 rgba(24,26,32,0.07);
+      flex: 1;
+    }
+    .ba-product {
+      overflow: hidden;
+      color: #2D3536;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: $font;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: capitalize;
+      display: block;
+    }
+    .ba-result {
+      margin-top: 4px;
+      overflow: hidden;
+      color: #716B69;
+      font-family: $font;
+      font-size: 11px;
+      font-weight: 400;
+      line-height: normal;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .ba-bott {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .ba-brand {
+      color: rgba(27,27,27,0.4);
+      font-family: $font;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .ba-duration {
+      color: rgba(27,27,27,0.35);
+      font-family: $font;
+      font-size: 11px;
+    }
+
     // rv-card styles for mobile (PC styles are scoped to .hp-sp-reviews)
     .rv-card {
       position: relative;
@@ -6365,6 +6490,176 @@ body {
 
         &.Mui-disabled { opacity: 0.4; }
       }
+    }
+  }
+}
+
+// ── Mobile Drawer — global scope (MUI Portal renders outside #mobile-wrap) ──
+.mob-drawer {
+  width: 280px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #F2EFE2;
+
+  .mob-drawer-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+
+    .mob-drawer-logo {
+      height: 22px;
+      width: auto;
+    }
+
+    .mob-drawer-close {
+      color: #2D3536;
+      cursor: pointer;
+      font-size: 22px;
+    }
+  }
+
+  .mob-drawer-list {
+    flex: 1;
+    padding: 8px 0;
+
+    .MuiListItemButton-root {
+      padding: 12px 20px;
+      font-family: $font;
+      font-size: 15px;
+      font-weight: 500;
+      color: #2D3536;
+
+      &.active {
+        color: #2C1654;
+        font-weight: 700;
+        background: rgba(44, 22, 84, 0.06);
+      }
+
+      &:hover {
+        background: rgba(44, 22, 84, 0.04);
+      }
+
+      .MuiListItemText-primary {
+        font-family: $font;
+        font-size: 14px;
+        font-weight: 500;
+        color: inherit;
+      }
+    }
+  }
+
+  .mob-drawer-lang {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .mob-drawer-lang-label {
+      font-family: $font;
+      font-size: 11px;
+      font-weight: 700;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .mob-drawer-lang-options {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+
+      .mob-drawer-lang-btn {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(24, 26, 32, 0.15);
+        background: transparent;
+        font-family: $font;
+        font-size: 12px;
+        font-weight: 600;
+        color: #2D3536;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &.active {
+          background: #2C1654;
+          border-color: #2C1654;
+          color: #fff;
+        }
+
+        .mob-drawer-lang-flag {
+          width: 18px;
+          height: 12px;
+          object-fit: cover;
+          border-radius: 2px;
+        }
+      }
+    }
+  }
+
+  .mob-drawer-footer {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .mob-drawer-user {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+
+      .mob-drawer-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(44, 22, 84, 0.15);
+      }
+
+      .mob-drawer-nick {
+        font-family: $font;
+        font-size: 14px;
+        font-weight: 700;
+        color: #2D3536;
+        display: block;
+      }
+
+      .mob-drawer-type {
+        font-family: $font;
+        font-size: 11px;
+        color: #2C1654;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: block;
+      }
+    }
+
+    .mob-drawer-logout-btn {
+      font-family: $font;
+      font-size: 13px;
+      font-weight: 600;
+      color: #716B69 !important;
+      text-transform: none;
+      justify-content: flex-start;
+      padding: 0;
+    }
+
+    .mob-drawer-login-btn {
+      font-family: $font;
+      font-size: 14px;
+      font-weight: 700;
+      background: #2C1654 !important;
+      color: #fff !important;
+      border-radius: 10px;
+      text-transform: none;
+      padding: 12px;
     }
   }
 }

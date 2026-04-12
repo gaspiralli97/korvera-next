@@ -57,62 +57,50 @@ const MyOrders = () => {
 		setExpandedId(expandedId === orderId ? null : orderId);
 	};
 
-	const cancelOrder = (orderId: string) => {
+	const updateOrderStatus = (orderId: string, status: OrderStatus) => {
 		const key = `korvera_orders_${user?._id ?? 'guest'}`;
-		const updated = orders.map((o) => o.orderId === orderId ? { ...o, status: 'Cancelled' as OrderStatus } : o);
+		const updated = orders.map((o) => o.orderId === orderId ? { ...o, status } : o);
 		setOrders(updated);
 		localStorage.setItem(key, JSON.stringify(updated));
 	};
 
 	const getOrderActions = (status: OrderStatus, orderId: string, isSellerRole: boolean) => {
+		const actions: { label: string; className: string; onClick: () => void }[] = [];
+
 		if (isSellerRole) {
 			if (status === 'Processing') {
-				return (
-					<Stack className={'mo-actions'} direction={'row'} gap={1}>
-						<Button className={'mo-action-btn'} size={'small'}>Confirm Order</Button>
-						<Button className={'mo-cancel-btn'} size={'small'} onClick={() => cancelOrder(orderId)}>Cancel Order</Button>
-					</Stack>
+				actions.push(
+					{ label: 'Confirm Order', className: 'mo-action-btn', onClick: () => updateOrderStatus(orderId, 'Delivered') },
+					{ label: 'Cancel Order', className: 'mo-cancel-btn', onClick: () => updateOrderStatus(orderId, 'Cancelled') },
 				);
-			}
-			if (status === 'Shipped') {
-				return (
-					<Stack className={'mo-actions'} direction={'row'} gap={1}>
-						<Button className={'mo-action-btn'} size={'small'}>Mark as Delivered</Button>
-					</Stack>
-				);
-			}
-			if (status === 'Delivered') {
+			} else if (status === 'Shipped') {
+				actions.push({ label: 'Mark as Delivered', className: 'mo-action-btn', onClick: () => updateOrderStatus(orderId, 'Delivered') });
+			} else if (status === 'Delivered') {
 				return (
 					<Stack className={'mo-actions'} direction={'row'} gap={1}>
 						<Chip label={'Completed'} color={'success'} size={'small'} />
 					</Stack>
 				);
 			}
-			return null;
+		} else {
+			if (status === 'Processing') {
+				actions.push({ label: 'Cancel Order', className: 'mo-cancel-btn', onClick: () => updateOrderStatus(orderId, 'Cancelled') });
+			} else if (status === 'Shipped') {
+				actions.push({ label: 'Track Shipment', className: 'mo-action-btn', onClick: () => {} });
+			} else if (status === 'Delivered') {
+				actions.push({ label: 'Write Review', className: 'mo-action-btn', onClick: () => {} });
+			}
 		}
 
-		if (status === 'Processing') {
-			return (
-				<Stack className={'mo-actions'} direction={'row'} gap={1}>
-					<Button className={'mo-cancel-btn'} size={'small'} onClick={() => cancelOrder(orderId)}>Cancel Order</Button>
-				</Stack>
-			);
-		}
-		if (status === 'Shipped') {
-			return (
-				<Stack className={'mo-actions'} direction={'row'} gap={1}>
-					<Button className={'mo-action-btn'} size={'small'}>Track Shipment</Button>
-				</Stack>
-			);
-		}
-		if (status === 'Delivered') {
-			return (
-				<Stack className={'mo-actions'} direction={'row'} gap={1}>
-					<Button className={'mo-action-btn'} size={'small'}>Write Review</Button>
-				</Stack>
-			);
-		}
-		return null;
+		if (actions.length === 0) return null;
+
+		return (
+			<Stack className={'mo-actions'} direction={'row'} gap={1}>
+				{actions.map(({ label, className, onClick }) => (
+					<Button key={label} className={className} size={'small'} onClick={onClick}>{label}</Button>
+				))}
+			</Stack>
+		);
 	};
 
 	if (device === 'mobile') {
