@@ -52,7 +52,11 @@ const MyFavorites: NextPage = () => {
 
 			await likeTargetProduct({ variables: { input: id } });
 			const result = await getFavoritesRefetch({ input: searchFavorites });
-			setMyFavorites(result.data?.getFavorites?.list ?? []);
+			const list = (result.data?.getFavorites?.list ?? []).map((p: Product) => ({
+				...p,
+				meLiked: p.meLiked?.length ? p.meLiked : [{ memberId: '', likeRefId: p._id, myFavorite: true }],
+			}));
+			setMyFavorites(list);
 		} catch (err: any) {
 			await sweetMixinErrorAlert(err.message).then();
 		}
