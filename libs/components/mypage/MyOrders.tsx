@@ -34,31 +34,6 @@ const STATUS_COLORS: Record<OrderStatus, { bg: string; color: string }> = {
 	Cancelled:  { bg: 'rgba(198,40,40,0.1)',    color: '#c62828' },
 };
 
-const STATIC_ORDERS: OrderRecord[] = [
-	{
-		orderId: 'KRV-20260301-0012',
-		createdAt: 'Mar 1, 2026',
-		status: 'Delivered',
-		total: 89.97,
-		address: '123 Main St, New York, NY 10001',
-		items: [
-			{ productBrand: 'LANEIGE', productTitle: 'Lip Sleeping Mask Intense Hydration', productImage: '/img/product/bigImage.png', productPrice: 24.0, qty: 2, size: '20g' },
-			{ productBrand: 'COSRX', productTitle: 'Advanced Snail 96 Mucin Power Essence', productImage: '/img/product/bigImage.png', productPrice: 25.0, qty: 1, size: '100ml' },
-			{ productBrand: 'SOME BY MI', productTitle: 'AHA BHA PHA 30 Days Miracle Toner', productImage: '/img/product/bigImage.png', productPrice: 16.97, qty: 1, size: '150ml' },
-		],
-	},
-	{
-		orderId: 'KRV-20260215-0008',
-		createdAt: 'Feb 15, 2026',
-		status: 'Shipped',
-		total: 54.0,
-		address: '456 Oak Ave, Los Angeles, CA 90001',
-		items: [
-			{ productBrand: 'INNISFREE', productTitle: 'Green Tea Seed Serum', productImage: '/img/product/bigImage.png', productPrice: 29.0, qty: 1, size: '80ml' },
-			{ productBrand: 'MISSHA', productTitle: 'Time Revolution Night Repair Cream', productImage: '/img/product/bigImage.png', productPrice: 25.0, qty: 1, size: '50ml' },
-		],
-	},
-];
 
 const MyOrders = () => {
 	const device = useDeviceDetect();
@@ -72,9 +47,9 @@ const MyOrders = () => {
 		try {
 			const raw = localStorage.getItem(key);
 			const localOrders: OrderRecord[] = raw ? JSON.parse(raw) : [];
-			setOrders([...localOrders, ...STATIC_ORDERS]);
+			setOrders(localOrders);
 		} catch {
-			setOrders(STATIC_ORDERS);
+			setOrders([]);
 		}
 	}, [user?._id]);
 

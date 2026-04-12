@@ -9,6 +9,7 @@ import { getJwtToken, updateUserInfo } from '../../auth';
 import Chat from '../Chat';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
+import AnnouncementBar from '../AnnouncementBar';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -36,6 +37,7 @@ const withLayoutFull = (Component: any) => {
 					</Head>
 					<Stack id="mobile-wrap">
 						<Stack id={'top'}>
+							<AnnouncementBar />
 							<Top />
 						</Stack>
 
@@ -58,6 +60,7 @@ const withLayoutFull = (Component: any) => {
 					</Head>
 					<Stack id="pc-wrap">
 						<Stack id={'top'}>
+							<AnnouncementBar />
 							<Top />
 						</Stack>
 

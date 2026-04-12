@@ -148,6 +148,8 @@ const MyOrder = () => {
 			const deliveryStr = delivery.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 			const createdAt = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
+			const fullAddress = [address.trim(), apt.trim(), city.trim(), stateVal.trim(), zip.trim()].filter(Boolean).join(', ');
+
 			const lastOrder = {
 				orderId: savedOrder?._id ?? `KRV-${Date.now()}`,
 				createdAt,
@@ -156,7 +158,31 @@ const MyOrder = () => {
 				shipping,
 				grandTotal,
 				estimatedDelivery: deliveryStr,
+				address: fullAddress,
 			};
+
+			// Save to order history list
+			const ordersKey = `korvera_orders_${user?._id ?? 'guest'}`;
+			const historyOrder = {
+				orderId: lastOrder.orderId,
+				createdAt,
+				status: 'Processing',
+				total: grandTotal,
+				address: fullAddress,
+				items: cartItems.map((item: CartItem) => ({
+					productTitle: item.productTitle,
+					productBrand: item.productBrand,
+					productImage: item.productImage,
+					productPrice: item.productPrice,
+					qty: item.qty,
+					size: item.size,
+				})),
+			};
+			try {
+				const raw = localStorage.getItem(ordersKey);
+				const existing = raw ? JSON.parse(raw) : [];
+				localStorage.setItem(ordersKey, JSON.stringify([historyOrder, ...existing]));
+			} catch {}
 
 			localStorage.setItem('korvera_last_order', JSON.stringify(lastOrder));
 			cartVar([]);
