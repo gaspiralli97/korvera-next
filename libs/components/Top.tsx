@@ -214,12 +214,14 @@ const Top = () => {
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		if (localStorage.getItem('locale') === null) {
-			localStorage.setItem('locale', 'en');
-			setLang('en');
-		} else {
-			setLang(localStorage.getItem('locale'));
-		}
+		try {
+			if (localStorage.getItem('locale') === null) {
+				localStorage.setItem('locale', 'en');
+				setLang('en');
+			} else {
+				setLang(localStorage.getItem('locale'));
+			}
+		} catch {}
 	}, [router]);
 
 	useEffect(() => {
@@ -250,7 +252,7 @@ const Top = () => {
 	const langChoice = useCallback(
 		async (e: any) => {
 			setLang(e.target.id);
-			localStorage.setItem('locale', e.target.id);
+			try { localStorage.setItem('locale', e.target.id); } catch {}
 			setAnchorEl2(null);
 			await router.push(router.asPath, router.asPath, { locale: e.target.id });
 		},
@@ -419,7 +421,7 @@ const Top = () => {
 										key={l.id}
 										className={`mob-drawer-lang-btn${lang === l.id ? ' active' : ''}`}
 										onClick={() => {
-											localStorage.setItem('locale', l.id);
+											try { localStorage.setItem('locale', l.id); } catch {}
 											router.push(router.asPath, router.asPath, { locale: l.id });
 											setLang(l.id);
 											setDrawerOpen(false);

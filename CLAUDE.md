@@ -80,3 +80,11 @@ Simplicity First: Make every change as simple as possible. Minimize impact.
 No Laziness: Find root causes. No temporary fixes. Follow senior developer standards.
 
 Minimal Impact: Only touch what’s necessary. Avoid introducing extra complexity.
+
+7. User Approval Before Coding
+
+NEVER write or modify code without explicitly asking the user first.
+
+Analyze, explain the plan, wait for "ha" or approval — then code.
+
+If unsure whether to code, always ask first.
