@@ -193,6 +193,28 @@
 				flex-direction: row;
 				gap: 8px;
 				align-items: center;
+
+				.mo-action-btn {
+					background: #2C1654 !important;
+					color: #F2EFE2 !important;
+					border-radius: 20px !important;
+					font-family: $font !important;
+					font-size: 12px !important;
+					font-weight: 600 !important;
+					text-transform: none !important;
+					padding: 6px 16px !important;
+				}
+
+				.mo-cancel-btn {
+					background: #c62828 !important;
+					color: #fff !important;
+					border-radius: 20px !important;
+					font-family: $font !important;
+					font-size: 12px !important;
+					font-weight: 600 !important;
+					text-transform: none !important;
+					padding: 6px 16px !important;
+				}
 			}
 		}
 	}

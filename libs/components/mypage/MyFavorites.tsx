@@ -32,7 +32,11 @@ const MyFavorites: NextPage = () => {
 		},
 		notifyOnNetworkStatusChange: true,
 		onCompleted(data) {
-			setMyFavorites(data?.getFavorites?.list);
+			const list = (data?.getFavorites?.list ?? []).map((p: Product) => ({
+				...p,
+				meLiked: p.meLiked?.length ? p.meLiked : [{ memberId: '', likeRefId: p._id, myFavorite: true }],
+			}));
+			setMyFavorites(list);
 			setTotal(data?.getFavorites?.metaCounter?.[0]?.total || 0);
 		},
 	});
