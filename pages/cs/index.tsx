@@ -33,7 +33,24 @@ const CS: NextPage = () => {
 	const tab = router.query.tab ?? 'notice';
 
 	if (device === 'mobile') {
-		return <h1>CS PAGE MOBILE</h1>;
+		return (
+			<div className={'mob-cs-page'}>
+				<div className={'mob-cs-header'}>
+					<span className={'mob-cs-title'}>Help Center</span>
+					<p className={'mob-cs-sub'}>How can we help you today?</p>
+				</div>
+				<div className={'mob-cs-tabs'}>
+					<button className={`mob-cs-tab-btn${tab === 'notice' ? ' active' : ''}`} onClick={() => changeTabHandler('notice')}>Notice</button>
+					<button className={`mob-cs-tab-btn${tab === 'faq' ? ' active' : ''}`} onClick={() => changeTabHandler('faq')}>FAQ</button>
+					<button className={`mob-cs-tab-btn${tab === 'inquiry' ? ' active' : ''}`} onClick={() => changeTabHandler('inquiry')}>Inquiry</button>
+				</div>
+				<div className={'mob-cs-content'}>
+					{tab === 'notice' && <Notice />}
+					{tab === 'faq' && <Faq />}
+					{tab === 'inquiry' && <Inquiry />}
+				</div>
+			</div>
+		);
 	} else {
 		return (
 			<Stack className={'cs-page'}>

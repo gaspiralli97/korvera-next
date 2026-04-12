@@ -82,7 +82,97 @@ const Join: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>LOGIN MOBILE</div>;
+		return (
+			<div className={'mob-auth-page'}>
+				<div className={'mob-auth-logo-wrap'}>
+					<img src="/img/logo/logoText.svg" alt="" className={'mob-auth-logo'} />
+					<span className={'mob-auth-logo-text'}>Korvera</span>
+				</div>
+				<div className={'mob-auth-card'}>
+					<div className={'mob-auth-tabs'}>
+						<button className={`mob-auth-tab-btn${loginView ? ' active' : ''}`} onClick={() => viewChangeHandler(true)}>Login</button>
+						<button className={`mob-auth-tab-btn${!loginView ? ' active' : ''}`} onClick={() => viewChangeHandler(false)}>Sign Up</button>
+					</div>
+					<div className={'mob-auth-inputs'}>
+						<div className={'mob-auth-field'}>
+							<label>Nickname</label>
+							<input
+								type="text"
+								placeholder="Enter Nickname"
+								value={input.nick}
+								onChange={(e) => handleInput('nick', e.target.value)}
+								onKeyDown={(e) => { if (e.key === 'Enter' && loginView) doLogin(); if (e.key === 'Enter' && !loginView) doSignUp(); }}
+							/>
+						</div>
+						<div className={'mob-auth-field'}>
+							<label>Password</label>
+							<input
+								type="password"
+								placeholder="Enter Password"
+								onChange={(e) => handleInput('password', e.target.value)}
+								onKeyDown={(e) => { if (e.key === 'Enter' && loginView) doLogin(); if (e.key === 'Enter' && !loginView) doSignUp(); }}
+							/>
+						</div>
+						{!loginView && (
+							<div className={'mob-auth-field'}>
+								<label>Phone</label>
+								<input
+									type="text"
+									placeholder="Enter Phone"
+									onChange={(e) => handleInput('phone', e.target.value)}
+									onKeyDown={(e) => { if (e.key === 'Enter') doSignUp(); }}
+								/>
+							</div>
+						)}
+					</div>
+					{!loginView && (
+						<div className={'mob-auth-type'}>
+							<span>Register as:</span>
+							<div className={'mob-auth-type-options'}>
+								<label className={'mob-auth-type-opt'}>
+									<input type="checkbox" name="USER" checked={input.type === 'USER'} onChange={checkUserTypeHandler} />
+									User
+								</label>
+								<label className={'mob-auth-type-opt'}>
+									<input type="checkbox" name="SELLER" checked={input.type === 'SELLER'} onChange={checkUserTypeHandler} />
+									Seller
+								</label>
+							</div>
+						</div>
+					)}
+					{loginView && (
+						<div className={'mob-auth-remember'}>
+							<label>
+								<input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+								Remember me
+							</label>
+							<a onClick={handleForgotPassword} style={{ cursor: 'pointer' }}>Lost password?</a>
+						</div>
+					)}
+					<button
+						className={'mob-auth-submit-btn'}
+						disabled={loginView ? input.nick === '' || input.password === '' : input.nick === '' || input.password === '' || input.phone === '' || input.type === ''}
+						onClick={loginView ? doLogin : doSignUp}
+					>
+						{loginView ? 'LOGIN' : 'SIGNUP'}
+					</button>
+					<div className={'mob-auth-divider'}><span>or {loginView ? 'login' : 'sign up'} with</span></div>
+					<div className={'mob-auth-social'}>
+						<button className={'mob-social-btn'} onClick={() => handleSocialLogin('Google')}>G</button>
+						<button className={'mob-social-btn'} onClick={() => handleSocialLogin('Kakao')}>K</button>
+						<button className={'mob-social-btn'} onClick={() => handleSocialLogin('Facebook')}>F</button>
+						<button className={'mob-social-btn'} onClick={() => handleSocialLogin('Apple')}>A</button>
+					</div>
+					<p className={'mob-auth-switch'}>
+						{loginView ? (
+							<>Not registered? <b onClick={() => viewChangeHandler(false)}>SIGNUP</b></>
+						) : (
+							<>Have account? <b onClick={() => viewChangeHandler(true)}>LOGIN</b></>
+						)}
+					</p>
+				</div>
+			</div>
+		);
 	} else {
 		return (
 			<Stack className={'join-page'}>

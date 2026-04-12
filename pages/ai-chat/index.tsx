@@ -48,7 +48,56 @@ const AiChat: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <h1>AI CHAT MOBILE</h1>;
+		return (
+			<div className={'mob-ai-chat-page'}>
+				<div className={'mob-ai-chat-header'}>
+					<div className={'mob-ai-chat-avatar'}>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36">
+							<circle cx="24" cy="24" r="24" fill="#2C2C2C" />
+							<circle cx="18" cy="24" r="2" fill="#C9A96E" />
+							<circle cx="24" cy="24" r="2" fill="#C9A96E" />
+							<circle cx="30" cy="24" r="2" fill="#C9A96E" />
+						</svg>
+					</div>
+					<div>
+						<span className={'mob-ai-chat-title'}>AI Beauty Advisor</span>
+						<span className={'mob-ai-chat-subtitle'}>Personalized skincare guidance</span>
+					</div>
+				</div>
+				<div className={'mob-ai-chat-body'}>
+					{messages.length === 0 ? (
+						<div className={'mob-ai-chat-empty'}>
+							<span className={'mob-ai-chat-empty-title'}>How can I help you?</span>
+							<div className={'mob-ai-suggestions'}>
+								{SUGGESTIONS.map((s) => (
+									<button key={s} className={'mob-ai-suggestion-btn'} onClick={() => sendMessage(s)}>{s}</button>
+								))}
+							</div>
+						</div>
+					) : (
+						<div className={'mob-ai-messages'}>
+							{messages.map((msg, i) => (
+								<div key={i} className={`mob-ai-message mob-ai-message--${msg.role}`}>
+									<span>{msg.text}</span>
+								</div>
+							))}
+							<div ref={bottomRef} />
+						</div>
+					)}
+				</div>
+				<div className={'mob-ai-chat-input-wrap'}>
+					<input
+						className={'mob-ai-chat-input'}
+						type="text"
+						placeholder={'Ask about skincare...'}
+						value={input}
+						onChange={(e) => setInput(e.target.value)}
+						onKeyDown={handleKeyDown}
+					/>
+					<button className={'mob-ai-chat-send'} onClick={() => sendMessage(input)}>Send</button>
+				</div>
+			</div>
+		);
 	}
 
 	return (

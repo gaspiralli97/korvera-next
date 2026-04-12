@@ -95,7 +95,48 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 	};
 
 	if (device === 'mobile') {
-		return <h1>COMMUNITY PAGE MOBILE</h1>;
+		return (
+			<div className={'mob-community-page'}>
+				<div className={'mob-community-header'}>
+					<h1 className={'mob-community-title'}>Community</h1>
+					<Button className={'mob-community-write-btn'} onClick={() => router.push({ pathname: '/mypage', query: { category: 'writeArticle' } })}>+ Write</Button>
+				</div>
+				<div className={'mob-community-tabs'}>
+					{(['SKINCARE_TIPS', 'PRODUCT_REVIEWS', 'BEAUTY_NEWS', 'HUMOR'] as const).map((cat) => (
+						<button
+							key={cat}
+							className={`mob-community-tab${searchCommunity.search.articleCategory === cat ? ' active' : ''}`}
+							onClick={(e) => tabChangeHandler(e, cat)}
+						>
+							{cat === 'SKINCARE_TIPS' ? 'Tips' : cat === 'PRODUCT_REVIEWS' ? 'Reviews' : cat === 'BEAUTY_NEWS' ? 'News' : 'Humor'}
+						</button>
+					))}
+				</div>
+				<div className={'mob-community-list'}>
+					{totalCount ? (
+						boardArticles?.map((boardArticle: BoardArticle) => (
+							<CommunityCard boardArticle={boardArticle} key={boardArticle?._id} likeArticleHandler={likeArticleHandler} />
+						))
+					) : (
+						<div className={'mob-community-no-data'}>
+							<img src="/img/icons/icoAlert.svg" alt="" />
+							<p>No articles yet. Be the first to write!</p>
+						</div>
+					)}
+				</div>
+				{totalCount > 0 && (
+					<div className={'mob-community-pagination'}>
+						<Pagination
+							count={Math.ceil(totalCount / searchCommunity.limit)}
+							page={searchCommunity.page}
+							shape="circular"
+							color="primary"
+							onChange={paginationHandler}
+						/>
+					</div>
+				)}
+			</div>
+		);
 	} else {
 		return (
 			<div id="community-list-page">

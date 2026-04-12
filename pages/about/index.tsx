@@ -29,7 +29,82 @@ const About: NextPage = () => {
 	});
 
 	if (device === 'mobile') {
-		return <div>ABOUT PAGE MOBILE</div>;
+		return (
+			<div className={'mob-about-page'}>
+				<div className={'mob-about-hero'}>
+					<span className={'mob-about-eyebrow'}>Our Story</span>
+					<h1 className={'mob-about-title'}>Beauty Is Our Passion</h1>
+					<p className={'mob-about-sub'}>We believe beauty should be accessible, joyful, and empowering for everyone.</p>
+					<div className={'mob-about-cta'}>
+						<Link href="/product"><button className={'mob-about-btn-primary'}>Shop Now</button></Link>
+						<Link href="/seller"><button className={'mob-about-btn-ghost'}>Explore Brands</button></Link>
+					</div>
+				</div>
+				<div className={'mob-about-stats'}>
+					{[
+						{ num: '500+', label: 'Premium Brands' },
+						{ num: '12K+', label: 'Products' },
+						{ num: '2M+', label: 'Customers' },
+						{ num: '98%', label: 'Satisfaction' },
+					].map(({ num, label }) => (
+						<div key={label} className={'mob-about-stat-card'}>
+							<span className={'mob-about-stat-num'}>{num}</span>
+							<span className={'mob-about-stat-label'}>{label}</span>
+						</div>
+					))}
+				</div>
+				<div className={'mob-about-section'}>
+					<span className={'mob-about-label'}>Who We Are</span>
+					<h2 className={'mob-about-section-title'}>Redefining Beauty</h2>
+					<p className={'mob-about-body'}>Korvera was born from a simple belief — that great skincare and beauty products should not be a luxury reserved for the few.</p>
+					<div className={'mob-about-pills'}>
+						{['🐰 Cruelty-Free', '🌿 Clean Beauty', '🌍 Sustainable', '✨ Expert-Curated'].map((p) => (
+							<span key={p} className={'mob-about-pill'}>{p}</span>
+						))}
+					</div>
+				</div>
+				<div className={'mob-about-values'}>
+					<span className={'mob-about-label'}>What We Stand For</span>
+					<h2 className={'mob-about-section-title'}>Our Core Values</h2>
+					{[
+						{ icon: '🧬', title: 'Science-Backed', desc: 'Clinically proven ingredients backed by dermatological research.' },
+						{ icon: '🌿', title: 'Clean Beauty', desc: 'We ban over 2,500 questionable ingredients.' },
+						{ icon: '🌈', title: 'Beauty for All', desc: 'We celebrate every skin tone, type, age, and gender identity.' },
+						{ icon: '♻️', title: 'Planet Positive', desc: 'Committed to a greener, more sustainable future.' },
+					].map(({ icon, title, desc }) => (
+						<div key={title} className={'mob-about-value-card'}>
+							<span className={'mob-about-value-icon'}>{icon}</span>
+							<div>
+								<h3 className={'mob-about-value-title'}>{title}</h3>
+								<p className={'mob-about-value-desc'}>{desc}</p>
+							</div>
+						</div>
+					))}
+				</div>
+				{sellers.length > 0 && (
+					<div className={'mob-about-partners'}>
+						<span className={'mob-about-label'}>Trusted Partners</span>
+						<h2 className={'mob-about-section-title'}>Brands We Carry</h2>
+						<div className={'mob-about-partners-scroll'}>
+							{sellers.map((seller: any) => (
+								<Link key={seller._id} href={`/seller/detail?agentId=${seller._id}`}>
+									<div className={'mob-about-partner-chip'}>
+										{seller.memberImage && (
+											<img src={`${REACT_APP_API_URL}/${seller.memberImage}`} alt={seller.memberNick} className={'mob-about-partner-logo'} />
+										)}
+										<span>{seller.memberFullName ?? seller.memberNick}</span>
+									</div>
+								</Link>
+							))}
+						</div>
+					</div>
+				)}
+				<div className={'mob-about-bottom-cta'}>
+					<h2>Start Your Beauty Journey</h2>
+					<Link href="/product"><button className={'mob-about-btn-primary'}>Shop the Collection</button></Link>
+				</div>
+			</div>
+		);
 	}
 
 	return (

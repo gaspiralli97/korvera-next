@@ -125,7 +125,48 @@ const SellerList: NextPage = ({ initialInput, ...props }: any) => {
 	};
 
 	if (device === 'mobile') {
-		return <h1>BRANDS PAGE MOBILE</h1>;
+		return (
+			<div className={'mob-seller-list-page'}>
+				<div className={'mob-seller-list-header'}>
+					<h1 className={'mob-seller-list-title'}>Discover Brands</h1>
+					<p className={'mob-seller-list-sub'}>Explore our curated collection of trusted sellers</p>
+				</div>
+				<div className={'mob-seller-list-search'}>
+					<input
+						type="text"
+						placeholder={'Search brands...'}
+						value={searchText}
+						onChange={(e: any) => setSearchText(e.target.value)}
+						onKeyDown={(event: any) => {
+							if (event.key === 'Enter') setSearchFilter({ ...searchFilter, search: { ...searchFilter.search, text: searchText } });
+						}}
+					/>
+				</div>
+				<div className={'mob-seller-list-wrap'}>
+					{agents?.length === 0 ? (
+						<div className={'mob-seller-no-data'}>
+							<img src="/img/icons/icoAlert.svg" alt="" />
+							<p>No brands found!</p>
+						</div>
+					) : (
+						agents.map((agent: Member) => (
+							<AgentCard agent={agent} key={agent._id} likeMemberHandler={likeMemberHandler} />
+						))
+					)}
+				</div>
+				{agents.length !== 0 && Math.ceil(total / searchFilter.limit) > 1 && (
+					<div className={'mob-seller-pagination'}>
+						<Pagination
+							page={currentPage}
+							count={Math.ceil(total / searchFilter.limit)}
+							onChange={paginationChangeHandler}
+							shape="circular"
+							color="primary"
+						/>
+					</div>
+				)}
+			</div>
+		);
 	} else {
 		return (
 			<Stack className={'agent-list-page'}>
