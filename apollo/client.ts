@@ -74,7 +74,6 @@ function createIsomorphicLink() {
 					...getHeaders(),				// Tokenlarni yuborish!
 				},
 			}));
-			console.warn('requesting.. ', operation);
 			return forward(operation);
 		});
 
