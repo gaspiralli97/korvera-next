@@ -447,6 +447,11 @@ export const GET_FAVORITES = gql`
 				manufacturedAt
 				createdAt
 				updatedAt
+				meLiked {
+					memberId
+					likeRefId
+					myFavorite
+				}
 				memberData {
 					_id
 					memberType
