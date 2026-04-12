@@ -241,7 +241,92 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 	};
 
 	if (device === 'mobile') {
-		return <div>COMMUNITY DETAIL PAGE MOBILE</div>;
+		return (
+			<div className={'mob-community-detail-page'}>
+				<div className={'mob-comm-detail-header'}>
+					<button className={'mob-comm-back-btn'} onClick={() => router.back()}>← Back</button>
+				</div>
+				<div className={'mob-comm-detail-article'}>
+					<h1 className={'mob-comm-detail-title'}>{boardArticle?.articleTitle}</h1>
+					<div className={'mob-comm-detail-meta'}>
+						<img src={memberImage} alt="" className={'mob-comm-detail-avatar'} onClick={() => goMemberPage(boardArticle?.memberData?._id)} />
+						<span className={'mob-comm-detail-nick'} onClick={() => goMemberPage(boardArticle?.memberData?._id)}>{boardArticle?.memberData?.memberNick}</span>
+						<Moment className={'mob-comm-detail-date'} format={'DD.MM.YY'}>{boardArticle?.createdAt}</Moment>
+					</div>
+					<div className={'mob-comm-detail-stats'}>
+						<span onClick={() => likeBoArticleHandler(user, boardArticle?._id)}>
+							{boardArticle?.meLiked?.[0]?.myFavorite ? '👍' : '👍'} {boardArticle?.articleLikes}
+						</span>
+						<span>👁 {boardArticle?.articleViews}</span>
+						<span>💬 {boardArticle?.articleComments}</span>
+					</div>
+					<div className={'mob-comm-detail-content'}>
+						<ToastViewerComponent markdown={boardArticle?.articleContent} className={'ytb_play'} />
+					</div>
+				</div>
+				<div className={'mob-comm-detail-comments'}>
+					<span className={'mob-comm-comments-title'}>Comments ({total})</span>
+					<div className={'mob-comm-leave-comment'}>
+						<input
+							type="text"
+							placeholder="Leave a comment"
+							value={comment}
+							onChange={(e) => {
+								if (e.target.value.length > 100) return;
+								setWordsCnt(e.target.value.length);
+								setComment(e.target.value);
+							}}
+						/>
+						<div className={'mob-comm-comment-footer'}>
+							<span>{wordsCnt}/100</span>
+							<Button onClick={creteCommentHandler}>Send</Button>
+						</div>
+					</div>
+					{comments?.map((commentData) => (
+						<div className={'mob-comm-comment-item'} key={commentData?._id}>
+							<div className={'mob-comm-comment-top'}>
+								<img src={getCommentMemberImage(commentData?.memberData?.memberImage)} alt="" className={'mob-comm-comment-avatar'} onClick={() => goMemberPage(commentData?.memberData?._id as string)} />
+								<div className={'mob-comm-comment-info'}>
+									<span className={'mob-comm-comment-nick'}>{commentData?.memberData?.memberNick}</span>
+									<Moment className={'mob-comm-comment-date'} format={'DD.MM.YY HH:mm'}>{commentData?.createdAt}</Moment>
+								</div>
+								{commentData?.memberId === user?._id && (
+									<div className={'mob-comm-comment-actions'}>
+										<IconButton size="small" onClick={() => { setUpdatedCommentId(commentData?._id); updateButtonHandler(commentData?._id, CommentStatus.DELETE); }}>
+											<DeleteForeverIcon sx={{ fontSize: 16, color: '#757575' }} />
+										</IconButton>
+										<IconButton size="small" onClick={() => { setUpdatedComment(commentData?.commentContent); setUpdatedCommentWordsCnt(commentData?.commentContent?.length); setUpdatedCommentId(commentData?._id); setOpenBackdrop(true); }}>
+											<EditIcon sx={{ fontSize: 16, color: '#757575' }} />
+										</IconButton>
+									</div>
+								)}
+							</div>
+							<p className={'mob-comm-comment-text'}>{commentData?.commentContent}</p>
+						</div>
+					))}
+					{total > 0 && (
+						<div className={'mob-comm-pagination'}>
+							<Pagination count={Math.ceil(total / searchFilter.limit) || 1} page={searchFilter.page} shape="circular" color="primary" onChange={paginationHandler} />
+						</div>
+					)}
+				</div>
+				{openBackdrop && (
+					<div className={'mob-comm-backdrop'}>
+						<div className={'mob-comm-update-modal'}>
+							<span>Update comment</span>
+							<input autoFocus value={updatedComment} onChange={(e) => updateCommentInputHandler(e.target.value)} type="text" />
+							<div className={'mob-comm-modal-footer'}>
+								<span>{updatedCommentWordsCnt}/100</span>
+								<div>
+									<Button onClick={cancelButtonHandler}>Cancel</Button>
+									<Button onClick={() => updateButtonHandler(updatedCommentId, undefined)}>Update</Button>
+								</div>
+							</div>
+						</div>
+					</div>
+				)}
+			</div>
+		);
 	} else {
 		return (
 			<div id="community-detail-page">

@@ -112,7 +112,36 @@ const MemberPage: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <>MEMBER PAGE MOBILE</>;
+		return (
+			<div className={'mob-member-page'}>
+				<div className={'mob-member-tabs'}>
+					<button className={`mob-member-tab${category === 'products' ? ' active' : ''}`} onClick={() => router.replace({ pathname: router.pathname, query: { ...router.query, category: 'products' } }, undefined, { shallow: true })}>Products</button>
+					<button className={`mob-member-tab${category === 'followers' ? ' active' : ''}`} onClick={() => router.replace({ pathname: router.pathname, query: { ...router.query, category: 'followers' } }, undefined, { shallow: true })}>Followers</button>
+					<button className={`mob-member-tab${category === 'followings' ? ' active' : ''}`} onClick={() => router.replace({ pathname: router.pathname, query: { ...router.query, category: 'followings' } }, undefined, { shallow: true })}>Followings</button>
+					<button className={`mob-member-tab${category === 'articles' ? ' active' : ''}`} onClick={() => router.replace({ pathname: router.pathname, query: { ...router.query, category: 'articles' } }, undefined, { shallow: true })}>Articles</button>
+				</div>
+				<div className={'mob-member-content'}>
+					{category === 'products' && <MemberProducts />}
+					{category === 'followers' && (
+						<MemberFollowers
+							subscribeHandler={subscribeHandler}
+							unsubscribeHandler={unsubscribeHandler}
+							likeMemberHandler={likeMemberHandler}
+							redirectToMemberPageHandler={redirectToMemberPageHandler}
+						/>
+					)}
+					{category === 'followings' && (
+						<MemberFollowings
+							subscribeHandler={subscribeHandler}
+							unsubscribeHandler={unsubscribeHandler}
+							likeMemberHandler={likeMemberHandler}
+							redirectToMemberPageHandler={redirectToMemberPageHandler}
+						/>
+					)}
+					{category === 'articles' && <MemberArticles />}
+				</div>
+			</div>
+		);
 	} else {
 		return (
 			<div id="member-page" style={{ position: 'relative' }}>

@@ -219,7 +219,105 @@ const SellerDetail: NextPage = ({ initialInput, initialComment, ...props }: any)
 	};
 
 	if (device === 'mobile') {
-		return <div>SELLER DETAIL PAGE MOBILE</div>;
+		return (
+			<div className={'mob-seller-detail-page'}>
+				<div className={'mob-seller-detail-banner'}>
+					<img
+						src={agent?.memberImage ? `${REACT_APP_API_URL}/${agent?.memberImage}` : '/img/profile/defaultUser.svg'}
+						alt="seller"
+						className={'mob-seller-detail-avatar'}
+					/>
+					<div className={'mob-seller-detail-meta'}>
+						<span className={'mob-seller-detail-name'} onClick={() => redirectToMemberPageHandler(agent?._id as string)}>
+							{agent?.memberFullName ?? agent?.memberNick}
+						</span>
+						<div className={'mob-seller-detail-stats'}>
+							<div className={'mob-seller-detail-stat'}>
+								<span className={'mob-seller-detail-stat-val'}>{agent?.memberProducts ?? 0}</span>
+								<span className={'mob-seller-detail-stat-label'}>Products</span>
+							</div>
+							<div className={'mob-seller-detail-stat'}>
+								<span className={'mob-seller-detail-stat-val'}>{agent?.memberFollowers ?? 0}</span>
+								<span className={'mob-seller-detail-stat-label'}>Followers</span>
+							</div>
+							<div className={'mob-seller-detail-stat'}>
+								<span className={'mob-seller-detail-stat-val'}>{agent?.memberLikes ?? 0}</span>
+								<span className={'mob-seller-detail-stat-label'}>Likes</span>
+							</div>
+						</div>
+						{user?._id && user._id !== agentId && (
+							<div className={'mob-seller-detail-follow'}>
+								{agent?.meFollowed && agent?.meFollowed[0]?.myFollowing ? (
+									<button className={'mob-seller-unfollow-btn'} onClick={unfollowHandler}>Unfollow</button>
+								) : (
+									<button className={'mob-seller-follow-btn'} onClick={followHandler}>Follow</button>
+								)}
+							</div>
+						)}
+					</div>
+				</div>
+				<div className={'mob-seller-detail-products'}>
+					<span className={'mob-seller-detail-section-title'}>Products</span>
+					<div className={'mob-seller-detail-products-grid'}>
+						{agentProducts.map((product: Product) => (
+							<div key={product?._id}>
+								<ProductCard product={product} likeProductHandler={likeProductHandler} />
+							</div>
+						))}
+					</div>
+					{productTotal === 0 && (
+						<div className={'mob-seller-no-data'}>
+							<img src="/img/icons/icoAlert.svg" alt="" />
+							<p>No products found!</p>
+						</div>
+					)}
+					{productTotal > searchFilter.limit && (
+						<div className={'mob-seller-pagination'}>
+							<Pagination
+								page={searchFilter.page}
+								count={Math.ceil(productTotal / searchFilter.limit) || 1}
+								onChange={productPaginationChangeHandler}
+								shape="circular"
+								color="primary"
+							/>
+						</div>
+					)}
+				</div>
+				<div className={'mob-seller-detail-reviews'}>
+					<span className={'mob-seller-detail-section-title'}>Reviews</span>
+					{agentComments?.map((comment: Comment) => (
+						<ReviewCard comment={comment} key={comment?._id} />
+					))}
+					{commentTotal === 0 && <p className={'mob-seller-no-reviews'}>No reviews yet.</p>}
+					{commentTotal > commentInquiry.limit && (
+						<div className={'mob-seller-pagination'}>
+							<Pagination
+								page={commentInquiry.page}
+								count={Math.ceil(commentTotal / commentInquiry.limit) || 1}
+								onChange={commentPaginationChangeHandler}
+								shape="circular"
+								color="primary"
+							/>
+						</div>
+					)}
+					<div className={'mob-seller-leave-review'}>
+						<span>Leave a Review</span>
+						<textarea
+							placeholder="Write your review..."
+							value={insertCommentData.commentContent}
+							onChange={({ target: { value } }: any) => setInsertCommentData({ ...insertCommentData, commentContent: value })}
+						/>
+						<button
+							className={'mob-seller-review-submit'}
+							disabled={insertCommentData.commentContent === '' || user?._id === ''}
+							onClick={createCommentHandler}
+						>
+							Submit
+						</button>
+					</div>
+				</div>
+			</div>
+		);
 	} else {
 		return (
 			<Stack className={'agent-detail-page'}>

@@ -226,7 +226,107 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 
 
 	if (device === 'mobile') {
-		return <div>ADD NEW PRODUCT MOBILE PAGE</div>;
+		return (
+			<div className={'mob-add-product-page'}>
+				<div className={'mob-add-product-header'}>
+					<span className={'mob-add-product-title'}>{router.query.productId ? 'Edit Product' : 'Add New Product'}</span>
+				</div>
+				<div className={'mob-add-product-form'}>
+					<div className={'mob-add-product-field'}>
+						<label>Title</label>
+						<input type="text" placeholder="Product Title" value={insertProductData.productTitle} onChange={({ target: { value } }) => setInsertProductData({ ...insertProductData, productTitle: value })} />
+					</div>
+					<div className={'mob-add-product-field'}>
+						<label>Brand</label>
+						<input type="text" placeholder="Brand Name" value={insertProductData.productBrand} onChange={({ target: { value } }) => setInsertProductData({ ...insertProductData, productBrand: value })} />
+					</div>
+					<div className={'mob-add-product-row'}>
+						<div className={'mob-add-product-field'}>
+							<label>Price</label>
+							<input type="number" placeholder="Price" value={insertProductData.productPrice} onChange={({ target: { value } }) => setInsertProductData({ ...insertProductData, productPrice: toSafeNumber(value) })} />
+						</div>
+						<div className={'mob-add-product-field'}>
+							<label>Volume (ml)</label>
+							<input type="number" placeholder="Volume" value={insertProductData.productVolume} onChange={({ target: { value } }) => setInsertProductData({ ...insertProductData, productVolume: toSafeNumber(value) })} />
+						</div>
+					</div>
+					<div className={'mob-add-product-row'}>
+						<div className={'mob-add-product-field'}>
+							<label>Category</label>
+							<select value={insertProductData.productCategory || 'select'} onChange={({ target: { value } }) => setInsertProductData({ ...insertProductData, productCategory: value as ProductCategory, productSubCategory: undefined })}>
+								<option disabled value="select">Select</option>
+								{productCategories.map((cat: any) => <option value={cat} key={cat}>{cat}</option>)}
+							</select>
+						</div>
+						<div className={'mob-add-product-field'}>
+							<label>Subcategory</label>
+							<select value={insertProductData.productSubCategory || 'select'} onChange={({ target: { value } }) => setInsertProductData({ ...insertProductData, productSubCategory: value as ProductSubCategory })}>
+								<option disabled value="select">Select</option>
+								{(SUB_CATEGORY_MAP[insertProductData.productCategory as ProductCategory] ?? []).map((sub) => <option value={sub} key={sub}>{sub.replace(/_/g, ' ')}</option>)}
+							</select>
+						</div>
+					</div>
+					<div className={'mob-add-product-row'}>
+						<div className={'mob-add-product-field'}>
+							<label>Size</label>
+							<select value={insertProductData.productSize || 'select'} onChange={({ target: { value } }) => setInsertProductData({ ...insertProductData, productSize: value as ProductSize })}>
+								<option disabled value="select">Select</option>
+								{productSizes.map((size: any) => <option value={size} key={size}>{size}</option>)}
+							</select>
+						</div>
+						<div className={'mob-add-product-field'}>
+							<label>Skin Type</label>
+							<select value={(insertProductData.productSkinType || [])[0] || 'select'} onChange={({ target: { value } }) => setInsertProductData({ ...insertProductData, productSkinType: [value as SkinType] })}>
+								<option disabled value="select">Select</option>
+								{skinTypes.map((type: string) => <option value={type} key={type}>{type}</option>)}
+							</select>
+						</div>
+					</div>
+					<div className={'mob-add-product-field'}>
+						<label>Stock Count</label>
+						<input type="number" min={0} placeholder="Available quantity" value={insertProductData.productLeftCount ?? 0} onChange={({ target: { value } }) => setInsertProductData({ ...insertProductData, productLeftCount: toSafeNumber(value) })} />
+					</div>
+					<div className={'mob-add-product-field'}>
+						<label>Certifications</label>
+						<div className={'mob-add-product-certs'}>
+							{allCertifications.map((cert) => {
+								const selected = (insertProductData.certifications ?? []).includes(cert);
+								return (
+									<div key={cert} className={`mob-cert-chip${selected ? ' selected' : ''}`} onClick={() => toggleCertification(cert)}>
+										{cert.replace(/_/g, ' ')}
+									</div>
+								);
+							})}
+						</div>
+					</div>
+					<div className={'mob-add-product-field'}>
+						<label>Description</label>
+						<textarea placeholder="Product description..." value={insertProductData.productDesc} onChange={({ target: { value } }) => setInsertProductData({ ...insertProductData, productDesc: value })} />
+					</div>
+					<div className={'mob-add-product-field'}>
+						<label>Images (max 5)</label>
+						<Button className={'mob-add-product-upload-btn'} onClick={() => inputRef.current.click()}>
+							Upload Images
+							<input ref={inputRef} type="file" hidden onChange={uploadImages} multiple accept="image/jpg, image/jpeg, image/png, image/webp" />
+						</Button>
+						{insertProductData.productImages.length > 0 && (
+							<div className={'mob-add-product-gallery'}>
+								{insertProductData.productImages.map((image: string) => (
+									<img key={image} src={getProductImageSrc(image)} alt="" className={'mob-add-product-img'} />
+								))}
+							</div>
+						)}
+					</div>
+					<Button
+						className={'mob-add-product-submit'}
+						disabled={doDisabledCheck()}
+						onClick={router.query.productId ? updateProductHandler : insertProductHandler}
+					>
+						Save
+					</Button>
+				</div>
+			</div>
+		);
 	} else {
 		return (
 			<div id="add-product-page">
