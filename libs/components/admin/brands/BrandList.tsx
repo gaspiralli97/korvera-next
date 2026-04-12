@@ -16,15 +16,16 @@ import {
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { Brand } from '../../../libs/types/brand/brand';
+import { Brand } from '../../../types/brand/brand';
+import { BrandStatus } from '../../../enums/brand.enum';
 
-const BRAND_STATUSES = ['ACTIVE', 'INACTIVE'];
+const BRAND_STATUSES: BrandStatus[] = [BrandStatus.ACTIVE, BrandStatus.INACTIVE];
 
-const getStatusClass = (status: string) => {
+const getStatusClass = (status: BrandStatus) => {
 	switch (status) {
-		case 'ACTIVE': return 'success';
-		case 'INACTIVE': return 'inactive';
-		case 'PENDING': return 'warning';
+		case BrandStatus.ACTIVE: return 'success';
+		case BrandStatus.INACTIVE: return 'inactive';
+		case BrandStatus.PENDING: return 'warning';
 		default: return 'success';
 	}
 };
@@ -117,7 +118,7 @@ export const BrandList = (props: BrandListProps) => {
 									</TableCell>
 
 									<TableCell align="center">
-										{brand.brandStatus === 'PENDING' ? (
+										{brand.brandStatus === BrandStatus.PENDING ? (
 											<Button className={'badge warning'} disabled>
 												PENDING
 											</Button>
@@ -165,7 +166,7 @@ export const BrandList = (props: BrandListProps) => {
 									</TableCell>
 
 									<TableCell align="center">
-										{brand.brandStatus === 'PENDING' ? (
+										{brand.brandStatus === BrandStatus.PENDING ? (
 											<Stack direction={'row'} spacing={1} justifyContent={'center'}>
 												<Button
 													size={'small'}
