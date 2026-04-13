@@ -23,12 +23,8 @@ const MyOrder = () => {
 	const [countryConfig, setCountryConfig] = useState(COUNTRY_CONFIG['USA']);
 
 	useEffect(() => {
-		// try-catch: localStorage can throw SecurityError when browser blocks storage access
-		// (e.g. korvera.kr SSL sertifikati noto'g'ri bo'lganda Chrome localStorage'ni bloklaydi)
-		try {
-			const savedCountry = localStorage.getItem('shippingCountry') ?? 'USA';
-			setCountryConfig(COUNTRY_CONFIG[savedCountry] ?? COUNTRY_CONFIG['USA']);
-		} catch {}
+		const savedCountry = localStorage.getItem('shippingCountry') ?? 'USA';
+		setCountryConfig(COUNTRY_CONFIG[savedCountry] ?? COUNTRY_CONFIG['USA']);
 	}, []);
 
 	// Shipping address
@@ -86,11 +82,7 @@ const MyOrder = () => {
 	useEffect(() => {
 		if (!user?._id) return;
 		const data = { firstName, lastName, address, apt, city, stateVal, zip, mobile, email };
-		// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
-		// (SSL domain mismatch yoki strict privacy settings bo'lganda)
-		try {
-			localStorage.setItem(`korvera_checkout_${user._id}`, JSON.stringify(data));
-		} catch {}
+		localStorage.setItem(`korvera_checkout_${user._id}`, JSON.stringify(data));
 	}, [firstName, lastName, address, apt, city, stateVal, zip, mobile, email, user?._id]);
 
 	// Order summary
@@ -192,11 +184,7 @@ const MyOrder = () => {
 				localStorage.setItem(ordersKey, JSON.stringify([historyOrder, ...existing]));
 			} catch {}
 
-			// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
-		// (oxirgi buyurtma ma'lumotlari saqlanadi, xato bo'lsa sahifa ishlab qoladi)
-		try {
 			localStorage.setItem('korvera_last_order', JSON.stringify(lastOrder));
-		} catch {}
 			cartVar([]);
 			saveCart([], user?._id ?? '');
 			router.push('/order/success');

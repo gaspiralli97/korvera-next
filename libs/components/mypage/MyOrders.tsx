@@ -61,11 +61,7 @@ const MyOrders = () => {
 		const key = `korvera_orders_${user?._id ?? 'guest'}`;
 		const updated = orders.map((o) => o.orderId === orderId ? { ...o, status } : o);
 		setOrders(updated);
-		// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
-		// (order status yangilanishi saqlanadi, xato bo'lsa UI ishlaydi lekin saqlash o'tib ketadi)
-		try {
-			localStorage.setItem(key, JSON.stringify(updated));
-		} catch {}
+		localStorage.setItem(key, JSON.stringify(updated));
 	};
 
 	const getOrderActions = (status: OrderStatus, orderId: string, isSellerRole: boolean) => {
