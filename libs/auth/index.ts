@@ -7,8 +7,6 @@ import { LOGIN, SIGN_UP } from '../../apollo/user/mutation';
 
 export function getJwtToken(): any {
 	if (typeof window !== 'undefined') {
-		// try-catch: localStorage.getItem throws SecurityError when browser blocks storage access
-		// (noto'g'ri SSL sertifikat yoki strict privacy settings bo'lganda Chrome localStorage'ni bloklaydi)
 		try {
 			return localStorage.getItem('accessToken') ?? '';
 		} catch {
@@ -18,7 +16,6 @@ export function getJwtToken(): any {
 }
 
 export function setJwtToken(token: string) {
-	// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
 	try { localStorage.setItem('accessToken', token); } catch {}
 }
 
@@ -128,8 +125,6 @@ const requestSignUpJwtToken = async ({
 
 export const updateStorage = ({ jwtToken }: { jwtToken: any }) => {
 	setJwtToken(jwtToken);
-	// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
-	// ('login' vaqti saqlanadi, boshqa tablar login hodisasini eshitsin deb)
 	try { window.localStorage.setItem('login', Date.now().toString()); } catch {}
 };
 
@@ -173,9 +168,7 @@ export const logOut = () => {
 };
 
 const deleteStorage = () => {
-	// try-catch: localStorage throws SecurityError when browser blocks storage access
 	try { localStorage.removeItem('accessToken'); } catch {}
-	// try-catch: 'logout' vaqti saqlanadi, boshqa tablar logout hodisasini eshitsin deb
 	try { window.localStorage.setItem('logout', Date.now().toString()); } catch {}
 };
 

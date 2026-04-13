@@ -214,8 +214,6 @@ const Top = () => {
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		// try-catch: localStorage throws SecurityError when browser blocks storage access
-		// (sayt tili 'locale' keyida saqlanadi, xato bo'lsa default 'en' ishlatiladi)
 		try {
 			if (localStorage.getItem('locale') === null) {
 				localStorage.setItem('locale', 'en');
@@ -254,7 +252,6 @@ const Top = () => {
 	const langChoice = useCallback(
 		async (e: any) => {
 			setLang(e.target.id);
-			// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
 			try { localStorage.setItem('locale', e.target.id); } catch {}
 			setAnchorEl2(null);
 			await router.push(router.asPath, router.asPath, { locale: e.target.id });
@@ -424,7 +421,6 @@ const Top = () => {
 										key={l.id}
 										className={`mob-drawer-lang-btn${lang === l.id ? ' active' : ''}`}
 										onClick={() => {
-											// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
 											try { localStorage.setItem('locale', l.id); } catch {}
 											router.push(router.asPath, router.asPath, { locale: l.id });
 											setLang(l.id);
