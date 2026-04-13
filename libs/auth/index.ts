@@ -7,11 +7,7 @@ import { LOGIN, SIGN_UP } from '../../apollo/user/mutation';
 
 export function getJwtToken(): any {
 	if (typeof window !== 'undefined') {
-		try {
-			return localStorage.getItem('accessToken') ?? '';
-		} catch {
-			return '';
-		}
+		return localStorage.getItem('accessToken') ?? '';
 	}
 }
 

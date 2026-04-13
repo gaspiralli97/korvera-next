@@ -31,9 +31,7 @@ const loadLiked = (userId = ''): Set<string> => {
 
 export const saveLiked = (ids: Set<string>, userId = '') => {
 	if (typeof window === 'undefined') return;
-	try {
-		localStorage.setItem(likedKey(userId), JSON.stringify([...ids]));
-	} catch {}
+	localStorage.setItem(likedKey(userId), JSON.stringify([...ids]));
 };
 
 export const likedProductIdsVar = makeVar<Set<string>>(loadLiked());
@@ -54,9 +52,7 @@ const loadCart = (userId = ''): CartItem[] => {
 
 export const saveCart = (items: CartItem[], userId = '') => {
 	if (typeof window === 'undefined') return;
-	try {
-		localStorage.setItem(cartKey(userId), JSON.stringify(items));
-	} catch {}
+	localStorage.setItem(cartKey(userId), JSON.stringify(items));
 };
 
 export const cartVar = makeVar<CartItem[]>(loadCart());
