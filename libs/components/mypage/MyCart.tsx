@@ -51,7 +51,9 @@ const MyCart: React.FC<MyCartProps> = () => {
 		switchUserLiked(String(userId));
 	}, [mounted, userId]);
 	const [cartUIState, setCartUIState] = useState<CartUIState>(() => {
-		const saved = typeof window !== 'undefined' ? localStorage.getItem('shippingCountry') : null;
+		// try-catch: localStorage.getItem throws SecurityError when browser blocks storage access
+		// (yetkazib berish mamlakati saqlanadi, xato bo'lsa default 'USA' ishlatiladi)
+		const saved = typeof window !== 'undefined' ? (() => { try { return localStorage.getItem('shippingCountry'); } catch { return null; } })() : null;
 		const country = (saved && (SHIPPING_COUNTRIES as string[]).includes(saved) ? saved : 'USA') as ShippingCountry;
 		return { shippingCountry: country, isRemovingAll: false };
 	});
@@ -100,7 +102,8 @@ const MyCart: React.FC<MyCartProps> = () => {
 
 	const handleCountryChange = (country: ShippingCountry) => {
 		setCartUIState((prev) => ({ ...prev, shippingCountry: country }));
-		localStorage.setItem('shippingCountry', country);
+		// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
+		try { localStorage.setItem('shippingCountry', country); } catch {}
 		handleCloseCountrySelector();
 	};
 

@@ -46,7 +46,11 @@ const Inquiry = () => {
 				if (raw) history = JSON.parse(raw);
 			} catch {}
 			history.unshift(record);
-			localStorage.setItem(key, JSON.stringify(history));
+			// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
+			// (so'rov tarixi saqlanadi, xato bo'lsa sahifa ishlab qoladi faqat tarix yo'qoladi)
+			try {
+				localStorage.setItem(key, JSON.stringify(history));
+			} catch {}
 
 			setSubject('');
 			setMessage('');
