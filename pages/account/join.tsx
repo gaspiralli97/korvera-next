@@ -23,10 +23,12 @@ const Join: NextPage = () => {
 
 	/** LIFECYCLE **/
 	useEffect(() => {
-		const savedNick = localStorage.getItem('korvera_remember_nick');
-		if (savedNick) {
-			setInput((prev) => ({ ...prev, nick: savedNick }));
-		}
+		// try-catch: localStorage.getItem throws SecurityError when browser blocks storage access
+		// ("Remember me" tanlangan foydalanuvchi nicknemi saqlanadi, xato bo'lsa input bo'sh qoladi)
+		try {
+			const savedNick = localStorage.getItem('korvera_remember_nick');
+			if (savedNick) setInput((prev) => ({ ...prev, nick: savedNick }));
+		} catch {}
 	}, []);
 
 	/** HANDLERS **/

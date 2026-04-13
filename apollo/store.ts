@@ -21,6 +21,8 @@ const likedKey = (userId: string) => (userId ? `korvera_liked_${userId}` : 'korv
 
 const loadLiked = (userId = ''): Set<string> => {
 	if (typeof window === 'undefined') return new Set();
+	// try-catch: localStorage.getItem throws SecurityError when browser blocks storage access
+	// (SSL sertifikat xatosi yoki strict privacy mode bo'lganda)
 	try {
 		const raw = localStorage.getItem(likedKey(userId));
 		return raw ? new Set(JSON.parse(raw)) : new Set();
@@ -31,6 +33,8 @@ const loadLiked = (userId = ''): Set<string> => {
 
 export const saveLiked = (ids: Set<string>, userId = '') => {
 	if (typeof window === 'undefined') return;
+	// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
+	// (yoqtirgan mahsulotlar saqlanadi, xato bo'lsa UI ishlaydi lekin saqlash o'tib ketadi)
 	try {
 		localStorage.setItem(likedKey(userId), JSON.stringify([...ids]));
 	} catch {}
@@ -44,6 +48,8 @@ export const switchUserLiked = (userId: string) => {
 
 const loadCart = (userId = ''): CartItem[] => {
 	if (typeof window === 'undefined') return [];
+	// try-catch: localStorage.getItem throws SecurityError when browser blocks storage access
+	// (SSL sertifikat xatosi yoki strict privacy mode bo'lganda savat bo'sh qaytadi)
 	try {
 		const raw = localStorage.getItem(cartKey(userId));
 		return raw ? JSON.parse(raw) : [];
@@ -54,6 +60,8 @@ const loadCart = (userId = ''): CartItem[] => {
 
 export const saveCart = (items: CartItem[], userId = '') => {
 	if (typeof window === 'undefined') return;
+	// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
+	// (savat ma'lumotlari saqlanadi, xato bo'lsa UI ishlaydi lekin qayta yuklanganda savat bo'sh bo'ladi)
 	try {
 		localStorage.setItem(cartKey(userId), JSON.stringify(items));
 	} catch {}
