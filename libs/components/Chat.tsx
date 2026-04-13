@@ -63,11 +63,13 @@ const Chat = () => {
 	/** LIFECYCLES **/
 
 	useEffect(() => {
+		if (!socket) return;		// socket undefined bo'lsa chiqib ketadi
+
 		socket.onmessage = (msg) => {		// Chatga ulangan userlarga sms yuboriladi
 			const data = JSON.parse(msg.data);		// parse qilib dataga tenglanadi
 			console.log('WebSocket message:', data);
 
-			switch (data.event) { 		// 
+			switch (data.event) {
 				case 'info':
 					const newInfo: InfoPayload = data;
 					setOnlineUsers(newInfo.totalClients);
@@ -78,15 +80,15 @@ const Chat = () => {
 					break;
 				case 'message':		// yangi sms yozilganda
 					const newMessage: MessagePayload = data;
-					messagesList.push(newMessage);
-					setMessagesList([...messagesList]); // yangi referencedagi smslani ketma-ketligi xosil buladi
+					// functional update: stale closure va state mutation muommosi yo'q
+					setMessagesList((prev) => [...prev, newMessage]);
 					break;
 				case 'onlineUsers':  // Online userlar ro'yxati yangilanganda
 					onlineUsersVar(data.members ?? []);
 					break;
 			}
 		};
-	}, [socket, messagesList]);		// Array Dependency => socket ozgarganda ishga tushadi
+	}, [socket]);		// faqat socket dependency — messagesList yo'q, handler qayta o'rnatilmaydi
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
@@ -109,7 +111,7 @@ const Chat = () => {
 			const text = e.target.value;
 			setMessageInput(text);
 		},
-		[messageInput],
+		[],		// bo'sh dependency — messageInput ga bog'liq emas, har keystrokeda qayta yaratilmaydi
 	);
 
 	const getKeyHandler = (e: any) => {
@@ -123,11 +125,17 @@ const Chat = () => {
 	};
 
 	const onClickHandler = () => {
-		if (!messageInput) sweetErrorAlert(Messages.error4);
-		else {
-			socket.send(JSON.stringify({ event: 'message', data: messageInput }));
-			setMessageInput('');
+		if (!messageInput) {
+			sweetErrorAlert(Messages.error4);
+			return;
 		}
+		// socket mavjud va OPEN holatda ekanligini tekshirish
+		if (!socket || socket.readyState !== WebSocket.OPEN) {
+			sweetErrorAlert('Chat connection is not ready. Please try again.');
+			return;
+		}
+		socket.send(JSON.stringify({ event: 'message', data: messageInput }));
+		setMessageInput('');
 	};
 
 	return (
