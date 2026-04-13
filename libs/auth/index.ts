@@ -18,6 +18,7 @@ export function getJwtToken(): any {
 }
 
 export function setJwtToken(token: string) {
+	if (typeof window === 'undefined') return;
 	// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
 	try { localStorage.setItem('accessToken', token); } catch {}
 }
@@ -128,6 +129,7 @@ const requestSignUpJwtToken = async ({
 
 export const updateStorage = ({ jwtToken }: { jwtToken: any }) => {
 	setJwtToken(jwtToken);
+	if (typeof window === 'undefined') return;
 	// try-catch: localStorage.setItem throws SecurityError when browser blocks storage access
 	// ('login' vaqti saqlanadi, boshqa tablar login hodisasini eshitsin deb)
 	try { window.localStorage.setItem('login', Date.now().toString()); } catch {}
@@ -173,6 +175,7 @@ export const logOut = () => {
 };
 
 const deleteStorage = () => {
+	if (typeof window === 'undefined') return;
 	// try-catch: localStorage throws SecurityError when browser blocks storage access
 	try { localStorage.removeItem('accessToken'); } catch {}
 	// try-catch: 'logout' vaqti saqlanadi, boshqa tablar logout hodisasini eshitsin deb

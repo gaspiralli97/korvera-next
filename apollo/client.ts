@@ -105,7 +105,9 @@ function createIsomorphicLink() {
 			if (networkError) console.log(`[Network error]: ${networkError}`);
 			// @ts-ignore
 			if (networkError?.statusCode === 401) {
-				localStorage.removeItem('accessToken');
+				// try-catch: localStorage throws SecurityError when browser blocks storage access
+				// (401 kelganda tokenni o'chirib login sahifasiga yuboradi, xato bo'lsa ham redirect ishlaydi)
+				try { localStorage.removeItem('accessToken'); } catch {}
 				window.location.href = '/account/join';
 			}
 		});
