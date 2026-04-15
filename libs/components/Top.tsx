@@ -23,6 +23,7 @@ import { ProductCategory, ProductSubCategory } from '../enums/product.enum';
 import { GET_PRODUCTS, GET_SELLERS } from '../../apollo/user/query';
 import { Product } from '../types/product/product';
 import { Member } from '../types/member/member';
+import NotificationDropdown from './NotificationDropdown';
 
 const categories = [
 	{ tKey: 'cat.skincare', value: ProductCategory.SKINCARE },
@@ -369,6 +370,7 @@ const Top = () => {
 								)}
 							</Link>
 						</Box>
+						{user?._id && <NotificationDropdown isMobile />}
 						{user?._id ? (
 							<Link href={'/mypage'}>
 								<img
@@ -594,6 +596,8 @@ const Top = () => {
 									<span className={'nav-text-link'}>{t('nav.signIn')}</span>
 								</Link>
 							)}
+
+							<NotificationDropdown />
 
 							<Link href={'/mypage'}>
 								<span className={'nav-text-link'}>{t('nav.wishlist')}</span>

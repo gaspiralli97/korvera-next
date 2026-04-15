@@ -556,3 +556,22 @@ export const CREATE_ORDER = gql`
 		}
 	}
 `;
+
+/**************************
+ *     NOTIFICATION       *
+ *************************/
+
+export const UPDATE_NOTIFICATION = gql`
+	mutation UpdateNotification($input: NotificationUpdate!) {
+		updateNotification(input: $input) {
+			_id
+			notificationStatus
+		}
+	}
+`;
+
+export const MARK_ALL_NOTIFICATIONS_READ = gql`
+	mutation MarkAllNotificationsAsRead {
+		markAllNotificationsAsRead
+	}
+`;
