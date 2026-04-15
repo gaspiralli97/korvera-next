@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Avatar } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -89,19 +88,16 @@ const NotificationDropdown = ({ isMobile = false }: Props) => {
 	const wrapClass = isMobile ? 'mob-notif-wrap' : 'notif-wrap';
 	const btnClass = isMobile ? 'mob-notif-btn' : 'notif-bell-btn';
 	const iconClass = isMobile ? 'mob-notif-icon' : 'notif-bell-icon';
-	const activeIconClass = isMobile ? 'mob-notif-icon' : 'notif-bell-icon notif-bell-active';
 	const badgeClass = isMobile ? 'mob-notif-badge' : 'notif-badge';
 
 	return (
 		<div className={wrapClass} ref={dropRef}>
 			<button className={btnClass} onClick={() => setOpen((p) => !p)}>
+				<NotificationsIcon className={iconClass} />
 				{unreadCount > 0 ? (
-					<NotificationsIcon className={activeIconClass} />
-				) : (
-					<NotificationsNoneIcon className={iconClass} />
-				)}
-				{unreadCount > 0 && (
 					<span className={badgeClass}>{unreadCount > 99 ? '99+' : unreadCount}</span>
+				) : (
+					<span className={`${badgeClass} notif-badge-dot`} />
 				)}
 			</button>
 
