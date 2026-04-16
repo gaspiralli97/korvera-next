@@ -200,6 +200,26 @@
 	font-size: 0 !important;
 }
 
+.notif-load-more {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	background: none;
+	border: none;
+	border-top: 1px solid $color-border;
+	cursor: pointer;
+	font-family: $font;
+	font-size: 12px;
+	font-weight: 500;
+	color: $color-plum;
+	text-align: center;
+	transition: background 0.15s ease;
+
+	&:hover {
+		background: $color-rose-pale;
+	}
+}
+
 .notif-dot {
 	width: 7px;
 	height: 7px;
