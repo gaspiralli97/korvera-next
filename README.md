@@ -1,6 +1,8 @@
 # Korvera
 
-Frontend for Korvera, a K-beauty marketplace. Shoppers browse by skin type rather
+**Live:** [korvera.kr](https://korvera.kr)
+
+Frontend for [korvera.kr](https://korvera.kr), a K-beauty marketplace. Shoppers browse by skin type rather
 than by brand, sellers run their own storefronts, and the whole catalogue is
 available in English, Korean and Russian.
 
