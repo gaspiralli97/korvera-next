@@ -6,6 +6,10 @@ Frontend for [korvera.kr](https://korvera.kr), a K-beauty marketplace. Shoppers 
 than by brand, sellers run their own storefronts, and the whole catalogue is
 available in English, Korean and Russian.
 
+<img src="docs/screenshots/home.jpg" alt="Korvera home" width="100%" />
+
+<img src="docs/screenshots/catalog.jpg" alt="Korvera catalogue with filters" width="100%" />
+
 ## Tech Stack
 
 | Layer | Technology |
