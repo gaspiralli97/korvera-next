@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      # Several dependencies still declare React 17 peer ranges while the app
+      # runs React 18, so the install needs the legacy resolver.
+      - run: npm ci --no-audit --no-fund
+        env:
+          NPM_CONFIG_LEGACY_PEER_DEPS: "true"
+      - run: npm run build
+        env:
+          REACT_APP_API_URL: https://korvera.kr
+          REACT_APP_API_GRAPHQL_URL: https://korvera.kr/graphql
+          REACT_APP_API_WS: wss://korvera.kr
